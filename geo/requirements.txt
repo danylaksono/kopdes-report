@@ -1,0 +1,4 @@
+requests
+py7zr
+pyshp
+shapely

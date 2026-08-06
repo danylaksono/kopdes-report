@@ -1,0 +1,24 @@
+# --- regenerable geo pipeline artifacts (see geo/README.md to rebuild) ---
+geo/raw/
+geo/geojson/
+geo/output/
+
+# --- regenerable web app data (see README.md to rebuild) ---
+web/data/
+
+# --- Python ---
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# --- Node ---
+node_modules/
+npm-debug.log*
+
+# --- OS / editor cruft ---
+.DS_Store
+Thumbs.db
+
+# --- local tool config ---
+.claude/settings.local.json
