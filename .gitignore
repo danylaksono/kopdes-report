@@ -1,3 +1,6 @@
+# --- regenerable geodata downloads (see scripts/download_osm.py to rebuild) ---
+data/osm/
+
 # --- regenerable geo pipeline artifacts (see geo/README.md to rebuild) ---
 geo/raw/
 geo/geojson/
