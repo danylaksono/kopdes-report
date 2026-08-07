@@ -20,6 +20,9 @@ This document outlines a data-driven investigation into these claims, structured
 | `kopdes_province_rat_and_construction.csv` | 38                                  | RAT completion (all 0), construction progress buckets (0-20%, 21-50%, 51-75%, 76-99%, 100%)                                                                        |
 | `kopdes_province_top_products.csv`         | ~38 x N                             | `product`, `volume`, `value` per province                                                                                                                          |
 | Geo boundaries                             | Provinsi, Kab/Kota, Kecamatan, Desa | BIG-derived polygons, simplified, linked via name matching                                                                                                         |
+| `data/osm/indonesia_roads.gpkg`            | ~4.5M segments                      | Nationwide road network: `osm_id`, `highway`, `name`, `oneway`, `maxspeed`, `surface`, `ref`, `lanes`, `bridge`, `tunnel`                                          |
+| `data/osm/indonesia_minimarkets.gpkg`      | ~10.6k POIs                         | Minimarket/supermarket POIs: `osm_id`, `name`, `brand`, `brand_label`, `shop`, `addr:*` — 16 brand categories                                                      |
+| `data/population/kontur_population_ID.gpkg` | ~1.8M cells                         | Kontur 400m H3 hexagons: `h3` (res 10), `population` — fusion of GHSL, Facebook HRSL, Microsoft Buildings, OSM                                                    |
 
 ---
 
@@ -298,12 +301,12 @@ This document outlines a data-driven investigation into these claims, structured
 
 To fully execute the modules above, we need these external datasets:
 
-| Dataset                                  | Needed For | Source                         | Priority |
-| ---------------------------------------- | ---------- | ------------------------------ | -------- |
-| Population grid (100m-1km)               | A1, A2     | WorldPop, Kontur, GHSL         | Critical |
-| OSM road network (Indonesia extract)     | A3         | Geofabrik, PPP-OSM-ID          | Critical |
-| SRTM/DEM elevation                       | A3         | USGS EarthExplorer, DEMNAS-BIG | High     |
-| Minimarket POI (Alfamart, Indomaret)     | B3         | OSM, commercial                | High     |
+| Dataset                                  | Needed For | Source                         | Priority | Status    |
+| ---------------------------------------- | ---------- | ------------------------------ | -------- | --------- |
+| Population grid (100m-1km)               | A1, A2     | WorldPop, Kontur, GHSL         | Critical | ✅ Kontur 400m H3 acquired (1.8M cells, 164 MB) |
+| OSM road network (Indonesia extract)     | A3         | Geofabrik, PPP-OSM-ID          | Critical | ✅ Acquired (4.5M segments, 1.6 GB GPKG) |
+| SRTM/DEM elevation                       | A3         | USGS EarthExplorer, DEMNAS-BIG | High     |           |
+| Minimarket POI (Alfamart, Indomaret)     | B3         | OSM, commercial                | High     | ✅ Acquired (10.6k nodes, 1.7 MB GPKG) |
 | Existing cooperative registry (pre-KDMP) | B2         | Kemenkop, BPS PODES            | High     |
 | APBN/DIPA budget allocation per KDMP     | C4         | Kemenkeu, Kemenkop             | High     |
 | Poverty/Vulnerability maps               | A4, C4     | BPS, SMERU, World Bank         | Medium   |
@@ -324,17 +327,17 @@ To fully execute the modules above, we need these external datasets:
 
 ### Phase 1 — Core Spatial Analytics (Weeks 2-3)
 
-- [ ] Module A1: Distance-to-settlement (existing data only, no population grid needed for first pass)
+- [ ] Module A1: Distance-to-settlement (now has Kontur population grid ✅)
 - [ ] Module B1: KDMP-to-KDMP proximity & clustering
 - [ ] Module C1: Construction vs. output correlation
 - [ ] Module C2: Land verification analysis
 - [ ] Module D2: Product mix analysis
 
-### Phase 2 — Enriched Analytics (Weeks 4-6, requires external data)
+### Phase 2 — Enriched Analytics (Weeks 4-6)
 
-- [ ] Module A2: Population catchment (needs population grid)
-- [ ] Module A3: Terrain & road accessibility (needs DEM + OSM roads)
-- [ ] Module B3: Minimarket proximity (needs POI data)
+- [ ] Module A2: Population catchment (Kontur H3 acquired ✅)
+- [ ] Module A3: Terrain & road accessibility (OSM roads acquired ✅; DEM still needed)
+- [ ] Module B3: Minimarket proximity (minimarket POIs acquired ✅)
 - [ ] Module C3: RAT compliance investigation
 - [ ] Module D1: Health score decomposition
 
