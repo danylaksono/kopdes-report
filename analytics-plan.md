@@ -8,21 +8,21 @@ This document outlines a data-driven investigation into these claims, structured
 
 ## Data Inventory (what we already have)
 
-| Dataset                                    | Rows                                | Key Fields                                                                                                                                                         |
-| ------------------------------------------ | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `kopdes_locations.csv`                     | ~83k                                | `cooperative_id`, `name`, `province`, `district`, `subdistrict`, `lat`, `lon`                                                                                      |
-| `kopdes_land_assets.csv`                   | ~66k                                | `asset_id`, `cooperative` (name), `status` (Terverifikasi/Sedang Diverifikasi/Tidak Ada Lahan), `surveyor` (TNI/Agrinas/KOPERASI), `lat`, `lon`                    |
-| `kopdes_national_summary.csv`              | 1                                   | 20+ national aggregates: total cooperatives, legal entity counts, NPWP/NIB compliance, land verification counts, IDR 179.5T total transaction volume, 1.8M members |
-| `kopdes_stats_province.csv`                | 38                                  | Per-province: cooperatives count, NPWP/NIB/RAT counts, transaction volume/value, savings (pokok + wajib), health score (all "unhealthy", index 51-57)              |
-| `kopdes_stats_district.csv`                | ~514                                | Same stat columns at district level                                                                                                                                |
-| `kopdes_stats_subdistrict.csv`             | ~7.2k                               | Same stat columns at subdistrict level                                                                                                                             |
-| `kopdes_stats_village.csv`                 | ~83k                                | Same stat columns at village level                                                                                                                                 |
-| `kopdes_province_rat_and_construction.csv` | 38                                  | RAT completion (all 0), construction progress buckets (0-20%, 21-50%, 51-75%, 76-99%, 100%)                                                                        |
-| `kopdes_province_top_products.csv`         | ~38 x N                             | `product`, `volume`, `value` per province                                                                                                                          |
-| Geo boundaries                             | Provinsi, Kab/Kota, Kecamatan, Desa | BIG-derived polygons, simplified, linked via name matching                                                                                                         |
-| `data/osm/indonesia_roads.gpkg`            | ~4.5M segments                      | Nationwide road network: `osm_id`, `highway`, `name`, `oneway`, `maxspeed`, `surface`, `ref`, `lanes`, `bridge`, `tunnel`                                          |
-| `data/osm/indonesia_minimarkets.gpkg`      | ~10.6k POIs                         | Minimarket/supermarket POIs: `osm_id`, `name`, `brand`, `brand_label`, `shop`, `addr:*` — 16 brand categories                                                      |
-| `data/population/kontur_population_ID.gpkg` | ~1.8M cells                         | Kontur 400m H3 hexagons: `h3` (res 10), `population` — fusion of GHSL, Facebook HRSL, Microsoft Buildings, OSM                                                    |
+| Dataset                                     | Rows                                | Key Fields                                                                                                                                                         |
+| ------------------------------------------- | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `kopdes_locations.csv`                      | ~83k                                | `cooperative_id`, `name`, `province`, `district`, `subdistrict`, `lat`, `lon`                                                                                      |
+| `kopdes_land_assets.csv`                    | ~66k                                | `asset_id`, `cooperative` (name), `status` (Terverifikasi/Sedang Diverifikasi/Tidak Ada Lahan), `surveyor` (TNI/Agrinas/KOPERASI), `lat`, `lon`                    |
+| `kopdes_national_summary.csv`               | 1                                   | 20+ national aggregates: total cooperatives, legal entity counts, NPWP/NIB compliance, land verification counts, IDR 179.5T total transaction volume, 1.8M members |
+| `kopdes_stats_province.csv`                 | 38                                  | Per-province: cooperatives count, NPWP/NIB/RAT counts, transaction volume/value, savings (pokok + wajib), health score (all "unhealthy", index 51-57)              |
+| `kopdes_stats_district.csv`                 | ~514                                | Same stat columns at district level                                                                                                                                |
+| `kopdes_stats_subdistrict.csv`              | ~7.2k                               | Same stat columns at subdistrict level                                                                                                                             |
+| `kopdes_stats_village.csv`                  | ~83k                                | Same stat columns at village level                                                                                                                                 |
+| `kopdes_province_rat_and_construction.csv`  | 38                                  | RAT completion (all 0), construction progress buckets (0-20%, 21-50%, 51-75%, 76-99%, 100%)                                                                        |
+| `kopdes_province_top_products.csv`          | ~38 x N                             | `product`, `volume`, `value` per province                                                                                                                          |
+| Geo boundaries                              | Provinsi, Kab/Kota, Kecamatan, Desa | BIG-derived polygons, simplified, linked via name matching                                                                                                         |
+| `data/osm/indonesia_roads.gpkg`             | ~4.5M segments                      | Nationwide road network: `osm_id`, `highway`, `name`, `oneway`, `maxspeed`, `surface`, `ref`, `lanes`, `bridge`, `tunnel`                                          |
+| `data/osm/indonesia_minimarkets.gpkg`       | ~10.6k POIs                         | Minimarket/supermarket POIs: `osm_id`, `name`, `brand`, `brand_label`, `shop`, `addr:*` — 16 brand categories                                                      |
+| `data/population/kontur_population_ID.gpkg` | ~1.8M cells                         | Kontur 400m H3 hexagons: `h3` (res 10), `population` — fusion of GHSL, Facebook HRSL, Microsoft Buildings, OSM                                                     |
 
 ---
 
@@ -301,12 +301,12 @@ This document outlines a data-driven investigation into these claims, structured
 
 To fully execute the modules above, we need these external datasets:
 
-| Dataset                                  | Needed For | Source                         | Priority | Status    |
-| ---------------------------------------- | ---------- | ------------------------------ | -------- | --------- |
+| Dataset                                  | Needed For | Source                         | Priority | Status                                          |
+| ---------------------------------------- | ---------- | ------------------------------ | -------- | ----------------------------------------------- |
 | Population grid (100m-1km)               | A1, A2     | WorldPop, Kontur, GHSL         | Critical | ✅ Kontur 400m H3 acquired (1.8M cells, 164 MB) |
-| OSM road network (Indonesia extract)     | A3         | Geofabrik, PPP-OSM-ID          | Critical | ✅ Acquired (4.5M segments, 1.6 GB GPKG) |
-| SRTM/DEM elevation                       | A3         | USGS EarthExplorer, DEMNAS-BIG | High     |           |
-| Minimarket POI (Alfamart, Indomaret)     | B3         | OSM, commercial                | High     | ✅ Acquired (10.6k nodes, 1.7 MB GPKG) |
+| OSM road network (Indonesia extract)     | A3         | Geofabrik, PPP-OSM-ID          | Critical | ✅ Acquired (4.5M segments, 1.6 GB GPKG)        |
+| SRTM/DEM elevation                       | A3         | USGS EarthExplorer, DEMNAS-BIG | High     |                                                 |
+| Minimarket POI (Alfamart, Indomaret)     | B3         | OSM, commercial                | High     | ✅ Acquired (10.6k nodes, 1.7 MB GPKG)          |
 | Existing cooperative registry (pre-KDMP) | B2         | Kemenkop, BPS PODES            | High     |
 | APBN/DIPA budget allocation per KDMP     | C4         | Kemenkeu, Kemenkop             | High     |
 | Poverty/Vulnerability maps               | A4, C4     | BPS, SMERU, World Bank         | Medium   |
