@@ -1,0 +1,5 @@
+within,pct_minimarkets,pct_random_pop_weighted,pct_random_on_road_pop_weighted,excess_vs_pop_null,excess_vs_road_null
+~500 m,43.8,27.62,34.16,16.18,9.64
+~1 km,78.29,61.56,71.17,16.73,7.12
+~2 km,95.69,86.56,92.71,9.13,2.98
+~5 km,99.61,98.45,99.53,1.16,0.08

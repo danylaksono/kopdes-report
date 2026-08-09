@@ -21,6 +21,8 @@ Run any of them with `python reports/NN-slug/run.py`. Dependencies:
 | 02 | [zero-inflation](02-zero-inflation/) | How much of the performance data is actually zero? | no | run 2026-08-09 |
 | 03 | [population-coverage](03-population-coverage/) | Who is within reach of a KDMP, and which KDMP are near nobody? | first run only | run 2026-08-09 |
 | 04 | [siting-screen](04-siting-screen/) | Which KDMP sit somewhere physically implausible? | cloud rasters | run 2026-08-09, top 2,500 |
+| 05 | [road-access](05-road-access/) | How far is each KDMP from a road? | no | run 2026-08-09 |
+| 06 | [minimarket-proximity](06-minimarket-proximity/) | Were KDMP built on top of existing modern retail? | no | run 2026-08-09 |
 
 **Next screen to write**: 04 selects for *isolation*, so it structurally cannot
 find the "built in the middle of a paddy field" cases — those sit next to a
@@ -45,6 +47,16 @@ Read this before quoting any number out of these reports.
   isolated, 2,346 are in closed forest, 69 on water/mangrove/wetland, 993 on
   steep ground — and **401 of them carry an officially `Terverifikasi` land
   asset**, 171 both verified and steep (04).
+- **6.2% of cooperatives (5,133) have no made road within ~5 km**; 4,321 have no
+  road of any kind, not even a track (05). Two methodologically independent
+  sources agree: 87.4% of those also sit in a zero-population cell, against a
+  21.4% baseline.
+- **Short-range overlap with existing modern retail is real but modest.** After
+  controlling for both sitting on roads in populated areas, a mapped minimarket
+  is ~9.6 pts more likely to have a KDMP within 500 m than a comparable random
+  roadside location; the excess decays to nothing by 2 km (06). This survives
+  re-tiering the retail data, so it does not depend on where the format
+  boundary is drawn.
 - SIMKOPDES **carries no per-record timestamp**, and its `updated_at` is the API
   response time, not a data-freshness stamp (01). Dated snapshots plus diffing
   is the only way to measure currency.
@@ -61,6 +73,14 @@ Read this before quoting any number out of these reports.
   cannot tell a cooperative built in a forest from one whose coordinate is
   wrong. Both are findings; they are different findings. Each case needs
   imagery before it is cited.
+- **Cannibalisation.** 06 establishes *proximity*, which is a precondition for
+  competition, not evidence of it. The claim is about trade, and trade data is
+  97% zero. Nor can any of this establish intent — KDMP and minimarkets may
+  simply both target the village focal point.
+- **Anything from OSM stated as an absence.** OSM coverage in rural Indonesia is
+  partial and urban-biased (13.8% of Indomaret outlets, 10.9% of Alfamart).
+  Presence is evidence; absence is not. Write "no road *mapped in OSM* within
+  5 km", and treat retail proximity figures as lower bounds.
 
 ## Conventions
 

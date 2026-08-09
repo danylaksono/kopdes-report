@@ -1,0 +1,8 @@
+distance_to_nearest_non_track_road,cooperatives,pct
+on a road cell (<70 m),31483,37.78
+< ~260 m,21438,25.72
+< ~530 m,7481,8.98
+< ~1 km,6942,8.33
+< ~2 km,5358,6.43
+< ~5 km,5507,6.61
+> ~5 km / none found,5133,6.16

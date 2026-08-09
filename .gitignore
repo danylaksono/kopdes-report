@@ -12,9 +12,14 @@ data/web/
 
 # --- report outputs that are per-record tables, not findings ---
 # Everything else under reports/ IS committed - the small CSVs are the findings
-# and must survive without a re-run. This one is 9 MB and rebuilds in ~1 min via
-# reports/03-population-coverage/run.py.
+# and must survive without a re-run. These are per-cooperative tables of 6-11 MB
+# that each rebuild in ~1 min from their own report's run.py.
 reports/03-population-coverage/kopdes_remoteness.csv
+reports/05-road-access/kopdes_road_access.csv
+reports/06-minimarket-proximity/kopdes_minimarket_distance.csv
+
+# --- cached spatial indexes (rebuilt by the reports that use them) ---
+data/osm/road_cells_h3r10.parquet
 
 # --- Python ---
 __pycache__/
