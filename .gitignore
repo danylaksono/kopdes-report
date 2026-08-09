@@ -21,6 +21,13 @@ reports/06-minimarket-proximity/kopdes_minimarket_distance.csv
 # --- cached spatial indexes (rebuilt by the reports that use them) ---
 data/osm/road_cells_h3r10.parquet
 
+# --- dated SIMKOPDES snapshots: kept locally, not published as raw files ---
+# The CSVs stay out of git (28 MB per pull). The manifests DO NOT - they are
+# tiny, and their SHA-256 hashes are the only provenance record for snapshots
+# that cannot be re-fetched, since the API only ever serves current state.
+# Findings are published as pages; raw snapshots are available on request.
+data/snapshots/**/*.csv
+
 # --- Python ---
 __pycache__/
 *.pyc

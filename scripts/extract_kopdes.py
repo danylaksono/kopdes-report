@@ -135,6 +135,25 @@ class Client:
         raise RuntimeError("failed " + endpoint + ": " + str(last))
 
 
+# SIMKOPDES is a live system under active development and individual endpoints
+# go down without warning (/statistics/land-mapping has been 500ing since
+# 2026-08-09). A snapshot that dies because one headline metric is unavailable
+# is worse than a snapshot with a recorded hole in it, so non-essential
+# endpoints degrade instead of raising, and the failures are written into
+# _manifest.json.
+FAILED_ENDPOINTS = []
+
+
+def optional(client, endpoint, default=None):
+    try:
+        value = client.get(endpoint, tries=2)
+        return default if value is None else value
+    except Exception as exc:  # noqa: BLE001
+        log("WARNING endpoint unavailable, continuing without it:", endpoint)
+        FAILED_ENDPOINTS.append({"endpoint": endpoint, "error": str(exc)[-200:]})
+        return default
+
+
 def pool(items, worker, label=None):
     with ThreadPoolExecutor(max_workers=CONCURRENCY) as pool_exec:
         results = []
@@ -179,7 +198,13 @@ def stats(node):
 
 
 # ------------------------------------------------------------------ 4. main
+def _now():
+    from datetime import datetime, timezone
+    return datetime.now(timezone.utc).astimezone().isoformat(timespec="seconds")
+
+
 def main():
+    started_at = _now()
     secret, iv = discover_cipher()
     api = Client(secret, iv)
 
@@ -374,8 +399,8 @@ def main():
               ["province_id", "province", "product", "volume", "value"], product_rows)
 
     # H. national headline numbers
-    landing = api.get("/cooperatives/landing-summary") or {}
-    land = api.get("/statistics/land-mapping") or {}
+    landing = optional(api, "/cooperatives/landing-summary", {})
+    land = optional(api, "/statistics/land-mapping", {})
     coop_stats = national.get("cooperative_stats") or {}
     national_rows = [
         {"metric": "total_cooperatives", "value": coop_stats.get("total")},
@@ -391,7 +416,44 @@ def main():
         national_rows.append({"metric": "land_" + key, "value": value})
     write_csv("kopdes_national_summary.csv", ["metric", "value"], national_rows)
 
+    write_manifest(started_at)
     log("done - files are in", OUT_DIR.resolve())
+
+
+def write_manifest(started_at):
+    """
+    Record what this pull actually got.
+
+    The API carries no per-record freshness field - its `updated_at` is the
+    response time, not a data timestamp (see reports/01-snapshot-drift). So the
+    only way to know how current a snapshot is, or to compare two of them, is to
+    record the pull ourselves. Content hashes make "did anything change at all?"
+    a one-line check.
+    """
+    import hashlib as _hashlib
+    import json as _json
+
+    files = {}
+    for path in sorted(OUT_DIR.glob("*.csv")):
+        raw = path.read_bytes()
+        files[path.name] = {
+            "bytes": len(raw),
+            "rows": max(raw.count(b"\n") - 1, 0),
+            "sha256": _hashlib.sha256(raw).hexdigest(),
+        }
+
+    manifest = {
+        "snapshot_date": date.today().isoformat(),
+        "pull_started_at": started_at,
+        "pull_finished_at": _now(),
+        "period": PERIOD,
+        "api": API,
+        "skip_villages": SKIP_VILLAGES,
+        "endpoints_failed": FAILED_ENDPOINTS,
+        "files": files,
+    }
+    (OUT_DIR / "_manifest.json").write_text(_json.dumps(manifest, indent=2), encoding="utf-8")
+    log("wrote _manifest.json", f"({len(files)} files, {len(FAILED_ENDPOINTS)} endpoint failures)")
 
 
 if __name__ == "__main__":

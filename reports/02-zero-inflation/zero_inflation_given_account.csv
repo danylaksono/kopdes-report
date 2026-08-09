@@ -1,8 +1,8 @@
 field,villages_with_account,pct_nonzero_given_account
-npwp_count,80517,98.56
-nib_count,80517,75.61
-transaction_volume,80517,3.13
-transaction_value,80517,3.13
-simpanan_pokok_amount,80517,12.27
-simpanan_wajib_amount,80517,9.55
-savings_total_amount,80517,12.92
+npwp_count,79579,98.87
+nib_count,79579,75.97
+transaction_volume,79579,3.16
+transaction_value,79579,3.16
+simpanan_pokok_amount,79579,12.38
+simpanan_wajib_amount,79579,9.63
+savings_total_amount,79579,13.03

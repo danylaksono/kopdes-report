@@ -60,15 +60,22 @@ Read this before quoting any number out of these reports.
 - SIMKOPDES **carries no per-record timestamp**, and its `updated_at` is the API
   response time, not a data-freshness stamp (01). Dated snapshots plus diffing
   is the only way to measure currency.
+- **No reporting backlog is draining.** Comparing two full snapshots four days
+  apart: of 80,553 villages reporting zero transactions on 2026-08-05, **exactly
+  one** reported any activity by 2026-08-09 (01). Meanwhile the registry grew by
+  40 cooperatives. Records are added; activity is not reported against them.
+- The 2026-08-05 export contains **1,555 duplicate village rows** (plus 148
+  subdistricts, 5 districts), which inflate any sum over rows. Always
+  `drop_duplicates` on the id (01).
 
 **Not established, and currently unidentifiable:**
 
-- **Whether a zero means "no activity" or "not yet reported".** This is the
-  single biggest open question and it gates most of `analytics-plan.md`. Four
-  days of observation showed 0 of 332 zero-transaction subdistricts converting,
-  which rules out a *fast* data backlog but not a slow or batched one (01).
-  Until there are several monthly snapshots, every write-up must say zero is
-  ambiguous rather than assert inactivity.
+- **Whether a zero means "no activity" or "not yet reported".** Much narrower
+  than it was — a system being actively populated should show zeros converting,
+  and over four days exactly one did out of 80,553 (01). But formally the two
+  remain indistinguishable: a cooperative could be trading briskly and reporting
+  nothing, and nothing in this data would reveal it. Write "has not **reported**
+  any transaction", never "is inactive". Monthly snapshots are what close this.
 - **Whether flagged sites are badly sited or badly geocoded.** The screen in 04
   cannot tell a cooperative built in a forest from one whose coordinate is
   wrong. Both are findings; they are different findings. Each case needs
@@ -82,11 +89,96 @@ Read this before quoting any number out of these reports.
   Presence is evidence; absence is not. Write "no road *mapped in OSM* within
   5 km", and treat retail proximity figures as lower bounds.
 
+## Backlog — agreed, not yet built
+
+### 07 — Land-use point-in-polygon
+
+Tests the specific accusations that raster land cover cannot reach. ESA
+WorldCover has **no cemetery class**, so *"dibangun di tanah kuburan"* is
+invisible to [04](04-siting-screen/); OSM has the polygons. Census of the
+2026-08-07 PBF (36 s with a C++-side `osmium.filter.KeyFilter` — do **not**
+iterate tags in a Python callback, that took 92 min and never finished):
+
+| OSM tag | Features | Tests |
+|---|---|---|
+| `landuse=farmland` | 77,107 | "in the middle of a paddy field" (`landuse=paddy` is unused — sawah is tagged farmland) |
+| `landuse=cemetery` + `amenity=grave_yard` | 9,165 | **"on burial ground"** |
+| `amenity=marketplace` | 5,756 | proximity to the existing *pasar* — see 08 |
+| `place=village` | 76,980 | independent "is this actually in a village?" check, not dependent on Kontur |
+| `amenity=place_of_worship` | 89,344 | second village-centre proxy |
+
+These are **polygons**, so this needs point-in-polygon plus exact distance —
+different machinery from 04's raster point-sampling. Same asymmetry rule as all
+OSM work: a hit is strong evidence, a miss is no evidence (~9,165 burial grounds
+against ~83,000 desa is roughly 10% coverage).
+
+### 08 — Exact-geometry refinement of 05 and 06
+
+**H3 to rank, exact geometry to report.** Ring distance is hex-grid distance
+with ~15% directional error, quantised to ~132 m — right for sorting 83k into
+bands, wrong for a published sentence about a named place. The narrative needs
+"the nearest road is 3.2 km away", not "in the >2 km band".
+
+Stage 2 over the shortlists only (~5k points): `pyogrio` bbox-filtered reads to
+pull local geometry, then `shapely` distance against actual LineStrings and
+polygons. Adds exact distance to nearest road, nearest marketplace, nearest
+village centre.
+
+Two things to get right:
+
+- **Never buffer in degrees.** A 0.01° buffer is a different size in Aceh than
+  in Papua. Use a projected CRS per UTM zone or geodesic distance (`pyproj.Geod`).
+- **Don't over-promise precision.** OSM road geometry is good to ~5–15 m, worse
+  for rural tracks. 132 m bands → ~15 m truth is a real gain; decimals of a
+  metre are theatre.
+
+### 09 — External corroboration of the transaction figures
+
+The single weakest point in the whole investigation: the government can answer
+"0.85 transactions per cooperative" with *"the website simply isn't up to
+date"*, and [01](01-snapshot-drift/) cannot yet refute it.
+
+Two independent lines of defence:
+
+1. **The snapshot series** (01) — time-sensitive, see Conventions below.
+2. **External figures**: Kemenkop press releases and ministerial statements,
+   DPR Komisi VI hearing records, BPS, and reporting from Kompas / Tempo /
+   Katadata / CNBC Indonesia / Bisnis.com. Either the ministry's own public
+   claims match its dashboard — in which case the rebuttal collapses and the
+   dashboard is the official number — or they diverge wildly, which is a story
+   in itself. Both outcomes are useful.
+
+### Known data gap to fix upstream
+
+`scripts/download_osm.py` pulls `shop=convenience|supermarket|department_store`,
+so it **excludes `shop=kiosk` (6,464) and `shop=general` (797) by query design**
+— categories that are exactly village retail. This is separate from, and
+additional to, OSM's coverage problem. `classify_brand()` also misses spelling
+variants (`Alfa Express`, `Alfa Midi`, Yomart, 7-Eleven, Bali chains); the
+report layer repairs these in `06/run.py`, but the fix belongs upstream.
+
 ## Conventions
 
-- **Never regenerate `data/raw/` in place.** The drift measurement in 01
-  compares the live API against the committed snapshot; overwriting the
-  snapshot destroys the baseline. Copy the old snapshot aside first.
+- **Never regenerate `data/raw/` in place.** It is the 2026-08-05 baseline for
+  the drift measurement in 01; overwriting it destroys the only evidence that
+  answers the "not entered yet" rebuttal. New pulls go to
+  `data/snapshots/YYYY-MM-DD/` via
+  `python scripts/extract_kopdes.py data/snapshots/$(date +%F)`.
+- **Snapshot CSVs are held locally and never committed** (~28 MB each); findings
+  are published as pages, and raw snapshots go out on request. The
+  `_manifest.json` files **are** committed — their SHA-256 hashes are the only
+  provenance record, because a SIMKOPDES snapshot cannot be re-fetched once the
+  API moves on. **Back the local snapshots up outside this working tree**; if
+  they are lost, the central finding becomes unverifiable by anyone, including
+  us.
+- **Deduplicate on the id before comparing or summing** any `kopdes_stats_*`
+  file. The 2026-08-05 export has 1,555 duplicate villages.
+- **Start the monthly snapshot series now — this is the one irrecoverable
+  item.** "The website simply isn't up to date" is the strongest rebuttal
+  available to the ministry, and today we cannot refute it. Four monthly
+  snapshots showing zeros not converting turns the investigation's weakest
+  claim into one of its strongest. Every month not captured is lost permanently,
+  and no amount of later work recovers it.
 - Scripts write only inside their own report directory.
 - Anything hitting the live API says so in its README, because re-running will
   legitimately produce different numbers than the committed CSVs.

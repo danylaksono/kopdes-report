@@ -191,6 +191,102 @@ Grid cells currently encode **count of cooperatives only** (`getWeight: () => 1`
 
 Normalization is screengrid's default `max-local`, i.e. **view-relative** — the same count maps to different colours at different viewports. The legend prints the current max to keep that honest. If cross-view comparison ever matters, switch to `max-global` with a fixed `normalizationContext.globalMax`.
 
+## The deliverable: an investigative report, not an academic paper
+
+**Decided 2026-08-09. This supersedes the earlier plan to write this up as a
+conference paper.**
+
+The output is a **public-facing investigative report** — an independent piece in
+the vein of Mongabay or bandungbergerak.id (reference the team gave:
+`https://bandungbergerak.id/londo-ireng-di-pohon-keluarga-prabowo`). Concretely:
+
+- **Interactive, scrollytelling** — narrative drives the visuals, not the other
+  way round. The reader scrolls; the map and charts respond.
+- **Grounded in scientific principles** — every claim traceable to a reproducible
+  analysis, nulls and caveats intact behind the scenes.
+- **Written for the general public.** This is the hardest constraint and the one
+  most likely to be violated by default. See the tone rules below.
+- **Tables, figures and interactive maps**, with **screengrid** as a primary
+  visualisation vehicle (see the Web app section).
+
+### Tone rules (the default register here is too technical)
+
+- Lead with the human claim, then the evidence. Never open a section with a
+  method.
+- No unexplained jargon: "H3 cell", "k-ring", "null model", "zero-inflated",
+  "lower bound" all need a plain-language gloss on first use or replacement.
+  Prefer "we compared it against 10,000 random spots that look just as
+  plausible" over "population-weighted null model".
+- Numbers need a referent. "IDR 2.15 million per cooperative" means nothing;
+  "about USD 130 — one month of groceries — for the entire lifetime of a
+  cooperative" lands.
+- Uncertainty is stated in sentences, not hedged into invisibility. "We can't
+  tell whether these zeros mean no business or no paperwork" is honest and
+  readable; "the outcome variable is unidentifiable between states" is neither.
+- Keep the rigour, move it. Methods, caveats and null models belong in a linked
+  methodology section, not in the narrative flow.
+
+### What does and does not change
+
+- **`reports/` does not change.** It remains the evidence base and must stay
+  rigorous and reproducible — it becomes the report's linked methodology
+  appendix, which is the standard pattern for this genre (Reuters Graphics,
+  Mongabay, Bellingcat all do this).
+- **The web app at the repo root becomes the report itself**, not a data viewer.
+  The current three-view map is a component of it, not the product.
+- The narrative should be organised around the three public claims (remoteness,
+  cannibalisation, budget-vs-output), and must report the honest verdict on each
+  — including that the coverage claim does **not** hold (see
+  `reports/README.md`'s "what we can and cannot say"). A report that only
+  confirms is not an investigation.
+
+### Site architecture: a site, not a page
+
+One scrollytelling page cannot carry this much material. It is the **summary
+layer**; the detail has to live somewhere navigable. Proposed structure —
+four levels of progressive disclosure, each one click deeper, which is the
+Reuters Graphics / Mongabay pattern:
+
+| Route | Role |
+|---|---|
+| `/` | **The story.** Scrollytelling, linear, the summarised findings. Links inline to everything below. |
+| `/explore/` | **The interactive map.** Full screengrid explorer — layer switching, filters, per-cell inspection. The reader's own investigation. |
+| `/findings/` | Index of the detailed write-ups |
+| `/findings/remoteness/`, `/competition/`, `/money/` | One page per act, in depth, with the tables and figures the story only gestures at |
+| `/methods/`, `/methods/<nn-slug>/` | Methodology appendix — one page per `reports/` entry |
+| `/data/` | Downloads, provenance, the snapshot log |
+| `/about/` | Who, why, and the corrections policy |
+
+Design decisions:
+
+- **Real directories with `index.html`, not a hash router.** Works on GitHub
+  Pages as-is, gives clean URLs, keeps each page independently linkable — which
+  matters when other outlets cite a specific finding.
+- **`/methods/` pages must be generated from `reports/*/README.md`, never
+  written twice.** Single source of truth. Rendering the markdown client-side
+  keeps the no-build-step property; a build step is the alternative if the
+  render quality isn't good enough.
+- **One shared data layer** across all pages: the same parquet files and
+  DuckDB-wasm setup, so the story and the explorer use one screengrid component
+  configured differently, not two implementations.
+- **A public corrections log** in `/about/`. For an independent investigative
+  report this is a credibility requirement, not a nicety.
+
+Note the parquet migration solves the deployment problem that blocked GitHub
+Pages: the old `points.geojson` was 25 MB and gitignored, so a Pages deploy
+would 404 on its data. Population is 3.0 MB as parquet and the cooperative
+table is of the same order, which is small enough to commit outright.
+
+### Open questions to settle before building
+
+- **Language**: Bahasa Indonesia, English, or both? Audience and reach depend on
+  it, and it affects every string in the app.
+- **Naming individual cooperatives**: the siting candidates in
+  `reports/04-siting-screen/` are nameable village institutions. A wrong
+  coordinate would unfairly tar a specific desa. Set a verification bar
+  (imagery + boundary check, ideally local confirmation) before any name is
+  published.
+
 ## Reports (standing requirement)
 
 **Any analysis must land in `reports/` — no exceptions, no throwaway scripts.**
@@ -202,13 +298,30 @@ re-run). Shared helpers live in `reports/_lib/`. Deps in
 
 When you finish an analysis, also update the **"What we can and cannot say
 right now"** section of `reports/README.md`. That list is the project's single
-source of truth for which claims are currently supportable.
+source of truth for which claims are currently supportable. Agreed-but-unbuilt
+analyses live in that file's **Backlog** section (currently: land-use
+point-in-polygon, exact-geometry refinement, external corroboration of the
+transaction figures).
+
+**Performance note for OSM work**: filter on the C++ side
+(`osmium.FileProcessor(...).with_filter(osmium.filter.KeyFilter(...))`, 36 s over
+the 1.73 GB Indonesia PBF). Iterating tags in a Python `SimpleHandler` callback
+fires once per object across ~250M nodes — that ran for 92 minutes without
+finishing.
 
 Two hard rules that fall out of the data being live:
 
-- **Never regenerate `data/raw/` in place.** `reports/01-snapshot-drift` measures
-  the live API against the committed snapshot; overwriting the snapshot destroys
-  the baseline. New pulls go to `data/snapshots/YYYY-MM-DD/`.
+- **Never regenerate `data/raw/` in place.** It is the 2026-08-05 baseline for
+  `reports/01-snapshot-drift`; overwriting it destroys the evidence that answers
+  the "not entered yet" rebuttal. New pulls go to `data/snapshots/YYYY-MM-DD/`
+  via `python scripts/extract_kopdes.py data/snapshots/$(date +%F)`, which writes
+  a `_manifest.json` alongside them.
+- **Snapshot CSVs stay out of git** (~28 MB per pull); the project publishes
+  figures as HTML pages and hands over raw snapshots on request. `.gitignore`
+  drops `data/snapshots/**/*.csv` but keeps every `_manifest.json`, because a
+  SIMKOPDES snapshot cannot be re-fetched and those SHA-256 hashes are the only
+  provenance record. **Back the local snapshots up outside the working tree** —
+  lose them and the central finding is unverifiable by anyone.
 - **A zero in the performance data is ambiguous** between "no activity" and "not
   yet reported" (see `reports/01-snapshot-drift`). Write "has not *reported* any
   transaction", never "is inactive", until a snapshot series settles it.

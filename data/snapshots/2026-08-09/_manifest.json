@@ -1,0 +1,61 @@
+{
+  "snapshot_date": "2026-08-09",
+  "pull_started_at": "2026-08-09T21:36:34+01:00",
+  "pull_finished_at": "2026-08-09T21:40:57+01:00",
+  "period": "2026",
+  "api": "https://api.simkopdes.go.id/api",
+  "skip_villages": false,
+  "endpoints_failed": [
+    {
+      "endpoint": "/statistics/land-mapping",
+      "error": "failed /statistics/land-mapping: 500 Server Error: Internal Server Error for url: https://api.simkopdes.go.id/api/statistics/land-mapping"
+    }
+  ],
+  "files": {
+    "kopdes_land_assets.csv": {
+      "bytes": 10090490,
+      "rows": 65999,
+      "sha256": "5e951d10ef491938ad3fb81bdbd07da912970e674ee2339ed9238f54b3562481"
+    },
+    "kopdes_locations.csv": {
+      "bytes": 9931118,
+      "rows": 83382,
+      "sha256": "bce415a65419b494cbef164aa584a0ee655ba70e45c4613925183bb53bc44912"
+    },
+    "kopdes_national_summary.csv": {
+      "bytes": 495,
+      "rows": 14,
+      "sha256": "3bb98af0a715f0388fc4d5f2903626e65bda6a366058720550a2e6f11076da7c"
+    },
+    "kopdes_province_rat_and_construction.csv": {
+      "bytes": 3671,
+      "rows": 38,
+      "sha256": "92ce0faae071ea4b28fe5a053dbcc93fb2cc6ee5df9d29c378f2313c2698d2b3"
+    },
+    "kopdes_province_top_products.csv": {
+      "bytes": 12652,
+      "rows": 263,
+      "sha256": "ffbe9ff30b0c565ef328355078448c04ae1b468b6ee427f0d9b7eac9efb33551"
+    },
+    "kopdes_stats_district.csv": {
+      "bytes": 52721,
+      "rows": 514,
+      "sha256": "a8770586dd40eb06a32c6854be1fbc1acfa3a73b4138f87186cd3bfc42bc05c5"
+    },
+    "kopdes_stats_province.csv": {
+      "bytes": 6236,
+      "rows": 38,
+      "sha256": "7848cb8f0812d19ada0d41469bd0ce7aca0dbd0c0e99586ec966d5a6d55304cd"
+    },
+    "kopdes_stats_subdistrict.csv": {
+      "bytes": 684623,
+      "rows": 7277,
+      "sha256": "a43b71bf9ed20b05df5c79a4eb8c8246527cedace39b24a1608de7dc7fec7777"
+    },
+    "kopdes_stats_village.csv": {
+      "bytes": 8125449,
+      "rows": 83069,
+      "sha256": "1f87b511743b92b59e253bbc927dfc02650dff276ab039566cf4b9736897afa3"
+    }
+  }
+}

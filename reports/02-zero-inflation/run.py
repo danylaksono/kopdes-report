@@ -37,6 +37,16 @@ ACTIVITY_COLS = [
 
 def main():
     v = pd.read_csv(RAW / "kopdes_stats_village.csv")
+    # The 2026-08-05 export ships 1,555 duplicate village_ids. Left in, they
+    # double-count: the village-level transaction total comes out IDR 18.8M
+    # above the province-level total, which is what first exposed them. The
+    # 2026-08-09 snapshot has none, so this is a defect of that export rather
+    # than a permanent feature of the data.
+    before = len(v)
+    v = v.drop_duplicates("village_id")
+    if before != len(v):
+        print(f"dropped {before - len(v):,} duplicate village_ids "
+              f"({before:,} rows -> {len(v):,} villages)\n")
 
     rows = []
     for kind, cols in (("administrative", ADMIN_COLS), ("activity", ACTIVITY_COLS)):
