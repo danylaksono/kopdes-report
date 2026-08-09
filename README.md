@@ -37,13 +37,15 @@ It hits the live public API (no auth) and overwrites the files in place.
 ## Layout
 
 ```
+index.html    the visual-analytics app (served from the repo root)
+app/          its JS/CSS modules
 data/raw/     kopdes_*.csv  -  raw SIMKOPDES export (committed; source of truth)
+data/web/     points.geojson  -  generated app data
 scripts/      extractor + web-data generator scripts
 geo/          boundary-shapefile download/convert/join pipeline (see geo/README.md)
-web/          static MapLibre GL viewer
 ```
 
-`geo/raw/`, `geo/geojson/`, `geo/output/`, and `web/data/` are gitignored -
+`geo/raw/`, `geo/geojson/`, `geo/output/`, and `data/web/` are gitignored -
 they're all regenerated from `data/raw/` by the scripts below, and the
 boundary-level ones run into the hundreds of MB.
 
@@ -64,32 +66,47 @@ pip install -r geo/requirements.txt
 python geo/run_pipeline.py
 ```
 
-**3. Rebuild the point layer for the web viewer** (fast, no download):
+**3. Rebuild the point layer for the app** (fast, no download):
 
 ```bash
 node scripts/build_points.mjs
 ```
 
-## Web viewer
+## The app
 
-Static site, no build step - just MapLibre GL JS from a CDN plus one
-generated GeoJSON file. Renders every cooperative as a clustered point
-(83k+ points, so clustering isn't optional past city-block zoom), colored by
-land-asset verification status (green = Terverifikasi, amber = any other
-known status, gray = cooperative has no land-asset record at all). That
-status is joined from `kopdes_land_assets.csv` by exact cooperative name in
-`scripts/build_points.mjs` (99.96% match rate - see that script's header
-comment for details); click a point to see its raw status string.
+Static site served from the repo root, no build step - MapLibre GL JS and
+[screengrid](https://github.com/danylaksono/screengrid) from a CDN plus one
+generated GeoJSON file:
 
 ```bash
-node scripts/build_points.mjs        # if web/data/points.geojson doesn't exist yet
-python -m http.server 8000 --directory web
+node scripts/build_points.mjs        # if data/web/points.geojson doesn't exist yet
+python -m http.server 8000
 # open http://localhost:8000
 ```
 
+Three views over the same 83k cooperatives, switchable from the panel top-right:
+
+- **Screen grid** (default) and **screen hex** - screen-space density
+  aggregation via screengrid. Cells are a fixed pixel size (slider, 16-120px),
+  so the grid re-bins on every pan/zoom and always shows density at the
+  resolution you're actually looking at. Cell value is a plain count of
+  cooperatives; hover for the number. Colour is √-scaled (counts are wildly
+  skewed between Java and the outer islands) and rescales to the current
+  viewport, so read the legend, not the hue, across views.
+- **Points (clustered)** - every cooperative as a circle, colored by
+  land-asset verification status (green = Terverifikasi, amber = any other
+  known status, gray = no land-asset record at all). That status is joined
+  from `kopdes_land_assets.csv` by exact cooperative name in
+  `scripts/build_points.mjs` (99.96% match rate - see that script's header
+  comment); click a point for its raw status string.
+
+Only position is used by the grid views so far - per-cell attribute encoding
+(glyphs) hangs off `getWeight`/`onDrawCell` in [app/grid-layer.js](app/grid-layer.js)
+when we get to it.
+
 Basemap is [OpenFreeMap](https://openfreemap.org) (free, no API key). Next
-step once this is validated: swap the plain points for the joined boundary
-GeoJSON from `geo/output/` to do choropleths at any admin level.
+step: bring in the joined boundary GeoJSON from `geo/output/` for choropleths
+at any admin level.
 
 ## Known data-quality caveats
 

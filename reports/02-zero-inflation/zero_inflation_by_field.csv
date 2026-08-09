@@ -1,0 +1,9 @@
+field,kind,rows,nonzero,pct_nonzero
+accounts_count,administrative,84624,80517,95.15
+npwp_count,administrative,84624,81571,96.39
+nib_count,administrative,84624,61182,72.3
+transaction_volume,activity,84624,2521,2.98
+transaction_value,activity,84624,2521,2.98
+simpanan_pokok_amount,activity,84624,9884,11.68
+simpanan_wajib_amount,activity,84624,7691,9.09
+savings_total_amount,activity,84624,10402,12.29

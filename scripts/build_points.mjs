@@ -4,7 +4,7 @@
  *
  * Converts data/raw/kopdes_locations.csv (cooperative_id, name, province,
  * district, subdistrict, latitude, longitude) into a Point FeatureCollection
- * for the web viewer: web/data/points.geojson.
+ * for the web viewer: data/web/points.geojson.
  *
  * Rows with missing/non-numeric coordinates, or coordinates far outside
  * Indonesia's bounding box (a sign of bad/placeholder data in the SIMKOPDES
@@ -34,7 +34,7 @@ import { fileURLToPath } from "node:url";
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const LOCATIONS_PATH = path.join(ROOT, "data", "raw", "kopdes_locations.csv");
 const LAND_ASSETS_PATH = path.join(ROOT, "data", "raw", "kopdes_land_assets.csv");
-const OUT_PATH = path.join(ROOT, "web", "data", "points.geojson");
+const OUT_PATH = path.join(ROOT, "data", "web", "points.geojson");
 
 // Loose bounding box around Indonesia (incl. EEZ margin), used only to
 // flag obviously-wrong coordinates (e.g. 0,0 or another country entirely).

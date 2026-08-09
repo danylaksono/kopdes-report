@@ -1,33 +1,39 @@
-const VERIFIED_COLORS = {
+/**
+ * points-layer.js
+ *
+ * The original per-cooperative view: every kopdes as a clustered MapLibre
+ * circle, colored by land-asset verification status. Good for "where exactly
+ * is this cooperative", useless for reading national density (83k points
+ * collapse into a handful of clusters), which is what grid-layer.js is for.
+ */
+
+export const VERIFIED_COLORS = {
   verified: "#2e9e5b",
   not_verified: "#e0a13d",
   no_record: "#9aa0a6",
 };
 
-const VERIFIED_LABELS = {
+export const VERIFIED_LABELS = {
   verified: "Verified",
   not_verified: "Not verified",
   no_record: "No asset record",
 };
 
-const map = new maplibregl.Map({
-  container: "map",
-  style: "https://tiles.openfreemap.org/styles/positron",
-  center: [117.5, -2.5], // roughly the middle of Indonesia
-  zoom: 4.2,
-});
+const SOURCE_ID = "kopdes";
+const LAYER_IDS = ["clusters", "cluster-count", "unclustered-point"];
 
-map.addControl(new maplibregl.NavigationControl(), "top-right");
+let popup = null;
+const handlers = [];
 
-const info = document.getElementById("info");
+function on(map, type, layer, fn) {
+  map.on(type, layer, fn);
+  handlers.push([type, layer, fn]);
+}
 
-map.on("load", async () => {
-  const res = await fetch("data/points.geojson");
-  const data = await res.json();
-
-  map.addSource("kopdes", {
+export function addPointsLayer(map, geojson) {
+  map.addSource(SOURCE_ID, {
     type: "geojson",
-    data,
+    data: geojson,
     cluster: true,
     clusterMaxZoom: 12,
     clusterRadius: 45,
@@ -36,7 +42,7 @@ map.on("load", async () => {
   map.addLayer({
     id: "clusters",
     type: "circle",
-    source: "kopdes",
+    source: SOURCE_ID,
     filter: ["has", "point_count"],
     paint: {
       "circle-color": [
@@ -56,7 +62,7 @@ map.on("load", async () => {
   map.addLayer({
     id: "cluster-count",
     type: "symbol",
-    source: "kopdes",
+    source: SOURCE_ID,
     filter: ["has", "point_count"],
     layout: {
       "text-field": ["get", "point_count_abbreviated"],
@@ -69,7 +75,7 @@ map.on("load", async () => {
   map.addLayer({
     id: "unclustered-point",
     type: "circle",
-    source: "kopdes",
+    source: SOURCE_ID,
     filter: ["!", ["has", "point_count"]],
     paint: {
       "circle-color": [
@@ -85,24 +91,22 @@ map.on("load", async () => {
     },
   });
 
-  info.textContent = `Kopdes Merah Putih cooperatives — ${data.features.length.toLocaleString()} points`;
-
-  map.on("click", "clusters", (e) => {
+  on(map, "click", "clusters", (e) => {
     const [feature] = map.queryRenderedFeatures(e.point, { layers: ["clusters"] });
     const clusterId = feature.properties.cluster_id;
-    map.getSource("kopdes").getClusterExpansionZoom(clusterId, (err, zoom) => {
+    map.getSource(SOURCE_ID).getClusterExpansionZoom(clusterId, (err, zoom) => {
       if (err) return;
       map.easeTo({ center: feature.geometry.coordinates, zoom });
     });
   });
 
-  map.on("click", "unclustered-point", (e) => {
+  on(map, "click", "unclustered-point", (e) => {
     const feature = e.features[0];
     const { name, province, district, subdistrict, verified, asset_status } = feature.properties;
     const statusLine = asset_status
       ? `${escapeHtml(VERIFIED_LABELS[verified])} (${escapeHtml(asset_status)})`
       : escapeHtml(VERIFIED_LABELS[verified]);
-    new maplibregl.Popup()
+    popup = new maplibregl.Popup()
       .setLngLat(feature.geometry.coordinates)
       .setHTML(
         `<b>${escapeHtml(name)}</b><br>${escapeHtml(subdistrict)}, ${escapeHtml(district)}<br>${escapeHtml(province)}` +
@@ -112,12 +116,23 @@ map.on("load", async () => {
   });
 
   for (const layer of ["clusters", "unclustered-point"]) {
-    map.on("mouseenter", layer, () => (map.getCanvas().style.cursor = "pointer"));
-    map.on("mouseleave", layer, () => (map.getCanvas().style.cursor = ""));
+    on(map, "mouseenter", layer, () => (map.getCanvas().style.cursor = "pointer"));
+    on(map, "mouseleave", layer, () => (map.getCanvas().style.cursor = ""));
   }
-});
+}
 
-function escapeHtml(s) {
+export function removePointsLayer(map) {
+  for (const [type, layer, fn] of handlers.splice(0)) map.off(type, layer, fn);
+  if (popup) {
+    popup.remove();
+    popup = null;
+  }
+  for (const id of LAYER_IDS) if (map.getLayer(id)) map.removeLayer(id);
+  if (map.getSource(SOURCE_ID)) map.removeSource(SOURCE_ID);
+  map.getCanvas().style.cursor = "";
+}
+
+export function escapeHtml(s) {
   return String(s ?? "").replace(/[&<>"']/g, (c) => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
   })[c]);

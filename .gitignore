@@ -8,7 +8,13 @@ geo/geojson/
 geo/output/
 
 # --- regenerable web app data (see README.md to rebuild) ---
-web/data/
+data/web/
+
+# --- report outputs that are per-record tables, not findings ---
+# Everything else under reports/ IS committed - the small CSVs are the findings
+# and must survive without a re-run. This one is 9 MB and rebuilds in ~1 min via
+# reports/03-population-coverage/run.py.
+reports/03-population-coverage/kopdes_remoteness.csv
 
 # --- Python ---
 __pycache__/

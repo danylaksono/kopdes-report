@@ -1,0 +1,3 @@
+checked_at,snapshot_date,measure,n_sampled,changed,was_zero,was_zero_now_positive,zero_conversion_rate,was_positive_increased,was_positive_decreased,total_delta
+2026-08-09T19:16:29+01:00,2026-08-05,transaction_value,400,3,332,0,0.0,3,0,15138350.0
+2026-08-09T19:16:29+01:00,2026-08-05,savings_total_amount,400,9,209,0,0.0,8,1,6270000.0
