@@ -142,17 +142,21 @@ computed on the surviving 79% is conditioned on "has a land record", and that
 almost certainly correlates with the outcomes you're testing. State this as a
 limitation everywhere it applies; don't quietly analyse the 79%.
 
-### 1.6 Road network was never actually extracted
+### 1.6 ~~Road network was never actually extracted~~ — WRONG, retracted
 
-The plan marks OSM roads **"✅ Acquired (4.5M segments, 1.6 GB GPKG)"**. What's
-on disk is:
+**This finding was my error and is withdrawn.** I listed `data/osm/` with a
+truncated `ls` and concluded `indonesia_roads.gpkg` was missing. It is not:
 
 ```
-data/osm/indonesia-latest.osm.pbf        1.73 GB   (raw, unextracted)
+data/osm/indonesia-latest.osm.pbf        1.73 GB
+data/osm/indonesia_roads.gpkg            1.67 GB   4,494,742 LineStrings
 data/osm/indonesia_minimarkets.gpkg      1.79 MB
 ```
 
-`indonesia_roads.gpkg` does not exist. A3 is unstarted, not ready.
+Verified: layer `roads`, EPSG:4326, fields `osm_id, highway, name, oneway,
+maxspeed, surface, ref, lanes, bridge, tunnel`. The plan's "✅ Acquired (4.5M
+segments)" was accurate. **A3's road half is ready to run today** — no PBF
+extraction needed, only a conversion to the H3/parquet shape (§5.5).
 
 ### 1.7 Coordinate quality is *better* than H5 assumes
 

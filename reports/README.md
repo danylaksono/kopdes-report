@@ -20,7 +20,12 @@ Run any of them with `python reports/NN-slug/run.py`. Dependencies:
 | 01 | [snapshot-drift](01-snapshot-drift/) | Is SIMKOPDES still being filled in? Are the zeros temporary? | **live API** | run 2026-08-09 |
 | 02 | [zero-inflation](02-zero-inflation/) | How much of the performance data is actually zero? | no | run 2026-08-09 |
 | 03 | [population-coverage](03-population-coverage/) | Who is within reach of a KDMP, and which KDMP are near nobody? | first run only | run 2026-08-09 |
-| 04 | [siting-screen](04-siting-screen/) | Which KDMP sit somewhere physically implausible? | cloud rasters | run 2026-08-09 |
+| 04 | [siting-screen](04-siting-screen/) | Which KDMP sit somewhere physically implausible? | cloud rasters | run 2026-08-09, top 2,500 |
+
+**Next screen to write**: 04 selects for *isolation*, so it structurally cannot
+find the "built in the middle of a paddy field" cases — those sit next to a
+village and score zero on its Stage A. A separate screen for **cropland cover
+while close to population** is needed to test that half of the critique.
 
 ## What we can and cannot say right now
 
@@ -36,6 +41,10 @@ Read this before quoting any number out of these reports.
   hold as a mass phenomenon.
 - There is a **real tail**: 21.4% of cooperatives sit in a 400 m cell with zero
   recorded population, and 174 have nobody within 5 km (03).
+- That tail contains **concrete, nameable candidates**: of the 2,500 most
+  isolated, 2,346 are in closed forest, 69 on water/mangrove/wetland, 993 on
+  steep ground — and **401 of them carry an officially `Terverifikasi` land
+  asset**, 171 both verified and steep (04).
 - SIMKOPDES **carries no per-record timestamp**, and its `updated_at` is the API
   response time, not a data-freshness stamp (01). Dated snapshots plus diffing
   is the only way to measure currency.
