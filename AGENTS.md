@@ -299,9 +299,8 @@ re-run). Shared helpers live in `reports/_lib/`. Deps in
 When you finish an analysis, also update the **"What we can and cannot say
 right now"** section of `reports/README.md`. That list is the project's single
 source of truth for which claims are currently supportable. Agreed-but-unbuilt
-analyses live in that file's **Backlog** section (currently: land-use
-point-in-polygon, exact-geometry refinement, external corroboration of the
-transaction figures).
+analyses live in that file's **Backlog** section (currently: exact-geometry
+refinement, external corroboration of the transaction figures).
 
 **Performance note for OSM work**: filter on the C++ side
 (`osmium.FileProcessor(...).with_filter(osmium.filter.KeyFilter(...))`, 36 s over

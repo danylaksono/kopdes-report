@@ -17,9 +17,11 @@ data/web/
 reports/03-population-coverage/kopdes_remoteness.csv
 reports/05-road-access/kopdes_road_access.csv
 reports/06-minimarket-proximity/kopdes_minimarket_distance.csv
+reports/07-landuse-polygons/kopdes_landuse_context.csv
 
 # --- cached spatial indexes (rebuilt by the reports that use them) ---
 data/osm/road_cells_h3r10.parquet
+data/osm/indonesia_landuse.parquet
 
 # --- dated SIMKOPDES snapshots: kept locally, not published as raw files ---
 # The CSVs stay out of git (28 MB per pull). The manifests DO NOT - they are

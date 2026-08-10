@@ -23,11 +23,7 @@ Run any of them with `python reports/NN-slug/run.py`. Dependencies:
 | 04 | [siting-screen](04-siting-screen/) | Which KDMP sit somewhere physically implausible? | cloud rasters | run 2026-08-09, top 2,500 |
 | 05 | [road-access](05-road-access/) | How far is each KDMP from a road? | no | run 2026-08-09 |
 | 06 | [minimarket-proximity](06-minimarket-proximity/) | Were KDMP built on top of existing modern retail? | no | run 2026-08-09 |
-
-**Next screen to write**: 04 selects for *isolation*, so it structurally cannot
-find the "built in the middle of a paddy field" cases — those sit next to a
-village and score zero on its Stage A. A separate screen for **cropland cover
-while close to population** is needed to test that half of the critique.
+| 07 | [landuse-polygons](07-landuse-polygons/) | On a graveyard? In a paddy field? | cloud rasters | run 2026-08-10, 536 candidates |
 
 ## What we can and cannot say right now
 
@@ -51,6 +47,14 @@ Read this before quoting any number out of these reports.
   road of any kind, not even a track (05). Two methodologically independent
   sources agree: 87.4% of those also sit in a zero-population cell, against a
   21.4% baseline.
+- **The paddy-field claim holds; the graveyard claim does not.** KDMP fall inside
+  a mapped `landuse=farmland` polygon at **2.65%** against **1.10%** for OSM's own
+  village-centre nodes — 2.4× — and **448** are placed on cropland by OSM *and* by
+  ESA WorldCover independently, ≥100 m from the field edge, with people living
+  around them (07). Burial ground is the opposite: **22 cases, a rate
+  indistinguishable from village nodes** (0.026% vs 0.022%), only 7 of them more
+  than 25 m inside, 16 of 22 in cities where a TPU is a city block. Two
+  individual cases remain worth chasing; the pattern is not there.
 - **Short-range overlap with existing modern retail is real but modest.** After
   controlling for both sitting on roads in populated areas, a mapped minimarket
   is ~9.6 pts more likely to have a KDMP within 500 m than a comparable random
@@ -80,6 +84,14 @@ Read this before quoting any number out of these reports.
   cannot tell a cooperative built in a forest from one whose coordinate is
   wrong. Both are findings; they are different findings. Each case needs
   imagery before it is cited.
+  **07 sharpened this into a specific worry and could not resolve it**: if a
+  SIMKOPDES coordinate is a desa centroid, a desa that is mostly rice fields
+  lands in a rice field automatically — and would beat the village-node baseline
+  by roughly the margin observed. The road test leans the wrong way: the
+  candidates are *less* likely to be near a road than comparable cooperatives
+  (59.5% vs 72.5%), not more. So write "**recorded at** a location inside a
+  paddy field", never "built in a paddy field". If the ministry answers that the
+  coordinates are wrong, that is a different story, not a smaller one.
 - **Cannibalisation.** 06 establishes *proximity*, which is a precondition for
   competition, not evidence of it. The claim is about trade, and trade data is
   97% zero. Nor can any of this establish intent — KDMP and minimarkets may
@@ -91,27 +103,6 @@ Read this before quoting any number out of these reports.
 
 ## Backlog — agreed, not yet built
 
-### 07 — Land-use point-in-polygon
-
-Tests the specific accusations that raster land cover cannot reach. ESA
-WorldCover has **no cemetery class**, so *"dibangun di tanah kuburan"* is
-invisible to [04](04-siting-screen/); OSM has the polygons. Census of the
-2026-08-07 PBF (36 s with a C++-side `osmium.filter.KeyFilter` — do **not**
-iterate tags in a Python callback, that took 92 min and never finished):
-
-| OSM tag | Features | Tests |
-|---|---|---|
-| `landuse=farmland` | 77,107 | "in the middle of a paddy field" (`landuse=paddy` is unused — sawah is tagged farmland) |
-| `landuse=cemetery` + `amenity=grave_yard` | 9,165 | **"on burial ground"** |
-| `amenity=marketplace` | 5,756 | proximity to the existing *pasar* — see 08 |
-| `place=village` | 76,980 | independent "is this actually in a village?" check, not dependent on Kontur |
-| `amenity=place_of_worship` | 89,344 | second village-centre proxy |
-
-These are **polygons**, so this needs point-in-polygon plus exact distance —
-different machinery from 04's raster point-sampling. Same asymmetry rule as all
-OSM work: a hit is strong evidence, a miss is no evidence (~9,165 burial grounds
-against ~83,000 desa is roughly 10% coverage).
-
 ### 08 — Exact-geometry refinement of 05 and 06
 
 **H3 to rank, exact geometry to report.** Ring distance is hex-grid distance
@@ -121,8 +112,9 @@ bands, wrong for a published sentence about a named place. The narrative needs
 
 Stage 2 over the shortlists only (~5k points): `pyogrio` bbox-filtered reads to
 pull local geometry, then `shapely` distance against actual LineStrings and
-polygons. Adds exact distance to nearest road, nearest marketplace, nearest
-village centre.
+polygons. **Scope is now roads and retail only** — [07](07-landuse-polygons/)
+already ships geodesic distance to the nearest marketplace and village centre
+for all 83,342 cooperatives, so that half is done.
 
 Two things to get right:
 

@@ -1,0 +1,6 @@
+class,osm_features,kdmp_inside_polygon,kdmp_within_100m,kdmp_within_250m,kdmp_within_500m,kdmp_within_1000m,median_dist_m
+cemetery,9095,22.0,268,896,2381,5659,11038.0
+farmland,77075,2206.0,4057,5870,8143,12257,7333.2
+marketplace,5742,16.0,212,689,1806,4401,10467.2
+village,76973,,6195,13971,26272,43609,932.8
+worship,89339,,1988,6164,11385,19523,3218.8
