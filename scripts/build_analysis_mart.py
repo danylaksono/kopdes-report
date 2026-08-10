@@ -1,0 +1,523 @@
+#!/usr/bin/env python3
+"""
+Build the analysis mart: one rich row per cooperative, plus the same measures
+rolled up to kecamatan, kabupaten and provinsi.
+
+This is the data layer the visual analytics app reads. Every finding produced in
+reports/ is per-cooperative and lives in its own directory; a glyph renderer
+needs them side by side, on one row, with a stable schema. That is all this
+script does - it computes nothing new and it must not. If a number here
+disagrees with a report, the report is right and this is broken.
+
+Four levels, for gradual aggregation in the app:
+
+  data/web/kopdes_points.parquet      83,342 rows - one cooperative (~= one desa)
+  data/web/kopdes_kecamatan.parquet    7,273 rows - subdistrict
+  data/web/kopdes_kabupaten.parquet      514 rows - district
+  data/web/kopdes_provinsi.parquet        38 rows - province
+
+Every aggregate level carries the SAME measure names as the level below, so one
+glyph specification works at all four zoom levels without a per-level special
+case. Each aggregate row also carries an `anchor_lat`/`anchor_lon` - the median
+position of its member cooperatives - which is what screengrid binds a feature
+to when it is not drawing points.
+
+Keys, and why they are what they are
+------------------------------------
+`kopdes_locations.csv` has no village name and no admin ids, only names. So:
+
+  * **Admin ids** come from joining (province, district, subdistrict) names
+    against `kopdes_stats_subdistrict.csv`, which carries all three ids.
+    **99.91%** of cooperatives match. The 0.09% that do not are kept in the
+    points table with null ids and are absent from every aggregate.
+  * **Village-level economics** need a second hop, because nothing links a
+    cooperative to a village directly: cooperative name -> `kopdes_land_assets`
+    (which has a `village`) -> `kopdes_stats_village`. Hop 2 is essentially
+    lossless (100.0%); hop 1 is not, because 21% of cooperatives have no
+    land-asset record at all. **End-to-end 79.1%** - see analytics-plan-review
+    section 1.5. Treat `has_village_stats` as a filter, never assume the join.
+  * **Aggregate economics do not use that hop.** `kopdes_stats_village.csv`
+    carries every admin id natively, so kecamatan/kabupaten/provinsi totals are
+    grouped straight off it and are complete.
+
+Two hard rules inherited from the reports:
+  * **Deduplicate on the id before summing anything.** The 2026-08-05 export has
+    1,555 duplicate village rows, 148 subdistricts, 5 districts.
+  * **A zero transaction is "has not reported", not "is inactive"** (see
+    reports/01-snapshot-drift). Column names say `reported` for that reason.
+
+H3 cell ids are stored as **UBIGINT**, not hex strings - smaller, and joinable
+by integer equality. `h3_h3_to_string(h3_r8)` converts in DuckDB / DuckDB-wasm
+when a string is genuinely needed.
+
+Inputs from reports/ are per-cooperative tables that are gitignored (6-28 MB
+each). If one is missing, its columns are filled with nulls and the script says
+so rather than failing - but the mart is then incomplete, so rebuild the report.
+
+Usage:
+  python scripts/build_analysis_mart.py
+  python scripts/build_analysis_mart.py --out data/web
+"""
+
+import argparse
+import json
+import sys
+from datetime import date
+from pathlib import Path
+
+import duckdb
+
+ROOT = Path(__file__).resolve().parent.parent
+RAW = ROOT / "data" / "raw"
+REPORTS = ROOT / "reports"
+
+# H3 resolutions written onto every point. r8 is Kontur's native 400 m grid (03);
+# the coarser ones let the app pre-aggregate without recomputing from lat/lon.
+H3_RES = [5, 6, 7, 8, 9]
+
+# Per-cooperative report outputs. `key` is that file's name for cooperative_id.
+SOURCES = {
+    "remoteness": (REPORTS / "03-population-coverage" / "kopdes_remoteness.csv",
+                   "cooperative_id", "python reports/03-population-coverage/run.py"),
+    "siting": (REPORTS / "04-siting-screen" / "candidates.csv",
+               "cooperative_id", "python reports/04-siting-screen/run.py --top 2500"),
+    "road": (REPORTS / "05-road-access" / "kopdes_road_access.csv",
+             "cooperative_id", "python reports/05-road-access/run.py"),
+    "retail": (REPORTS / "06-minimarket-proximity" / "kopdes_minimarket_distance.csv",
+               "id", "python reports/06-minimarket-proximity/run.py"),
+    "landuse": (REPORTS / "07-landuse-polygons" / "kopdes_landuse_context.csv",
+                "cooperative_id", "python reports/07-landuse-polygons/run.py"),
+    "farmcand": (REPORTS / "07-landuse-polygons" / "farmland_candidates.csv",
+                 "cooperative_id", "python reports/07-landuse-polygons/run.py"),
+    "retail_exact": (REPORTS / "08-exact-geometry" / "exact_minimarket_distance.csv",
+                     "cooperative_id", "python reports/08-exact-geometry/run.py"),
+    "road_exact": (REPORTS / "08-exact-geometry" / "exact_road_distance_far_set.csv",
+                   "cooperative_id", "python reports/08-exact-geometry/run.py"),
+    "suspect": (REPORTS / "08-exact-geometry" / "suspect_coordinates.csv",
+                "cooperative_id", "python reports/08-exact-geometry/run.py"),
+}
+
+
+def csv(path: Path) -> str:
+    return f"read_csv_auto('{path.as_posix()}', header=true, sample_size=-1)"
+
+
+def register_sources(con):
+    """Create one view per report output; empty stand-in if the file is absent."""
+    missing = []
+    for name, (path, key, how) in SOURCES.items():
+        if path.exists():
+            con.execute(f"create or replace view src_{name} as "
+                        f"select * rename ({key} as cooperative_id) from {csv(path)}"
+                        if key != "cooperative_id" else
+                        f"create or replace view src_{name} as select * from {csv(path)}")
+        else:
+            con.execute(f"create or replace view src_{name} as "
+                        f"select null::bigint as cooperative_id where false")
+            missing.append((name, path, how))
+    if missing:
+        print("  WARNING - missing report outputs, their columns will be null:")
+        for name, path, how in missing:
+            print(f"    {name:10} {path.relative_to(ROOT)}\n{'':15}rebuild: {how}")
+    return {n for n, _, _ in missing}
+
+
+def build_points(con, missing):
+    """One row per cooperative, every report's attributes joined on."""
+    h3_cols = ",\n            ".join(
+        f"h3_latlng_to_cell(l.latitude, l.longitude, {r}) as h3_r{r}" for r in H3_RES
+    )
+
+    # Admin ids via the subdistrict name triple. Deduplicated first: the export
+    # repeats 148 subdistricts, and joining against the raw file would duplicate
+    # cooperatives.
+    con.execute(f"""
+        create or replace table admin as
+        select * exclude (rn) from (
+            select province_id, district_id, subdistrict_id,
+                   upper(trim(province)) as p, upper(trim(district)) as d,
+                   upper(trim(subdistrict)) as s,
+                   row_number() over (partition by subdistrict_id order by province_id) as rn
+            from {csv(RAW / 'kopdes_stats_subdistrict.csv')}
+        ) where rn = 1
+    """)
+
+    # Village statistics, deduplicated on village_id. This is the complete
+    # economic picture (every admin id is native to this file) and it is the
+    # source for all aggregate totals. The two-hop join below is only ever used
+    # to put a value on an individual cooperative.
+    con.execute(f"""
+        create or replace table village_stats as
+        select * exclude (rn) from (
+            select village_id, subdistrict_id, district_id, province_id,
+                   upper(trim(province)) as p, upper(trim(district)) as d,
+                   upper(trim(subdistrict)) as s, upper(trim(village)) as v,
+                   village, accounts_count, npwp_count, nib_count, rat_count,
+                   transaction_volume, transaction_value, savings_total_amount,
+                   row_number() over (partition by village_id order by village) as rn
+            from {csv(RAW / 'kopdes_stats_village.csv')}
+        ) where rn = 1
+    """)
+
+    # The two-hop village link. Land assets carry the village name that
+    # locations lacks; village stats are then keyed on the full name path.
+    con.execute(f"""
+        create or replace table village_link as
+        with la as (
+            select * exclude (rn) from (
+                select cooperative, upper(trim(province)) as p, upper(trim(district)) as d,
+                       upper(trim(subdistrict)) as s, upper(trim(village)) as v,
+                       status as land_status, surveyor as land_surveyor,
+                       row_number() over (partition by cooperative order by asset_id) as rn
+                from {csv(RAW / 'kopdes_land_assets.csv')}
+            ) where rn = 1
+        )
+        select la.cooperative, la.land_status, la.land_surveyor,
+               vs.village_id, vs.village, vs.accounts_count, vs.npwp_count, vs.nib_count,
+               vs.rat_count, vs.transaction_volume, vs.transaction_value,
+               vs.savings_total_amount
+        from la left join village_stats vs
+               on la.p = vs.p and la.d = vs.d and la.s = vs.s and la.v = vs.v
+    """)
+
+    con.execute(f"""
+        create or replace table points as
+        select
+            l.cooperative_id,
+            l.name                                  as cooperative,
+            a.province_id, a.district_id, a.subdistrict_id,
+            l.province, l.district, l.subdistrict,
+            vl.village_id, vl.village,
+            l.latitude, l.longitude,
+            {h3_cols},
+
+            -- 02 zero-inflation / the outcome variable, where the two-hop join
+            -- reached. NULL means "not linked", 0 means "linked and reported
+            -- nothing" - these must never be conflated.
+            (vl.village_id is not null)             as has_village_stats,
+            vl.transaction_value, vl.transaction_volume, vl.savings_total_amount,
+            vl.accounts_count, vl.npwp_count, vl.nib_count, vl.rat_count,
+            case when vl.village_id is null then null
+                 else vl.transaction_value > 0 end  as has_reported_transaction,
+
+            -- 03 population coverage
+            r.own_cell_pop, r.pop_within_1_4km, r.pop_within_5_1km, r.remoteness_band,
+            -- 04's Stage A score, recomputed here for ALL cooperatives (the
+            -- report only writes out its shortlist).
+            (case when r.own_cell_pop = 0 then 2 else 0 end
+             + case when coalesce(r.pop_within_1_4km, 0) < 100 then 2 else 0 end
+             + case when coalesce(r.pop_within_5_1km, 0) < 1000 then 1 else 0 end)
+                                                    as isolation_score,
+
+            -- 04 siting screen: shortlist only, null elsewhere by design
+            (s.cooperative_id is not null)          as in_siting_shortlist,
+            s.elevation_m, s.relief_200m_m, s.landcover as siting_landcover,
+            s.flag_steep, s.flag_implausible_cover, s.n_flags as siting_n_flags,
+
+            -- 05 road access
+            rd.km_any_road, rd.km_non_track, rd.road_band, rd.track_only,
+
+            -- 06 modern retail (ring bands) and 08 (exact geodesic, all points).
+            -- Prefer the exact column: 08 showed the ring version overstates
+            -- distance by ~169 m and is capped at ~5 km.
+            rt.km_to_minimarket,
+            rx.m_to_minimarket                      as m_to_minimarket_exact,
+            rx.nearest_brand                        as nearest_minimarket_brand,
+
+            -- 08 exact road distance. Present only for 05's roadless set - for
+            -- everyone else the ring distance is accurate to ~34 m and there was
+            -- nothing to refine.
+            dx.m_to_made_road                       as m_to_made_road_exact,
+
+            -- 08 coordinate validity. TRUE means the point is outside Indonesia
+            -- entirely; `coordinate_diagnosis` says whether flipping the
+            -- latitude sign explains it. FILTER THESE OUT of any map or
+            -- distance statistic.
+            (sc.cooperative_id is not null)         as coordinate_suspect,
+            sc.diagnosis                            as coordinate_diagnosis,
+
+            -- 07 land use
+            lu.in_farmland, lu.farmland_depth_m, lu.farmland_polygon_coarse,
+            lu.in_cemetery, lu.cemetery_depth_m, lu.dist_cemetery_m,
+            lu.dist_marketplace_m, lu.dist_village_core_m, lu.outside_village_core,
+            (fc.cooperative_id is not null)         as farmland_candidate,
+            fc.confirmed_agricultural               as farmland_confirmed_cropland,
+
+            -- land assets (name join; see the module docstring)
+            vl.land_status, vl.land_surveyor,
+            (vl.land_status = 'Terverifikasi')       as land_verified,
+
+            'https://www.google.com/maps/@' || l.latitude || ',' || l.longitude
+                || ',250m/data=!3m1!1e3'            as imagery_url
+        from {csv(RAW / 'kopdes_locations.csv')} l
+        left join admin a
+               on a.p = upper(trim(l.province)) and a.d = upper(trim(l.district))
+              and a.s = upper(trim(l.subdistrict))
+        left join village_link vl on vl.cooperative = l.name
+        left join src_remoteness r using (cooperative_id)
+        left join src_siting     s using (cooperative_id)
+        left join src_road      rd using (cooperative_id)
+        left join src_retail    rt using (cooperative_id)
+        left join src_landuse   lu using (cooperative_id)
+        left join src_farmcand  fc using (cooperative_id)
+        left join src_retail_exact rx using (cooperative_id)
+        left join src_road_exact   dx using (cooperative_id)
+        left join src_suspect      sc using (cooperative_id)
+    """)
+
+    n, = con.execute("select count(*) from points").fetchone()
+    base, = con.execute(f"select count(*) from {csv(RAW / 'kopdes_locations.csv')}").fetchone()
+    if n != base:
+        sys.exit(f"FATAL: points has {n:,} rows against {base:,} cooperatives - a join fanned out")
+    return n
+
+
+# Spatial measures, aggregated from the points table. Identical names at every
+# level, written once here so the four tables cannot drift apart.
+#
+# Economics are deliberately NOT in this list. Summing them over points would
+# only reach the 79% of cooperatives whose village link resolved - which carry
+# 88% of national transaction value, so the totals would be wrong AND biased.
+# They come from ECON_MEASURES below instead, off the complete village file.
+AGG_MEASURES = """
+    count(*)                                                as cooperatives,
+    -- Anchors ignore the 19 impossible coordinates (08). A median is robust to
+    -- them nationally, but a kecamatan with few members could be dragged into
+    -- the sea by one.
+    median(latitude)  filter (where not coordinate_suspect) as anchor_lat,
+    median(longitude) filter (where not coordinate_suspect) as anchor_lon,
+    count(*) filter (where coordinate_suspect)              as coordinate_suspect,
+    count(*) filter (where has_village_stats)               as cooperatives_village_linked,
+
+    round(100.0 * count(*) filter (where own_cell_pop = 0)
+          / nullif(count(*) filter (where own_cell_pop is not null), 0), 2)
+                                                            as pct_zero_population_cell,
+    median(pop_within_1_4km)                                as median_pop_within_1_4km,
+    round(avg(isolation_score), 2)                          as mean_isolation_score,
+
+    round(100.0 * count(*) filter (where km_non_track is null or km_non_track > 5)
+          / nullif(count(*) filter (where km_any_road is not null
+                                       or km_non_track is not null), 0), 2)
+                                                            as pct_no_road_within_5km,
+    median(km_non_track)                                    as median_km_to_road,
+    -- Exact (08), not the capped ring version, so this is defined everywhere.
+    round(median(m_to_minimarket_exact) / 1000.0, 3)        as median_km_to_minimarket,
+    round(100.0 * count(*) filter (where m_to_minimarket_exact <= 500)
+          / nullif(count(*) filter (where m_to_minimarket_exact is not null), 0), 2)
+                                                            as pct_minimarket_within_500m,
+
+    count(*) filter (where in_farmland)                     as in_farmland,
+    count(*) filter (where farmland_candidate)              as farmland_candidates,
+    count(*) filter (where in_cemetery)                     as in_cemetery,
+    median(dist_marketplace_m)                              as median_m_to_marketplace,
+    median(dist_village_core_m)                             as median_m_to_village_core,
+
+    count(*) filter (where land_verified)                   as land_verified,
+    round(100.0 * count(*) filter (where land_verified)
+          / nullif(count(*) filter (where land_status is not null), 0), 2)
+                                                            as pct_land_verified,
+    count(*) filter (where in_siting_shortlist)             as siting_shortlisted
+"""
+
+
+# The economic half, grouped straight off the deduplicated village file, which
+# has every admin id natively. Complete at every level - no name matching and no
+# two-hop join involved, so these totals reconcile exactly with the raw export.
+ECON_MEASURES = """
+    count(*)                                                as villages,
+    count(*) filter (where transaction_value > 0)           as villages_reporting,
+    round(100.0 * count(*) filter (where transaction_value > 0)
+          / nullif(count(*), 0), 2)                         as pct_reported_transaction,
+    sum(transaction_value)                                  as transaction_value,
+    sum(transaction_volume)                                 as transaction_volume,
+    sum(savings_total_amount)                               as savings_total_amount,
+    sum(accounts_count)                                     as accounts_count,
+    sum(npwp_count)                                         as npwp_count,
+    sum(nib_count)                                          as nib_count,
+    sum(rat_count)                                          as rat_count
+"""
+
+
+def build_aggregate(con, name, id_col, label_cols):
+    """
+    Roll one admin level up: spatial measures from `points`, economics from
+    `village_stats`, joined on the admin id.
+
+    Points with a null id are dropped, which is the 0.05% whose subdistrict name
+    did not match. They stay in the points table; they cannot be placed in a
+    hierarchy that has no id for them.
+    """
+    labels = ", ".join(f"any_value({c}) as {c}" for c in label_cols)
+    con.execute(f"""
+        create or replace table agg_{name} as
+        with spatial as (
+            select {id_col}, {labels}, {AGG_MEASURES}
+            from points where {id_col} is not null group by {id_col}
+        ), econ as (
+            select {id_col}, {ECON_MEASURES}
+            from village_stats where {id_col} is not null group by {id_col}
+        )
+        select * from spatial full outer join econ using ({id_col})
+        order by {id_col}
+    """)
+    n, = con.execute(f"select count(*) from agg_{name}").fetchone()
+    return n
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--out", default=str(ROOT / "data" / "web"))
+    args = ap.parse_args()
+    out = Path(args.out)
+    out.mkdir(parents=True, exist_ok=True)
+
+    con = duckdb.connect()
+    con.execute("install h3 from community; load h3;")
+
+    print("registering report outputs")
+    missing = register_sources(con)
+
+    print("\nbuilding points")
+    n_points = build_points(con, missing)
+    matched, = con.execute("select count(*) from points where subdistrict_id is not null").fetchone()
+    linked, = con.execute("select count(*) from points where has_village_stats").fetchone()
+    print(f"  {n_points:,} cooperatives")
+    print(f"  admin ids resolved:      {matched:,}  ({100*matched/n_points:.2f}%)")
+    print(f"  village stats linked:    {linked:,}  ({100*linked/n_points:.1f}%)")
+
+    levels = {
+        "kecamatan": ("subdistrict_id", ["province_id", "district_id",
+                                         "province", "district", "subdistrict"]),
+        "kabupaten": ("district_id", ["province_id", "province", "district"]),
+        "provinsi": ("province_id", ["province"]),
+    }
+    print("\nbuilding aggregates")
+    counts = {"points": n_points}
+    for name, (id_col, labels) in levels.items():
+        counts[name] = build_aggregate(con, name, id_col, labels)
+        print(f"  {name:10} {counts[name]:>6,} rows")
+
+    # The province stats file carries health scoring that exists nowhere else.
+    # Its own latitude/longitude is kept beside the computed anchor rather than
+    # replacing it - analytics-plan-review 1.7 found those centroids to be the
+    # likelier error for the new Papua provinces.
+    con.execute(f"""
+        create or replace table agg_provinsi as
+        select a.*, p.health_score, p.health_status, p.average_health_index,
+               p.healthy_count, p.fairly_healthy_count, p.unhealthy_count,
+               p.latitude as official_lat, p.longitude as official_lon
+        from agg_provinsi a
+        left join (select * exclude (rn) from (
+                     select *, row_number() over (partition by province_id
+                                                  order by province) as rn
+                     from {csv(RAW / 'kopdes_stats_province.csv')}) where rn = 1) p
+               using (province_id)
+        order by province_id
+    """)
+
+    print("\nwriting parquet")
+    written = {}
+    for table, fname in [("points", "kopdes_points"), ("agg_kecamatan", "kopdes_kecamatan"),
+                         ("agg_kabupaten", "kopdes_kabupaten"), ("agg_provinsi", "kopdes_provinsi")]:
+        path = out / f"{fname}.parquet"
+        con.execute(f"copy {table} to '{path.as_posix()}' (format parquet, compression zstd)")
+        written[fname] = path
+        print(f"  {path.relative_to(ROOT)}  {path.stat().st_size/1e6:.2f} MB")
+
+    # The manifest is what the app reads to know what it has: column names,
+    # types, row counts, and which report produced each file. It also records
+    # the join coverage, so a caveat cannot be silently lost between here and a
+    # published chart.
+    schema = {}
+    for table, fname in [("points", "kopdes_points"), ("agg_kecamatan", "kopdes_kecamatan"),
+                         ("agg_kabupaten", "kopdes_kabupaten"), ("agg_provinsi", "kopdes_provinsi")]:
+        cols = con.execute(f"describe {table}").fetchall()
+        entry = {
+            "file": f"{fname}.parquet",
+            "rows": con.execute(f"select count(*) from {table}").fetchone()[0],
+            "columns": [{"name": c[0], "type": c[1]} for c in cols],
+        }
+        if table != "points":
+            # Units that have villages in the statistics but no name-matched
+            # cooperative. They carry economics and a null anchor, so they
+            # cannot be drawn - filter on `anchor_lat is not null` to map.
+            entry["rows_without_anchor"] = con.execute(
+                f"select count(*) from {table} where anchor_lat is null").fetchone()[0]
+        schema[fname] = entry
+    manifest = {
+        "built": date.today().isoformat(),
+        "source_snapshot": "data/raw (SIMKOPDES export 2026-08-05)",
+        "h3_resolutions": H3_RES,
+        "h3_encoding": "UBIGINT; use h3_h3_to_string() for the hex form",
+        "levels": ["kopdes_points", "kopdes_kecamatan", "kopdes_kabupaten", "kopdes_provinsi"],
+        "anchor": "median latitude/longitude of member cooperatives",
+        "coverage": {
+            "cooperatives": n_points,
+            "admin_ids_resolved": matched,
+            "village_stats_linked": linked,
+            "village_stats_linked_pct": round(100 * linked / n_points, 1),
+        },
+        "caveats": [
+            "A zero transaction means 'has not reported', not 'is inactive' (reports/01).",
+            "transaction_value is NULL where the village join failed and 0 where it "
+            "succeeded and nothing was reported - do not conflate them.",
+            "OSM-derived distances are upper bounds; absence is not evidence (reports/05, 07).",
+            "Siting and farmland flags are candidates requiring imagery verification "
+            "(reports/04, 07).",
+            "Aggregate economics come from the complete village file; point-level "
+            "economics reach 79% of cooperatives and carry 88% of national value, so "
+            "never sum point economics to get a regional total - read the aggregate.",
+            "Filter aggregates on anchor_lat is not null before mapping.",
+        ],
+        # What a null MEANS, per column. This is not pedantry: several of these
+        # nulls carry the finding. A glyph that renders a null
+        # `km_to_minimarket` as "no data" instead of "further than 5 km" inverts
+        # the meaning of report 06.
+        "null_semantics": {
+            "km_to_minimarket": "no mapped minimarket within ~5 km (the ring search "
+                                "caps at k=38). 66,846 cooperatives. NOT unknown.",
+            "km_any_road": "no mapped road of any kind within ~5 km (4,321). NOT unknown.",
+            "km_non_track": "no made road within ~5 km (5,133). NOT unknown.",
+            "pop_within_1_4km": "no populated Kontur cell within the ring - read as 0.",
+            "transaction_value": "the village link failed (21% of cooperatives). "
+                                 "Genuinely unknown. 0 means linked and nothing reported.",
+            "elevation_m, relief_200m_m, siting_landcover, flag_*": "not in 04's top-2,500 "
+                                                                   "shortlist; never sampled.",
+            "farmland_depth_m": "not inside a farmland polygon.",
+            "cemetery_depth_m": "not inside a burial ground.",
+            "land_status": "no land-asset record exists for this cooperative.",
+            "m_to_made_road_exact": "not in 05's roadless set - the ring distance in "
+                                    "km_non_track is accurate to ~34 m, use that (08).",
+            "coordinate_diagnosis": "the coordinate is inside Indonesia and was never "
+                                    "suspect.",
+        },
+        "missing_sources": sorted(missing),
+        "schema": schema,
+    }
+    (out / "mart_manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    print(f"  {(out / 'mart_manifest.json').relative_to(ROOT)}")
+
+    print("\nsanity checks")
+    official, = con.execute("select sum(transaction_value) from village_stats").fetchone()
+    tv_points, = con.execute("select sum(transaction_value) from points").fetchone()
+    rows = con.execute(
+        "select (select sum(transaction_value) from agg_kecamatan), "
+        "       (select sum(transaction_value) from agg_kabupaten), "
+        "       (select sum(transaction_value) from agg_provinsi)").fetchone()
+    print(f"  deduplicated village file {official:>20,.0f}   <- ground truth")
+    for label, v in zip(("kecamatan", "kabupaten", "provinsi"), rows):
+        flag = "OK" if v == official else f"MISMATCH ({100*v/official:.2f}%)"
+        print(f"  {label:>25} {v:>20,.0f}   {flag}")
+    print(f"  {'points (79% linked)':>25} {tv_points:>20,.0f}   "
+          f"{100*tv_points/official:.1f}% - expected, point economics are partial")
+    top = con.execute(
+        "select province, cooperatives, pct_reported_transaction, pct_zero_population_cell, "
+        "pct_no_road_within_5km, pct_land_verified from agg_provinsi "
+        "order by cooperatives desc limit 5"
+    ).fetchdf()
+    print()
+    print(top.to_string(index=False))
+
+
+if __name__ == "__main__":
+    main()

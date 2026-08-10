@@ -72,6 +72,49 @@ python geo/run_pipeline.py
 node scripts/build_points.mjs
 ```
 
+## The analysis mart (what the app reads)
+
+Every analysis in `reports/` produces its own per-cooperative table. The app
+needs them on one row, so `scripts/build_analysis_mart.py` joins all of them and
+writes four parquet files — the same measures at four levels of aggregation, so
+one visualisation spec works at every zoom:
+
+```bash
+python scripts/build_analysis_mart.py
+```
+
+| File | Rows | Unit |
+|---|---|---|
+| `data/web/kopdes_points.parquet` | 83,342 | one cooperative ≈ one desa — **63 columns** |
+| `data/web/kopdes_kecamatan.parquet` | 7,277 | subdistrict |
+| `data/web/kopdes_kabupaten.parquet` | 514 | district |
+| `data/web/kopdes_provinsi.parquet` | 38 | province |
+
+These four (and `mart_manifest.json`) are **committed** — ~7 MB total, small
+enough to serve from GitHub Pages, unlike the 25 MB `points.geojson` they
+replace. Everything else in `data/web/` stays gitignored.
+
+Each point carries H3 cell ids at r5–r9 as `UBIGINT`, so the app can re-bin at
+any resolution without recomputing from lat/lon (`h3_h3_to_string()` for the hex
+form). Each aggregate row carries `anchor_lat`/`anchor_lon` — the median position
+of its members — which is what a renderer binds a feature to when it is not
+drawing points. Filter on `anchor_lat is not null`: 4 kecamatan have villages in
+the statistics but no name-matched cooperative.
+
+**Read `mart_manifest.json` before encoding anything.** It records the schema,
+join coverage, and — most importantly — what a null *means* per column. Several
+nulls carry the finding rather than marking absence: a null `km_to_minimarket`
+means "no minimarket within 5 km" (66,846 cooperatives), not "unknown", and
+rendering it as missing data inverts the result of
+[report 06](reports/06-minimarket-proximity/).
+
+Two joins are lossy and the manifest publishes both rates: admin ids resolve for
+**99.95%** of cooperatives by subdistrict name, while village-level economics
+need a two-hop join through the land-asset file and reach **79.1%**. Aggregate
+economics therefore do *not* come from the points — they are grouped straight off
+the complete village file and reconcile exactly with the raw export. **Never sum
+point economics for a regional total; read the aggregate table.**
+
 ## The app
 
 Static site served from the repo root, no build step - MapLibre GL JS and

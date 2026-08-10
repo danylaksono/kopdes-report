@@ -32,7 +32,7 @@ All sourced from SIMKOPDES public API (no auth required). Snapshot date: **2026-
 | `kopdes_stats_district.csv`                | ~514   | Same stats at district level                                                               |
 | `kopdes_stats_subdistrict.csv`             | ~7.2k  | Same stats at subdistrict level                                                            |
 | `kopdes_stats_village.csv`                 | ~83k   | Same stats at village level (many zeros — most villages have 1 coop with minimal activity) |
-| `kopdes_national_summary.csv`              | 1      | Headline numbers: IDR 179.5T total transactions, 1.8M members                              |
+| `kopdes_national_summary.csv`              | 1      | Headline numbers: **IDR 179.5 billion** (*miliar*, ~USD 11M) total transactions, 1.8M members. **Not trillion** — the old "179.5T" here was wrong by 1000×; externally confirmed in `reports/09-external-corroboration` |
 | `kopdes_province_rat_and_construction.csv` | 38     | RAT compliance (**all zeros — major red flag**), construction progress                     |
 | `kopdes_province_top_products.csv`         | varies | Top products per province (fertilizer, rice, LPG dominate)                                 |
 
@@ -51,6 +51,40 @@ All sourced from SIMKOPDES public API (no auth required). Snapshot date: **2026-
 | `data/osm/indonesia_minimarkets.gpkg` | 1.7 MB | Overpass API     | `python scripts/download_osm.py --poi-only`   |
 | `geo/output/*.geojson`                | varies | BIG shapefiles   | `cd geo && python run_pipeline.py`            |
 | `data/web/points.geojson`             | varies | kopdes locations | `node scripts/build_points.mjs`               |
+
+### The analysis mart (`data/web/kopdes_*.parquet`)
+
+`python scripts/build_analysis_mart.py` joins every per-cooperative table in
+`reports/` into one row per cooperative, then rolls it up to kecamatan,
+kabupaten and provinsi. **It computes nothing** — if a number here disagrees
+with a report, the report is right and the mart is broken.
+
+| File | Rows | Unit |
+| --- | --- | --- |
+| `kopdes_points.parquet` | 83,342 | cooperative ≈ desa, 63 columns |
+| `kopdes_kecamatan.parquet` | 7,277 | subdistrict |
+| `kopdes_kabupaten.parquet` | 514 | district |
+| `kopdes_provinsi.parquet` | 38 | province (+ health scores) |
+
+These five files (incl. `mart_manifest.json`) are **committed** — they are the
+app's data layer and a Pages deploy 404s without them. Note the `.gitignore`
+uses `data/web/*` not `data/web/`: git cannot re-include a file whose parent
+directory is excluded, so the negations would silently do nothing.
+
+Things that will bite you:
+
+- **Aggregate measures share names with point measures on purpose**, so one
+  glyph spec works at all four levels. Keep it that way when adding columns.
+- **Aggregate economics do not come from the points.** The village link reaches
+  79.1% of cooperatives, which carry 88% of national transaction value — summing
+  points would be both wrong and biased. Aggregates group straight off the
+  deduplicated village file and reconcile exactly with the raw export. The
+  script asserts this on every run.
+- **Nulls carry meaning**, and `mart_manifest.json` documents it per column. A
+  null `km_to_minimarket` is "further than 5 km" (66,846 rows), not "unknown".
+- **H3 is `UBIGINT`**, r5–r9, per the roadmap item in `analytics-plan-review.md`.
+- Adding a report? Add it to `SOURCES` in the script and to `AGG_MEASURES` if it
+  should aggregate. That is the whole extension path.
 
 ## Environment & dependencies
 

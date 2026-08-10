@@ -8,7 +8,19 @@ geo/geojson/
 geo/output/
 
 # --- regenerable web app data (see README.md to rebuild) ---
-data/web/
+# Note the glob: `data/web/` would exclude the directory itself, and git cannot
+# re-include a file whose parent directory is excluded, so the negations below
+# would silently do nothing.
+data/web/*
+# ...except the analysis mart, which IS committed. It is the app's data layer -
+# a GitHub Pages deploy 404s on its data otherwise - and it is small as parquet
+# (6.5 MB for all 83,342 cooperatives, against 25 MB for the old points.geojson).
+# Rebuild: python scripts/build_analysis_mart.py
+!data/web/kopdes_points.parquet
+!data/web/kopdes_kecamatan.parquet
+!data/web/kopdes_kabupaten.parquet
+!data/web/kopdes_provinsi.parquet
+!data/web/mart_manifest.json
 
 # --- report outputs that are per-record tables, not findings ---
 # Everything else under reports/ IS committed - the small CSVs are the findings
@@ -18,6 +30,7 @@ reports/03-population-coverage/kopdes_remoteness.csv
 reports/05-road-access/kopdes_road_access.csv
 reports/06-minimarket-proximity/kopdes_minimarket_distance.csv
 reports/07-landuse-polygons/kopdes_landuse_context.csv
+reports/08-exact-geometry/exact_minimarket_distance.csv
 
 # --- cached spatial indexes (rebuilt by the reports that use them) ---
 data/osm/road_cells_h3r10.parquet

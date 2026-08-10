@@ -1,0 +1,768 @@
+{
+  "built": "2026-08-11",
+  "source_snapshot": "data/raw (SIMKOPDES export 2026-08-05)",
+  "h3_resolutions": [
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "h3_encoding": "UBIGINT; use h3_h3_to_string() for the hex form",
+  "levels": [
+    "kopdes_points",
+    "kopdes_kecamatan",
+    "kopdes_kabupaten",
+    "kopdes_provinsi"
+  ],
+  "anchor": "median latitude/longitude of member cooperatives",
+  "coverage": {
+    "cooperatives": 83342,
+    "admin_ids_resolved": 83301,
+    "village_stats_linked": 65905,
+    "village_stats_linked_pct": 79.1
+  },
+  "caveats": [
+    "A zero transaction means 'has not reported', not 'is inactive' (reports/01).",
+    "transaction_value is NULL where the village join failed and 0 where it succeeded and nothing was reported - do not conflate them.",
+    "OSM-derived distances are upper bounds; absence is not evidence (reports/05, 07).",
+    "Siting and farmland flags are candidates requiring imagery verification (reports/04, 07).",
+    "Aggregate economics come from the complete village file; point-level economics reach 79% of cooperatives and carry 88% of national value, so never sum point economics to get a regional total - read the aggregate.",
+    "Filter aggregates on anchor_lat is not null before mapping."
+  ],
+  "null_semantics": {
+    "km_to_minimarket": "no mapped minimarket within ~5 km (the ring search caps at k=38). 66,846 cooperatives. NOT unknown.",
+    "km_any_road": "no mapped road of any kind within ~5 km (4,321). NOT unknown.",
+    "km_non_track": "no made road within ~5 km (5,133). NOT unknown.",
+    "pop_within_1_4km": "no populated Kontur cell within the ring - read as 0.",
+    "transaction_value": "the village link failed (21% of cooperatives). Genuinely unknown. 0 means linked and nothing reported.",
+    "elevation_m, relief_200m_m, siting_landcover, flag_*": "not in 04's top-2,500 shortlist; never sampled.",
+    "farmland_depth_m": "not inside a farmland polygon.",
+    "cemetery_depth_m": "not inside a burial ground.",
+    "land_status": "no land-asset record exists for this cooperative.",
+    "m_to_made_road_exact": "not in 05's roadless set - the ring distance in km_non_track is accurate to ~34 m, use that (08).",
+    "coordinate_diagnosis": "the coordinate is inside Indonesia and was never suspect."
+  },
+  "missing_sources": [],
+  "schema": {
+    "kopdes_points": {
+      "file": "kopdes_points.parquet",
+      "rows": 83342,
+      "columns": [
+        {
+          "name": "cooperative_id",
+          "type": "BIGINT"
+        },
+        {
+          "name": "cooperative",
+          "type": "VARCHAR"
+        },
+        {
+          "name": "province_id",
+          "type": "BIGINT"
+        },
+        {
+          "name": "district_id",
+          "type": "BIGINT"
+        },
+        {
+          "name": "subdistrict_id",
+          "type": "BIGINT"
+        },
+        {
+          "name": "province",
+          "type": "VARCHAR"
+        },
+        {
+          "name": "district",
+          "type": "VARCHAR"
+        },
+        {
+          "name": "subdistrict",
+          "type": "VARCHAR"
+        },
+        {
+          "name": "village_id",
+          "type": "BIGINT"
+        },
+        {
+          "name": "village",
+          "type": "VARCHAR"
+        },
+        {
+          "name": "latitude",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "longitude",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "h3_r5",
+          "type": "UBIGINT"
+        },
+        {
+          "name": "h3_r6",
+          "type": "UBIGINT"
+        },
+        {
+          "name": "h3_r7",
+          "type": "UBIGINT"
+        },
+        {
+          "name": "h3_r8",
+          "type": "UBIGINT"
+        },
+        {
+          "name": "h3_r9",
+          "type": "UBIGINT"
+        },
+        {
+          "name": "has_village_stats",
+          "type": "BOOLEAN"
+        },
+        {
+          "name": "transaction_value",
+          "type": "BIGINT"
+        },
+        {
+          "name": "transaction_volume",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "savings_total_amount",
+          "type": "BIGINT"
+        },
+        {
+          "name": "accounts_count",
+          "type": "BIGINT"
+        },
+        {
+          "name": "npwp_count",
+          "type": "BIGINT"
+        },
+        {
+          "name": "nib_count",
+          "type": "BIGINT"
+        },
+        {
+          "name": "rat_count",
+          "type": "BIGINT"
+        },
+        {
+          "name": "has_reported_transaction",
+          "type": "BOOLEAN"
+        },
+        {
+          "name": "own_cell_pop",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "pop_within_1_4km",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "pop_within_5_1km",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "remoteness_band",
+          "type": "VARCHAR"
+        },
+        {
+          "name": "isolation_score",
+          "type": "INTEGER"
+        },
+        {
+          "name": "in_siting_shortlist",
+          "type": "BOOLEAN"
+        },
+        {
+          "name": "elevation_m",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "relief_200m_m",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "siting_landcover",
+          "type": "VARCHAR"
+        },
+        {
+          "name": "flag_steep",
+          "type": "BOOLEAN"
+        },
+        {
+          "name": "flag_implausible_cover",
+          "type": "BOOLEAN"
+        },
+        {
+          "name": "siting_n_flags",
+          "type": "BIGINT"
+        },
+        {
+          "name": "km_any_road",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "km_non_track",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "road_band",
+          "type": "VARCHAR"
+        },
+        {
+          "name": "track_only",
+          "type": "BOOLEAN"
+        },
+        {
+          "name": "km_to_minimarket",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "m_to_minimarket_exact",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "nearest_minimarket_brand",
+          "type": "VARCHAR"
+        },
+        {
+          "name": "m_to_made_road_exact",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "coordinate_suspect",
+          "type": "BOOLEAN"
+        },
+        {
+          "name": "coordinate_diagnosis",
+          "type": "VARCHAR"
+        },
+        {
+          "name": "in_farmland",
+          "type": "BOOLEAN"
+        },
+        {
+          "name": "farmland_depth_m",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "farmland_polygon_coarse",
+          "type": "BOOLEAN"
+        },
+        {
+          "name": "in_cemetery",
+          "type": "BOOLEAN"
+        },
+        {
+          "name": "cemetery_depth_m",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "dist_cemetery_m",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "dist_marketplace_m",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "dist_village_core_m",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "outside_village_core",
+          "type": "BOOLEAN"
+        },
+        {
+          "name": "farmland_candidate",
+          "type": "BOOLEAN"
+        },
+        {
+          "name": "farmland_confirmed_cropland",
+          "type": "BOOLEAN"
+        },
+        {
+          "name": "land_status",
+          "type": "VARCHAR"
+        },
+        {
+          "name": "land_surveyor",
+          "type": "VARCHAR"
+        },
+        {
+          "name": "land_verified",
+          "type": "BOOLEAN"
+        },
+        {
+          "name": "imagery_url",
+          "type": "VARCHAR"
+        }
+      ]
+    },
+    "kopdes_kecamatan": {
+      "file": "kopdes_kecamatan.parquet",
+      "rows": 7277,
+      "columns": [
+        {
+          "name": "subdistrict_id",
+          "type": "BIGINT"
+        },
+        {
+          "name": "province_id",
+          "type": "BIGINT"
+        },
+        {
+          "name": "district_id",
+          "type": "BIGINT"
+        },
+        {
+          "name": "province",
+          "type": "VARCHAR"
+        },
+        {
+          "name": "district",
+          "type": "VARCHAR"
+        },
+        {
+          "name": "subdistrict",
+          "type": "VARCHAR"
+        },
+        {
+          "name": "cooperatives",
+          "type": "BIGINT"
+        },
+        {
+          "name": "anchor_lat",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "anchor_lon",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "coordinate_suspect",
+          "type": "BIGINT"
+        },
+        {
+          "name": "cooperatives_village_linked",
+          "type": "BIGINT"
+        },
+        {
+          "name": "pct_zero_population_cell",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "median_pop_within_1_4km",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "mean_isolation_score",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "pct_no_road_within_5km",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "median_km_to_road",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "median_km_to_minimarket",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "pct_minimarket_within_500m",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "in_farmland",
+          "type": "BIGINT"
+        },
+        {
+          "name": "farmland_candidates",
+          "type": "BIGINT"
+        },
+        {
+          "name": "in_cemetery",
+          "type": "BIGINT"
+        },
+        {
+          "name": "median_m_to_marketplace",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "median_m_to_village_core",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "land_verified",
+          "type": "BIGINT"
+        },
+        {
+          "name": "pct_land_verified",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "siting_shortlisted",
+          "type": "BIGINT"
+        },
+        {
+          "name": "villages",
+          "type": "BIGINT"
+        },
+        {
+          "name": "villages_reporting",
+          "type": "BIGINT"
+        },
+        {
+          "name": "pct_reported_transaction",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "transaction_value",
+          "type": "HUGEINT"
+        },
+        {
+          "name": "transaction_volume",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "savings_total_amount",
+          "type": "HUGEINT"
+        },
+        {
+          "name": "accounts_count",
+          "type": "HUGEINT"
+        },
+        {
+          "name": "npwp_count",
+          "type": "HUGEINT"
+        },
+        {
+          "name": "nib_count",
+          "type": "HUGEINT"
+        },
+        {
+          "name": "rat_count",
+          "type": "HUGEINT"
+        }
+      ],
+      "rows_without_anchor": 4
+    },
+    "kopdes_kabupaten": {
+      "file": "kopdes_kabupaten.parquet",
+      "rows": 514,
+      "columns": [
+        {
+          "name": "district_id",
+          "type": "BIGINT"
+        },
+        {
+          "name": "province_id",
+          "type": "BIGINT"
+        },
+        {
+          "name": "province",
+          "type": "VARCHAR"
+        },
+        {
+          "name": "district",
+          "type": "VARCHAR"
+        },
+        {
+          "name": "cooperatives",
+          "type": "BIGINT"
+        },
+        {
+          "name": "anchor_lat",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "anchor_lon",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "coordinate_suspect",
+          "type": "BIGINT"
+        },
+        {
+          "name": "cooperatives_village_linked",
+          "type": "BIGINT"
+        },
+        {
+          "name": "pct_zero_population_cell",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "median_pop_within_1_4km",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "mean_isolation_score",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "pct_no_road_within_5km",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "median_km_to_road",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "median_km_to_minimarket",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "pct_minimarket_within_500m",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "in_farmland",
+          "type": "BIGINT"
+        },
+        {
+          "name": "farmland_candidates",
+          "type": "BIGINT"
+        },
+        {
+          "name": "in_cemetery",
+          "type": "BIGINT"
+        },
+        {
+          "name": "median_m_to_marketplace",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "median_m_to_village_core",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "land_verified",
+          "type": "BIGINT"
+        },
+        {
+          "name": "pct_land_verified",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "siting_shortlisted",
+          "type": "BIGINT"
+        },
+        {
+          "name": "villages",
+          "type": "BIGINT"
+        },
+        {
+          "name": "villages_reporting",
+          "type": "BIGINT"
+        },
+        {
+          "name": "pct_reported_transaction",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "transaction_value",
+          "type": "HUGEINT"
+        },
+        {
+          "name": "transaction_volume",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "savings_total_amount",
+          "type": "HUGEINT"
+        },
+        {
+          "name": "accounts_count",
+          "type": "HUGEINT"
+        },
+        {
+          "name": "npwp_count",
+          "type": "HUGEINT"
+        },
+        {
+          "name": "nib_count",
+          "type": "HUGEINT"
+        },
+        {
+          "name": "rat_count",
+          "type": "HUGEINT"
+        }
+      ],
+      "rows_without_anchor": 0
+    },
+    "kopdes_provinsi": {
+      "file": "kopdes_provinsi.parquet",
+      "rows": 38,
+      "columns": [
+        {
+          "name": "province_id",
+          "type": "BIGINT"
+        },
+        {
+          "name": "province",
+          "type": "VARCHAR"
+        },
+        {
+          "name": "cooperatives",
+          "type": "BIGINT"
+        },
+        {
+          "name": "anchor_lat",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "anchor_lon",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "coordinate_suspect",
+          "type": "BIGINT"
+        },
+        {
+          "name": "cooperatives_village_linked",
+          "type": "BIGINT"
+        },
+        {
+          "name": "pct_zero_population_cell",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "median_pop_within_1_4km",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "mean_isolation_score",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "pct_no_road_within_5km",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "median_km_to_road",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "median_km_to_minimarket",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "pct_minimarket_within_500m",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "in_farmland",
+          "type": "BIGINT"
+        },
+        {
+          "name": "farmland_candidates",
+          "type": "BIGINT"
+        },
+        {
+          "name": "in_cemetery",
+          "type": "BIGINT"
+        },
+        {
+          "name": "median_m_to_marketplace",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "median_m_to_village_core",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "land_verified",
+          "type": "BIGINT"
+        },
+        {
+          "name": "pct_land_verified",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "siting_shortlisted",
+          "type": "BIGINT"
+        },
+        {
+          "name": "villages",
+          "type": "BIGINT"
+        },
+        {
+          "name": "villages_reporting",
+          "type": "BIGINT"
+        },
+        {
+          "name": "pct_reported_transaction",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "transaction_value",
+          "type": "HUGEINT"
+        },
+        {
+          "name": "transaction_volume",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "savings_total_amount",
+          "type": "HUGEINT"
+        },
+        {
+          "name": "accounts_count",
+          "type": "HUGEINT"
+        },
+        {
+          "name": "npwp_count",
+          "type": "HUGEINT"
+        },
+        {
+          "name": "nib_count",
+          "type": "HUGEINT"
+        },
+        {
+          "name": "rat_count",
+          "type": "HUGEINT"
+        },
+        {
+          "name": "health_score",
+          "type": "BIGINT"
+        },
+        {
+          "name": "health_status",
+          "type": "VARCHAR"
+        },
+        {
+          "name": "average_health_index",
+          "type": "BIGINT"
+        },
+        {
+          "name": "healthy_count",
+          "type": "BIGINT"
+        },
+        {
+          "name": "fairly_healthy_count",
+          "type": "BIGINT"
+        },
+        {
+          "name": "unhealthy_count",
+          "type": "BIGINT"
+        },
+        {
+          "name": "official_lat",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "official_lon",
+          "type": "DOUBLE"
+        }
+      ],
+      "rows_without_anchor": 0
+    }
+  }
+}

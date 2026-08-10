@@ -24,6 +24,8 @@ Run any of them with `python reports/NN-slug/run.py`. Dependencies:
 | 05 | [road-access](05-road-access/) | How far is each KDMP from a road? | no | run 2026-08-09 |
 | 06 | [minimarket-proximity](06-minimarket-proximity/) | Were KDMP built on top of existing modern retail? | no | run 2026-08-09 |
 | 07 | [landuse-polygons](07-landuse-polygons/) | On a graveyard? In a paddy field? | cloud rasters | run 2026-08-10, 536 candidates |
+| 08 | [exact-geometry](08-exact-geometry/) | How far is it *really*? Are the coordinates even possible? | no | run 2026-08-10 |
+| 09 | [external-corroboration](09-external-corroboration/) | Does the ministry's own public figure match its dashboard? | sources cited, not scraped | run 2026-08-10 |
 
 ## What we can and cannot say right now
 
@@ -61,13 +63,39 @@ Read this before quoting any number out of these reports.
   roadside location; the excess decays to nothing by 2 km (06). This survives
   re-tiering the retail data, so it does not depend on where the format
   boundary is drawn.
+- **The "the website isn't up to date" rebuttal is closed.** On 2026-08-09 the
+  press reported the national total as **Rp 179.72 miliar**; our own API pull the
+  same day gives **Rp 179.79 miliar** — a **0.042%** difference (09). The
+  ministry quotes this dashboard, so whatever it says about activity is the
+  government's own public account of it. Independently, the head of Bakom put
+  **1,061 cooperatives operating** on 2026-06-08 (1.3% of the registry) against
+  our 3.0% reporting any transaction, in the same two provinces.
+- **The headline is Rp 179.5 *billion* (miliar), ~USD 11 million — about
+  Rp 2.15 million (~USD 130) per cooperative to date.** Any "179.5T" is wrong by
+  1000× (09).
+- **19 cooperatives are not in Indonesia**, and 18 are a latitude sign error
+  (08). All 19 sit in 04's candidate list and 05's roadless set, so: 04's
+  land-verified candidates **401 → 388**, its water/mangrove cases **69 → 67**,
+  05's no-made-road set **5,133 → 5,114**, no-road-at-all **4,321 → 4,302**.
+- **The roadless set, measured exactly**: median **9.7 km** to the nearest made
+  road, 90th percentile 26.5 km, maximum 292 km; 600 are beyond 25 km (08).
+- **05's ring distances are sound; 06's are biased.** Re-measured against real
+  geometry: roads median absolute error **34 m** (92% within one cell width);
+  minimarkets **+169 m median signed error**, i.e. 06 *overstated* distance and
+  undercounted proximity (08). 06's null-model comparison is unaffected — both
+  arms used the same method — but its absolute bands are superseded.
 - SIMKOPDES **carries no per-record timestamp**, and its `updated_at` is the API
   response time, not a data-freshness stamp (01). Dated snapshots plus diffing
   is the only way to measure currency.
-- **No reporting backlog is draining.** Comparing two full snapshots four days
+- **Value grows; participation does not.** Comparing two full snapshots four days
   apart: of 80,553 villages reporting zero transactions on 2026-08-05, **exactly
-  one** reported any activity by 2026-08-09 (01). Meanwhile the registry grew by
-  40 cooperatives. Records are added; activity is not reported against them.
+  one** reported any activity by 2026-08-09 (01). **09 refines this**: over a
+  longer window the national total is *not* flat — it rose 13.8% between
+  2026-07-31 and 2026-08-09 — but it rose inside an almost perfectly static set
+  of reporting villages (2,516 → 2,517). The supportable claim is the reported
+  total rises while the number of cooperatives reporting anything does not; it is
+  concentration deepening, not a backlog draining. Do not write "nothing is being
+  entered".
 - The 2026-08-05 export contains **1,555 duplicate village rows** (plus 148
   subdistricts, 5 districts), which inflate any sum over rows. Always
   `drop_duplicates` on the id (01).
@@ -103,42 +131,7 @@ Read this before quoting any number out of these reports.
 
 ## Backlog — agreed, not yet built
 
-### 08 — Exact-geometry refinement of 05 and 06
-
-**H3 to rank, exact geometry to report.** Ring distance is hex-grid distance
-with ~15% directional error, quantised to ~132 m — right for sorting 83k into
-bands, wrong for a published sentence about a named place. The narrative needs
-"the nearest road is 3.2 km away", not "in the >2 km band".
-
-Stage 2 over the shortlists only (~5k points): `pyogrio` bbox-filtered reads to
-pull local geometry, then `shapely` distance against actual LineStrings and
-polygons. **Scope is now roads and retail only** — [07](07-landuse-polygons/)
-already ships geodesic distance to the nearest marketplace and village centre
-for all 83,342 cooperatives, so that half is done.
-
-Two things to get right:
-
-- **Never buffer in degrees.** A 0.01° buffer is a different size in Aceh than
-  in Papua. Use a projected CRS per UTM zone or geodesic distance (`pyproj.Geod`).
-- **Don't over-promise precision.** OSM road geometry is good to ~5–15 m, worse
-  for rural tracks. 132 m bands → ~15 m truth is a real gain; decimals of a
-  metre are theatre.
-
-### 09 — External corroboration of the transaction figures
-
-The single weakest point in the whole investigation: the government can answer
-"0.85 transactions per cooperative" with *"the website simply isn't up to
-date"*, and [01](01-snapshot-drift/) cannot yet refute it.
-
-Two independent lines of defence:
-
-1. **The snapshot series** (01) — time-sensitive, see Conventions below.
-2. **External figures**: Kemenkop press releases and ministerial statements,
-   DPR Komisi VI hearing records, BPS, and reporting from Kompas / Tempo /
-   Katadata / CNBC Indonesia / Bisnis.com. Either the ministry's own public
-   claims match its dashboard — in which case the rebuttal collapses and the
-   dashboard is the official number — or they diverge wildly, which is a story
-   in itself. Both outcomes are useful.
+Both remaining screens agreed in this file have now been built: [08](08-exact-geometry/) and [09](09-external-corroboration/). What is left is an upstream data fix, plus the standing snapshot cadence in Conventions.
 
 ### Known data gap to fix upstream
 
