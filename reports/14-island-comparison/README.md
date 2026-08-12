@@ -14,15 +14,15 @@ the 19 unplaced are 08's impossible coordinates, excluded from medians).
 
 [`islands_economy.csv`](islands_economy.csv)
 
-| Island | Coops | % reporting tx | Rp tx per coop | % any savings |
-|---|---|---|---|---|
-| **JAVA** | 25,248 | **7.85%** | **4,819,782** | 20.6% |
-| KALIMANTAN | 7,160 | 1.82% | 2,137,211 | 9.9% |
-| NUSA TENGGARA | 5,342 | 0.90% | 1,575,089 | 17.5% |
-| SUMATRA | 25,589 | 1.18% | 1,243,838 | 9.2% |
-| SULAWESI | 10,555 | 0.48% | 161,012 | 10.2% |
-| MALUKU | 2,427 | 0.08% | 93,436 | 2.6% |
-| **PAPUA** | 7,060 | **0.09%** | **56,390** | **1.1%** |
+| Island        | Coops  | % reporting tx | Rp tx per coop | % any savings |
+| ------------- | ------ | -------------- | -------------- | ------------- |
+| **JAVA**      | 25,248 | **7.85%**      | **4,819,782**  | 20.6%         |
+| KALIMANTAN    | 7,160  | 1.82%          | 2,137,211      | 9.9%          |
+| NUSA TENGGARA | 5,342  | 0.90%          | 1,575,089      | 17.5%         |
+| SUMATRA       | 25,589 | 1.18%          | 1,243,838      | 9.2%          |
+| SULAWESI      | 10,555 | 0.48%          | 161,012        | 10.2%         |
+| MALUKU        | 2,427  | 0.08%          | 93,436         | 2.6%          |
+| **PAPUA**     | 7,060  | **0.09%**      | **56,390**     | **1.1%**      |
 
 Java has 30% of the cooperatives and **~68% of the reported transaction value**;
 Papua has 8.5% of the cooperatives and **0.2%** of the value. The gap is ~85×
@@ -32,15 +32,15 @@ in per-cooperative output.
 
 [`islands_spatial.csv`](islands_spatial.csv) · excluding 08's 19 impossible coordinates
 
-| Island | % zero-pop cell | median pop within 1.4 km | median km to minimarket | median m to nearest coop | % land verified |
-|---|---|---|---|---|---|
-| JAVA | 2.6% | 29,015 | 6.7 | 1,293 | 62.7% |
-| NUSA TENGGARA | 16.0% | 5,012 | 12.8 | 1,967 | 42.2% |
-| SUMATRA | 19.7% | 6,406 | 25.0 | 1,782 | 41.0% |
-| SULAWESI | 20.7% | 4,792 | 27.1 | 1,935 | 32.9% |
-| KALIMANTAN | 38.4% | 1,565 | 35.6 | 3,605 | 30.9% |
-| MALUKU | 54.7% | 1,014 | 128.7 | 2,652 | 22.0% |
-| **PAPUA** | **70.7%** | 1,337 | **74.6** | 2,422 | **3.2%** |
+| Island        | % zero-pop cell | median pop within 1.4 km | median km to minimarket | median m to nearest coop | % land verified |
+| ------------- | --------------- | ------------------------ | ----------------------- | ------------------------ | --------------- |
+| JAVA          | 2.6%            | 29,015                   | 6.7                     | 1,293                    | 62.7%           |
+| NUSA TENGGARA | 16.0%           | 5,012                    | 12.8                    | 1,967                    | 42.2%           |
+| SUMATRA       | 19.7%           | 6,406                    | 25.0                    | 1,782                    | 41.0%           |
+| SULAWESI      | 20.7%           | 4,792                    | 27.1                    | 1,935                    | 32.9%           |
+| KALIMANTAN    | 38.4%           | 1,565                    | 35.6                    | 3,605                    | 30.9%           |
+| MALUKU        | 54.7%           | 1,014                    | 128.7                   | 2,652                    | 22.0%           |
+| **PAPUA**     | **70.7%**       | 1,337                    | **74.6**                | 2,422                    | **3.2%**        |
 
 Every "tail" finding in the investigation is disproportionately a
 Papua/Maluku/Kalimantan phenomenon: 70.7% of Papua cooperatives sit in a

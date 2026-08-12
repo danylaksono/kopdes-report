@@ -4,8 +4,8 @@
 **Source**: `kopdes_province_rat_and_construction.csv` + `kopdes_stats_province.csv`
 
 C1 of `analytics-plan.md`, deliberately downgraded. n = 38 provinces, no
-confounder control — the plan-review's verdict is explicit: *"a correlation on
-38 points with no confounder control is a scatter plot, not evidence."* This
+confounder control — the plan-review's verdict is explicit: _"a correlation on
+38 points with no confounder control is a scatter plot, not evidence."_ This
 report is that scatter plot, printed because two structural facts in the same
 file need stating once, not because it proves anything.
 
@@ -22,19 +22,19 @@ data is completely empty.
 [`construction_vs_output.csv`](construction_vs_output.csv)
 
 - **19,161 of 83,382 cooperatives (23.0%)** are at 100% construction.
-- **37,972 (45.5%)** have *any* construction stage recorded — more than half
+- **37,972 (45.5%)** have _any_ construction stage recorded — more than half
   of the program has no construction record at all.
 - ~30% are at ≥76% (built, or nearly so).
 
 ## The scatter, stated honestly
 
-| Province-level correlation (n = 38) | Spearman |
-|---|---|
+| Province-level correlation (n = 38)          | Spearman  |
+| -------------------------------------------- | --------- |
 | % at 100% construction vs Rp per cooperative | **0.335** |
-| % with any stage vs Rp per cooperative | 0.294 |
+| % with any stage vs Rp per cooperative       | 0.294     |
 
 Weakly positive, and confounded: both variables track economic geography. Java
-Timur/Tengah top the construction table *and* the output table; Papua is at
+Timur/Tengah top the construction table _and_ the output table; Papua is at
 the bottom of both. The counter-example that breaks a causal reading is
 **DKI Jakarta**: 2.6% at 100% construction (its construction data is barely
 recorded) but the **highest** output per cooperative in the country

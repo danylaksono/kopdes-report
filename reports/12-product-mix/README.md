@@ -3,7 +3,7 @@
 **Run**: `python reports/12-product-mix/run.py` · No network · **Last run**: 2026-08-12
 **Source**: `kopdes_province_top_products.csv` (261 rows, 33 of 38 provinces)
 
-D2 of `analytics-plan.md`. This is the only transaction-*content* data in the
+D2 of `analytics-plan.md`. This is the only transaction-_content_ data in the
 export — the top products each province reports selling. Per the plan-review:
 report composition, skip the diversity index (it is biased on top-N-truncated
 lists). Product names are inconsistent in the source (`BERAS SPHP` vs
@@ -13,15 +13,15 @@ lists). Product names are inconsistent in the source (`BERAS SPHP` vs
 
 [`product_categories.csv`](product_categories.csv) — national composition by value
 
-| Category | Share of reported value | Provinces |
-|---|---|---|
-| **rice** | **48.2%** | 29 |
-| **cooking oil** | **26.9%** | 24 |
-| **fertilizer** | 16.5% | 24 |
-| other | 6.8% | 29 |
-| sugar | 0.8% | 18 |
-| dairy | 0.6% | 2 |
-| LPG | 0.3% | 16 |
+| Category        | Share of reported value | Provinces |
+| --------------- | ----------------------- | --------- |
+| **rice**        | **48.2%**               | 29        |
+| **cooking oil** | **26.9%**               | 24        |
+| **fertilizer**  | 16.5%                   | 24        |
+| other           | 6.8%                    | 29        |
+| sugar           | 0.8%                    | 18        |
+| dairy           | 0.6%                    | 2         |
+| LPG             | 0.3%                    | 16        |
 
 Three-quarters of reported sales value is **rice and cooking oil**; fertilizer
 is the main agricultural input, present in 24 provinces. KDMP are positioned as
@@ -52,8 +52,8 @@ question, [06](../06-minimarket-proximity/)).
   empty in the same places every other activity channel is empty (13, 14).
 - "BARANG LAINNYA" ("other goods") is the export's own catch-all and carries
   6.8% of value.
-- No causal or welfare reading is possible from this alone: it shows *what was
-  sold*, not *who bought it* or at what margin.
+- No causal or welfare reading is possible from this alone: it shows _what was
+  sold_, not _who bought it_ or at what margin.
 
 ## Output for later
 

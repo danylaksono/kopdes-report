@@ -15,23 +15,23 @@ Run any of them with `python reports/NN-slug/run.py`. Dependencies:
 
 ## Index
 
-| # | Report | Question | Network | Status |
-|---|---|---|---|---|
-| 01 | [snapshot-drift](01-snapshot-drift/) | Is SIMKOPDES still being filled in? Are the zeros temporary? | **live API** | run 2026-08-09 |
-| 02 | [zero-inflation](02-zero-inflation/) | How much of the performance data is actually zero? | no | run 2026-08-09 |
-| 03 | [population-coverage](03-population-coverage/) | Who is within reach of a KDMP, and which KDMP are near nobody? | first run only | run 2026-08-09 |
-| 04 | [siting-screen](04-siting-screen/) | Which KDMP sit somewhere physically implausible? | cloud rasters | run 2026-08-09, top 2,500 |
-| 05 | [road-access](05-road-access/) | How far is each KDMP from a road? | no | run 2026-08-09 |
-| 06 | [minimarket-proximity](06-minimarket-proximity/) | Were KDMP built on top of existing modern retail? | no | run 2026-08-09 |
-| 07 | [landuse-polygons](07-landuse-polygons/) | On a graveyard? In a paddy field? | cloud rasters | run 2026-08-10, 536 candidates |
-| 08 | [exact-geometry](08-exact-geometry/) | How far is it *really*? Are the coordinates even possible? | no | run 2026-08-10 |
-| 09 | [external-corroboration](09-external-corroboration/) | Does the ministry's own public figure match its dashboard? | sources cited, not scraped | run 2026-08-10 |
-| 10 | [coop-clustering](10-coop-clustering/) | Do KDMP cluster on top of each other, and does it hurt? | no | run 2026-08-12 |
-| 11 | [savings-behaviour](11-savings-behaviour/) | Are members actually saving, or are the accounts dormant? | no | run 2026-08-12 |
-| 12 | [product-mix](12-product-mix/) | What does the program actually sell? | no | run 2026-08-12 |
-| 13 | [compliance-npwp-nib](13-compliance-npwp-nib/) | Is the paperwork real, and is anyone operating under it? | no | run 2026-08-12 |
-| 14 | [island-comparison](14-island-comparison/) | Whose program is this — Java or Indonesia? | no | run 2026-08-12 |
-| 15 | [construction-output](15-construction-output/) | Does construction track output? | no | run 2026-08-12 |
+| #   | Report                                               | Question                                                       | Network                    | Status                         |
+| --- | ---------------------------------------------------- | -------------------------------------------------------------- | -------------------------- | ------------------------------ |
+| 01  | [snapshot-drift](01-snapshot-drift/)                 | Is SIMKOPDES still being filled in? Are the zeros temporary?   | **live API**               | run 2026-08-09                 |
+| 02  | [zero-inflation](02-zero-inflation/)                 | How much of the performance data is actually zero?             | no                         | run 2026-08-09                 |
+| 03  | [population-coverage](03-population-coverage/)       | Who is within reach of a KDMP, and which KDMP are near nobody? | first run only             | run 2026-08-09                 |
+| 04  | [siting-screen](04-siting-screen/)                   | Which KDMP sit somewhere physically implausible?               | cloud rasters              | run 2026-08-09, top 2,500      |
+| 05  | [road-access](05-road-access/)                       | How far is each KDMP from a road?                              | no                         | run 2026-08-09                 |
+| 06  | [minimarket-proximity](06-minimarket-proximity/)     | Were KDMP built on top of existing modern retail?              | no                         | run 2026-08-09                 |
+| 07  | [landuse-polygons](07-landuse-polygons/)             | On a graveyard? In a paddy field?                              | cloud rasters              | run 2026-08-10, 536 candidates |
+| 08  | [exact-geometry](08-exact-geometry/)                 | How far is it _really_? Are the coordinates even possible?     | no                         | run 2026-08-10                 |
+| 09  | [external-corroboration](09-external-corroboration/) | Does the ministry's own public figure match its dashboard?     | sources cited, not scraped | run 2026-08-10                 |
+| 10  | [coop-clustering](10-coop-clustering/)               | Do KDMP cluster on top of each other, and does it hurt?        | no                         | run 2026-08-12                 |
+| 11  | [savings-behaviour](11-savings-behaviour/)           | Are members actually saving, or are the accounts dormant?      | no                         | run 2026-08-12                 |
+| 12  | [product-mix](12-product-mix/)                       | What does the program actually sell?                           | no                         | run 2026-08-12                 |
+| 13  | [compliance-npwp-nib](13-compliance-npwp-nib/)       | Is the paperwork real, and is anyone operating under it?       | no                         | run 2026-08-12                 |
+| 14  | [island-comparison](14-island-comparison/)           | Whose program is this — Java or Indonesia?                     | no                         | run 2026-08-12                 |
+| 15  | [construction-output](15-construction-output/)       | Does construction track output?                                | no                         | run 2026-08-12                 |
 
 ## What we can and cannot say right now
 
@@ -44,7 +44,7 @@ Read this before quoting any number out of these reports.
   (02).
 - **Savings are reported ~4× more often than transactions, and the money is
   one-time capital, not ongoing saving.** 12.5% of villages report any savings
-  (vs 3.0% transactions) and 14.1% report *some* financial footprint; 9,192
+  (vs 3.0% transactions) and 14.1% report _some_ financial footprint; 9,192
   villages report savings with zero transactions. Of those reporting both pokok
   and wajib, median wajib/pokok = 0.28 and only 15.7% have wajib > pokok — the
   plan's own "wajib ≫ pokok = active" test fails. The field tiers (accounts
@@ -89,7 +89,7 @@ Read this before quoting any number out of these reports.
   21.4% baseline.
 - **The paddy-field claim holds; the graveyard claim does not.** KDMP fall inside
   a mapped `landuse=farmland` polygon at **2.65%** against **1.10%** for OSM's own
-  village-centre nodes — 2.4× — and **448** are placed on cropland by OSM *and* by
+  village-centre nodes — 2.4× — and **448** are placed on cropland by OSM _and_ by
   ESA WorldCover independently, ≥100 m from the field edge, with people living
   around them (07). Burial ground is the opposite: **22 cases, a rate
   indistinguishable from village nodes** (0.026% vs 0.022%), only 7 of them more
@@ -129,7 +129,7 @@ Read this before quoting any number out of these reports.
   government's own public account of it. Independently, the head of Bakom put
   **1,061 cooperatives operating** on 2026-06-08 (1.3% of the registry) against
   our 3.0% reporting any transaction, in the same two provinces.
-- **The headline is Rp 179.5 *billion* (miliar), ~USD 11 million — about
+- **The headline is Rp 179.5 _billion_ (miliar), ~USD 11 million — about
   Rp 2.15 million (~USD 130) per cooperative to date.** Any "179.5T" is wrong by
   1000× (09).
 - **19 cooperatives are not in Indonesia**, and 18 are a latitude sign error
@@ -140,7 +140,7 @@ Read this before quoting any number out of these reports.
   road, 90th percentile 26.5 km, maximum 292 km; 600 are beyond 25 km (08).
 - **05's ring distances are sound; 06's are biased.** Re-measured against real
   geometry: roads median absolute error **34 m** (92% within one cell width);
-  minimarkets **+169 m median signed error**, i.e. 06 *overstated* distance and
+  minimarkets **+169 m median signed error**, i.e. 06 _overstated_ distance and
   undercounted proximity (08). 06's null-model comparison is unaffected — both
   arms used the same method — but its absolute bands are superseded.
 - SIMKOPDES **carries no per-record timestamp**, and its `updated_at` is the API
@@ -149,7 +149,7 @@ Read this before quoting any number out of these reports.
 - **Value grows; participation does not.** Comparing two full snapshots four days
   apart: of 80,553 villages reporting zero transactions on 2026-08-05, **exactly
   one** reported any activity by 2026-08-09 (01). **09 refines this**: over a
-  longer window the national total is *not* flat — it rose 13.8% between
+  longer window the national total is _not_ flat — it rose 13.8% between
   2026-07-31 and 2026-08-09 — but it rose inside an almost perfectly static set
   of reporting villages (2,516 → 2,517). The supportable claim is the reported
   total rises while the number of cooperatives reporting anything does not; it is
@@ -175,7 +175,7 @@ Read this before quoting any number out of these reports.
   SIMKOPDES coordinate is a desa centroid, a desa that is mostly rice fields
   lands in a rice field automatically — and would beat the village-node baseline
   by roughly the margin observed. The road test leans the wrong way: the
-  candidates are *less* likely to be near a road than comparable cooperatives
+  candidates are _less_ likely to be near a road than comparable cooperatives
   (59.5% vs 72.5%), not more. So write "**recorded at** a location inside a
   paddy field", never "built in a paddy field". If the ministry answers that the
   coordinates are wrong, that is a different story, not a smaller one.
@@ -183,18 +183,18 @@ Read this before quoting any number out of these reports.
   in one ~1 km cell near Wamena (and the other dense cells in Papua, Aceh,
   Jambi) are as likely to be many desa geocoded to a town as 17 physically
   co-located buildings. Same imagery bar as 04/07 before any name is cited (10).
-- **Cannibalisation.** 06 establishes *proximity*, which is a precondition for
+- **Cannibalisation.** 06 establishes _proximity_, which is a precondition for
   competition, not evidence of it. The claim is about trade, and trade data is
   97% zero. Nor can any of this establish intent — KDMP and minimarkets may
   simply both target the village focal point.
 - **Anything from OSM stated as an absence.** OSM coverage in rural Indonesia is
   partial and urban-biased (13.8% of Indomaret outlets, 10.9% of Alfamart).
-  Presence is evidence; absence is not. Write "no road *mapped in OSM* within
+  Presence is evidence; absence is not. Write "no road _mapped in OSM_ within
   5 km", and treat retail proximity figures as lower bounds.
 
 ## Backlog — cleared
 
-The plan-review's *do* list is now fully built: [08](08-exact-geometry/),
+The plan-review's _do_ list is now fully built: [08](08-exact-geometry/),
 [09](09-external-corroboration/), [10](10-coop-clustering/),
 [11](11-savings-behaviour/), [12](12-product-mix/), [13](13-compliance-npwp-nib/),
 [14](14-island-comparison/) and [15](15-construction-output/).

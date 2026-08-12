@@ -25,17 +25,17 @@ cross-referenced to the official health index.
 
 [`savings_zero_inflation.csv`](savings_zero_inflation.csv)
 
-| Field | Villages non-zero | Share |
-|---|---|---|
-| accounts (admin, from 02) | — | ~96% |
-| **pokok** (one-time capital) | 9,857 | **11.87%** |
-| **wajib** (ongoing dues) | 7,666 | **9.23%** |
-| **any savings** | 10,372 | **12.49%** |
-| transactions (02) | 2,516 | **3.03%** |
+| Field                        | Villages non-zero | Share      |
+| ---------------------------- | ----------------- | ---------- |
+| accounts (admin, from 02)    | —                 | ~96%       |
+| **pokok** (one-time capital) | 9,857             | **11.87%** |
+| **wajib** (ongoing dues)     | 7,666             | **9.23%**  |
+| **any savings**              | 10,372            | **12.49%** |
+| transactions (02)            | 2,516             | **3.03%**  |
 
-The three tiers are the read: the *registration* machinery is populated for
-~96% of villages, *one-time capital* was collected in ~12%, and *ongoing
-operations* (wajib or transactions) in under 10%. A system that captured the
+The three tiers are the read: the _registration_ machinery is populated for
+~96% of villages, _one-time capital_ was collected in ~12%, and _ongoing
+operations_ (wajib or transactions) in under 10%. A system that captured the
 accounts field for 96% of villages did capture pokok for only 12% — the low
 fields are not empty because the system cannot hold them.
 
@@ -43,20 +43,20 @@ fields are not empty because the system cannot hold them.
 
 [`dormancy_bands.csv`](dormancy_bands.csv) · [`wajib_pokok_ratio.csv`](wajib_pokok_ratio.csv)
 
-| Dormancy band | Villages | Share |
-|---|---|---|
-| **no savings at all** | 72,697 | **87.51%** |
-| pokok only (capital, no ongoing dues) | 2,706 | 3.26% |
-| both pokok and wajib | 7,151 | 8.61% |
-| wajib only | 515 | 0.62% |
+| Dormancy band                         | Villages | Share      |
+| ------------------------------------- | -------- | ---------- |
+| **no savings at all**                 | 72,697   | **87.51%** |
+| pokok only (capital, no ongoing dues) | 2,706    | 3.26%      |
+| both pokok and wajib                  | 7,151    | 8.61%      |
+| wajib only                            | 515      | 0.62%      |
 
 Among the 7,151 villages reporting **both**:
 
 - median **wajib/pokok = 0.28** (p25 0.11, p75 0.70)
 - only **15.7%** have wajib > pokok
 
-The plan's own test is explicit: *"if wajib >> pokok, it suggests active ongoing
-saving."* That is not what the data shows. The typical reporting village has
+The plan's own test is explicit: _"if wajib >> pokok, it suggests active ongoing
+saving."_ That is not what the data shows. The typical reporting village has
 roughly four times more pokok than wajib — the signature of a cooperative that
 collected its founding capital and then stopped, not one whose members are
 saving month to month.
@@ -65,12 +65,12 @@ saving month to month.
 
 [`savings_vs_transactions.csv`](savings_vs_transactions.csv)
 
-| | no transaction | transaction |
-|---|---|---|
-| **savings** | 9,192 (11.07%) | 1,180 (1.42%) |
+|                | no transaction  | transaction   |
+| -------------- | --------------- | ------------- |
+| **savings**    | 9,192 (11.07%)  | 1,180 (1.42%) |
 | **no savings** | 71,361 (85.91%) | 1,336 (1.61%) |
 
-**14.1%** of villages report *some* financial footprint (savings or
+**14.1%** of villages report _some_ financial footprint (savings or
 transactions), against the 3.0% that report transactions. The two signals barely
 overlap — 9,192 villages report savings with zero transactions. Transactions
 alone understate the "anything is happening" share by a factor of ~4.7; savings
@@ -80,10 +80,10 @@ is the less degenerate activity channel (12.5% vs 3.0% non-zero).
 
 [`savings_per_member.csv`](savings_per_member.csv)
 
-| Type | Villages | per-member median | per-member mean |
-|---|---|---|---|
-| pokok | 9,857 | **Rp 50,000** | Rp 192,000 |
-| wajib | 7,666 | **Rp 20,000** | Rp 39,000 |
+| Type  | Villages | per-member median | per-member mean |
+| ----- | -------- | ----------------- | --------------- |
+| pokok | 9,857    | **Rp 50,000**     | Rp 192,000      |
+| wajib | 7,666    | **Rp 20,000**     | Rp 39,000       |
 
 These are plausible Indonesian cooperative figures — a one-time principal of
 ~Rp 50k and mandatory dues of ~Rp 20k are exactly the scale such programs
@@ -96,12 +96,12 @@ has no time anchor, only a lifetime total.)
 [`savings_concentration.csv`](savings_concentration.csv)
 
 | Top-N villages | Share of savings | Share of transactions (02) |
-|---|---|---|
-| 100 | 24.4% | 37% |
-| 1,000 | 56.9% | 93% |
+| -------------- | ---------------- | -------------------------- |
+| 100            | 24.4%            | 37%                        |
+| 1,000          | 56.9%            | 93%                        |
 
 Savings spread much more evenly than transactions — consistent with savings
-being a *registration-era* phenomenon (pokok collected across many villages at
+being a _registration-era_ phenomenon (pokok collected across many villages at
 founding) rather than the deep operating concentration of transactions.
 
 ## Finding 6 — national totals and the province gradient
@@ -123,7 +123,7 @@ CSV for reference only.
 ## Caveats
 
 - A zero is still ambiguous between "no activity" and "not yet reported" (01).
-  What the savings channel adds is *structure*: the same system that recorded
+  What the savings channel adds is _structure_: the same system that recorded
   accounts for 96% of villages recorded pokok for 12% and wajib for 9%. That
   ordering — admin ≫ one-time capital ≫ ongoing operations — is what a real
   activity funnel looks like, and what a purely arbitrary data gap would not

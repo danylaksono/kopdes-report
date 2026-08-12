@@ -15,10 +15,10 @@ by **−2 (NPWP)** and **−1 (NIB)** — effectively exact.
 
 [`compliance_by_level.csv`](compliance_by_level.csv) · [`compliance_by_province.csv`](compliance_by_province.csv)
 
-| Document | Cooperatives holding it | Share |
-|---|---|---|
-| NPWP (tax id) | 80,976 | **97.1%** |
-| NIB (business license) | 60,806 | **72.9%** |
+| Document               | Cooperatives holding it | Share     |
+| ---------------------- | ----------------------- | --------- |
+| NPWP (tax id)          | 80,976                  | **97.1%** |
+| NIB (business license) | 60,806                  | **72.9%** |
 
 Compliance is identical at every admin level (the sums are the same numbers
 rolled up). Province spread of NIB: **99.3%** (DKI Jakarta) down to **5.6%**
@@ -31,14 +31,14 @@ transact.
 
 [`nib_vs_transaction.csv`](nib_vs_transaction.csv) · per village
 
-| | no transaction | transaction |
-|---|---|---|
-| **NIB** | 58,230 (70.10%) | 2,493 (3.00%) |
-| **no NIB** | 22,323 (26.87%) | 23 (0.03%) |
+|            | no transaction  | transaction   |
+| ---------- | --------------- | ------------- |
+| **NIB**    | 58,230 (70.10%) | 2,493 (3.00%) |
+| **no NIB** | 22,323 (26.87%) | 23 (0.03%)    |
 
 - **70.1% of villages hold the NIB and report no transaction.** The state has
   licensed them as businesses; they show no business.
-- Only **23 villages (0.03%)** report a transaction *without* an NIB — nobody
+- Only **23 villages (0.03%)** report a transaction _without_ an NIB — nobody
   is operating outside the licensing system.
 - 26.9% have neither license nor transaction.
 
@@ -50,7 +50,7 @@ absent".
 
 ## Caveats
 
-- Village-level aggregation: a village counts as "NIB" if *any* cooperative in
+- Village-level aggregation: a village counts as "NIB" if _any_ cooperative in
   it holds one. The 70.1% figure is therefore a lower bound on licensed-but-
   silent villages in cooperative terms.
 - `npwp_count`/`nib_count` count documents held, not necessarily current/valid
