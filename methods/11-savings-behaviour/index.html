@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>11 — Savings behaviour: are members actually saving, or are the accounts dormant? — Metode</title>
+  <link rel="stylesheet" href="../../app/site.css" />
+</head>
+<body data-root="../../">
+  <nav id="site-nav"></nav>
+  <main class="wrap">
+    <p class="kicker">Metode · lampiran 11-savings-behaviour</p>
+    <h1>11 — Savings behaviour: are members actually saving, or are the accounts dormant?</h1>
+    <p class="lede">Lampiran metode ini ditampilkan langsung dari
+      <code>reports/11-savings-behaviour/README.md</code> — satu sumber kebenaran, tidak
+      ditulis dua kali.</p>
+    <div id="md"></div>
+    <p class="md-note">Laporan metode ditulis dalam bahasa Inggris dan memuat
+      tabel data mentah, termasuk nama kandidat yang <strong>belum
+      diverifikasi</strong>. Lihat <a href="../../about/">kebijakan verifikasi
+      &amp; koreksi</a> sebelum mengutip nama desa/koperasi apa pun.</p>
+  </main>
+  <footer id="site-footer"></footer>
+  <script type="module" src="../../app/site.js"></script>
+  <script type="module">
+    import { fetchMarkdown, renderMarkdownInto } from "../../app/site.js";
+    const md = document.getElementById("md");
+    try {
+      const text = await fetchMarkdown("../../reports/11-savings-behaviour/README.md");
+      await renderMarkdownInto(md, text);
+    } catch (e) {
+      md.innerHTML = `<p style="color:#a00">Gagal memuat README: ${e.message}</p>`;
+    }
+  </script>
+</body>
+</html>

@@ -207,23 +207,56 @@ Three stages:
 
 Outputs go to `geo/output/` (gitignored). Match failures go to `*_unmatched.csv`.
 
-## Web app
+## Web app — the report site (started 2026-08-12)
 
-Static MapLibre GL app served from the **repo root** (`index.html` + `app/`), so a plain `python -m http.server 8000` at the root serves it at `/`. No build step; dependencies are CDN ES modules.
+Static multi-page site served from the **repo root**, so a plain
+`python -m http.server 8000` at the root serves it at `/`. No build step;
+dependencies are CDN ES modules. Language: **Bahasa Indonesia** (narrative);
+the methods appendix stays in English (it *is* the reports).
 
-| File                 | Role                                                                                     |
-| -------------------- | ---------------------------------------------------------------------------------------- |
-| `index.html`         | Shell: map container, control panel, legend, tooltip                                     |
-| `app/main.js`        | Loads `data/web/points.geojson`, switches views, renders legend/tooltip                  |
-| `app/points-layer.js`| Clustered per-cooperative circles, colored by verification status                        |
-| `app/grid-layer.js`  | screengrid screen-space aggregation (rect + hex), colour ramp                            |
-| `app/style.css`      | All styling                                                                              |
+Real directories with `index.html` (works on GitHub Pages, independently
+linkable):
 
-**screengrid**: pinned as `https://unpkg.com/screengrid@3.1.1/dist/screengrid.mjs` (source lives at `D:\Dissertation\screengrid`, npm `screengrid`). Bump the pin in `app/grid-layer.js` when the library is republished — there is no lockfile.
+| Route | Role |
+|---|---|
+| `/` (`index.html`) | The story — scrollytelling (hero + `app/story.js` charts) |
+| `/explore/` | The interactive map (`app/explore.js`) |
+| `/findings/`, `findings/{remoteness,competition,money}/` | The three acts, in Bahasa Indonesia, **anonymous until verified** |
+| `/methods/`, `methods/<nn-slug>/` | Methodology appendix — generated from `reports/*/README.md`, rendered client-side, never written twice |
+| `/data/` | Downloads, provenance, null semantics, snapshot log |
+| `/about/` | Who/why, verification & corrections policy, public corrections log |
 
-Grid cells currently encode **count of cooperatives only** (`getWeight: () => 1`, `aggregationFunction: 'sum'`). Attribute glyphs are deliberately deferred; they attach via `getWeight`/`onDrawCell`/`enableGlyphs` in `app/grid-layer.js`.
+Shared shell: `app/site.css` (design system) + `app/site.js` (injects nav +
+footer from `data-root`, `marked` markdown renderer, ID-locale number helpers).
+The old single-page viewer (`index.html` map + `app/main.js` + `app/style.css`)
+is **deleted**; its map ideas live on in `/explore/` and `app/points-layer.js` /
+`app/grid-layer.js`, which are reused unchanged.
 
-Normalization is screengrid's default `max-local`, i.e. **view-relative** — the same count maps to different colours at different viewports. The legend prints the current max to keep that honest. If cross-view comparison ever matters, switch to `max-global` with a fixed `normalizationContext.globalMax`.
+**Data layer (one shared layer for every page)**: the committed parquet files
+(`data/web/kopdes_points.parquet` etc.) read in-browser through **duckdb-wasm**.
+Import map in `explore/index.html` maps `@duckdb/duckdb-wasm` →
+`dist/duckdb-browser.mjs` and `apache-arrow@17.0.0/+esm` (the ESM build imports
+apache-arrow as a bare specifier; the import map is required, there is no UMD
+build). `getJsDelivrBundles()` + `selectBundle()` + `AsyncDuckDB` is the load
+path. The old `data/web/points.geojson` (24 MB) is dead; the parquet replaces it.
+
+**screengrid**: pinned as `https://unpkg.com/screengrid@3.1.1/dist/screengrid.mjs`
+(source lives at `D:\Dissertation\screengrid`, npm `screengrid`). Bump the pin in
+`app/grid-layer.js` when the library is republished — there is no lockfile.
+
+Grid cells encode **count of cooperatives only** (`getWeight: () => 1`,
+`aggregationFunction: 'sum'`); attribute glyphs attach via
+`getWeight`/`onDrawCell`/`enableGlyphs` in `app/grid-layer.js`. Normalization is
+screengrid's default `max-local` (view-relative); the legend prints the current
+max to keep that honest.
+
+**/methods/ generation**: `python scripts/build_methods_pages.py` scaffolds
+`methods/<nn-slug>/index.html` shells + the index from
+`reports/README.md` (titles and per-report questions come from the index table).
+Each shell fetches its own `reports/<slug>/README.md` at runtime and renders it
+with `marked` — single source of truth. Re-run the generator when a report is
+added or renamed. Named cooperatives in the appendix carry a verification
+disclaimer (see `/about/`).
 
 ## The deliverable: an investigative report, not an academic paper
 

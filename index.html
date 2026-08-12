@@ -1,38 +1,168 @@
 <!doctype html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="utf-8" />
-  <title>Kopdes Merah Putih — visual analytics</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link href="https://unpkg.com/maplibre-gl@4/dist/maplibre-gl.css" rel="stylesheet" />
-  <link href="app/style.css" rel="stylesheet" />
+  <title>Koperasi Desa Merah Putih — sebuah investigasi data</title>
+  <meta name="description" content="Investigasi data independen tentang program Koperasi Desa Merah Putih: dibangun di mana, apakah tumpang tindih dengan ritel yang ada, dan apa hasilnya." />
+  <link href="app/site.css" rel="stylesheet" />
 </head>
-<body>
-  <div id="map"></div>
+<body data-root="">
+  <nav id="site-nav"></nav>
 
-  <div id="info" class="panel">
-    <h1 id="info-text">Loading&hellip;</h1>
-    <div class="count" id="info-count"></div>
+  <!-- HERO -->
+  <header style="border-bottom:1px solid var(--line)">
+    <div class="wrap" style="padding:72px 20px 56px; max-width:820px">
+      <p class="kicker">Sebuah investigasi data · 2026</p>
+      <h1 style="font-size:46px">83.342 koperasi dibangun atas nama “desa merah putih”. Apa yang sebenarnya terjadi?</h1>
+      <p class="lede">Program Koperasi Desa Merah Putih mendirikan koperasi di
+        hampir setiap desa di Indonesia. Tiga klaim beredar tentangnya: bahwa
+        koperasi dibangun di tempat terpencil yang tak terjangkau, bahwa banyak
+        yang didirikan di atas minimarket yang sudah ada, dan bahwa anggaran
+        dikeluarkan tanpa hasil. Kami menguji ketiganya dengan data publik,
+        metode yang dapat direproduksi, dan vonis yang jujur.</p>
+      <p style="margin-top:28px"><a href="#mulai" style="font-weight:700">Mulai membaca ↓</a> ·
+        <a href="findings/">Langsung ke ringkasan temuan</a></p>
+    </div>
+  </header>
+
+  <!-- SCROLLY -->
+  <div class="wrap scrolly" id="mulai" style="max-width:1080px">
+    <div class="sticky">
+      <div class="figure" style="text-align:center">
+        <div class="figure-inner" style="display:inline-block; min-width:min(92vw,620px)">
+          <p style="font-size:13px;color:#5c5c5c">Grafik berganti seiring gulir</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="steps">
+
+      <div class="step" data-chart="coverage">
+        <div class="step-inner">
+          <span class="step-num">Bab 1 · Akses</span>
+          <h2>Klaim: “dibangun di tempat yang tak bisa dijangkau siapa pun.”</h2>
+          <p>Mari mulai dari jangkauan. Menggunakan grid populasi resolusi 400 m,
+            kami mengukur berapa banyak penduduk Indonesia yang tinggal dekat
+            sebuah koperasi. Hasilnya bukan yang diklaim.</p>
+          <p><strong>95% penduduk tinggal dalam ±1,4 km dari sebuah KDMP.</strong>
+            Ini bukan program yang meleset dari penduduknya.</p>
+        </div>
+      </div>
+
+      <div class="step" data-chart="tail">
+        <div class="step-inner">
+          <span class="step-num">Bab 1 · Akses</span>
+          <h2>Tapi ada ekor yang nyata.</h2>
+          <p>“Bukan fenomena massal” dan “tidak ada masalah” adalah dua hal yang
+            berbeda. <strong>174 koperasi tidak punya penduduk dalam radius 5
+            kilometer.</strong> 17.804 koperasi (21,4%) berada di sel 400 m tanpa
+            populasi tercatat.</p>
+          <p>174 dari 83.342 adalah 0,2% dari program — dan juga 174 kasus
+            konkret, bisa disebutkan, bisa diperiksa.</p>
+        </div>
+      </div>
+
+      <div class="step" data-chart="road">
+        <div class="step-inner">
+          <span class="step-num">Bab 1 · Akses</span>
+          <h2>Dan ada yang benar-benar jauh.</h2>
+          <p>5.114 koperasi tidak punya jalan beraspal dalam ±5 km. Diukur
+            persis: median jaraknya ke jalan terdekat adalah <strong>9,7 km</strong>,
+            dan 16 koperasi lebih dari 100 km dari jalan beraspal mana pun.</p>
+          <p>19 koperasi bahkan tidak berada di Indonesia — koordinatnya mustahil.
+            Sebagian besar ekor ini ada di Indonesia timur.</p>
+        </div>
+      </div>
+
+      <div class="step" data-chart="nn">
+        <div class="step-inner">
+          <span class="step-num">Bab 2 · Kompetisi</span>
+          <h2>Klaim: “dibangun di atas minimarket yang sudah ada.”</h2>
+          <p>Pertama, bagaimana koperasi terhadap sesama koperasi? Program ini
+            satu koperasi per desa, dan desa-desa di Indonesia padat. Hasilnya
+            sejalan: 91% koperasi punya koperasi lain dalam 5 km, dan
+            <strong>1 dari 5 dalam 1 km</strong>.</p>
+        </div>
+      </div>
+
+      <div class="step" data-chart="cluster">
+        <div class="step-inner">
+          <span class="step-num">Bab 2 · Kompetisi</span>
+          <h2>Penumpukan sejati jarang — dan tidak merugikan.</h2>
+          <p>Hanya 6,7% koperasi benar-benar berbagi sel ±1 km dengan koperasi
+            lain (dan sebagian besar “penumpukan” halus ternyata artefak
+            koordinat, bukan bangunan).</p>
+          <p>Uji kinerjanya: koperasi yang menumpuk melaporkan transaksi pada
+            tingkat yang sama dengan yang terpencil. <strong>Tidak ada penalti
+            yang terukur</strong>.</p>
+        </div>
+      </div>
+
+      <div class="step" data-chart="funnel">
+        <div class="step-inner">
+          <span class="step-num">Bab 3 · Anggaran &amp; output</span>
+          <h2>Klaim: “boros — uang keluar, tidak ada hasil.”</h2>
+          <p>Inilah bab yang paling kuat. Total nasional yang benar bukan Rp
+            179,5 <em>triliun</em> — itu salah 1000×. Angka yang benar, dan
+            cocok dengan angka resmi kementerian, adalah <strong>Rp 179,5
+            miliar</strong> (~USD 11 juta), kira-kira <strong>USD 130 per
+            koperasi</strong> seumur hidup.</p>
+          <p>Perhatikan corong di samping: sistem mencatat akun untuk 96% desa
+            dan NPWP untuk 97%, tetapi transaksi hanya untuk 3%. Mesin
+            pendaftaran bekerja; mesin operasi tidak.</p>
+        </div>
+      </div>
+
+      <div class="step" data-chart="nib">
+        <div class="step-inner">
+          <span class="step-num">Bab 3 · Anggaran &amp; output</span>
+          <h2>Izin usaha ada; bisnisnya tidak.</h2>
+          <p>72,9% koperasi memegang NIB — izin usaha. Hanya 23 desa melaporkan
+            transaksi <em>tanpa</em> izin. Tetapi <strong>70% desa memegang izin
+            dan tidak melaporkan transaksi apa pun</strong>.</p>
+          <p>Simpanan serupa: 87,5% desa tanpa simpanan; di yang ada, uangnya
+            modal awal, bukan tabungan berjalan.</p>
+        </div>
+      </div>
+
+      <div class="step" data-chart="concentration">
+        <div class="step-inner">
+          <span class="step-num">Bab 3 · Anggaran &amp; output</span>
+          <h2>Aktivitas yang ada juga sangat terkonsentrasi.</h2>
+          <p>100 desa membawa 37% dari seluruh nilai transaksi nasional; 1.000
+            desa membawa 93%. Nilai tumbuh, tetapi di dalam set desa pelapor
+            yang hampir statis — pendalaman konsentrasi, bukan backlog yang
+            terselesaikan.</p>
+          <p>Konstruksi: seperempat selesai. RAT: nol di semua provinsi.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-inner">
+          <span class="step-num">Vonis</span>
+          <h2>Jadi, apa yang sebenarnya terjadi?</h2>
+          <p><strong>Klaim “terpencil” tidak berlaku massal</strong> — jangkauan
+            nyaris sempurna, tetapi ada ekor nyata yang bisa diperiksa.
+            <strong>Klaim “kanibalisasi” hanya sebagian</strong> — kedekatan
+            nyata tapi sedang, kompetisi tidak terukur. <strong>Klaim “boros”
+            didukung data</strong> — sejauh yang dilaporkan, dan angka itu milik
+            pemerintah sendiri.</p>
+          <p style="margin-top:20px">
+            <a href="findings/" style="font-weight:700">Baca tiga bab secara utuh →</a><br />
+            <a href="explore/">Jelajahi peta interaktif</a> ·
+            <a href="methods/">Lampiran metode</a> ·
+            <a href="data/">Data &amp; sumber</a> ·
+            <a href="about/">Tentang &amp; koreksi</a>
+          </p>
+        </div>
+      </div>
+
+    </div>
   </div>
 
-  <div id="controls" class="panel">
-    <fieldset>
-      <legend>View</legend>
-      <label class="opt"><input type="radio" name="view" value="grid" /> Screen grid</label>
-      <label class="opt"><input type="radio" name="view" value="hex" /> Screen hex</label>
-      <label class="opt"><input type="radio" name="view" value="points" /> Points (clustered)</label>
-    </fieldset>
-    <fieldset id="cell-size-field">
-      <legend>Cell size <span class="val" id="cell-size-val"></span></legend>
-      <input type="range" id="cell-size" min="16" max="120" step="4"
-             aria-label="Aggregation cell size in pixels" />
-    </fieldset>
-  </div>
-
-  <div id="legend" class="panel"></div>
-  <div id="cell-tip"></div>
-
-  <script src="https://unpkg.com/maplibre-gl@4/dist/maplibre-gl.js"></script>
-  <script type="module" src="app/main.js"></script>
+  <footer id="site-footer"></footer>
+  <script type="module" src="app/site.js"></script>
+  <script type="module" src="app/story.js"></script>
 </body>
 </html>

@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Anggaran &amp; output — Temuan</title>
+  <link href="../../app/site.css" rel="stylesheet" />
+</head>
+<body data-root="../../">
+  <nav id="site-nav"></nav>
+  <main class="wrap">
+    <p class="kicker">Temuan · Bab 3</p>
+    <h1>“Boros: uang dikeluarkan, tidak ada yang terjadi” — inilah bab yang paling kuat.</h1>
+    <p class="lede">Angka nasionalnya bukan Rp 179,5 <em>triliun</em> seperti yang
+      beredar. Angka yang benar — dan cocok dengan angka resmi kementerian
+      sendiri — adalah <strong>Rp 179,5 miliar</strong>, sekitar USD 11 juta,
+      untuk seluruh program sejauh ini. Itu kira-kira <strong>USD 130 per
+      koperasi</strong> — satu bulan belanja kebutuhan pokok — untuk seumur
+      hidup sebuah koperasi.</p>
+
+    <div class="stat-strip">
+      <div class="stat"><div class="value">179,5<small>miliar</small></div><div class="label">total transaksi nasional yang dilaporkan (~USD 11 juta)</div></div>
+      <div class="stat"><div class="value">3,0<small>%</small></div><div class="label">desa yang melaporkan transaksi sama sekali</div></div>
+      <div class="stat"><div class="value">37<small>%</small></div><div class="label">nilai nasional dari hanya 100 desa</div></div>
+      <div class="stat"><div class="value">70,1<small>%</small></div><div class="label">desa ber-NIB (izin usaha) tanpa transaksi</div></div>
+      <div class="stat"><div class="value">23<small>%</small></div><div class="label">koperasi dengan konstruksi 100%</div></div>
+      <div class="stat"><div class="value">0</div><div class="label">RAT (rapat anggota) dilaporkan di 38 provinsi</div></div>
+    </div>
+
+    <h2>Angka dasarnya sendiri</h2>
+    <p>Pada 2026-08-09, media melaporkan total nasional Rp 179,72 miliar;
+      tarikan API kami hari yang sama menghasilkan Rp 179,79 miliar — selisih
+      0,042%. Kementerian mengutip dashboard ini, jadi apa pun yang dikatakannya
+      tentang aktivitas adalah catatan publik pemerintah sendiri. Secara
+      terpisah, kepala Bakom menyebut <strong>1.061 koperasi beroperasi</strong>
+      (1,3% dari registry) pada 2026-06-08 — sejalan dengan 3,0% desa yang
+      melaporkan transaksi dalam dua provinsi yang sama.</p>
+
+    <h2>Mesin pendaftaran bekerja; mesin operasi tidak</h2>
+    <p>Data runtun dari administrasi ke operasi. Sistem yang sama mencatat akun
+      untuk ±96% desa dan NPWP untuk 97,1% koperasi — tetapi transaksi hanya
+      untuk 3,0%, dan iuran wajib bulanan hanya 9,2%. Ini bentuk corong
+      <em>aktivitas nyata</em>:</p>
+    <figure class="figure">
+      <table>
+        <thead><tr><th>Tingkat data</th><th class="num">Bagian desa dengan data</th><th>Sumber</th></tr></thead>
+        <tbody>
+          <tr><td>Akun (terdaftar di sistem)</td><td class="num">±96%</td><td>metode 02</td></tr>
+          <tr><td>NPWP (nomor pajak)</td><td class="num">97,1%</td><td>metode 13</td></tr>
+          <tr><td>NIB (izin usaha)</td><td class="num">72,9%</td><td>metode 13</td></tr>
+          <tr><td>Modal pokok (simpanan awal)</td><td class="num">11,9%</td><td>metode 11</td></tr>
+          <tr><td>Iuran wajib (dues bulanan)</td><td class="num">9,2%</td><td>metode 11</td></tr>
+          <tr><td><strong>Transaksi</strong></td><td class="num"><strong>3,0%</strong></td><td>metode 02</td></tr>
+        </tbody>
+      </table>
+      <figcaption>Corong pendaftaran → operasi. Lapisan administrasi penuh,
+        lapisan operasi hampir kosong.</figcaption>
+    </figure>
+
+    <h2>Simpanan: uangnya modal awal, bukan tabungan berjalan</h2>
+    <p>Transaksi 97% nol membuat kami mencari kanal aktivitas kedua: simpanan.
+      Simpanan dilaporkan 4× lebih sering daripada transaksi — 12,5% desa punya
+      simpanan apa pun — tapi tetap saja <strong>87,5% desa tidak melaporkan
+      simpanan sama sekali</strong>. Dan di antara yang melaporkan, polanya
+      justru menandakan dormansi:</p>
+    <ul>
+      <li>Rasio <strong>iuran wajib vs modal pokok</strong> mediannya 0,28 — hanya
+        15,7% desa punya iuran wajib lebih besar dari modal pokok. Uangnya adalah
+        <strong>modal sekali setor saat didirikan</strong>, bukan tabungan yang
+        berjalan bulan ke bulan.</li>
+      <li>Simpanan total Rp 40,1 miliar (~USD 2,5 juta) — sekitar seperlima dari
+        nilai transaksi.</li>
+      <li>Di mana dilaporkan, jumlahnya masuk akal (pokok ±Rp 50 ribu, wajib
+        ±Rp 20 ribu per anggota) — jadi ini uang sungguhan, bukan angka isian.</li>
+    </ul>
+
+    <h2>Izin usaha ada; operasinya tidak — dan konsentrasi yang ekstrem</h2>
+    <p>Uji “zombie”: 72,9% koperasi memegang NIB (izin usaha). Hanya 23 desa
+      (0,03%) melaporkan transaksi <em>tanpa</em> izin — nyaris tidak ada yang
+      beroperasi di luar sistem. Tetapi <strong>70,1% desa memegang izin dan
+      tidak melaporkan transaksi apa pun</strong>. Negara telah memberi mereka
+      izin usaha; bisnisnya tidak ada.</p>
+    <p>Aktivitas yang ada juga sangat terkonsentrasi: <strong>100 desa membawa
+      37% nilai transaksi nasional</strong>, dan 1.000 desa membawa 93%.
+      Nilainya tumbuh (naik 13,8% antara 2026-07-31 dan 2026-08-09) tetapi
+      hampir di dalam set desa pelapor yang statis (2.516 → 2.517). Itu
+      pendalaman konsentrasi, bukan gelombang backlog yang terselesaikan.</p>
+
+    <h2>Konstruksi dan tata kelola</h2>
+    <ul>
+      <li><strong>Konstruksi</strong>: 23,0% koperasi berada di 100% konstruksi;
+        45,5% punya catatan konstruksi sama sekali — lebih dari separuh tanpa
+        catatan apa pun.</li>
+      <li><strong>RAT</strong> (rapat anggota tahunan, kanal tata kelola):
+        nol di semua 38 provinsi. Entah tidak dikumpulkan, atau ketidakpatuhan
+        nasional yang nyata — keduanya adalah temuan.</li>
+    </ul>
+
+    <div class="callout"><span class="callout-label">Kejujuran data</span>
+      “Nol” di sini berarti <strong>belum melaporkan</strong>, bukan “tidak
+      aktif”. Secara formal keduanya tidak bisa dipisahkan. Tetapi corong di
+      atas menggeser beban pembuktian: sistem yang mencatat akun untuk 96% dan
+      NPWP untuk 97% desa, tetapi transaksi untuk 3%, bukanlah sistem yang
+      “belum sempat mencatat” — itu sistem yang mencatat pendaftaran dan tidak
+      mencatat operasi. Seri snapshot bulanan (sedang berjalan) akan menutup
+      celah ini.</div>
+
+    <div class="verdict">
+      <h3>Vonis bab ini</h3>
+      <p><strong>Klaim “boros, tidak ada hasil” adalah klaim yang paling didukung
+        data.</strong> Total nasional yang benar (±Rp 179,5 miliar / USD 11 juta)
+        cocok dengan angka resmi; hanya 3% desa melaporkan transaksi; 70%
+        berizin usaha tanpa operasi; simpanan sebagian besar modal awal;
+        konstruksi seperempat selesai; RAT nol. Peringatan tetap berlaku: “tidak
+        melaporkan” ≠ “tidak aktif”, dan kami tidak bisa menyebut angka aktivitas
+        yang sebenarnya — hanya angka yang dilaporkan. Tapi angka yang dilaporkan
+        itu milik pemerintah sendiri.</p>
+    </div>
+
+    <p><a href="../methods/09-external-corroboration/">Metode 09</a> ·
+      <a href="../methods/02-zero-inflation/">02</a> ·
+      <a href="../methods/11-savings-behaviour/">11</a> ·
+      <a href="../methods/13-compliance-npwp-nib/">13</a> ·
+      <a href="../methods/15-construction-output/">15</a> ·
+      <a href="../methods/01-snapshot-drift/">01</a></p>
+  </main>
+  <footer id="site-footer"></footer>
+  <script type="module" src="../../app/site.js"></script>
+</body>
+</html>
