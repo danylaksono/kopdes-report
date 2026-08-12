@@ -59,7 +59,7 @@ export function renderNav(container) {
       </div>
       ${NAV.map(
         (n) =>
-          `<a class="nav-link${isActive(n) ? " active" : ""}" href="${ROOT}${n.href}">${n.label}</a>`
+          `<a class="nav-link${isActive(n) ? " active" : ""}" href="${ROOT}${n.href}">${n.label}</a>`,
       ).join("")}
     </div>`;
   container.replaceWith(nav);
@@ -106,9 +106,12 @@ export function id(n, maxFrac = 0) {
 export function rp(n) {
   if (n == null || Number.isNaN(n)) return "—";
   const abs = Math.abs(n);
-  if (abs >= 1e12) return `${(n / 1e12).toLocaleString("id-ID", { maximumFractionDigits: 1 })} triliun`;
-  if (abs >= 1e9) return `${(n / 1e9).toLocaleString("id-ID", { maximumFractionDigits: 1 })} miliar`;
-  if (abs >= 1e6) return `${(n / 1e6).toLocaleString("id-ID", { maximumFractionDigits: 1 })} juta`;
+  if (abs >= 1e12)
+    return `${(n / 1e12).toLocaleString("id-ID", { maximumFractionDigits: 1 })} triliun`;
+  if (abs >= 1e9)
+    return `${(n / 1e9).toLocaleString("id-ID", { maximumFractionDigits: 1 })} miliar`;
+  if (abs >= 1e6)
+    return `${(n / 1e6).toLocaleString("id-ID", { maximumFractionDigits: 1 })} juta`;
   return n.toLocaleString("id-ID");
 }
 

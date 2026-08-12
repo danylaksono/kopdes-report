@@ -8,15 +8,31 @@
  * No build step: maplibre, screengrid and duckdb-wasm are CDN ES modules.
  */
 
-import { addPointsLayer, removePointsLayer, VERIFIED_COLORS } from "./points-layer.js";
-import { createGridLayer, gridColorRampCss, LAYER_ID as GRID_LAYER_ID } from "./grid-layer.js";
+import {
+  addPointsLayer,
+  removePointsLayer,
+  VERIFIED_COLORS,
+} from "./points-layer.js";
+import {
+  createGridLayer,
+  gridColorRampCss,
+  LAYER_ID as GRID_LAYER_ID,
+} from "./grid-layer.js";
 import * as duckdb from "@duckdb/duckdb-wasm"; // resolved via the import map in explore/index.html
 
-const PARQUET_URL = new URL("../data/web/kopdes_points.parquet", location.href).href;
+const PARQUET_URL = new URL("../data/web/kopdes_points.parquet", location.href)
+  .href;
 const NEEDED_COLUMNS = [
-  "cooperative_id", "latitude", "longitude",
-  "own_cell_pop", "km_non_track", "m_to_minimarket_exact",
-  "land_verified", "has_reported_transaction", "coordinate_suspect", "cluster_size",
+  "cooperative_id",
+  "latitude",
+  "longitude",
+  "own_cell_pop",
+  "km_non_track",
+  "m_to_minimarket_exact",
+  "land_verified",
+  "has_reported_transaction",
+  "coordinate_suspect",
+  "cluster_size",
 ];
 
 const els = {
@@ -43,8 +59,10 @@ const FILTERS = {
   },
   minimarket: {
     all: () => true,
-    far: (p) => p.m_to_minimarket_exact == null || p.m_to_minimarket_exact > 5000,
-    near: (p) => p.m_to_minimarket_exact != null && p.m_to_minimarket_exact <= 5000,
+    far: (p) =>
+      p.m_to_minimarket_exact == null || p.m_to_minimarket_exact > 5000,
+    near: (p) =>
+      p.m_to_minimarket_exact != null && p.m_to_minimarket_exact <= 5000,
   },
   land: {
     all: () => true,
@@ -66,9 +84,9 @@ const FILTERS = {
 const state = {
   view: "grid",
   cellSizePixels: 48,
-  rows: [],             // raw rows from the parquet
-  features: [],         // GeoJSON features (all rows)
-  filtered: [],         // features after current filters
+  rows: [], // raw rows from the parquet
+  features: [], // GeoJSON features (all rows)
+  filtered: [], // features after current filters
   gridLayer: null,
   gridStats: null,
 };
@@ -88,14 +106,18 @@ async function loadRows() {
   const bundle = duckdb.getJsDelivrBundles();
   const selected = await duckdb.selectBundle(bundle);
   const workerUrl = URL.createObjectURL(
-    new Blob([`importScripts("${selected.mainWorker}");`], { type: "text/javascript" })
+    new Blob([`importScripts("${selected.mainWorker}");`], {
+      type: "text/javascript",
+    }),
   );
   const worker = new Worker(workerUrl);
   const db = new duckdb.AsyncDuckDB(new duckdb.ConsoleLogger(), worker);
   await db.instantiate(selected.mainModule, selected.pthreadWorker);
   const con = await db.connect();
   const cols = NEEDED_COLUMNS.join(", ");
-  const tbl = await con.query(`SELECT ${cols} FROM read_parquet('${PARQUET_URL}')`);
+  const tbl = await con.query(
+    `SELECT ${cols} FROM read_parquet('${PARQUET_URL}')`,
+  );
   return tbl.toArray().map((row) => row.toJSON());
 }
 
@@ -121,7 +143,7 @@ function currentFilters() {
 function applyFilters() {
   const preds = currentFilters();
   state.filtered = state.features.filter((f) =>
-    preds.every((pred) => pred(f.properties))
+    preds.every((pred) => pred(f.properties)),
   );
   // Rebuild the layer: the screengrid layer's data is set at construction, so
   // a filter change is a rebuild, not a setData.
@@ -139,12 +161,18 @@ function applyView() {
   hideTip();
 
   if (state.view === "points") {
-    addPointsLayer(map, { type: "FeatureCollection", features: state.filtered });
+    addPointsLayer(map, {
+      type: "FeatureCollection",
+      features: state.filtered,
+    });
   } else {
     state.gridLayer = createGridLayer(state.filtered, {
       mode: state.view === "hex" ? "screen-hex" : "screen-grid",
       cellSizePixels: state.cellSizePixels,
-      onStats: (stats) => { state.gridStats = stats; renderLegend(); },
+      onStats: (stats) => {
+        state.gridStats = stats;
+        renderLegend();
+      },
       onHover: showTip,
     });
     map.addLayer(state.gridLayer);
@@ -162,7 +190,9 @@ function wireControls() {
     });
   }
   for (const key of Object.keys(FILTERS)) {
-    document.getElementById(`f-${key}`).addEventListener("change", applyFilters);
+    document
+      .getElementById(`f-${key}`)
+      .addEventListener("change", applyFilters);
   }
   els.cellSize.value = String(state.cellSizePixels);
   els.cellSizeVal.textContent = `${state.cellSizePixels} px`;

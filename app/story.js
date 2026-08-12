@@ -107,7 +107,11 @@ function renderChart(name, container) {
   const c = CHART[name];
   if (!c) return;
   const max = Math.max(...c.bars.map((b) => b.v));
-  const W = 620, x0 = 250, x1 = W - 78, rowH = 26, top = 34;
+  const W = 620,
+    x0 = 250,
+    x1 = W - 78,
+    rowH = 26,
+    top = 34;
   const H = top + c.bars.length * rowH + (c.note ? 22 : 0);
   const barW = (v) => Math.max((v / max) * (x1 - x0), 2);
 
@@ -143,7 +147,7 @@ function initScrolly() {
         if (e.isIntersecting) setActive(steps.indexOf(e.target));
       }
     },
-    { rootMargin: "-45% 0px -45% 0px" }
+    { rootMargin: "-45% 0px -45% 0px" },
   );
   steps.forEach((s) => io.observe(s));
   setActive(0);

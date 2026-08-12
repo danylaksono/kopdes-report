@@ -10,13 +10,13 @@ Analysis pipeline for **KDMP** (Koperasi Desa Merah Putih), Indonesia's nationwi
 
 ## Key documents
 
-| File                | Purpose                                                                     |
-| ------------------- | --------------------------------------------------------------------------- |
-| `analytics-plan.md` | Full analytical blueprint — modules A–F, hypotheses, external data wishlist |
+| File                       | Purpose                                                                                                                                 |
+| -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `analytics-plan.md`        | Full analytical blueprint — modules A–F, hypotheses, external data wishlist                                                             |
 | `analytics-plan-review.md` | **Feasibility triage of the above (2026-08-09).** Corrects several load-bearing errors in the plan; read it before acting on any module |
-| `reports/README.md` | Index of completed analyses + the running "what we can and cannot say" list |
-| `README.md`         | Project overview, data layout, how to regenerate data                       |
-| `geo/README.md`     | Boundary shapefile pipeline (download → convert → link to kopdes stats)     |
+| `reports/README.md`        | Index of completed analyses + the running "what we can and cannot say" list                                                             |
+| `README.md`                | Project overview, data layout, how to regenerate data                                                                                   |
+| `geo/README.md`            | Boundary shapefile pipeline (download → convert → link to kopdes stats)                                                                 |
 
 ## Data inventory
 
@@ -24,17 +24,17 @@ Analysis pipeline for **KDMP** (Koperasi Desa Merah Putih), Indonesia's nationwi
 
 All sourced from SIMKOPDES public API (no auth required). Snapshot date: **2026-08-05**.
 
-| File                                       | Rows   | Key point                                                                                  |
-| ------------------------------------------ | ------ | ------------------------------------------------------------------------------------------ |
-| `kopdes_locations.csv`                     | ~83k   | Every cooperative: id, name, admin hierarchy, lat/lon                                      |
-| `kopdes_land_assets.csv`                   | ~66k   | Land/building verification status per cooperative                                          |
-| `kopdes_stats_province.csv`                | 38     | Per-province: transactions, savings, NPWP/NIB, health scores                               |
-| `kopdes_stats_district.csv`                | ~514   | Same stats at district level                                                               |
-| `kopdes_stats_subdistrict.csv`             | ~7.2k  | Same stats at subdistrict level                                                            |
-| `kopdes_stats_village.csv`                 | ~83k   | Same stats at village level (many zeros — most villages have 1 coop with minimal activity) |
-| `kopdes_national_summary.csv`              | 1      | Headline numbers: **IDR 179.5 billion** (*miliar*, ~USD 11M) total transactions, 1.8M members. **Not trillion** — the old "179.5T" here was wrong by 1000×; externally confirmed in `reports/09-external-corroboration` |
-| `kopdes_province_rat_and_construction.csv` | 38     | RAT compliance (**all zeros — major red flag**), construction progress                     |
-| `kopdes_province_top_products.csv`         | varies | Top products per province (fertilizer, rice, LPG dominate)                                 |
+| File                                       | Rows   | Key point                                                                                                                                                                                                               |
+| ------------------------------------------ | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `kopdes_locations.csv`                     | ~83k   | Every cooperative: id, name, admin hierarchy, lat/lon                                                                                                                                                                   |
+| `kopdes_land_assets.csv`                   | ~66k   | Land/building verification status per cooperative                                                                                                                                                                       |
+| `kopdes_stats_province.csv`                | 38     | Per-province: transactions, savings, NPWP/NIB, health scores                                                                                                                                                            |
+| `kopdes_stats_district.csv`                | ~514   | Same stats at district level                                                                                                                                                                                            |
+| `kopdes_stats_subdistrict.csv`             | ~7.2k  | Same stats at subdistrict level                                                                                                                                                                                         |
+| `kopdes_stats_village.csv`                 | ~83k   | Same stats at village level (many zeros — most villages have 1 coop with minimal activity)                                                                                                                              |
+| `kopdes_national_summary.csv`              | 1      | Headline numbers: **IDR 179.5 billion** (_miliar_, ~USD 11M) total transactions, 1.8M members. **Not trillion** — the old "179.5T" here was wrong by 1000×; externally confirmed in `reports/09-external-corroboration` |
+| `kopdes_province_rat_and_construction.csv` | 38     | RAT compliance (**all zeros — major red flag**), construction progress                                                                                                                                                  |
+| `kopdes_province_top_products.csv`         | varies | Top products per province (fertilizer, rice, LPG dominate)                                                                                                                                                              |
 
 ### Key data quality issues
 
@@ -59,12 +59,12 @@ All sourced from SIMKOPDES public API (no auth required). Snapshot date: **2026-
 kabupaten and provinsi. **It computes nothing** — if a number here disagrees
 with a report, the report is right and the mart is broken.
 
-| File | Rows | Unit |
-| --- | --- | --- |
-| `kopdes_points.parquet` | 83,342 | cooperative ≈ desa, 63 columns |
-| `kopdes_kecamatan.parquet` | 7,277 | subdistrict |
-| `kopdes_kabupaten.parquet` | 514 | district |
-| `kopdes_provinsi.parquet` | 38 | province (+ health scores) |
+| File                       | Rows   | Unit                           |
+| -------------------------- | ------ | ------------------------------ |
+| `kopdes_points.parquet`    | 83,342 | cooperative ≈ desa, 63 columns |
+| `kopdes_kecamatan.parquet` | 7,277  | subdistrict                    |
+| `kopdes_kabupaten.parquet` | 514    | district                       |
+| `kopdes_provinsi.parquet`  | 38     | province (+ health scores)     |
 
 These five files (incl. `mart_manifest.json`) are **committed** — they are the
 app's data layer and a Pages deploy 404s without them. Note the `.gitignore`
@@ -212,19 +212,19 @@ Outputs go to `geo/output/` (gitignored). Match failures go to `*_unmatched.csv`
 Static multi-page site served from the **repo root**, so a plain
 `python -m http.server 8000` at the root serves it at `/`. No build step;
 dependencies are CDN ES modules. Language: **Bahasa Indonesia** (narrative);
-the methods appendix stays in English (it *is* the reports).
+the methods appendix stays in English (it _is_ the reports).
 
 Real directories with `index.html` (works on GitHub Pages, independently
 linkable):
 
-| Route | Role |
-|---|---|
-| `/` (`index.html`) | The story — scrollytelling (hero + `app/story.js` charts) |
-| `/explore/` | The interactive map (`app/explore.js`) |
-| `/findings/`, `findings/{remoteness,competition,money}/` | The three acts, in Bahasa Indonesia, **anonymous until verified** |
-| `/methods/`, `methods/<nn-slug>/` | Methodology appendix — generated from `reports/*/README.md`, rendered client-side, never written twice |
-| `/data/` | Downloads, provenance, null semantics, snapshot log |
-| `/about/` | Who/why, verification & corrections policy, public corrections log |
+| Route                                                    | Role                                                                                                   |
+| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `/` (`index.html`)                                       | The story — scrollytelling (hero + `app/story.js` charts)                                              |
+| `/explore/`                                              | The interactive map (`app/explore.js`)                                                                 |
+| `/findings/`, `findings/{remoteness,competition,money}/` | The three acts, in Bahasa Indonesia, **anonymous until verified**                                      |
+| `/methods/`, `methods/<nn-slug>/`                        | Methodology appendix — generated from `reports/*/README.md`, rendered client-side, never written twice |
+| `/data/`                                                 | Downloads, provenance, null semantics, snapshot log                                                    |
+| `/about/`                                                | Who/why, verification & corrections policy, public corrections log                                     |
 
 Shared shell: `app/site.css` (design system) + `app/site.js` (injects nav +
 footer from `data-root`, `marked` markdown renderer, ID-locale number helpers).
@@ -314,15 +314,15 @@ layer**; the detail has to live somewhere navigable. Proposed structure —
 four levels of progressive disclosure, each one click deeper, which is the
 Reuters Graphics / Mongabay pattern:
 
-| Route | Role |
-|---|---|
-| `/` | **The story.** Scrollytelling, linear, the summarised findings. Links inline to everything below. |
-| `/explore/` | **The interactive map.** Full screengrid explorer — layer switching, filters, per-cell inspection. The reader's own investigation. |
-| `/findings/` | Index of the detailed write-ups |
-| `/findings/remoteness/`, `/competition/`, `/money/` | One page per act, in depth, with the tables and figures the story only gestures at |
-| `/methods/`, `/methods/<nn-slug>/` | Methodology appendix — one page per `reports/` entry |
-| `/data/` | Downloads, provenance, the snapshot log |
-| `/about/` | Who, why, and the corrections policy |
+| Route                                               | Role                                                                                                                               |
+| --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `/`                                                 | **The story.** Scrollytelling, linear, the summarised findings. Links inline to everything below.                                  |
+| `/explore/`                                         | **The interactive map.** Full screengrid explorer — layer switching, filters, per-cell inspection. The reader's own investigation. |
+| `/findings/`                                        | Index of the detailed write-ups                                                                                                    |
+| `/findings/remoteness/`, `/competition/`, `/money/` | One page per act, in depth, with the tables and figures the story only gestures at                                                 |
+| `/methods/`, `/methods/<nn-slug>/`                  | Methodology appendix — one page per `reports/` entry                                                                               |
+| `/data/`                                            | Downloads, provenance, the snapshot log                                                                                            |
+| `/about/`                                           | Who, why, and the corrections policy                                                                                               |
 
 Design decisions:
 
@@ -389,7 +389,7 @@ Two hard rules that fall out of the data being live:
   provenance record. **Back the local snapshots up outside the working tree** —
   lose them and the central finding is unverifiable by anyone.
 - **A zero in the performance data is ambiguous** between "no activity" and "not
-  yet reported" (see `reports/01-snapshot-drift`). Write "has not *reported* any
+  yet reported" (see `reports/01-snapshot-drift`). Write "has not _reported_ any
   transaction", never "is inactive", until a snapshot series settles it.
 
 ## Git notes

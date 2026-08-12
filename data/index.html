@@ -1,91 +1,159 @@
 <!doctype html>
 <html lang="id">
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Data — Koperasi Desa Merah Putih</title>
-  <link href="../app/site.css" rel="stylesheet" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Data — Koperasi Desa Merah Putih</title>
+    <link href="../app/site.css" rel="stylesheet" />
 </head>
+
 <body data-root="../">
-  <nav id="site-nav"></nav>
-  <main class="wrap">
-    <p class="kicker">Data</p>
-    <h1>Data: apa yang kami punya dan dari mana</h1>
-    <p class="lede">Setiap angka di situs ini dapat ditelusuri ke berkas yang
-      dikomit di repositori ini — tidak ada angka yang “muncul begitu saja”.
-      Halaman ini mencatat asal data, jadwal snapshot, dan makna nilai kosong
-      (null), karena dalam investigasi ini <strong>null itu bermakna</strong>.</p>
+    <nav id="site-nav"></nav>
+    <main class="wrap">
+        <p class="kicker">Data</p>
+        <h1>Data: apa yang kami punya dan dari mana</h1>
+        <p class="lede">Setiap angka di situs ini dapat ditelusuri ke berkas yang
+            dikomit di repositori ini — tidak ada angka yang “muncul begitu saja”.
+            Halaman ini mencatat asal data, jadwal snapshot, dan makna nilai kosong
+            (null), karena dalam investigasi ini <strong>null itu bermakna</strong>.</p>
 
-    <h2>Lapisan data bersama (analysis mart)</h2>
-    <p>Semua halaman (peta, temuan, cerita) memakai satu lapisan data yang
-      sama: file parquet berikut, dibaca langsung di peramban lewat DuckDB-wasm.
-      Mart ini menggabungkan semua temuan per-koperasi ke dalam satu baris per
-      koperasi, lalu menggulungnya ke kecamatan, kabupaten, dan provinsi.</p>
+        <h2>Lapisan data bersama (analysis mart)</h2>
+        <p>Semua halaman (peta, temuan, cerita) memakai satu lapisan data yang
+            sama: file parquet berikut, dibaca langsung di peramban lewat DuckDB-wasm.
+            Mart ini menggabungkan semua temuan per-koperasi ke dalam satu baris per
+            koperasi, lalu menggulungnya ke kecamatan, kabupaten, dan provinsi.</p>
 
-    <figure class="figure">
-      <table>
-        <thead><tr><th>Berkas</th><th class="num">Ukuran</th><th>Isi</th></tr></thead>
-        <tbody>
-          <tr><td><a href="../data/web/kopdes_points.parquet" download>kopdes_points.parquet</a></td><td class="num">7,1 MB</td><td>83.342 koperasi, 63+ kolom</td></tr>
-          <tr><td><a href="../data/web/kopdes_kecamatan.parquet" download>kopdes_kecamatan.parquet</a></td><td class="num">0,39 MB</td><td>7.277 kecamatan</td></tr>
-          <tr><td><a href="../data/web/kopdes_kabupaten.parquet" download>kopdes_kabupaten.parquet</a></td><td class="num">0,05 MB</td><td>514 kabupaten/kota</td></tr>
-          <tr><td><a href="../data/web/kopdes_provinsi.parquet" download>kopdes_provinsi.parquet</a></td><td class="num">0,01 MB</td><td>38 provinsi</td></tr>
-          <tr><td><a href="../data/web/mart_manifest.json" download>mart_manifest.json</a></td><td class="num">0,02 MB</td><td>skema, null-semantik, cakupan</td></tr>
-        </tbody>
-      </table>
-      <figcaption>Parquet dikompres (zstd) sehingga muat untuk dikomit dan
-        dimuat penuh di GitHub Pages — pengganti points.geojson 24 MB yang lama.</figcaption>
-    </figure>
+        <figure class="figure">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Berkas</th>
+                        <th class="num">Ukuran</th>
+                        <th>Isi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><a href="../data/web/kopdes_points.parquet" download>kopdes_points.parquet</a></td>
+                        <td class="num">7,1 MB</td>
+                        <td>83.342 koperasi, 63+ kolom</td>
+                    </tr>
+                    <tr>
+                        <td><a href="../data/web/kopdes_kecamatan.parquet" download>kopdes_kecamatan.parquet</a></td>
+                        <td class="num">0,39 MB</td>
+                        <td>7.277 kecamatan</td>
+                    </tr>
+                    <tr>
+                        <td><a href="../data/web/kopdes_kabupaten.parquet" download>kopdes_kabupaten.parquet</a></td>
+                        <td class="num">0,05 MB</td>
+                        <td>514 kabupaten/kota</td>
+                    </tr>
+                    <tr>
+                        <td><a href="../data/web/kopdes_provinsi.parquet" download>kopdes_provinsi.parquet</a></td>
+                        <td class="num">0,01 MB</td>
+                        <td>38 provinsi</td>
+                    </tr>
+                    <tr>
+                        <td><a href="../data/web/mart_manifest.json" download>mart_manifest.json</a></td>
+                        <td class="num">0,02 MB</td>
+                        <td>skema, null-semantik, cakupan</td>
+                    </tr>
+                </tbody>
+            </table>
+            <figcaption>Parquet dikompres (zstd) sehingga muat untuk dikomit dan
+                dimuat penuh di GitHub Pages — pengganti points.geojson 24 MB yang lama.</figcaption>
+        </figure>
 
-    <h2>Asal data</h2>
-    <ul>
-      <li><strong>Sumber utama</strong>: API publik SIMKOPDES (sistem Kementerian
-        Koperasi). Tidak perlu autentikasi; respons dienkripsi AES-256-CBC dengan
-        kunci yang dipublikasikan di bundel JS situsnya sendiri.</li>
-      <li><strong>Tanggal snapshot dasar</strong>: 2026-08-05, dikomit di
-        <code>data/raw/</code>. Ini baseline yang tidak boleh diganti.</li>
-      <li><strong>Data eksternal</strong>: jaringan jalan &amp; minimarket dari
-        OpenStreetMap (Geofabrik + Overpass), populasi dari Kontur (grid H3 r8,
-        resolusi 400 m). Semua dapat diunduh ulang lewat <code>scripts/</code>.</li>
-      <li><strong>Batas wilayah</strong>: shapefile turunan BIG (Badan Informasi
-        Geospasial), diubah ke GeoJSON dengan penyederhanaan Douglas-Peucker.</li>
-    </ul>
+        <h2>Asal data</h2>
+        <ul>
+            <li><strong>Sumber utama</strong>: API publik SIMKOPDES (sistem Kementerian
+                Koperasi). Tidak perlu autentikasi; respons dienkripsi AES-256-CBC dengan
+                kunci yang dipublikasikan di bundel JS situsnya sendiri.</li>
+            <li><strong>Tanggal snapshot dasar</strong>: 2026-08-05, dikomit di
+                <code>data/raw/</code>. Ini baseline yang tidak boleh diganti.
+            </li>
+            <li><strong>Data eksternal</strong>: jaringan jalan &amp; minimarket dari
+                OpenStreetMap (Geofabrik + Overpass), populasi dari Kontur (grid H3 r8,
+                resolusi 400 m). Semua dapat diunduh ulang lewat <code>scripts/</code>.</li>
+            <li><strong>Batas wilayah</strong>: shapefile turunan BIG (Badan Informasi
+                Geospasial), diubah ke GeoJSON dengan penyederhanaan Douglas-Peucker.</li>
+        </ul>
 
-    <h2>Jadwal snapshot</h2>
-    <table>
-      <thead><tr><th>Tanggal</th><th>Status</th><th>Peran</th></tr></thead>
-      <tbody>
-        <tr><td>2026-08-05</td><td>Baseline, dikomit</td><td>Snapshot awal; dasar laporan 01–15</td></tr>
-        <tr><td>2026-08-09</td><td>Dikomit (manifest)</td><td>Snapshot kedua; membuktikan rebuttal “websitenya belum di-update”</td></tr>
-        <tr><td>Bulanan, mulai sekarang</td><td>Berjalan</td><td>Seri bulanan — satu-satunya cara memisahkan “nol = tidak ada bisnis” dari “nol = belum dilaporkan”</td></tr>
-      </tbody>
-    </table>
-    <p>CSV snapshot mentah (~28 MB per tarikan) <strong>tidak dipublikasikan</strong>
-      di situs ini, tetapi hash SHA-256-nya dikomit di <code>data/snapshots/*/_manifest.json</code>
-      sebagai bukti keberadaan. Snapshot dapat diminta langsung.</p>
+        <h2>Jadwal snapshot</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Tanggal</th>
+                    <th>Status</th>
+                    <th>Peran</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2026-08-05</td>
+                    <td>Baseline, dikomit</td>
+                    <td>Snapshot awal; dasar laporan 01–15</td>
+                </tr>
+                <tr>
+                    <td>2026-08-09</td>
+                    <td>Dikomit (manifest)</td>
+                    <td>Snapshot kedua; membuktikan rebuttal “websitenya belum di-update”</td>
+                </tr>
+                <tr>
+                    <td>Bulanan, mulai sekarang</td>
+                    <td>Berjalan</td>
+                    <td>Seri bulanan — satu-satunya cara memisahkan “nol = tidak ada bisnis” dari “nol = belum
+                        dilaporkan”</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>CSV snapshot mentah (~28 MB per tarikan) <strong>tidak dipublikasikan</strong>
+            di situs ini, tetapi hash SHA-256-nya dikomit di <code>data/snapshots/*/_manifest.json</code>
+            sebagai bukti keberadaan. Snapshot dapat diminta langsung.</p>
 
-    <h2>Makna null (ringkas)</h2>
-    <table>
-      <thead><tr><th>Kolom</th><th>Null berarti</th></tr></thead>
-      <tbody>
-        <tr><td><code>km_to_minimarket</code></td><td>Tidak ada minimarket dalam ±5 km (66.846 koperasi) — <strong>bukan</strong> “tidak diketahui”</td></tr>
-        <tr><td><code>km_any_road</code> / <code>km_non_track</code></td><td>Tidak ada jalan (sama sekali / beraspal) dalam ±5 km — <strong>bukan</strong> “tidak diketahui”</td></tr>
-        <tr><td><code>transaction_value</code></td><td>Null = sambungan desa gagal (21%); 0 = tersambung dan tidak melaporkan apa pun</td></tr>
-        <tr><td><code>coordinate_diagnosis</code></td><td>Koordinat di dalam Indonesia dan tidak pernah mencurigakan</td></tr>
-      </tbody>
-    </table>
+        <h2>Makna null (ringkas)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Kolom</th>
+                    <th>Null berarti</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>km_to_minimarket</code></td>
+                    <td>Tidak ada minimarket dalam ±5 km (66.846 koperasi) — <strong>bukan</strong> “tidak diketahui”
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>km_any_road</code> / <code>km_non_track</code></td>
+                    <td>Tidak ada jalan (sama sekali / beraspal) dalam ±5 km — <strong>bukan</strong> “tidak diketahui”
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>transaction_value</code></td>
+                    <td>Null = sambungan desa gagal (21%); 0 = tersambung dan tidak melaporkan apa pun</td>
+                </tr>
+                <tr>
+                    <td><code>coordinate_diagnosis</code></td>
+                    <td>Koordinat di dalam Indonesia dan tidak pernah mencurigakan</td>
+                </tr>
+            </tbody>
+        </table>
 
-    <h2>Hasil tiap laporan</h2>
-    <p>Setiap laporan di <a href="../methods/">Metode</a> mengkomit CSV
-      hasilnya di <code>reports/NN-slug/</code> — lihat halaman metode masing-masing
-      untuk tautan langsung.</p>
+        <h2>Hasil tiap laporan</h2>
+        <p>Setiap laporan di <a href="../methods/">Metode</a> mengkomit CSV
+            hasilnya di <code>reports/NN-slug/</code> — lihat halaman metode masing-masing
+            untuk tautan langsung.</p>
 
-    <div class="callout"><span class="callout-label">Regenerasi</span>
-      Semua berkas dapat dibangun ulang dari repo (lihat <code>README.md</code>
-      dan <code>scripts/</code>). Snapshot SIMKOPDES <em>tidak</em> dapat diambil
-      ulang — itulah sebabnya manifest hash-nya dikomit.</div>
-  </main>
-  <footer id="site-footer"></footer>
-  <script type="module" src="../app/site.js"></script>
+        <div class="callout"><span class="callout-label">Regenerasi</span>
+            Semua berkas dapat dibangun ulang dari repo (lihat <code>README.md</code>
+            dan <code>scripts/</code>). Snapshot SIMKOPDES <em>tidak</em> dapat diambil
+            ulang — itulah sebabnya manifest hash-nya dikomit.</div>
+    </main>
+    <footer id="site-footer"></footer>
+    <script type="module" src="../app/site.js"></script>
 </body>
+
 </html>
