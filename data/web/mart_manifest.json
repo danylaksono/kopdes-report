@@ -1,5 +1,5 @@
 {
-  "built": "2026-08-11",
+  "built": "2026-08-12",
   "source_snapshot": "data/raw (SIMKOPDES export 2026-08-05)",
   "h3_resolutions": [
     5,
@@ -234,6 +234,22 @@
           "type": "DOUBLE"
         },
         {
+          "name": "m_to_nearest_other",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "nn_band",
+          "type": "VARCHAR"
+        },
+        {
+          "name": "cluster_id",
+          "type": "VARCHAR"
+        },
+        {
+          "name": "cluster_size",
+          "type": "DOUBLE"
+        },
+        {
           "name": "coordinate_suspect",
           "type": "BOOLEAN"
         },
@@ -412,6 +428,18 @@
           "type": "BIGINT"
         },
         {
+          "name": "median_m_to_nearest_other",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "pct_sibling_within_1km",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "median_cluster_size",
+          "type": "DOUBLE"
+        },
+        {
           "name": "villages",
           "type": "BIGINT"
         },
@@ -555,6 +583,18 @@
           "type": "BIGINT"
         },
         {
+          "name": "median_m_to_nearest_other",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "pct_sibling_within_1km",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "median_cluster_size",
+          "type": "DOUBLE"
+        },
+        {
           "name": "villages",
           "type": "BIGINT"
         },
@@ -688,6 +728,18 @@
         {
           "name": "siting_shortlisted",
           "type": "BIGINT"
+        },
+        {
+          "name": "median_m_to_nearest_other",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "pct_sibling_within_1km",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "median_cluster_size",
+          "type": "DOUBLE"
         },
         {
           "name": "villages",

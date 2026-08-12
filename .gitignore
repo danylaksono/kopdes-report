@@ -31,6 +31,7 @@ reports/05-road-access/kopdes_road_access.csv
 reports/06-minimarket-proximity/kopdes_minimarket_distance.csv
 reports/07-landuse-polygons/kopdes_landuse_context.csv
 reports/08-exact-geometry/exact_minimarket_distance.csv
+reports/10-coop-clustering/nn_distances.csv
 
 # --- cached spatial indexes (rebuilt by the reports that use them) ---
 data/osm/road_cells_h3r10.parquet

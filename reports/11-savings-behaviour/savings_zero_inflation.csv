@@ -1,0 +1,8 @@
+field,label,villages,nonzero,pct_nonzero,max
+simpanan_pokok_amount,"pokok - one-time capital, value",83069,9857,11.87,2193000000.0
+simpanan_pokok_members,"pokok - one-time capital, members",83069,9870,11.88,2193.0
+simpanan_pokok_tx,"pokok - one-time capital, transactions",83069,9870,11.88,2193.0
+simpanan_wajib_amount,"wajib - ongoing dues, value",83069,7666,9.23,406120000.0
+simpanan_wajib_members,"wajib - ongoing dues, members",83069,7672,9.24,1457.0
+simpanan_wajib_tx,"wajib - ongoing dues, transactions",83069,7672,9.24,3780.0
+savings_total_amount,all savings (pokok + wajib),83069,10372,12.49,2221860000.0

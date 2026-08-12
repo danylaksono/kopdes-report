@@ -95,6 +95,8 @@ SOURCES = {
                    "cooperative_id", "python reports/08-exact-geometry/run.py"),
     "suspect": (REPORTS / "08-exact-geometry" / "suspect_coordinates.csv",
                 "cooperative_id", "python reports/08-exact-geometry/run.py"),
+    "clustering": (REPORTS / "10-coop-clustering" / "nn_distances.csv",
+                    "cooperative_id", "python reports/10-coop-clustering/run.py"),
 }
 
 
@@ -229,6 +231,15 @@ def build_points(con, missing):
             -- nothing to refine.
             dx.m_to_made_road                       as m_to_made_road_exact,
 
+            -- 10 KDMP-to-KDMP clustering (exact geodesic nearest-neighbour).
+            -- NULL m_to_nearest_other = one of the 821 coordinate artifacts the
+            -- report set aside (see its coord_artifacts.csv) - filter, don't
+            -- impute. nn_band / cluster_* are the same-cell r8 definitions.
+            cl.m_to_nearest_other,
+            cl.nn_band,
+            cl.cluster_id,
+            cl.cluster_size,
+
             -- 08 coordinate validity. TRUE means the point is outside Indonesia
             -- entirely; `coordinate_diagnosis` says whether flipping the
             -- latitude sign explains it. FILTER THESE OUT of any map or
@@ -263,6 +274,7 @@ def build_points(con, missing):
         left join src_retail_exact rx using (cooperative_id)
         left join src_road_exact   dx using (cooperative_id)
         left join src_suspect      sc using (cooperative_id)
+        left join src_clustering   cl using (cooperative_id)
     """)
 
     n, = con.execute("select count(*) from points").fetchone()
@@ -316,7 +328,16 @@ AGG_MEASURES = """
     round(100.0 * count(*) filter (where land_verified)
           / nullif(count(*) filter (where land_status is not null), 0), 2)
                                                             as pct_land_verified,
-    count(*) filter (where in_siting_shortlist)             as siting_shortlisted
+    count(*) filter (where in_siting_shortlist)             as siting_shortlisted,
+
+    -- 10 self-overlap. Distance to the nearest sibling, exact geodesic; NULL
+    -- where the point is one of the 821 excluded coordinate artifacts, and the
+    -- nullif keeps those out of the denominator too.
+    round(median(m_to_nearest_other), 0)                    as median_m_to_nearest_other,
+    round(100.0 * count(*) filter (where m_to_nearest_other <= 1000)
+          / nullif(count(*) filter (where m_to_nearest_other is not null), 0), 2)
+                                                            as pct_sibling_within_1km,
+    round(median(cluster_size), 0)                          as median_cluster_size
 """
 
 

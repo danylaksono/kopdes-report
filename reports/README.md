@@ -26,6 +26,12 @@ Run any of them with `python reports/NN-slug/run.py`. Dependencies:
 | 07 | [landuse-polygons](07-landuse-polygons/) | On a graveyard? In a paddy field? | cloud rasters | run 2026-08-10, 536 candidates |
 | 08 | [exact-geometry](08-exact-geometry/) | How far is it *really*? Are the coordinates even possible? | no | run 2026-08-10 |
 | 09 | [external-corroboration](09-external-corroboration/) | Does the ministry's own public figure match its dashboard? | sources cited, not scraped | run 2026-08-10 |
+| 10 | [coop-clustering](10-coop-clustering/) | Do KDMP cluster on top of each other, and does it hurt? | no | run 2026-08-12 |
+| 11 | [savings-behaviour](11-savings-behaviour/) | Are members actually saving, or are the accounts dormant? | no | run 2026-08-12 |
+| 12 | [product-mix](12-product-mix/) | What does the program actually sell? | no | run 2026-08-12 |
+| 13 | [compliance-npwp-nib](13-compliance-npwp-nib/) | Is the paperwork real, and is anyone operating under it? | no | run 2026-08-12 |
+| 14 | [island-comparison](14-island-comparison/) | Whose program is this — Java or Indonesia? | no | run 2026-08-12 |
+| 15 | [construction-output](15-construction-output/) | Does construction track output? | no | run 2026-08-12 |
 
 ## What we can and cannot say right now
 
@@ -36,6 +42,38 @@ Read this before quoting any number out of these reports.
 - Reported economic activity is extraordinarily concentrated — **100 villages
   out of 84,624 carry 37% of all national transaction value**, 1,000 carry 93%
   (02).
+- **Savings are reported ~4× more often than transactions, and the money is
+  one-time capital, not ongoing saving.** 12.5% of villages report any savings
+  (vs 3.0% transactions) and 14.1% report *some* financial footprint; 9,192
+  villages report savings with zero transactions. Of those reporting both pokok
+  and wajib, median wajib/pokok = 0.28 and only 15.7% have wajib > pokok — the
+  plan's own "wajib ≫ pokok = active" test fails. The field tiers (accounts
+  ~96% > pokok 11.9% > wajib 9.2% / transactions 3.0%) are the shape a real
+  activity funnel would produce (11).
+- **Savings spread far less concentrated than transactions** (top-100 = 24.4%
+  vs 37%; top-1,000 = 56.9% vs 93%), consistent with capital being collected at
+  registration rather than through operations (11).
+- **Savings uptake has a ~400× province gradient** — 31.3% of villages in
+  Yogyakarta down to 0.08% in Papua Pegunungan — tracking economic geography,
+  not randomness (11).
+- **The program sells staple groceries and farm inputs.** 75% of reported
+  sales value is rice + cooking oil; fertilizer is the main input, present in
+  24 provinces. KDMP are positioned as village grocery shops (12).
+- **The license exists; the operations don't.** 97.1% of cooperatives hold
+  NPWP, 72.9% NIB (totals reconcile with the national summary). Only 23
+  villages (0.03%) report a transaction without a license, while 70.1% of
+  villages hold the license and report no transaction — paperwork present,
+  operations absent (13).
+- **The program is a Java phenomenon.** Java holds 30% of cooperatives but
+  ~68% of reported transaction value; Papua 8.5% of cooperatives and 0.2% of
+  value (~85× per-cooperative gap). The remoteness tail, the land-verification
+  gap (3.2% verified in Papua) and the activity gap are all eastern-Indonesia
+  phenomena (14).
+- **Construction is a quarter done; the RAT channel is empty.** 23.0% of
+  cooperatives nationally are at 100% construction and 45.5% have any
+  construction stage recorded; `total_rat` is zero in all 38 provinces. The
+  construction-vs-output correlation (ρ = 0.34, n = 38) is a geography
+  confound, not evidence (15).
 - **Coverage is not the problem**: 95% of Indonesians live within ~1.4 km of a
   KDMP (03). The "they built them where nobody can reach them" claim does not
   hold as a mass phenomenon.
@@ -63,6 +101,27 @@ Read this before quoting any number out of these reports.
   roadside location; the excess decays to nothing by 2 km (06). This survives
   re-tiering the retail data, so it does not depend on where the format
   boundary is drawn.
+- **KDMP are near-continuous, not clustered.** 91.2% of cooperatives have
+  another KDMP within 5 km (exact geodesic), 58.9% within 2 km, 22.1% within
+  1 km, 4.6% within 500 m; 6.7% share the same ~1 km H3 cell — but most of that
+  is pairs (2,100 of 2,501 cells hold exactly two), maximum 17 in one cell near
+  Wamena (Papua Pegunungan) (10).
+- **About two-thirds of apparent fine-scale co-location is a coordinate
+  artefact.** 821 cooperatives — 19 with impossible coordinates (08) plus 802
+  sharing an exact duplicate coordinate (388 groups, up to 11 at one point;
+  concentrated in Aceh and Papua) — are set aside in 10. At the ~350 m scale
+  they are 64% of apparent co-location, so same-cell figures must be read from
+  the clean set. Write "recorded at", never "built at".
+- **Clustering does not measurably hurt performance (null).** Cooperatives that
+  share a cell report transactions at the same rate as isolated ones (3.9% vs
+  3.5%), and cluster size does not correlate with per-cooperative value
+  (Spearman −0.02 all, +0.05 reporting-only). B1's "clustered → lower per-unit
+  output" hypothesis is not supported (10).
+- **The "too close together" claim does not hold as a mass phenomenon either.**
+  At any linking radius ≥ ~1 km, density-connected components chain across Java
+  (55–82% of cooperatives merge), so KDMP form a saturated field in populated
+  Indonesia rather than discrete over-concentrated pockets. The honest
+  short-range footprint is 22% within 1 km (10).
 - **The "the website isn't up to date" rebuttal is closed.** On 2026-08-09 the
   press reported the national total as **Rp 179.72 miliar**; our own API pull the
   same day gives **Rp 179.79 miliar** — a **0.042%** difference (09). The
@@ -120,6 +179,10 @@ Read this before quoting any number out of these reports.
   (59.5% vs 72.5%), not more. So write "**recorded at** a location inside a
   paddy field", never "built in a paddy field". If the ministry answers that the
   coordinates are wrong, that is a different story, not a smaller one.
+- **Whether the densest co-location cells are real.** 17 cooperatives recorded
+  in one ~1 km cell near Wamena (and the other dense cells in Papua, Aceh,
+  Jambi) are as likely to be many desa geocoded to a town as 17 physically
+  co-located buildings. Same imagery bar as 04/07 before any name is cited (10).
 - **Cannibalisation.** 06 establishes *proximity*, which is a precondition for
   competition, not evidence of it. The claim is about trade, and trade data is
   97% zero. Nor can any of this establish intent — KDMP and minimarkets may
@@ -129,9 +192,21 @@ Read this before quoting any number out of these reports.
   Presence is evidence; absence is not. Write "no road *mapped in OSM* within
   5 km", and treat retail proximity figures as lower bounds.
 
-## Backlog — agreed, not yet built
+## Backlog — cleared
 
-Both remaining screens agreed in this file have now been built: [08](08-exact-geometry/) and [09](09-external-corroboration/). What is left is an upstream data fix, plus the standing snapshot cadence in Conventions.
+The plan-review's *do* list is now fully built: [08](08-exact-geometry/),
+[09](09-external-corroboration/), [10](10-coop-clustering/),
+[11](11-savings-behaviour/), [12](12-product-mix/), [13](13-compliance-npwp-nib/),
+[14](14-island-comparison/) and [15](15-construction-output/).
+
+What is left is not analysis but operations and one upstream fix:
+
+- **The report site itself** — the scrollytelling investigative report decided
+  2026-08-09 (see AGENTS.md). All 15 reports are now its methodology appendix.
+- **Start the monthly snapshot series** — the one irrecoverable item; see
+  Conventions.
+- **Fix `download_osm.py` upstream** (below), so the retail picture includes
+  `shop=kiosk`/`general`.
 
 ### Known data gap to fix upstream
 
