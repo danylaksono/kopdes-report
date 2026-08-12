@@ -14,11 +14,11 @@
         <p class="kicker">Temuan · Bab 2</p>
         <h1>“Dibangun tepat di atas minimarket yang sudah ada” — kedekatan nyata, tapi sedang; kompetisi dagang tidak
             bisa dibuktikan.</h1>
-        <p class="lede">Klaim kedua: program membangun koperasi di desa yang sudah
+        <p class="lede">Tuduhan kedua: program membangun koperasi di desa yang sudah
             punya minimarket modern (Indomaret, Alfamart, dan sejenisnya) — tumpang
-            tindih yang boros. Kami bisa mengukur <em>kedekatan fisik</em> dengan
-            tepat. Yang tidak bisa kami buktikan adalah <em>kompetisi dagang</em> atau
-            <em>niat</em>.
+            tindih yang boros. Yang bisa kami ukur dengan tepat adalah
+            <em>kedekatan fisik</em>. Yang tidak bisa kami buktikan adalah
+            <em>kompetisi dagang</em> atau <em>niat</em>.
         </p>
 
         <div class="stat-strip">
@@ -49,27 +49,27 @@
         </div>
 
         <h2>Kedekatan dengan minimarket: nyata, tapi sedang dan terbatas</h2>
-        <p>Kami tidak bisa begitu saja menghitung “berapa minimarket di dekat
-            koperasi” — minimarket dan koperasi sama-sama suka berada di jalan utama
-            daerah berpenduduk, jadi kedekatan itu bisa kebetulan. Untuk itu kami
-            membandingkan setiap minimarket dengan <strong>lokasi acak yang setara</strong>
-            (di jalan, di daerah berpenduduk).</p>
-        <p>Hasilnya: setelah mengontrol faktor itu, sebuah minimarket yang terpetakan
-            <strong>±9,6 poin persentase lebih mungkin</strong> memiliki koperasi dalam
-            500 m daripada lokasi acak yang sebanding. Kelebihan itu <strong>menghilang
-                pada jarak 2 km</strong>. Ini bertahan saat tingkat data ritel diubah-ubah,
-            jadi tidak bergantung pada di mana batas format digambar.
+        <p>Menghitung “berapa minimarket di dekat koperasi” saja tidak cukup —
+            minimarket dan koperasi sama-sama suka berada di jalan utama daerah
+            berpenduduk, jadi kedekatan itu bisa kebetulan belaka. Karena itu kami
+            membandingkan setiap minimarket dengan <strong>lokasi acak yang setara</strong>:
+            sama-sama di jalan, sama-sama di daerah berpenduduk.</p>
+        <p>Hasilnya: setelah faktor itu diimbangi, sebuah minimarket yang terpetakan
+            <strong>sekitar 9,6 poin persentase lebih mungkin</strong> memiliki koperasi
+            dalam 500 m dibanding lokasi acak yang sebanding. Kelebihan itu
+            <strong>menghilang pada jarak 2 km</strong>. Angka ini bertahan saat tingkat
+            data ritel diubah-ubah, jadi tidak bergantung pada di mana batas format
+            digambar.
         </p>
-        <p>Penting dicatat: angka ini adalah <em>batas bawah</em>. OSM hanya
-            memetakan sebagian minimarket Indonesia (13,8% gerai Indomaret, 10,9%
-            Alfamart), dan kueri data kami bahkan tidak menarik kategori
-            <code>shop=kiosk</code> — justru ritel desa. Kehadiran adalah bukti;
-            ketidakhadiran bukan.
-        </p>
+        <p>Perlu dicatat: angka ini adalah <em>batas bawah</em>. Peta yang kami pakai
+            hanya memuat sebagian minimarket Indonesia (13,8% gerai Indomaret, 10,9%
+            Alfamart), dan kami bahkan belum memasukkan warung dan toko kelontong
+            kecil — justru ritel yang paling dekat dengan desa. Kehadiran adalah bukti;
+            ketidakhadiran bukan.</p>
 
         <h2>Koperasi yang saling menumpuk: klaster</h2>
-        <p>Bagaimana dengan koperasi terhadap sesama koperasi? Diukur dengan jarak
-            geodesik eksak ke tetangga terdekat:</p>
+        <p>Bagaimana dengan koperasi terhadap sesama koperasi? Kami menghitung jarak
+            terdekat setiap koperasi ke koperasi lain:</p>
         <figure class="figure">
             <table>
                 <thead>
@@ -97,54 +97,56 @@
                     </tr>
                 </tbody>
             </table>
-            <figcaption>Metode 10. Angka ini dari himpunan “bersih” setelah 821
-                artefak koordinat dikeluarkan (lihat di bawah).</figcaption>
+            <figcaption>Lampiran metode 10. Angka ini dari himpunan “bersih” setelah
+                821 koperasi berkoordinat ganda/mustahil dikeluarkan (lihat di bawah).</figcaption>
         </figure>
-        <p>Dua hal penting. <strong>Pertama</strong>, 91% koperasi punya saudara dalam
-            5 km — itu konsekuensi program “satu koperasi per desa” di Indonesia yang
-            padat, bukan bukti penumpukan. <strong>Kedua</strong>, pada ujung yang ketat
-            ada jejak nyata: 1 dari 5 koperasi punya koperasi lain dalam 1 km, dan
-            ada 2.501 sel ±1 km berisi ≥2 koperasi (maksimum 17 dalam satu sel).</p>
+        <p>Dua hal yang perlu diingat. <strong>Pertama</strong>, 91% koperasi punya
+            saudara dalam 5 km — itu konsekuensi wajar dari program “satu koperasi per
+            desa” di Indonesia yang padat, bukan bukti penumpukan. <strong>Kedua</strong>,
+            pada ujung yang ketat ada jejak nyata: 1 dari 5 koperasi punya koperasi
+            lain dalam 1 km, dan ada 2.501 petak 1 km berisi dua koperasi atau lebih
+            (maksimum 17 dalam satu petak).</p>
 
-        <div class="callout"><span class="callout-label">Penting</span>
-            Sebagian besar “koperasi menumpuk” pada skala halus ternyata <strong>artefak
-                geokoding</strong>: 821 koperasi berkoordinat duplikat atau mustahil, dan
-            pada skala ±350 m mereka adalah 64% dari ko-lokasi yang tampak. Pada skala
-            itu, 1.254 menjadi 450 setelah artefak dikeluarkan. Tuliskan “tercatat di
-            lokasi yang sama”, bukan “dibangun di lokasi yang sama” — sampai citra
-            memutuskan.</div>
+        <div class="callout"><span class="callout-label">Perlu kehati-hatian</span>
+            Sebagian besar “koperasi menumpuk” pada skala halus ternyata <strong>jejak
+                data</strong>: 821 koperasi berkoordinat ganda atau mustahil, dan pada
+            skala sekitar 350 meter mereka adalah 64% dari tumpang tindih yang tampak.
+            Pada skala itu, 1.254 menjadi 450 setelah jejak tersebut dikeluarkan.
+            Tuliskan “tercatat di lokasi yang sama”, bukan “dibangun di lokasi yang
+            sama” — sampai citra memutuskan.</div>
 
         <h2>Apakah penumpukan merugikan kinerja? Ternyata tidak terukur</h2>
-        <p>Hipotesis dalam rencana analisis: koperasi yang berdekatan saling berebut
-            populasi, jadi output per koperasi lebih rendah. Kami uji: koperasi yang
-            berbagi sel melaporkan transaksi pada tingkat yang sama dengan yang
-            terpencil (3,9% vs 3,5%), dan ukuran klaster tidak berkorelasi dengan nilai
-            per koperasi (ρ ≈ 0). <strong>Hipotesis itu tidak didukung.</strong> Ini
-            hasil nol yang jujur — mengingat data dagang 97% nol, “tidak ada penalti”
-            adalah pernyataan terkuat yang diizinkan data, bukan ukuran ketiadaan
-            kompetisi.</p>
+        <p>Dugaan yang kami uji: koperasi yang berdekatan saling berebut warga, jadi
+            hasil per koperasi lebih rendah. Kenyataannya, koperasi yang berbagi petak
+            melaporkan transaksi sama seringnya dengan yang terpencil (3,9% vs 3,5%),
+            dan ukuran kelompok tidak berkorelasi dengan nilai per koperasi (ρ ≈ 0).
+            <strong>Dugaan itu tidak didukung.</strong> Ini hasil nol yang jujur:
+            mengingat data dagang 97% kosong, “tidak ada penalti” adalah pernyataan
+            terkuat yang diizinkan data — bukan ukuran ketiadaan kompetisi.
+        </p>
 
         <h2>Barang yang dijual memang barang yang sama</h2>
-        <p>Konteksnya penting: 75% nilai penjualan yang dilaporkan program adalah
-            beras dan minyak goreng, dengan pupuk sebagai input utama — persis barang
-            yang dijual minimarket dan warung desa. Jadi secara <em>produk</em>, KDMP
-            memang masuk pasar yang sama. Tapi itu bukan bukti kanibalisasi; itu
-            deskripsi peran.</p>
+        <p>Konteks ini penting: 75% nilai penjualan yang dilaporkan program adalah
+            beras dan minyak goreng, dengan pupuk sebagai barang utama lainnya — persis
+            barang yang dijual minimarket dan warung desa. Jadi secara <em>produk</em>,
+            koperasi ini memang masuk pasar yang sama. Tapi itu deskripsi peran, bukan
+            bukti kanibalisasi.</p>
 
         <div class="verdict">
             <h3>Vonis bab ini</h3>
-            <p><strong>Kedekatan dengan ritel modern nyata tapi sedang (±9,6 pt dalam
-                    500 m, hilang pada 2 km) dan tumpang tindih antar-koperasi nyata tapi
-                    tanpa penalti kinerja yang terukur.</strong> Yang klaim publik butuhkan —
-                bukti koperasi mengambil pelanggan minimarket, atau program sengaja
-                dibangun di atasnya — <em>tidak</em> dapat dibuktikan dari data ini:
-                data dagang 97% nol, dan kedekatan juga bisa berarti keduanya mengejar
-                titik fokus desa yang sama. Tumpang tindih dengan koperasi lama (KUD
-                dll.) tidak dapat diuji sama sekali: tidak ada registry koperasi
-                pra-KDMP.</p>
+            <p><strong>Kedekatan dengan ritel modern nyata tapi sedang — sekitar 9,6
+                    poin dalam 500 m, hilang pada 2 km — dan tumpang tindih antar-koperasi
+                    nyata tapi tanpa penalti kinerja yang terukur.</strong> Yang dibutuhkan
+                tuduhan publik — bukti koperasi merebut pelanggan minimarket, atau program
+                sengaja dibangun di atasnya — <em>tidak</em> dapat dibuktikan dari data
+                ini: data dagang 97% kosong, dan kedekatan juga bisa berarti keduanya
+                mengejar titik ramai desa yang sama. Tumpang tindih dengan koperasi lama
+                (KUD dan sejenisnya) tidak bisa diuji sama sekali: tidak ada daftar
+                koperasi sebelum program ini.</p>
         </div>
 
-        <p><a href="../methods/06-minimarket-proximity/">Metode 06</a> ·
+        <p><em>Lampiran metode:</em>
+            <a href="../methods/06-minimarket-proximity/">06</a> ·
             <a href="../methods/10-coop-clustering/">10</a> ·
             <a href="../methods/12-product-mix/">12</a> ·
             <a href="../methods/08-exact-geometry/">08</a>

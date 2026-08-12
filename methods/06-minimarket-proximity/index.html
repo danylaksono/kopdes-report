@@ -11,14 +11,16 @@
   <main class="wrap">
     <p class="kicker">Metode · lampiran 06-minimarket-proximity</p>
     <h1>06 — Minimarket proximity: were KDMP built on top of existing retail?</h1>
-    <p class="lede">Lampiran metode ini ditampilkan langsung dari
-      <code>reports/06-minimarket-proximity/README.md</code> — satu sumber kebenaran, tidak
-      ditulis dua kali.</p>
+    <p class="lede">Laporan teknis lengkap dari analisis ini ditulis dalam bahasa
+      Inggris demi ketelitian. Ringkasannya dalam bahasa Indonesia ada di bawah.</p>
+    <div class="callout"><span class="callout-label">Ringkasan</span>
+      <p>Apakah koperasi dibangun di atas minimarket? Setelah memperhitungkan bahwa keduanya sama-sama suka berada di jalan utama daerah ramai, minimarket sekitar 9,6 poin lebih mungkin punya koperasi dalam 500 m daripada lokasi acak yang sebanding — tetapi kelebihannya hilang pada jarak 2 km. Kedekatan ini nyata tapi sedang; bukan bukti kompetisi dagang.</p>
+    </div>
+    <h2>Laporan lengkap (Inggris)</h2>
     <div id="md"></div>
-    <p class="md-note">Laporan metode ditulis dalam bahasa Inggris dan memuat
-      tabel data mentah, termasuk nama kandidat yang <strong>belum
-      diverifikasi</strong>. Lihat <a href="../../about/">kebijakan verifikasi
-      &amp; koreksi</a> sebelum mengutip nama desa/koperasi apa pun.</p>
+    <p class="md-note">Laporan ini memuat tabel data mentah, termasuk nama kandidat
+      yang <strong>belum diverifikasi</strong>. Lihat <a href="../../about/">kebijakan
+      verifikasi &amp; koreksi</a> sebelum mengutip nama desa/koperasi apa pun.</p>
   </main>
   <footer id="site-footer"></footer>
   <script type="module" src="../../app/site.js"></script>
@@ -29,7 +31,7 @@
       const text = await fetchMarkdown("../../reports/06-minimarket-proximity/README.md");
       await renderMarkdownInto(md, text);
     } catch (e) {
-      md.innerHTML = `<p style="color:#a00">Gagal memuat README: ${e.message}</p>`;
+      md.innerHTML = `<p style="color:#a00">Gagal memuat laporan: ${e.message}</p>`;
     }
   </script>
 </body>

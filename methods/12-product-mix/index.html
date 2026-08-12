@@ -11,14 +11,16 @@
   <main class="wrap">
     <p class="kicker">Metode · lampiran 12-product-mix</p>
     <h1>12 — Product mix: what does the KDMP program actually sell?</h1>
-    <p class="lede">Lampiran metode ini ditampilkan langsung dari
-      <code>reports/12-product-mix/README.md</code> — satu sumber kebenaran, tidak
-      ditulis dua kali.</p>
+    <p class="lede">Laporan teknis lengkap dari analisis ini ditulis dalam bahasa
+      Inggris demi ketelitian. Ringkasannya dalam bahasa Indonesia ada di bawah.</p>
+    <div class="callout"><span class="callout-label">Ringkasan</span>
+      <p>Program ini menjual apa? Tiga perempat nilai penjualan yang dilaporkan adalah beras dan minyak goreng, dengan pupuk sebagai barang utama lainnya. Koperasi desa ini berperan sebagai toko sembako dan saprotan.</p>
+    </div>
+    <h2>Laporan lengkap (Inggris)</h2>
     <div id="md"></div>
-    <p class="md-note">Laporan metode ditulis dalam bahasa Inggris dan memuat
-      tabel data mentah, termasuk nama kandidat yang <strong>belum
-      diverifikasi</strong>. Lihat <a href="../../about/">kebijakan verifikasi
-      &amp; koreksi</a> sebelum mengutip nama desa/koperasi apa pun.</p>
+    <p class="md-note">Laporan ini memuat tabel data mentah, termasuk nama kandidat
+      yang <strong>belum diverifikasi</strong>. Lihat <a href="../../about/">kebijakan
+      verifikasi &amp; koreksi</a> sebelum mengutip nama desa/koperasi apa pun.</p>
   </main>
   <footer id="site-footer"></footer>
   <script type="module" src="../../app/site.js"></script>
@@ -29,7 +31,7 @@
       const text = await fetchMarkdown("../../reports/12-product-mix/README.md");
       await renderMarkdownInto(md, text);
     } catch (e) {
-      md.innerHTML = `<p style="color:#a00">Gagal memuat README: ${e.message}</p>`;
+      md.innerHTML = `<p style="color:#a00">Gagal memuat laporan: ${e.message}</p>`;
     }
   </script>
 </body>

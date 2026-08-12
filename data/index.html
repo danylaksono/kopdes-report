@@ -13,16 +13,17 @@
     <main class="wrap">
         <p class="kicker">Data</p>
         <h1>Data: apa yang kami punya dan dari mana</h1>
-        <p class="lede">Setiap angka di situs ini dapat ditelusuri ke berkas yang
-            dikomit di repositori ini — tidak ada angka yang “muncul begitu saja”.
-            Halaman ini mencatat asal data, jadwal snapshot, dan makna nilai kosong
-            (null), karena dalam investigasi ini <strong>null itu bermakna</strong>.</p>
+        <p class="lede">Setiap angka di situs ini bisa ditelusuri ke data yang bisa
+            diunduh di halaman ini — tidak ada angka yang “muncul begitu saja”. Di
+            sini kami catat dari mana data berasal, kapan kami mengambilnya, dan apa
+            arti sel-sel kosong di dalamnya. Sebab dalam investigasi ini, <strong>angka
+                kosong itu sendiri adalah temuan</strong>.</p>
 
-        <h2>Lapisan data bersama (analysis mart)</h2>
-        <p>Semua halaman (peta, temuan, cerita) memakai satu lapisan data yang
-            sama: file parquet berikut, dibaca langsung di peramban lewat DuckDB-wasm.
-            Mart ini menggabungkan semua temuan per-koperasi ke dalam satu baris per
-            koperasi, lalu menggulungnya ke kecamatan, kabupaten, dan provinsi.</p>
+        <h2>Bank data bersama</h2>
+        <p>Peta, temuan, dan cerita di situs ini memakai satu bank data yang sama:
+            data setiap koperasi digabung ke dalam satu tabel, lalu dirangkum ke
+            tingkat kecamatan, kabupaten, dan provinsi. Berkasnya menggunakan format
+            parquet — terkompresi, sehingga muat untuk diunduh siapa saja:</p>
 
         <figure class="figure">
             <table>
@@ -57,30 +58,35 @@
                     <tr>
                         <td><a href="../data/web/mart_manifest.json" download>mart_manifest.json</a></td>
                         <td class="num">0,02 MB</td>
-                        <td>skema, null-semantik, cakupan</td>
+                        <td>keterangan kolom, arti angka kosong, cakupan</td>
                     </tr>
                 </tbody>
             </table>
-            <figcaption>Parquet dikompres (zstd) sehingga muat untuk dikomit dan
-                dimuat penuh di GitHub Pages — pengganti points.geojson 24 MB yang lama.</figcaption>
+            <figcaption>Format parquet terkompres sehingga berkasnya kecil dan bisa
+                dimuat penuh di halaman — pengganti berkas peta 24 MB yang lama.</figcaption>
         </figure>
 
         <h2>Asal data</h2>
         <ul>
-            <li><strong>Sumber utama</strong>: API publik SIMKOPDES (sistem Kementerian
-                Koperasi). Tidak perlu autentikasi; respons dienkripsi AES-256-CBC dengan
-                kunci yang dipublikasikan di bundel JS situsnya sendiri.</li>
-            <li><strong>Tanggal snapshot dasar</strong>: 2026-08-05, dikomit di
-                <code>data/raw/</code>. Ini baseline yang tidak boleh diganti.
-            </li>
-            <li><strong>Data eksternal</strong>: jaringan jalan &amp; minimarket dari
-                OpenStreetMap (Geofabrik + Overpass), populasi dari Kontur (grid H3 r8,
-                resolusi 400 m). Semua dapat diunduh ulang lewat <code>scripts/</code>.</li>
-            <li><strong>Batas wilayah</strong>: shapefile turunan BIG (Badan Informasi
-                Geospasial), diubah ke GeoJSON dengan penyederhanaan Douglas-Peucker.</li>
+            <li><strong>Sumber utama</strong>: sistem SIMKOPDES milik Kementerian
+                Koperasi. Datanya bisa diambil siapa saja tanpa akun; responsnya
+                terenkripsi, dan kami memecahkannya dengan kunci yang dipublikasikan
+                sistem itu sendiri.</li>
+            <li><strong>Cuplikan dasar</strong>: diambil 5 Agustus 2026, tersimpan di
+                folder <code>data/raw/</code> dalam repositori publik proyek. Ini
+                dasar yang tidak boleh diganti, agar semua angka bisa dibandingkan
+                dengan titik awal yang sama.</li>
+            <li><strong>Data pelengkap</strong>: peta jalan &amp; minimarket dari
+                OpenStreetMap (disusun sukarelawan), peta kepadatan penduduk dari
+                Kontur (berpetak 400 meter). Semuanya bisa diunduh ulang lewat
+                skrip di repositori.</li>
+            <li><strong>Batas wilayah</strong>: peta turunan Badan Informasi Geospasial
+                (BIG), disederhanakan untuk kebutuhan situs.</li>
         </ul>
 
-        <h2>Jadwal snapshot</h2>
+        <h2>Jejak data berkala</h2>
+        <p>Data SIMKOPDES berubah dari waktu ke waktu. Kami mengambilnya lebih dari
+            sekali, agar bisa melihat apa yang berubah:</p>
         <table>
             <thead>
                 <tr>
@@ -91,14 +97,14 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>2026-08-05</td>
-                    <td>Baseline, dikomit</td>
-                    <td>Snapshot awal; dasar laporan 01–15</td>
+                    <td>5 Agustus 2026</td>
+                    <td>Dasar, tersimpan</td>
+                    <td>Cuplikan pertama; dasar seluruh laporan 01–15</td>
                 </tr>
                 <tr>
-                    <td>2026-08-09</td>
-                    <td>Dikomit (manifest)</td>
-                    <td>Snapshot kedua; membuktikan rebuttal “websitenya belum di-update”</td>
+                    <td>9 Agustus 2026</td>
+                    <td>Tersimpan (sidik jari)</td>
+                    <td>Cuplikan kedua; menjawab sanggahan “websitenya belum di-update”</td>
                 </tr>
                 <tr>
                     <td>Bulanan, mulai sekarang</td>
@@ -108,32 +114,33 @@
                 </tr>
             </tbody>
         </table>
-        <p>CSV snapshot mentah (~28 MB per tarikan) <strong>tidak dipublikasikan</strong>
-            di situs ini, tetapi hash SHA-256-nya dikomit di <code>data/snapshots/*/_manifest.json</code>
-            sebagai bukti keberadaan. Snapshot dapat diminta langsung.</p>
+        <p>Data mentah setiap cuplikan (sekitar 28 MB) <strong>tidak kami publikasikan</strong>
+            di situs ini, tetapi sidik jari digitalnya (SHA-256) kami simpan sebagai
+            bukti bahwa cuplikan itu pernah ada dan tidak diubah-ubah. Cuplikan dapat
+            diminta langsung.</p>
 
-        <h2>Makna null (ringkas)</h2>
+        <h2>Arti angka kosong</h2>
         <table>
             <thead>
                 <tr>
                     <th>Kolom</th>
-                    <th>Null berarti</th>
+                    <th>Kosong berarti</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td><code>km_to_minimarket</code></td>
-                    <td>Tidak ada minimarket dalam ±5 km (66.846 koperasi) — <strong>bukan</strong> “tidak diketahui”
+                    <td>Tidak ada minimarket dalam 5 km (66.846 koperasi) — <strong>bukan</strong> “tidak diketahui”
                     </td>
                 </tr>
                 <tr>
                     <td><code>km_any_road</code> / <code>km_non_track</code></td>
-                    <td>Tidak ada jalan (sama sekali / beraspal) dalam ±5 km — <strong>bukan</strong> “tidak diketahui”
+                    <td>Tidak ada jalan (sama sekali / beraspal) dalam 5 km — <strong>bukan</strong> “tidak diketahui”
                     </td>
                 </tr>
                 <tr>
                     <td><code>transaction_value</code></td>
-                    <td>Null = sambungan desa gagal (21%); 0 = tersambung dan tidak melaporkan apa pun</td>
+                    <td>Kosong = data desa tidak tersambung (21%); 0 = tersambung dan tidak melaporkan apa pun</td>
                 </tr>
                 <tr>
                     <td><code>coordinate_diagnosis</code></td>
@@ -143,14 +150,15 @@
         </table>
 
         <h2>Hasil tiap laporan</h2>
-        <p>Setiap laporan di <a href="../methods/">Metode</a> mengkomit CSV
-            hasilnya di <code>reports/NN-slug/</code> — lihat halaman metode masing-masing
-            untuk tautan langsung.</p>
+        <p>Setiap laporan di <a href="../methods/">Metode</a> menyertakan tabel
+            hasilnya yang bisa diunduh — lihat halaman metode masing-masing untuk
+            tautan langsung.</p>
 
-        <div class="callout"><span class="callout-label">Regenerasi</span>
-            Semua berkas dapat dibangun ulang dari repo (lihat <code>README.md</code>
-            dan <code>scripts/</code>). Snapshot SIMKOPDES <em>tidak</em> dapat diambil
-            ulang — itulah sebabnya manifest hash-nya dikomit.</div>
+        <div class="callout"><span class="callout-label">Bisa dibangun ulang</span>
+            Semua data di halaman ini bisa dibangun ulang dari repositori proyek
+            (petunjuk lengkap ada di <a href="../about/">Tentang</a>). Satu
+            pengecualian: cuplikan SIMKOPDES <em>tidak</em> bisa diambil ulang setelah
+            sistemnya berubah — itulah sebabnya sidik jarinya kami simpan.</div>
     </main>
     <footer id="site-footer"></footer>
     <script type="module" src="../app/site.js"></script>
