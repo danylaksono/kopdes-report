@@ -1,0 +1,803 @@
+/* ===========================================================================
+   explore.css — chrome for the interactive map.
+
+   Scoped to /explore/ and layered on top of site.css, whose tokens it reuses
+   without redefining: this page has to read as the same publication as the
+   rest of the report, so the paper, the serif and the investigative red all
+   come from there.
+
+   What is new here is density. The report pages are a 68ch measure at 17px;
+   a control rail is a different instrument — 13px, tabular numerals, hairline
+   rules — and it needs its own scale rather than a shrunken copy of the other.
+   =========================================================================== */
+
+.explore-body {
+  --rail-w: 336px;
+  --rail-pad: 18px;
+  --chrome-bg: #fcfbf8;
+  --chrome-sunken: #f1ede4;
+  --chrome-line: #e6e2d9;
+  --ctl: 13px;
+
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* The rest of the site scrolls; this page does not. */
+.explore-body .site-nav {
+  flex: none;
+}
+
+.explore-shell {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: var(--rail-w) 1fr;
+}
+
+.map-wrap {
+  position: relative;
+  min-width: 0;
+}
+
+#map {
+  position: absolute;
+  inset: 0;
+}
+
+/* MapLibre's own controls, brought into the report's visual language. */
+.map-wrap .maplibregl-ctrl-group {
+  border-radius: 8px;
+  border: 1px solid var(--chrome-line);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.07);
+}
+
+/* ---- rail ---------------------------------------------------------------- */
+
+.rail {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-right: 1px solid var(--chrome-line);
+  background: var(--chrome-bg);
+  font-size: var(--ctl);
+  line-height: 1.45;
+}
+
+.rail-head {
+  padding: 16px var(--rail-pad) 14px;
+  border-bottom: 1px solid var(--chrome-line);
+}
+
+.rail-kicker {
+  margin: 0;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* The count is the rail's headline — the page title is already in the site nav
+   two centimetres above, and repeating it costs the legend a screenful. */
+.rail-count {
+  margin: 10px 0 0;
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+}
+.rail-count b {
+  font-family: var(--serif);
+  font-size: 34px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.015em;
+  line-height: 0.95;
+}
+.rail-count span {
+  font-size: 11.5px;
+  line-height: 1.3;
+  color: var(--muted);
+}
+
+.rail-sec {
+  padding: 13px var(--rail-pad);
+  border-bottom: 1px solid var(--chrome-line);
+}
+
+.rail-h {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 10px;
+  font-family: var(--sans);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.rail-h .ic {
+  opacity: 0.65;
+}
+
+.ic {
+  flex: none;
+  vertical-align: -0.14em;
+}
+
+/* ---- the scale ladder ---------------------------------------------------- */
+/* The one place this page spends its boldness. Each rung carries the number of
+   units at that scale, so switching from provinsi to the dynamic grid is not a
+   relabelled radio group — you watch 38 become 83.342. The spine is what makes
+   it read as one hierarchy rather than four unrelated choices. */
+
+.ladder {
+  position: relative;
+  margin: 0 0 4px;
+}
+.ladder::before {
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: 15px;
+  bottom: 15px;
+  width: 1px;
+  background: var(--chrome-line);
+}
+
+.rung {
+  position: relative;
+  display: grid;
+  grid-template-columns: 15px 1fr auto;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 7px 8px 7px 0;
+  border: 0;
+  border-radius: 7px;
+  background: none;
+  font: inherit;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+.rung:hover {
+  background: var(--chrome-sunken);
+}
+.rung:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.rung-dot {
+  width: 9px;
+  height: 9px;
+  margin-left: 3px;
+  border: 1.5px solid #c6bfb0;
+  border-radius: 50%;
+  background: var(--chrome-bg);
+  transition: box-shadow 0.12s ease;
+}
+.rung.is-active .rung-dot {
+  border-color: var(--accent);
+  background: var(--accent);
+  box-shadow: 0 0 0 3px rgba(170, 0, 0, 0.13);
+}
+
+.rung-label {
+  font-size: var(--ctl);
+  color: var(--muted);
+}
+.rung.is-active .rung-label {
+  color: var(--ink);
+  font-weight: 650;
+}
+
+.rung-n {
+  font-size: 11.5px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+  color: #9a9384;
+}
+.rung.is-active .rung-n {
+  color: var(--ink);
+  font-weight: 650;
+}
+
+/* ---- controls ------------------------------------------------------------ */
+
+.segmented {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  padding: 2px;
+  border-radius: 8px;
+  background: var(--chrome-sunken);
+}
+
+.seg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 7px 4px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  font: inherit;
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+}
+.seg .ic {
+  opacity: 0.7;
+}
+.seg.is-active {
+  background: #fff;
+  color: var(--ink);
+  font-weight: 650;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.09);
+}
+.seg.is-active .ic {
+  opacity: 1;
+  color: var(--accent);
+}
+.seg:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.mode-detail {
+  margin-top: 10px;
+}
+
+.field {
+  display: block;
+  margin: 10px 0 0;
+}
+/* `display: block` above outranks the user agent's `[hidden] { display: none }`,
+   so hiding a field needs saying again at this specificity. */
+.field[hidden] {
+  display: none;
+}
+.field > span,
+.field > label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+.field-val {
+  float: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+.rail select {
+  width: 100%;
+  font: inherit;
+  font-size: var(--ctl);
+  padding: 6px 8px;
+  border: 1px solid var(--chrome-line);
+  border-radius: 7px;
+  background: #fff;
+  color: var(--ink);
+}
+.rail select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}
+
+.rail input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.switch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 0;
+  cursor: pointer;
+}
+.switch input {
+  accent-color: var(--accent);
+  width: 15px;
+  height: 15px;
+}
+.switch span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.switch .ic {
+  opacity: 0.55;
+}
+
+.switch-note {
+  margin: 6px 0 0;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+.switch-note:empty {
+  display: none;
+}
+
+/* ---- filters ------------------------------------------------------------- */
+
+.rail-filters summary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  list-style: none;
+  cursor: pointer;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.rail-filters summary::-webkit-details-marker {
+  display: none;
+}
+.rail-filters summary .ic:last-child {
+  margin-left: auto;
+  transition: transform 0.15s ease;
+}
+.rail-filters[open] summary .ic:last-child {
+  transform: rotate(180deg);
+}
+.rail-filters.is-muted .filter-body {
+  opacity: 0.55;
+}
+
+.badge {
+  min-width: 16px;
+  padding: 1px 5px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-align: center;
+}
+
+.filter-body {
+  margin-top: 10px;
+}
+
+.linkish {
+  margin-top: 12px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 11.5px;
+  color: var(--link);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.linkish:hover {
+  text-decoration: underline;
+}
+
+/* ---- legend -------------------------------------------------------------- */
+
+.rail-legend {
+  padding: 13px var(--rail-pad);
+  border-bottom: 1px solid var(--chrome-line);
+}
+
+.legend-keys {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+  font-size: 12px;
+}
+.legend-keys td {
+  padding: 3px 0;
+  border: 0;
+  vertical-align: middle;
+}
+.key-swatch {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+.key-label {
+  padding-left: 8px !important;
+  white-space: nowrap;
+}
+.key-bar {
+  width: 100%;
+  padding: 0 10px !important;
+}
+.key-bar span {
+  display: block;
+  height: 5px;
+  min-width: 2px;
+  border-radius: 3px;
+  opacity: 0.75;
+}
+.key-num {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.legend-stack {
+  display: flex;
+  height: 12px;
+  margin-bottom: 10px;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.legend-stack span {
+  display: block;
+}
+
+.legend-measure {
+  margin: 0 0 8px;
+  font-weight: 650;
+}
+.legend-ramp {
+  position: relative;
+  height: 11px;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+.ramp-mark {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 2px;
+  background: var(--ink);
+  border-radius: 1px;
+  transform: translateX(-1px);
+}
+.legend-scale {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 3px;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+
+.legend-note,
+.legend-scope {
+  margin: 9px 0 0;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+.legend-scope {
+  padding-top: 9px;
+  border-top: 1px solid var(--chrome-line);
+}
+
+.legend-warn {
+  display: flex;
+  gap: 6px;
+  margin: 8px 0 0;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: #8a5a2b;
+}
+.legend-warn .ic {
+  margin-top: 2px;
+  color: #c2610a;
+}
+
+.rail-foot {
+  padding: 14px var(--rail-pad) 24px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.rail-foot p {
+  margin: 0 0 6px;
+}
+
+/* ---- tooltip ------------------------------------------------------------- */
+
+#tip {
+  position: absolute;
+  z-index: 6;
+  display: none;
+  pointer-events: none;
+  padding: 7px 10px;
+  border: 1px solid var(--chrome-line);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
+  font-size: 12px;
+  line-height: 1.4;
+}
+#tip b {
+  display: block;
+  font-weight: 650;
+}
+#tip span {
+  color: var(--muted);
+}
+#tip em {
+  display: block;
+  margin-top: 3px;
+  font-size: 10.5px;
+  font-style: normal;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #a9a293;
+}
+
+/* ---- inspector ----------------------------------------------------------- */
+
+#inspector {
+  position: absolute;
+  z-index: 8;
+  top: 14px;
+  right: 14px;
+  width: 316px;
+  max-height: calc(100% - 28px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 18px 20px 20px;
+  border: 1px solid var(--chrome-line);
+  border-radius: 12px;
+  background: var(--panel);
+  box-shadow: 0 6px 26px rgba(0, 0, 0, 0.14);
+  font-size: 12.5px;
+}
+#inspector[hidden] {
+  display: none;
+}
+
+.ins-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  padding: 5px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+}
+.ins-close:hover {
+  background: var(--chrome-sunken);
+  color: var(--ink);
+}
+
+.ins-kicker {
+  margin: 0;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.ins-title {
+  margin: 5px 40px 0 0;
+  font-family: var(--serif);
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.ins-sub {
+  margin: 3px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+.ins-count {
+  margin: 10px 0 0;
+}
+.ins-count b {
+  font-family: var(--serif);
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+}
+
+.ins-drill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  padding: 7px 11px;
+  border: 1px solid var(--chrome-line);
+  border-radius: 7px;
+  background: #fff;
+  font: inherit;
+  font-size: 12px;
+  color: var(--ink);
+  cursor: pointer;
+}
+.ins-drill:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+#inspector h3 {
+  margin: 18px 0 7px;
+  font-family: var(--sans);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.ins-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+  font-size: 12px;
+}
+.ins-table td {
+  padding: 3px 0;
+  border: 0;
+  vertical-align: middle;
+}
+.ins-label {
+  white-space: nowrap;
+  padding-right: 10px !important;
+}
+.ins-bar {
+  width: 100%;
+  padding-right: 8px !important;
+}
+.ins-bar span {
+  display: block;
+  height: 6px;
+  min-width: 2px;
+  border-radius: 3px;
+}
+.ins-num {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+  font-weight: 650;
+}
+.ins-note-row td {
+  padding: 0 0 6px !important;
+  font-size: 10.5px;
+  color: #a9a293;
+}
+
+.ins-dl {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 3px 12px;
+  margin: 0;
+  font-size: 12px;
+}
+.ins-dl dt {
+  color: var(--muted);
+}
+.ins-dl dd {
+  margin: 0;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-weight: 650;
+}
+
+.ins-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ins-list li {
+  padding: 5px 0;
+  border-bottom: 1px solid var(--chrome-line);
+  font-size: 12px;
+}
+.ins-list li:last-child {
+  border-bottom: 0;
+}
+.ins-list span {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.ins-caveat {
+  margin: 8px 0 0;
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+.ins-caveat .ic {
+  color: #c2610a;
+}
+
+/* ---- status -------------------------------------------------------------- */
+
+#status {
+  position: absolute;
+  z-index: 9;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 9px 16px;
+  border: 1px solid var(--chrome-line);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  font-size: 12.5px;
+}
+#status[hidden] {
+  display: none;
+}
+#status.is-error {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ---- responsive ---------------------------------------------------------- */
+/* Below the breakpoint the rail becomes a bottom sheet: the map keeps the whole
+   viewport and the controls sit over it, which is the only arrangement where a
+   phone-sized screen still shows enough map to be worth panning. */
+
+@media (max-width: 940px) {
+  .explore-shell {
+    grid-template-columns: 1fr;
+  }
+  .map-wrap {
+    grid-row: 1;
+  }
+  .rail {
+    position: absolute;
+    z-index: 10;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-height: 48vh;
+    border-right: 0;
+    border-top: 1px solid var(--chrome-line);
+    border-radius: 14px 14px 0 0;
+    box-shadow: 0 -4px 22px rgba(0, 0, 0, 0.13);
+  }
+  .rail-head {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: var(--chrome-bg);
+    padding-top: 14px;
+  }
+  .rail-head::before {
+    content: "";
+    display: block;
+    width: 34px;
+    height: 3px;
+    margin: -4px auto 12px;
+    border-radius: 2px;
+    background: #d8d3c7;
+  }
+  .rail-title {
+    display: none;
+  }
+  #inspector {
+    top: 12px;
+    right: 12px;
+    left: 12px;
+    width: auto;
+    max-height: 40vh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rung-dot,
+  .rail-filters summary .ic:last-child {
+    transition: none;
+  }
+}

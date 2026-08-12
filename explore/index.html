@@ -2,111 +2,43 @@
 <html lang="id">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Peta interaktif — Koperasi Desa Merah Putih</title>
-    <link href="https://unpkg.com/maplibre-gl@4/dist/maplibre-gl.css" rel="stylesheet" />
-    <link href="../app/site.css" rel="stylesheet" />
-    <!-- duckdb-wasm imports apache-arrow as a bare specifier; the import map
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Peta interaktif — Koperasi Desa Merah Putih</title>
+  <meta name="description"
+    content="Peta multivariat 83.342 Koperasi Desa Merah Putih: dari kisi dinamis sampai agregat kecamatan, kabupaten dan provinsi." />
+  <link href="https://unpkg.com/maplibre-gl@4/dist/maplibre-gl.css" rel="stylesheet" />
+  <link href="../app/site.css" rel="stylesheet" />
+  <link href="../app/explore.css" rel="stylesheet" />
+  <!-- duckdb-wasm imports apache-arrow as a bare specifier; the import map
        resolves it so no bundler is needed (no-build-step site). -->
-    <script type="importmap">
-  {
-    "imports": {
-      "@duckdb/duckdb-wasm": "https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@1.29.0/dist/duckdb-browser.mjs",
-      "apache-arrow": "https://cdn.jsdelivr.net/npm/apache-arrow@17.0.0/+esm"
+  <script type="importmap">
+    {
+      "imports": {
+        "@duckdb/duckdb-wasm": "https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@1.29.0/dist/duckdb-browser.mjs",
+        "apache-arrow": "https://cdn.jsdelivr.net/npm/apache-arrow@17.0.0/+esm"
+      }
     }
-  }
   </script>
 </head>
 
 <body class="explore-body" data-root="../">
-    <nav id="site-nav"></nav>
+  <nav id="site-nav"></nav>
 
-    <div id="explore-map">
-        <div id="explore-loading" class="explore-panel" style="top:76px; left:50%; transform:translateX(-50%)">
-            Memuat 83.342 koperasi dari parquet…
-        </div>
+  <div class="explore-shell">
+    <aside class="rail" id="rail" aria-label="Kontrol peta"></aside>
+
+    <div class="map-wrap">
+      <div id="map"></div>
+      <div id="status">Menyiapkan peta…</div>
+      <div id="tip" role="status" aria-live="polite"></div>
+      <aside id="inspector" hidden aria-label="Rincian wilayah"></aside>
     </div>
+  </div>
 
-    <aside id="explore-controls" class="explore-panel">
-        <h2>Peta interaktif</h2>
-        <p style="font-size:13px;color:#5c5c5c;margin:4px 0 8px">
-            Setiap titik adalah satu koperasi (≈ satu desa). Warna sel = jumlah koperasi.
-        </p>
-
-        <fieldset>
-            <legend>Tampilan</legend>
-            <label class="opt"><input type="radio" name="view" value="grid" checked /> Kisi persegi</label>
-            <label class="opt"><input type="radio" name="view" value="hex" /> Kisi heksagon</label>
-            <label class="opt"><input type="radio" name="view" value="points" /> Titik (per koperasi)</label>
-        </fieldset>
-
-        <fieldset id="cell-size-field">
-            <legend>Ukuran sel <span class="val" id="cell-size-val"></span></legend>
-            <input type="range" id="cell-size" min="16" max="120" step="4"
-                aria-label="Ukuran sel agregasi dalam piksel" />
-        </fieldset>
-
-        <fieldset>
-            <legend>Filter</legend>
-            <label class="opt">Populasi
-                <select id="f-population">
-                    <option value="all">Semua</option>
-                    <option value="zero_cell">Sel populasi kosong (400 m)</option>
-                    <option value="populated">Ada populasi di sel</option>
-                </select></label>
-            <label class="opt">Jalan
-                <select id="f-road">
-                    <option value="all">Semua</option>
-                    <option value="no_road">Tanpa jalan ±5 km (OSM)</option>
-                    <option value="has_road">Ada jalan ≤5 km</option>
-                </select></label>
-            <label class="opt">Minimarket
-                <select id="f-minimarket">
-                    <option value="all">Semua</option>
-                    <option value="far">Jauh (&gt;5 km)</option>
-                    <option value="near">Dekat (≤5 km)</option>
-                </select></label>
-            <label class="opt">Lahan
-                <select id="f-land">
-                    <option value="all">Semua</option>
-                    <option value="verified">Terverifikasi</option>
-                    <option value="not_verified">Belum terverifikasi</option>
-                </select></label>
-            <label class="opt">Transaksi
-                <select id="f-transaction">
-                    <option value="all">Semua</option>
-                    <option value="reporting">Melaporkan transaksi</option>
-                    <option value="silent">Tidak melaporkan</option>
-                </select></label>
-            <label class="opt">Klaster
-                <select id="f-cluster">
-                    <option value="all">Semua</option>
-                    <option value="clustered">Dalam klaster (1 sel, ≥2 koperasi)</option>
-                    <option value="isolated">Sendirian di selnya</option>
-                </select></label>
-        </fieldset>
-
-        <div class="hint">
-            Angka jalan/minimarket bersumber dari OSM dan merupakan batas bawah.
-            “Tidak melaporkan transaksi” ≠ “tidak aktif” — lihat
-            <a href="../methods/01-snapshot-drift/">metode 01</a>.
-        </div>
-    </aside>
-
-    <div id="explore-legend" class="explore-panel"></div>
-    <div id="explore-tip" class="explore-panel"></div>
-
-    <div class="map-warning">
-        Data: ekspor SIMKOPDES 2026-08-05 (83.342 koperasi). Koordinat yang jelas
-        salah (19 titik, lihat <a href="../methods/08-exact-geometry/">metode 08</a>)
-        tetap tampil di “Semua”; gunakan filter Populasi untuk menyaring.
-    </div>
-
-    <footer id="site-footer"></footer>
-
-    <script src="https://unpkg.com/maplibre-gl@4/dist/maplibre-gl.js"></script>
-    <script type="module" src="../app/explore.js"></script>
+  <script src="https://unpkg.com/maplibre-gl@4/dist/maplibre-gl.js"></script>
+  <script type="module" src="../app/site.js"></script>
+  <script type="module" src="../app/explore/index.js"></script>
 </body>
 
 </html>

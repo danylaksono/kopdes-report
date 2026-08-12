@@ -37,17 +37,20 @@ It hits the live public API (no auth) and overwrites the files in place.
 ## Layout
 
 ```
-index.html    the visual-analytics app (served from the repo root)
-app/          its JS/CSS modules
-data/raw/     kopdes_*.csv  -  raw SIMKOPDES export (committed; source of truth)
-data/web/     points.geojson  -  generated app data
-scripts/      extractor + web-data generator scripts
-geo/          boundary-shapefile download/convert/join pipeline (see geo/README.md)
+index.html         the story (scrollytelling), served from the repo root
+explore/           the interactive map
+app/               shared shell (site.css, site.js) + story.js
+app/explore/       the map's modules; app/explore.css is its chrome
+data/raw/          kopdes_*.csv  -  raw SIMKOPDES export (committed; source of truth)
+data/web/          the parquet mart + simplified boundaries (committed)
+scripts/           extractor, mart builder, boundary builder
+geo/               boundary-shapefile download/convert/join pipeline (see geo/README.md)
 ```
 
-`geo/raw/`, `geo/geojson/`, `geo/output/`, and `data/web/` are gitignored -
-they're all regenerated from `data/raw/` by the scripts below, and the
-boundary-level ones run into the hundreds of MB.
+`geo/raw/`, `geo/geojson/` and `geo/output/` are gitignored - they're
+regenerated from `data/raw/` by the scripts below and run into the hundreds of
+MB. `data/web/` is gitignored *except* for the files the deployed app fetches:
+the four parquet tables, `mart_manifest.json`, and `boundaries/*.geojson`.
 
 ## Regenerating the data
 
@@ -66,10 +69,11 @@ pip install -r geo/requirements.txt
 python geo/run_pipeline.py
 ```
 
-**3. Rebuild the point layer for the app** (fast, no download):
+**3. Rebuild the map's boundary layer** from what step 2 produced (fast, no
+download - it simplifies `geo/output/` down to something a browser can fetch):
 
 ```bash
-node scripts/build_points.mjs
+python scripts/build_boundaries.py
 ```
 
 ## The analysis mart (what the app reads)
@@ -85,7 +89,7 @@ python scripts/build_analysis_mart.py
 
 | File | Rows | Unit |
 |---|---|---|
-| `data/web/kopdes_points.parquet` | 83,342 | one cooperative ≈ one desa — **63 columns** |
+| `data/web/kopdes_points.parquet` | 83,342 | one cooperative ≈ one desa — **70 columns** |
 | `data/web/kopdes_kecamatan.parquet` | 7,277 | subdistrict |
 | `data/web/kopdes_kabupaten.parquet` | 514 | district |
 | `data/web/kopdes_provinsi.parquet` | 38 | province |
@@ -117,39 +121,59 @@ point economics for a regional total; read the aggregate table.**
 
 ## The app
 
-Static site served from the repo root, no build step - MapLibre GL JS and
-[screengrid](https://github.com/danylaksono/screengrid) from a CDN plus one
-generated GeoJSON file:
+Static site served from the repo root, no build step - MapLibre GL JS,
+[screengrid](https://github.com/danylaksono/screengrid) and DuckDB-wasm from a
+CDN, reading the committed parquet directly:
 
 ```bash
-node scripts/build_points.mjs        # if data/web/points.geojson doesn't exist yet
 python -m http.server 8000
-# open http://localhost:8000
+# open http://localhost:8000  (story)  or  /explore/  (map)
 ```
 
-Three views over the same 83k cooperatives, switchable from the panel top-right:
+### The map (`/explore/`)
 
-- **Screen grid** (default) and **screen hex** - screen-space density
-  aggregation via screengrid. Cells are a fixed pixel size (slider, 16-120px),
-  so the grid re-bins on every pan/zoom and always shows density at the
-  resolution you're actually looking at. Cell value is a plain count of
-  cooperatives; hover for the number. Colour is √-scaled (counts are wildly
-  skewed between Java and the outer islands) and rescales to the current
-  viewport, so read the legend, not the hue, across views.
-- **Points (clustered)** - every cooperative as a circle, colored by
-  land-asset verification status (green = Terverifikasi, amber = any other
-  known status, gray = no land-asset record at all). That status is joined
-  from `kopdes_land_assets.csv` by exact cooperative name in
-  `scripts/build_points.mjs` (99.96% match rate - see that script's header
-  comment); click a point for its raw status string.
+**Four scales of the same 83,342 cooperatives**, picked from the ladder in the
+left rail, which shows what each one costs you: 83.342 points → 7.273 kecamatan
+→ 514 kabupaten → 38 provinsi.
 
-Only position is used by the grid views so far - per-cell attribute encoding
-(glyphs) hangs off `getWeight`/`onDrawCell` in [app/grid-layer.js](app/grid-layer.js)
-when we get to it.
+- **Kisi dinamis** - screen-space cells via screengrid, fixed pixel size
+  (slider), re-binned on every pan and zoom.
+- **Kecamatan / Kabupaten / Provinsi** - one glyph per area, drawn at the
+  *median position of its member cooperatives*, not the polygon centroid, which
+  can sit offshore. Simplified boundaries render underneath as context.
 
-Basemap is [OpenFreeMap](https://openfreemap.org) (free, no API key). Next
-step: bring in the joined boundary GeoJSON from `geo/output/` for choropleths
-at any admin level.
+**Three ways to encode a cell**, all of them shares of cooperatives so the four
+scales stay comparable:
+
+- **Profil** - four bars, one per question the report asks: sekitarnya sepi,
+  jauh dari jalan, berdempetan, tidak melaporkan transaksi. Taller is always
+  worse, so a tall glyph is an area in trouble on several fronts.
+- **Komposisi** - a stacked column showing how the area's cooperatives divide
+  across a class family (distance to road, population nearby, distance to the
+  nearest other cooperative).
+- **Ukuran** - one measure as a colour ramp, fixed at 0-100% so the colours do
+  not change meaning as you pan. Several measures sit in a narrow band near one
+  end, so there is an explicit "regangkan skala" toggle; the legend prints the
+  bounds whenever it is on.
+
+**Profil draws every glyph at the same size**, on purpose. Sizing it by count
+would put the same share at different pixel heights in different cells, which is
+precisely the comparison the mode exists to support - and the smallest cells
+would fall below the size where four bars still read as four bars. The count is
+in the inspector instead. Komposisi and Ukuran do scale with count, where it
+costs nothing: proportions are scale-invariant, and colour leaves size free.
+There the area is scaled to a high percentile rather than the maximum, because
+scaling to Java's peak flattens everywhere else.
+
+**Titik koperasi** overlays the raw coordinates on any scale; filters apply to the grid
+and the points, never to the pre-computed admin aggregates (the rail says so
+when they are inert). Clicking any glyph opens an inspector with the full
+profile against the national figure, the medians the glyph deliberately does not
+encode, and a button to drop one rung down the ladder in that area.
+
+Basemap is [OpenFreeMap](https://openfreemap.org) (free, no API key), retinted
+to the report's palette. Icons are [Phosphor](https://phosphoricons.com) (MIT),
+inlined.
 
 ## Known data-quality caveats
 
@@ -159,9 +183,11 @@ at any admin level.
   boundary join goes through name-matching instead.
 - A small number of source rows have wrong province/district pairings or
   bogus coordinates baked into the SIMKOPDES export itself (e.g. a district
-  named "Fukuoka" filed under province "PAPUA"). `scripts/build_points.mjs`
-  drops points outside Indonesia's bounding box and logs how many; the geo
-  pipeline logs unmatched rows to `geo/output/<level>_unmatched.csv`.
+  named "Fukuoka" filed under province "PAPUA").
+  [Report 08](reports/08-exact-geometry/) identifies the 19 coordinates that
+  fall outside Indonesia and flags them as `coordinate_suspect` in the mart;
+  the map filters them out by default but lets you show them. The geo pipeline
+  logs unmatched rows to `geo/output/<level>_unmatched.csv`.
 - `kopdes_land_assets.csv` has no cooperative id either - it's joined to
   `kopdes_locations.csv` by exact cooperative name, which misses ~0.04% of
   land-asset rows (26 of 65,921 unique names) and, for the 55 duplicate names

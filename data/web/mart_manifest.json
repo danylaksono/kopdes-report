@@ -314,6 +314,18 @@
           "type": "BOOLEAN"
         },
         {
+          "name": "road_class",
+          "type": "VARCHAR"
+        },
+        {
+          "name": "pop_class",
+          "type": "VARCHAR"
+        },
+        {
+          "name": "nn_class",
+          "type": "VARCHAR"
+        },
+        {
           "name": "imagery_url",
           "type": "VARCHAR"
         }
@@ -437,6 +449,54 @@
         },
         {
           "name": "median_cluster_size",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "road_share_over_5km",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "road_share_under_5km",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "road_share_under_500m",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "road_share_on_road",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "pop_share_empty",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "pop_share_under_500",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "pop_share_under_10k",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "pop_share_over_10k",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "nn_share_under_1km",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "nn_share_1_2km",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "nn_share_2_5km",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "nn_share_over_5km",
           "type": "DOUBLE"
         },
         {
@@ -595,6 +655,54 @@
           "type": "DOUBLE"
         },
         {
+          "name": "road_share_over_5km",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "road_share_under_5km",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "road_share_under_500m",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "road_share_on_road",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "pop_share_empty",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "pop_share_under_500",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "pop_share_under_10k",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "pop_share_over_10k",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "nn_share_under_1km",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "nn_share_1_2km",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "nn_share_2_5km",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "nn_share_over_5km",
+          "type": "DOUBLE"
+        },
+        {
           "name": "villages",
           "type": "BIGINT"
         },
@@ -739,6 +847,54 @@
         },
         {
           "name": "median_cluster_size",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "road_share_over_5km",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "road_share_under_5km",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "road_share_under_500m",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "road_share_on_road",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "pop_share_empty",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "pop_share_under_500",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "pop_share_under_10k",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "pop_share_over_10k",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "nn_share_under_1km",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "nn_share_1_2km",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "nn_share_2_5km",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "nn_share_over_5km",
           "type": "DOUBLE"
         },
         {

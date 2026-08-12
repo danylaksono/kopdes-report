@@ -50,7 +50,6 @@ All sourced from SIMKOPDES public API (no auth required). Snapshot date: **2026-
 | `data/osm/indonesia_roads.gpkg`       | 1.6 GB | Geofabrik PBF    | `python scripts/download_osm.py --roads-only` |
 | `data/osm/indonesia_minimarkets.gpkg` | 1.7 MB | Overpass API     | `python scripts/download_osm.py --poi-only`   |
 | `geo/output/*.geojson`                | varies | BIG shapefiles   | `cd geo && python run_pipeline.py`            |
-| `data/web/points.geojson`             | varies | kopdes locations | `node scripts/build_points.mjs`               |
 
 ### The analysis mart (`data/web/kopdes_*.parquet`)
 
@@ -61,7 +60,7 @@ with a report, the report is right and the mart is broken.
 
 | File                       | Rows   | Unit                           |
 | -------------------------- | ------ | ------------------------------ |
-| `kopdes_points.parquet`    | 83,342 | cooperative ≈ desa, 63 columns |
+| `kopdes_points.parquet`    | 83,342 | cooperative ≈ desa, 70 columns |
 | `kopdes_kecamatan.parquet` | 7,277  | subdistrict                    |
 | `kopdes_kabupaten.parquet` | 514    | district                       |
 | `kopdes_provinsi.parquet`  | 38     | province (+ health scores)     |
@@ -75,6 +74,13 @@ Things that will bite you:
 
 - **Aggregate measures share names with point measures on purpose**, so one
   glyph spec works at all four levels. Keep it that way when adding columns.
+- **`road_class` / `pop_class` / `nn_class`** collapse the reports' bands to four
+  ordered classes each (worst first), and the aggregates carry the matching
+  `<family>_share_<class>` percentages. The collapse is defined once, in
+  `CLASS_COLUMNS`, and the shares are derived from those same expressions —
+  re-deriving it in JavaScript is how a grid cell and a kecamatan glyph start
+  disagreeing about what "near a road" means. Denominators are non-null counts:
+  unmeasured is not a class.
 - **Aggregate economics do not come from the points.** The village link reaches
   79.1% of cooperatives, which carry 88% of national transaction value — summing
   points would be both wrong and biased. Aggregates group straight off the
@@ -91,7 +97,7 @@ Things that will bite you:
 - **Python venv**: `d:\personal\github\kopdes\.venv\` (Python 3.13, Windows)
 - **Core deps** (for OSM pipeline): `osmium>=4.0`, `geopandas`, `requests`, `tqdm`
 - **Full deps**: `scripts/requirements_osm.txt`
-- **Node.js**: Used for `scripts/build_points.mjs` and `scripts/extract_kopdes.mjs`
+- **Node.js**: Used for `scripts/extract_kopdes.mjs` only
 
 Activate venv before running anything:
 
@@ -185,8 +191,8 @@ python scripts/extract_kopdes.py data/raw
 # Node.js version:
 node scripts/extract_kopdes.mjs
 
-# Build web map points:
-node scripts/build_points.mjs
+# Rebuild the mart the app reads:
+python scripts/build_analysis_mart.py
 ```
 
 The extraction scripts discover AES-256-CBC encryption keys at runtime by scraping the SIMKOPDES JS bundle. They make concurrent API calls (concurrency=12) and walk the full admin hierarchy.
@@ -206,6 +212,18 @@ Three stages:
 3. `link_kopdes.py` — joins kopdes stats to boundaries via normalized name matching
 
 Outputs go to `geo/output/` (gitignored). Match failures go to `*_unmatched.csv`.
+
+A fourth stage produces the web-ready copies the explorer actually loads:
+
+```bash
+python scripts/build_boundaries.py            # all three levels
+python scripts/build_boundaries.py provinsi   # just one
+```
+
+It strips the merged stats down to `{id, name}`, drops islands too small to
+render, simplifies per level, and rounds coordinates — 54 MB of `geo/output/`
+becomes 9.7 MB in `data/web/boundaries/`, which **is** committed. Re-run it after
+any `geo/run_pipeline.py` run, or the map keeps serving the old shapes.
 
 ## Web app — the report site (started 2026-08-12)
 
@@ -229,8 +247,8 @@ linkable):
 Shared shell: `app/site.css` (design system) + `app/site.js` (injects nav +
 footer from `data-root`, `marked` markdown renderer, ID-locale number helpers).
 The old single-page viewer (`index.html` map + `app/main.js` + `app/style.css`)
-is **deleted**; its map ideas live on in `/explore/` and `app/points-layer.js` /
-`app/grid-layer.js`, which are reused unchanged.
+is **deleted**, and so are its successors `app/explore.js`, `app/grid-layer.js`
+and `app/points-layer.js` — the explorer below replaces all three.
 
 **Data layer (one shared layer for every page)**: the committed parquet files
 (`data/web/kopdes_points.parquet` etc.) read in-browser through **duckdb-wasm**.
@@ -238,17 +256,87 @@ Import map in `explore/index.html` maps `@duckdb/duckdb-wasm` →
 `dist/duckdb-browser.mjs` and `apache-arrow@17.0.0/+esm` (the ESM build imports
 apache-arrow as a bare specifier; the import map is required, there is no UMD
 build). `getJsDelivrBundles()` + `selectBundle()` + `AsyncDuckDB` is the load
-path. The old `data/web/points.geojson` (24 MB) is dead; the parquet replaces it.
+path. The old `data/web/points.geojson` (24 MB) and its builder
+`scripts/build_points.mjs` are **deleted**; the parquet replaces both.
 
 **screengrid**: pinned as `https://unpkg.com/screengrid@3.1.1/dist/screengrid.mjs`
 (source lives at `D:\Dissertation\screengrid`, npm `screengrid`). Bump the pin in
-`app/grid-layer.js` when the library is republished — there is no lockfile.
+`app/explore/layers.js` when the library is republished — there is no lockfile.
 
-Grid cells encode **count of cooperatives only** (`getWeight: () => 1`,
-`aggregationFunction: 'sum'`); attribute glyphs attach via
-`getWeight`/`onDrawCell`/`enableGlyphs` in `app/grid-layer.js`. Normalization is
-screengrid's default `max-local` (view-relative); the legend prints the current
-max to keep that honest.
+### The explorer (`app/explore/`, rebuilt 2026-08-12)
+
+Multi-scale multivariate glyph map. Four scales share one glyph specification,
+which is the whole design:
+
+| Module        | Role                                                            |
+| ------------- | --------------------------------------------------------------- |
+| `index.js`    | controller: state, layer rebuilds, drill-down, basemap retint   |
+| `measures.js` | **the registry** — scales, class families, measures, filters    |
+| `data.js`     | DuckDB session, per-level queries, lazy boundary fetch          |
+| `glyph.js`    | cell summaries + canvas drawing for all three glyph modes       |
+| `layers.js`   | screengrid layer factories, boundary fill/line, point circles   |
+| `ui.js`       | rail, scale ladder, legend, tooltip, inspector                  |
+| `icons.js`    | inlined Phosphor SVGs (MIT). **Not Lucide** — deliberate choice |
+
+Chrome lives in `app/explore.css`, not `site.css`: a control rail is a denser
+instrument (13 px, tabular numerals) than the 17 px/68ch reading pages.
+
+**Two screengrid render modes, one glyph.** Grid scale uses
+`ScreenGridLayerGL.glyphMap` (screen-space cells); the three admin scales use
+`ScreenGridLayerGL.featureGlyphs` with `placement: {strategy:'point'}` over the
+aggregate anchors. `summarizeCell` (grid members) and `summarizeAnchor` (one
+pre-aggregated row) both emit `{count, values, shares}`, and `drawGlyph` never
+learns which produced it. Screengrid contract, verified in its source:
+`onAfterAggregate` → `cellInfo.customData` for grid cells, `cellInfo.props` for
+anchors, `cellInfo.isHovered` in grid mode.
+
+**Every glyph value is a share, and this is load-bearing.** Two reasons that
+turned out to be one: `ScreenGridLayerGL.render()` calls `_aggregate()` on every
+frame, so a cell summary must be one pass with no sorting; and a grid drawing a
+mean beside a kecamatan drawing a median would make the scales incomparable —
+which would defeat the point of the ladder. Shares are single counters at grid
+level, are exactly the mart's `pct_*` / `*_share_*` columns at admin level, and
+fix the legend: 0–100 % everywhere, so nothing rescales as you pan. Medians live
+in the click inspector, which runs once and can afford them.
+
+Three glyph modes: `profile` (four deficit bars — sepi/jalan/dempet/senyap, one
+per report act, taller is always worse), `composition` (stacked column over a
+class family), `measure` (one share as a colour ramp).
+
+**`sizeFor` in `glyph.js` is where size encoding is decided, and profile mode is
+deliberately exempt.** A varying box makes the same share draw at different
+pixel heights in different cells, which destroys the only comparison a profile
+glyph supports, and the small end falls below the size where four bars read as
+four bars. Profile therefore draws at one `uniformPx` per scale; composition and
+measure keep `glyphSize`, scaled to a high percentile of the count rather than
+the maximum. Consequence: profile mode encodes nothing about how many
+cooperatives a cell holds — the legend says so, and `minzoom` on kabupaten and
+kecamatan warns when uniform glyphs overlap, since they no longer thin
+themselves out in dense areas the way proportional symbols did.
+
+Measure mode offers an
+explicit **"regangkan skala"** toggle, off by default, because several measures
+sit in a narrow high band (96.5 % of cooperatives report nothing) where an
+absolute ramp shows nothing; the legend prints the moved bounds when it is on.
+
+**Gotchas that cost time:**
+
+- `cooperative_id` is BIGINT → JS BigInt → MapLibre throws "Do not know how to
+  serialize a BigInt" on any GeoJSON source. `data.js` casts wide integers at
+  the query boundary; keep doing that for anything new.
+- `loadLevel` orders `cooperatives ASC` on purpose. `feature-anchors` draws in
+  source order with no depth sorting, so descending order lets small glyphs
+  overpaint big ones around Java.
+- `.field { display: block }` outranks the UA's `[hidden] { display: none }`;
+  `app/explore.css` restates it at matching specificity.
+
+**Boundaries**: `data/web/boundaries/{provinsi,kabupaten,kecamatan}.geojson`,
+built by `scripts/build_boundaries.py` from `geo/output/`, committed (9.7 MB for
+all three). Context fills only — every measure still comes from the parquet via
+the admin id. Join coverage is provinsi 38/38, kabupaten 489/514, kecamatan
+7 235/7 277; the gaps are the bad SIMKOPDES rows `geo/README.md` documents, and
+those areas keep their anchor glyph and simply lose the fill. Kecamatan is 8.4 MB
+and fetched lazily.
 
 **/methods/ generation**: `python scripts/build_methods_pages.py` scaffolds
 `methods/<nn-slug>/index.html` shells + the index from

@@ -100,6 +100,63 @@ SOURCES = {
 }
 
 
+# Ordered four-class collapses of the report bands, for the explorer's
+# composition glyph. The reports' own bands are the right resolution for a
+# table (`road_band` has seven) and the wrong one for a 40-pixel glyph, so each
+# gets folded to four classes ordered worst -> best.
+#
+# These live here, on the points table, rather than in the app, because the
+# aggregate share columns below are computed from the very same expressions.
+# Deriving the collapse a second time in JavaScript is how a grid cell and a
+# kecamatan glyph start disagreeing about what "near a road" means.
+#
+# Class order for stacking, per family (worst first):
+#   road_class  over_5km  < under_5km < under_500m < on_road
+#   pop_class   empty     < under_500 < under_10k  < over_10k
+#   nn_class    under_1km < 1_2km     < 2_5km      < over_5km   (proximity, not quality)
+CLASS_COLUMNS = """
+            case rd.road_band
+                when 'on a road cell (<70 m)'  then 'on_road'
+                when '< ~260 m'                then 'under_500m'
+                when '< ~530 m'                then 'under_500m'
+                when '< ~1 km'                 then 'under_5km'
+                when '< ~2 km'                 then 'under_5km'
+                when '< ~5 km'                 then 'under_5km'
+                when '> ~5 km / none found'    then 'over_5km'
+            end                                     as road_class,
+
+            case r.remoteness_band
+                when 'nobody within 5km'       then 'empty'
+                when '<500'                    then 'under_500'
+                when '500-2k'                  then 'under_10k'
+                when '2k-10k'                  then 'under_10k'
+                when '>10k'                    then 'over_10k'
+            end                                     as pop_class,
+
+            case cl.nn_band
+                when '<500m'                   then 'under_1km'
+                when '500m-1km'                then 'under_1km'
+                when '1-2km'                   then '1_2km'
+                when '2-5km'                   then '2_5km'
+                when '>5km'                    then 'over_5km'
+            end                                     as nn_class"""
+
+
+def class_shares(family: str, classes: list[str]) -> str:
+    """Percent-of-known share columns for one `<family>_class` collapse.
+
+    The denominator is the non-null count, not the row count: a cooperative
+    with no `road_band` is unmeasured, not "far from a road", and folding those
+    into the denominator would quietly deflate every share in the family.
+    """
+    return ",\n".join(
+        f"    round(100.0 * count(*) filter (where {family}_class = '{cls}')\n"
+        f"          / nullif(count({family}_class), 0), 2)"
+        f"{'':{max(1, 24 - len(family) - len(cls))}}as {family}_share_{cls}"
+        for cls in classes
+    )
+
+
 def csv(path: Path) -> str:
     return f"read_csv_auto('{path.as_posix()}', header=true, sample_size=-1)"
 
@@ -258,6 +315,8 @@ def build_points(con, missing):
             vl.land_status, vl.land_surveyor,
             (vl.land_status = 'Terverifikasi')       as land_verified,
 
+            {CLASS_COLUMNS},
+
             'https://www.google.com/maps/@' || l.latitude || ',' || l.longitude
                 || ',250m/data=!3m1!1e3'            as imagery_url
         from {csv(RAW / 'kopdes_locations.csv')} l
@@ -291,7 +350,7 @@ def build_points(con, missing):
 # only reach the 79% of cooperatives whose village link resolved - which carry
 # 88% of national transaction value, so the totals would be wrong AND biased.
 # They come from ECON_MEASURES below instead, off the complete village file.
-AGG_MEASURES = """
+AGG_MEASURES = f"""
     count(*)                                                as cooperatives,
     -- Anchors ignore the 19 impossible coordinates (08). A median is robust to
     -- them nationally, but a kecamatan with few members could be dragged into
@@ -337,7 +396,14 @@ AGG_MEASURES = """
     round(100.0 * count(*) filter (where m_to_nearest_other <= 1000)
           / nullif(count(*) filter (where m_to_nearest_other is not null), 0), 2)
                                                             as pct_sibling_within_1km,
-    round(median(cluster_size), 0)                          as median_cluster_size
+    round(median(cluster_size), 0)                          as median_cluster_size,
+
+    -- Class composition, for the explorer's stacked glyph. A median tells you
+    -- where the middle cooperative sits; these tell you how the whole area is
+    -- distributed, which is the thing a single number hides.
+{class_shares('road', ['over_5km', 'under_5km', 'under_500m', 'on_road'])},
+{class_shares('pop', ['empty', 'under_500', 'under_10k', 'over_10k'])},
+{class_shares('nn', ['under_1km', '1_2km', '2_5km', 'over_5km'])}
 """
 
 

@@ -21,6 +21,12 @@ data/web/*
 !data/web/kopdes_kabupaten.parquet
 !data/web/kopdes_provinsi.parquet
 !data/web/mart_manifest.json
+# Simplified admin polygons for /explore/ — context fills under the glyphs.
+# Same reasoning: committed because the deployed app fetches them. 9.7 MB for
+# all three levels, against 54 MB for the geo/output/ files they come from.
+# Rebuild: python scripts/build_boundaries.py
+!data/web/boundaries/
+!data/web/boundaries/*.geojson
 
 # --- report outputs that are per-record tables, not findings ---
 # Everything else under reports/ IS committed - the small CSVs are the findings
