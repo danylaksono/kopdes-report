@@ -268,15 +268,17 @@ path. The old `data/web/points.geojson` (24 MB) and its builder
 Multi-scale multivariate glyph map. Four scales share one glyph specification,
 which is the whole design:
 
-| Module        | Role                                                            |
-| ------------- | --------------------------------------------------------------- |
-| `index.js`    | controller: state, layer rebuilds, drill-down, basemap retint   |
-| `measures.js` | **the registry** — scales, class families, measures, filters    |
-| `data.js`     | DuckDB session, per-level queries, lazy boundary fetch          |
-| `glyph.js`    | cell summaries + canvas drawing for all three glyph modes       |
-| `layers.js`   | screengrid layer factories, boundary fill/line, point circles   |
-| `ui.js`       | rail, scale ladder, legend, tooltip, inspector                  |
-| `icons.js`    | inlined Phosphor SVGs (MIT). **Not Lucide** — deliberate choice |
+| Module        | Role                                                                 |
+| ------------- | -------------------------------------------------------------------- |
+| `index.js`    | controller: state, layer rebuilds, drill-down, search actions        |
+| `measures.js` | **the registry** — scales, sizing, class families, measures, filters |
+| `data.js`     | DuckDB session, per-level queries, lazy boundary fetch               |
+| `glyph.js`    | cell summaries + canvas drawing for all three glyph modes            |
+| `layers.js`   | screengrid layer factories, boundary fill/line, point circles        |
+| `basemaps.js` | backdrop registry + the Positron retint                              |
+| `search.js`   | in-memory name index over cooperatives and areas                     |
+| `ui.js`       | rail, ladder, legend, tooltip, inspector, search, basemap pill       |
+| `icons.js`    | inlined Phosphor SVGs (MIT). **Not Lucide** — deliberate choice      |
 
 Chrome lives in `app/explore.css`, not `site.css`: a control rail is a denser
 instrument (13 px, tabular numerals) than the 17 px/68ch reading pages.
@@ -319,11 +321,44 @@ explicit **"regangkan skala"** toggle, off by default, because several measures
 sit in a narrow high band (96.5 % of cooperatives report nothing) where an
 absolute ramp shows nothing; the legend prints the moved bounds when it is on.
 
+**View-level controls sit over the canvas** (`#search`, `#basemaps`), not in the
+rail: the rail is for what the data says, the canvas for how you look at it.
+
+- **Search** (`search.js`) indexes cooperative names plus the three
+  administrative levels, derived from the points already in memory — no extra
+  query, and area entries carry the admin id so a hit resolves to the exact
+  aggregate row. Picking a cooperative flies to it and turns the point layer on;
+  picking an area switches the ladder to that scale and opens its inspector.
+- **Basemaps** (`basemaps.js`): Terang (retinted Positron), Detail (Liberty),
+  Satelit. Satellite is **Esri World Imagery**, not Google — Google's `mt*.google.com`
+  tile endpoints are not licensed for third-party embedding, and shipping them
+  in a report that publishes its own provenance is the wrong trade. The licensed
+  Google route is their Map Tiles API with a key; it would slot in as another
+  registry entry. `dark: true` flips boundary lines to white and cooperative
+  dots to yellow-on-charcoal, both invisible over imagery otherwise.
+
+**One size slider, per scale.** `LEVELS[].sizing` drives it: on the grid it sets
+`cellSizePixels`, on an administrative scale it sets the glyph itself (there is
+no cell). Values are kept per scale so switching away and back does not lose the
+adjustment, and `state.sizing` is mutated in place and read on every draw, so
+dragging does not rebuild the layer.
+
 **Gotchas that cost time:**
 
-- `cooperative_id` is BIGINT → JS BigInt → MapLibre throws "Do not know how to
-  serialize a BigInt" on any GeoJSON source. `data.js` casts wide integers at
-  the query boundary; keep doing that for anything new.
+- `cooperative_id` and `admin_id` are BIGINT → JS BigInt → MapLibre throws "Do
+  not know how to serialize a BigInt" on any GeoJSON source, and a BigInt is
+  never `===` a plain number, which silently breaks search-result matching and
+  feature-state keys. `data.js` casts wide integers at the query boundary; keep
+  doing that for anything new.
+- **`render()` is guarded by a `generation` counter.** It awaits in three places
+  (level query, boundary fetch, style swap), so clicking quickly puts two
+  renders in flight; without the guard the older one adds its layers into the
+  newer one's style and throws on the duplicate layer id. Any new `await` inside
+  a render path needs a `if (token !== generation) return;` after it.
+- `map.setStyle()` destroys every layer _and_ source, the custom screengrid
+  layer included. `setBasemap` resets the bookkeeping (`state.glyphLayer`,
+  `clearBoundaryState()`) before rebuilding, or the rebuild updates sources that
+  no longer exist.
 - `loadLevel` orders `cooperatives ASC` on purpose. `feature-anchors` draws in
   source order with no depth sorting, so descending order lets small glyphs
   overpaint big ones around Java.

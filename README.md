@@ -171,9 +171,23 @@ when they are inert). Clicking any glyph opens an inspector with the full
 profile against the national figure, the medians the glyph deliberately does not
 encode, and a button to drop one rung down the ladder in that area.
 
-Basemap is [OpenFreeMap](https://openfreemap.org) (free, no API key), retinted
-to the report's palette. Icons are [Phosphor](https://phosphoricons.com) (MIT),
-inlined.
+**Search** (top-left, over the map) covers all 83,342 cooperative names and every
+kecamatan, kabupaten and provinsi. Picking an area switches the ladder to that
+scale and opens it; picking a cooperative flies to it, turns the point layer on
+and marks it - which paired with the satellite basemap is how you check whether
+a coordinate lands on anything.
+
+**Basemaps** (bottom-left, over the map): _Terang_ is
+[OpenFreeMap](https://openfreemap.org) Positron retinted to the report's
+palette, _Detail_ is OpenFreeMap Liberty, and _Satelit_ is
+[Esri World Imagery](https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9).
+
+> Satellite imagery is Esri rather than Google on purpose: Google's `mt*.google.com`
+> tile endpoints are not licensed for embedding in another site. If you have a
+> Google Maps Platform key, their Map Tiles API is the licensed route and drops
+> into `app/explore/basemaps.js` as one more entry.
+
+Icons are [Phosphor](https://phosphoricons.com) (MIT), inlined.
 
 ## Known data-quality caveats
 

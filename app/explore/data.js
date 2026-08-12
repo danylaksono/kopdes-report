@@ -87,6 +87,11 @@ export async function loadPoints() {
       cooperative_id::INTEGER AS cooperative_id,
       cooperative,
       province, district, subdistrict, village,
+      -- Admin ids let a search hit on an area name resolve to the exact
+      -- aggregate row, rather than flying to a name and hoping.
+      province_id::INTEGER AS province_id,
+      district_id::INTEGER AS district_id,
+      subdistrict_id::INTEGER AS subdistrict_id,
       longitude, latitude,
       coordinate_suspect,
       ${classCodes},
@@ -143,7 +148,10 @@ export async function loadLevel(levelId) {
   const labels = [level.nameCol, ...level.parentCols];
   const data = await rows(`
     SELECT
-      ${level.key} AS admin_id,
+      -- INTEGER, not the native BIGINT: this id is compared against the ids in
+      -- the search index and used as a MapLibre feature-state key, and a BigInt
+      -- is never === a plain number.
+      ${level.key}::INTEGER AS admin_id,
       ${labels.join(", ")},
       cooperatives::DOUBLE AS cooperatives,
       coordinate_suspect::DOUBLE AS coordinate_suspect,

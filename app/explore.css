@@ -508,6 +508,187 @@
   margin: 0 0 6px;
 }
 
+/* ---- controls over the canvas -------------------------------------------- */
+/* Search and the basemap switcher change how you look at the map, not what it
+   says, so they live here rather than adding two more sections to the rail. */
+
+.map-control {
+  position: absolute;
+  z-index: 7;
+}
+
+.map-control-search {
+  top: 14px;
+  left: 14px;
+  width: min(330px, calc(100% - 28px));
+}
+
+.search-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+  border: 1px solid var(--chrome-line);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+}
+.search-field:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.16);
+}
+.search-field .ic {
+  color: var(--muted);
+}
+
+#search-input {
+  flex: 1;
+  min-width: 0;
+  padding: 9px 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: var(--ctl);
+  color: var(--ink);
+}
+#search-input:focus {
+  outline: none;
+}
+#search-input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.search-clear {
+  display: flex;
+  padding: 4px;
+  border: 0;
+  border-radius: 5px;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+}
+.search-clear:hover {
+  background: var(--chrome-sunken);
+  color: var(--ink);
+}
+
+.search-results {
+  max-height: min(52vh, 420px);
+  margin: 6px 0 0;
+  padding: 4px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  list-style: none;
+  border: 1px solid var(--chrome-line);
+  border-radius: 9px;
+  background: var(--panel);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.16);
+}
+.search-results[hidden] {
+  display: none;
+}
+.search-results li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas: "kind name" "kind parent";
+  gap: 0 8px;
+  padding: 7px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.search-results li.is-active,
+.search-results li:hover {
+  background: var(--chrome-sunken);
+}
+
+.res-kind {
+  grid-area: kind;
+  align-self: center;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #efe9dd;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.res-koperasi {
+  background: #f6e6e6;
+  color: var(--accent);
+}
+.res-name {
+  grid-area: name;
+  font-size: 13px;
+  font-weight: 600;
+}
+.res-parent {
+  grid-area: parent;
+  font-size: 11px;
+  color: var(--muted);
+}
+.search-empty {
+  padding: 10px;
+  font-size: 12px;
+  color: var(--muted);
+  cursor: default;
+}
+
+.map-control-basemaps {
+  left: 14px;
+  bottom: 40px;
+}
+.basemap-pill {
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--chrome-line);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+}
+.basemap-opt {
+  padding: 6px 11px;
+  border: 0;
+  border-radius: 7px;
+  background: none;
+  font: inherit;
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+}
+.basemap-opt:hover {
+  background: var(--chrome-sunken);
+  color: var(--ink);
+}
+.basemap-opt.is-active {
+  background: var(--ink);
+  color: #fff;
+  font-weight: 600;
+}
+.basemap-opt:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+/* Popup marking a searched cooperative. */
+.found b {
+  display: block;
+  font-size: 13px;
+}
+.found span {
+  display: block;
+  margin-top: 2px;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+.found a {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 11.5px;
+}
+
 /* ---- tooltip ------------------------------------------------------------- */
 
 #tip {
@@ -786,12 +967,24 @@
   .rail-title {
     display: none;
   }
-  #inspector {
-    top: 12px;
-    right: 12px;
-    left: 12px;
+  /* The search field keeps the full width it can get; the inspector drops
+     below it so the two never stack on the same strip. */
+  .map-control-search {
+    top: 10px;
+    left: 10px;
+    right: 10px;
     width: auto;
-    max-height: 40vh;
+  }
+  .map-control-basemaps {
+    left: 10px;
+    bottom: 52vh;
+  }
+  #inspector {
+    top: 62px;
+    right: 10px;
+    left: 10px;
+    width: auto;
+    max-height: 36vh;
   }
 }
 

@@ -43,9 +43,16 @@
 // ---------------------------------------------------------------------------
 
 /**
- * The four scales, coarsest last. `count` is filled in at load from the data
- * itself — hardcoding 83.342 here would be a second source of truth that goes
+ * The four scales, coarsest last. Cardinalities are filled in at load from the
+ * manifest — hardcoding 83.342 here would be a second source of truth that goes
  * stale the next time SIMKOPDES is re-scraped.
+ *
+ * `sizing` drives the one slider in the rail, whose meaning changes with the
+ * scale: on the grid it sets the aggregation cell, on an administrative scale
+ * there is no cell to set, only the glyph itself. `ratio` is the fraction of
+ * the maximum envelope that profile mode's uniform box occupies — profile draws
+ * everything at one size, so it has to sit below the size the largest few areas
+ * would otherwise take.
  */
 export const LEVELS = [
   {
@@ -54,6 +61,7 @@ export const LEVELS = [
     note: "Sel layar, dihitung ulang tiap kali peta digeser",
     kind: "grid",
     table: "kopdes_points",
+    sizing: { label: "Ukuran sel", min: 24, max: 120, step: 4, default: 52, ratio: 0.92 },
   },
   {
     id: "kecamatan",
@@ -66,6 +74,7 @@ export const LEVELS = [
     parentCols: ["district", "province"],
     boundaries: "kecamatan",
     minzoom: 6,
+    sizing: { label: "Ukuran grafik", min: 12, max: 64, step: 2, default: 30, ratio: 0.74 },
   },
   {
     id: "kabupaten",
@@ -77,6 +86,7 @@ export const LEVELS = [
     nameCol: "district",
     parentCols: ["province"],
     boundaries: "kabupaten",
+    sizing: { label: "Ukuran grafik", min: 16, max: 90, step: 2, default: 42, ratio: 0.76 },
     // Profile glyphs are a fixed size, so dense areas no longer thin themselves
     // out the way proportional symbols did. 514 anchors at a legible size
     // overlap across Java below about this zoom — the legend says so rather
@@ -94,6 +104,7 @@ export const LEVELS = [
     nameCol: "province",
     parentCols: [],
     boundaries: "provinsi",
+    sizing: { label: "Ukuran grafik", min: 24, max: 140, step: 4, default: 70, ratio: 0.74 },
   },
 ];
 

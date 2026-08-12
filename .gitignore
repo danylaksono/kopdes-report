@@ -66,3 +66,6 @@ Thumbs.db
 
 # --- local tool config ---
 .claude/settings.local.json
+# Browser-automation scratch output (screenshots, console logs) written into the
+# working directory when the app is driven for a visual check.
+.playwright-mcp/

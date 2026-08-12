@@ -8,13 +8,16 @@
  */
 
 import { LEVELS, LEVEL_BY_ID, FILTERS, FILTER_DEFAULTS, MEASURES, PROFILE } from "./measures.js";
+import { BASEMAPS, BASEMAP_BY_ID, tintBasemap } from "./basemaps.js";
 import { loadBoundaries, loadLevel, loadManifest, loadPoints } from "./data.js";
 import { identity, makeSpec, summarizeCell } from "./glyph.js";
+import { buildIndex, search } from "./search.js";
 import {
   BOUNDARY_FILL,
   BOUNDARY_LINE,
   GLYPH_LAYER,
   POINTS_LAYER,
+  clearBoundaryState,
   createAnchorLayer,
   createGridLayer,
   removeBoundaries,
@@ -32,6 +35,8 @@ const els = {
   tip: document.getElementById("tip"),
   inspector: document.getElementById("inspector"),
   status: document.getElementById("status"),
+  search: document.getElementById("search"),
+  basemaps: document.getElementById("basemaps"),
 };
 
 const state = {
@@ -40,13 +45,21 @@ const state = {
   measure: "road_far",
   family: "road",
   stretch: false,
-  cellSizePixels: 52,
+  basemap: "terang",
   showPoints: false,
   showBoundaries: true,
   filters: { ...FILTER_DEFAULTS },
 
+  // One size per scale, so switching away and back does not lose the
+  // adjustment. Seeded from each level's own `sizing.default`.
+  sizePx: Object.fromEntries(LEVELS.map((l) => [l.id, l.sizing.default])),
+  // Mutated in place and read on every draw, so dragging the slider on an
+  // administrative scale does not rebuild the layer.
+  sizing: { maxPx: 70, uniformPx: 52 },
+
   rows: [],
   filtered: [],
+  index: [],
   levels: new Map(), // levelId -> FeatureCollection of anchors
   counts: {},
   national: null,
@@ -55,9 +68,20 @@ const state = {
   selection: null,
 };
 
+const isDark = () => BASEMAP_BY_ID[state.basemap].dark === true;
+
+/** Keep `state.sizing` in step with the slider value for the current scale. */
+function syncSizing() {
+  const level = LEVEL_BY_ID[state.level];
+  const px = state.sizePx[level.id];
+  state.sizing.maxPx = px;
+  state.sizing.uniformPx = Math.round(px * level.sizing.ratio);
+  return px;
+}
+
 const map = new maplibregl.Map({
   container: "map",
-  style: "https://tiles.openfreemap.org/styles/positron",
+  style: BASEMAP_BY_ID[state.basemap].style,
   center: [117.5, -2.2],
   zoom: 4.3,
   minZoom: 3.4,
@@ -70,32 +94,29 @@ map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "bottom
 map.addControl(new maplibregl.ScaleControl({ maxWidth: 110, unit: "metric" }), "bottom-left");
 
 /**
- * Bring Positron into the report's palette.
+ * Swap the backdrop.
  *
- * Positron's cool greys are a fine general-purpose basemap and a poor backdrop
- * for this one: the glyphs are warm ochres and reds on cream chrome, and a
- * blue-grey sea makes the page look like two publications stapled together.
- * Retinting land and water to the paper family costs three paint properties and
- * makes the map belong to the article around it.
- *
- * Contrast between land and water is kept wide enough to read a coastline
- * without the sea competing with the data — which is the one thing a basemap
- * under 83.000 glyphs must not do.
+ * `setStyle` discards every layer and source on the map, the custom screengrid
+ * layer included, so this is a teardown and a full rebuild rather than a paint
+ * change. All the bookkeeping that points at destroyed objects has to be reset
+ * before `render()` runs, or the rebuild will try to update sources that are no
+ * longer there.
  */
-function tintBasemap() {
-  const tints = [
-    ["background", "background-color", "#f7f4ed"],
-    ["water", "fill-color", "#dfd9cc"],
-    ["waterway", "line-color", "#cfc8b9"],
-    ["park", "fill-color", "#eeeee2"],
-    ["landcover_wood", "fill-color", "#e9e9dc"],
-    ["landuse_residential", "fill-color", "#efece3"],
-  ];
-  for (const [layer, prop, value] of tints) {
-    // Styles change upstream; a missing layer should tint what it can and move
-    // on rather than take the map down.
-    if (map.getLayer(layer)) map.setPaintProperty(layer, prop, value);
-  }
+async function setBasemap(id) {
+  if (state.basemap === id) return;
+  state.basemap = id;
+  const def = BASEMAP_BY_ID[id];
+  const token = ++generation;
+
+  state.glyphLayer = null;
+  clearBoundaryState();
+  ui.updateBasemaps(els.basemaps, id);
+
+  map.setStyle(def.style);
+  await new Promise((resolve) => map.once("styledata", resolve));
+  if (token !== generation) return;
+  if (def.tint) tintBasemap(map);
+  await render(token);
 }
 
 // ---------------------------------------------------------------------------
@@ -146,37 +167,30 @@ function restack() {
   }
 }
 
-async function rebuildGlyphs() {
+async function rebuildGlyphs(token) {
   removeGlyphs(map, state.glyphLayer);
   state.glyphLayer = null;
 
   const level = LEVEL_BY_ID[state.level];
   const spec = currentSpec();
+  const px = syncSizing();
 
   if (level.kind === "grid") {
     state.glyphLayer = createGridLayer({
       rows: state.filtered,
       spec,
-      cellSizePixels: state.cellSizePixels,
+      cellSizePixels: px,
       onStats: onStats,
       onHover: onHover,
       onClick: onClick,
     });
   } else {
     const collection = await ensureLevel(state.level);
+    if (token !== generation) return;
     state.glyphLayer = createAnchorLayer({
       collection,
       spec,
-      // Provinsi has 38 glyphs over the whole country and can afford to be
-      // large; kecamatan has 7.235 and would turn into a solid sheet at that
-      // size, so the envelope shrinks as the unit gets finer. These are sized
-      // against Java, where the anchors are closest together — anywhere else
-      // has room to spare.
-      maxPx: level.id === "provinsi" ? 70 : level.id === "kabupaten" ? 42 : 30,
-      // Profile mode draws every glyph at this one size. Smaller than the
-      // envelope above, because nothing shrinks any more: what was the size of
-      // the largest few areas would now be the size of all of them.
-      uniformPx: level.id === "provinsi" ? 52 : level.id === "kabupaten" ? 32 : 22,
+      sizing: state.sizing,
       onStats: onStats,
       onHover: onHover,
       onClick: onClick,
@@ -194,7 +208,7 @@ async function ensureLevel(levelId) {
   return state.levels.get(levelId);
 }
 
-async function syncBoundaries() {
+async function syncBoundaries(token = generation) {
   const level = LEVEL_BY_ID[state.level];
   const wanted = state.showBoundaries && level.kind === "admin";
   if (!wanted) {
@@ -210,10 +224,11 @@ async function syncBoundaries() {
   try {
     ui.setBoundaryNote(els.rail, "Memuat batas wilayah…");
     const geo = await loadBoundaries(state.level);
-    // The level can change while an 8 MB fetch is in flight; dropping a stale
-    // response is cheaper than cancelling and keeps the map consistent.
-    if (state.level !== level.id || !state.showBoundaries) return;
-    setBoundaries(map, geo, { selectedId: state.selection });
+    // The level or the basemap can change while an 8 MB fetch is in flight;
+    // dropping a stale response is cheaper than cancelling and keeps the map
+    // consistent.
+    if (token !== generation || state.level !== level.id || !state.showBoundaries) return;
+    setBoundaries(map, geo, { selectedId: state.selection, dark: isDark() });
     restack();
     const missing = (state.counts[level.id] ?? 0) - geo.features.length;
     ui.setBoundaryNote(
@@ -230,18 +245,33 @@ async function syncBoundaries() {
 
 function syncPoints() {
   if (!state.showPoints) return removePoints(map);
-  setPoints(map, state.filtered);
+  setPoints(map, state.filtered, { dark: isDark() });
   restack();
 }
 
-async function render() {
+/**
+ * Rebuild everything on the map from `state`.
+ *
+ * Async in three places — the level query, the boundary fetch, the style swap —
+ * so two renders can be in flight at once if someone clicks quickly. `generation`
+ * is the guard: a render that has been superseded stops rather than adding its
+ * layers on top of the newer one's, which otherwise throws on the duplicate
+ * layer id or, worse, silently leaves the map showing a mixture of two states.
+ */
+let generation = 0;
+
+async function render(token = ++generation) {
+  const level = LEVEL_BY_ID[state.level];
   ui.updateLadder(els.rail, state.level, state.counts);
   ui.updateModes(els.rail, state.mode);
-  ui.setCellSizeVisible(els.rail, LEVEL_BY_ID[state.level].kind === "grid");
-  ui.updateFilterBadge(els.rail, changedFilterCount(), LEVEL_BY_ID[state.level].kind === "grid");
+  ui.setSizeControl(els.rail, level.sizing, state.sizePx[level.id]);
+  ui.updateFilterBadge(els.rail, changedFilterCount(), level.kind === "grid");
   ui.updateCount(els.rail, state.filtered.length);
-  await rebuildGlyphs();
-  await syncBoundaries();
+
+  await rebuildGlyphs(token);
+  if (token !== generation) return;
+  await syncBoundaries(token);
+  if (token !== generation) return;
   syncPoints();
   refreshLegend();
 }
@@ -330,6 +360,79 @@ function setLevel(levelId) {
 }
 
 // ---------------------------------------------------------------------------
+// Search
+// ---------------------------------------------------------------------------
+
+/**
+ * Go to whatever was picked.
+ *
+ * A cooperative is a place: fly to it, turn the point layer on so there is
+ * something to see when you arrive, and mark it. An area is a scale: switch the
+ * ladder to that scale, fly to it, and open its inspector — which is the same
+ * thing clicking its glyph would have done.
+ */
+async function gotoResult(entry) {
+  if (entry.kind === "koperasi") {
+    if (!state.showPoints) {
+      state.showPoints = true;
+      els.rail.querySelector("#toggle-points").checked = true;
+      syncPoints();
+    }
+    map.easeTo({ center: [entry.lon, entry.lat], zoom: 16, duration: 900 });
+    closeInspector();
+    showFoundPoint(entry);
+    return;
+  }
+
+  const wasLevel = state.level;
+  state.level = entry.kind;
+  closeInspector();
+  if (wasLevel !== entry.kind) await render();
+
+  const collection = await ensureLevel(entry.kind);
+  const feature = collection.features.find((f) => f.properties.admin_id === entry.id);
+  const target = feature
+    ? feature.geometry.coordinates
+    : [entry.lon, entry.lat];
+  map.easeTo({
+    center: target,
+    zoom: entry.kind === "provinsi" ? 6.4 : entry.kind === "kabupaten" ? 8.4 : 10.4,
+    duration: 900,
+  });
+  if (feature) {
+    onClick({
+      kind: "admin",
+      count: feature.properties.cooperatives ?? 0,
+      rows: null,
+      summary: null,
+      props: feature.properties,
+    });
+  }
+}
+
+let foundMarker = null;
+
+/** Mark the searched cooperative, since one dot among 83.000 is easy to lose. */
+function showFoundPoint(entry) {
+  foundMarker?.remove();
+  const r = entry.row ?? {};
+  foundMarker = new maplibregl.Popup({ closeOnClick: false, offset: 12 })
+    .setLngLat([entry.lon, entry.lat])
+    .setHTML(
+      `<div class="found">
+         <b>${ui.escapeHtml(entry.name)}</b>
+         <span>${ui.escapeHtml([r.subdistrict, r.district, r.province].filter(Boolean).join(", "))}</span>
+         ${
+           r.imagery_url
+             ? `<a href="${ui.escapeHtml(r.imagery_url)}" target="_blank" rel="noopener">Lihat citra satelit ↗</a>`
+             : ""
+         }
+       </div>`,
+    )
+    .addTo(map);
+}
+
+// ---------------------------------------------------------------------------
 // Boot
 // ---------------------------------------------------------------------------
 
@@ -368,14 +471,29 @@ const handlers = {
 };
 
 async function boot() {
-  tintBasemap();
+  if (BASEMAP_BY_ID[state.basemap].tint) tintBasemap(map);
+
+  ui.renderBasemaps(els.basemaps, BASEMAPS, state.basemap, setBasemap);
+  ui.renderSearch(els.search, {
+    onQuery: (q) => search(state.index, q),
+    onPick: gotoResult,
+  });
+
   ui.renderRail(els.rail, {
     ...handlers,
-    cellSize: (px) => {
-      state.cellSizePixels = px;
-      // A slider drag is the one interaction fast enough to need the in-place
-      // update rather than a rebuild.
-      state.glyphLayer?.setConfig?.({ cellSizePixels: px });
+    size: (px) => {
+      const level = LEVEL_BY_ID[state.level];
+      state.sizePx[level.id] = px;
+      syncSizing();
+      // A slider drag is the one interaction that has to stay in-place rather
+      // than rebuild. On the grid that means the cell size; on an anchor layer
+      // the draw already reads `state.sizing` every frame, and only the hit
+      // radius — which derives from anchorSizePixels — needs telling.
+      state.glyphLayer?.setConfig?.(
+        level.kind === "grid"
+          ? { cellSizePixels: px }
+          : { anchorSizePixels: state.sizing.maxPx },
+      );
       map.triggerRepaint();
     },
     points: (on) => {
@@ -398,6 +516,7 @@ async function boot() {
     status("Memuat data koperasi…");
     const [manifest, rows] = await Promise.all([loadManifest(), loadPoints()]);
     state.rows = rows;
+    state.index = buildIndex(rows);
     ui.renderFoot(els.rail, manifest);
 
     // Scale cardinalities come from the manifest, which the mart builder writes

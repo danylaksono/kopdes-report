@@ -35,6 +35,170 @@ export function escapeHtml(s) {
 }
 
 // ---------------------------------------------------------------------------
+// Controls that live over the map canvas
+// ---------------------------------------------------------------------------
+//
+// These change *how you look at the data*, not what the data says. The rail is
+// for scale, encoding, measures and filters; search and the basemap belong to
+// the view, and putting them here keeps the rail from growing a fifth section
+// nobody can reach without scrolling.
+
+const KIND_LABEL = {
+  koperasi: "Koperasi",
+  kecamatan: "Kecamatan",
+  kabupaten: "Kabupaten / kota",
+  provinsi: "Provinsi",
+};
+
+/**
+ * Typeahead over cooperative and area names.
+ *
+ * `onQuery` returns results synchronously — the index is in memory — so there is
+ * no loading state and no race to manage. Keyboard handling is the part worth
+ * getting right: arrows move, Enter picks, Escape closes without clearing, so
+ * the field stays usable without the mouse.
+ */
+export function renderSearch(root, { onQuery, onPick }) {
+  root.innerHTML = `
+    <div class="search-field">
+      ${icon("target", 15)}
+      <input id="search-input" type="search" autocomplete="off" spellcheck="false"
+             placeholder="Cari koperasi atau wilayah…"
+             aria-label="Cari koperasi atau wilayah"
+             role="combobox" aria-expanded="false" aria-controls="search-results" />
+      <button class="search-clear" type="button" hidden aria-label="Kosongkan">${icon("close", 13)}</button>
+    </div>
+    <ul class="search-results" id="search-results" role="listbox" hidden></ul>`;
+
+  const input = root.querySelector("#search-input");
+  const list = root.querySelector("#search-results");
+  const clear = root.querySelector(".search-clear");
+  let results = [];
+  let active = -1;
+
+  function close() {
+    list.hidden = true;
+    input.setAttribute("aria-expanded", "false");
+    active = -1;
+  }
+
+  function paint() {
+    if (!results.length) {
+      list.innerHTML = `<li class="search-empty">Tidak ada yang cocok.</li>`;
+      list.hidden = false;
+      input.setAttribute("aria-expanded", "true");
+      return;
+    }
+    list.innerHTML = results
+      .map(
+        (r, i) => `
+        <li role="option" data-i="${i}" aria-selected="${i === active}"
+            class="${i === active ? "is-active" : ""}">
+          <span class="res-kind res-${r.kind}">${escapeHtml(KIND_LABEL[r.kind])}</span>
+          <span class="res-name">${escapeHtml(r.name)}</span>
+          <span class="res-parent">${escapeHtml(
+            r.kind === "koperasi" ? r.parent : `${fmtId(r.count)} koperasi · ${r.parent}`,
+          )}</span>
+        </li>`,
+      )
+      .join("");
+    list.hidden = false;
+    input.setAttribute("aria-expanded", "true");
+  }
+
+  function run() {
+    clear.hidden = !input.value;
+    results = onQuery(input.value);
+    active = results.length ? 0 : -1;
+    if (!input.value.trim()) return close();
+    paint();
+  }
+
+  // The index scan is a few milliseconds, but a keystroke-per-scan on a 83.000
+  // entry list is still work worth coalescing while someone is mid-word.
+  let timer = null;
+  input.addEventListener("input", () => {
+    clearTimeout(timer);
+    timer = setTimeout(run, 110);
+  });
+
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      if (list.hidden || !results.length) return;
+      e.preventDefault();
+      active = (active + (e.key === "ArrowDown" ? 1 : -1) + results.length) % results.length;
+      paint();
+      list.querySelector(".is-active")?.scrollIntoView({ block: "nearest" });
+    } else if (e.key === "Enter") {
+      if (active >= 0 && results[active]) {
+        e.preventDefault();
+        onPick(results[active]);
+        close();
+        input.blur();
+      }
+    } else if (e.key === "Escape") {
+      close();
+      input.blur();
+    }
+  });
+
+  list.addEventListener("mousedown", (e) => {
+    // mousedown, not click: the input's blur would tear the list down first.
+    const li = e.target.closest("li[data-i]");
+    if (!li) return;
+    e.preventDefault();
+    onPick(results[Number(li.dataset.i)]);
+    close();
+    input.blur();
+  });
+
+  clear.addEventListener("click", () => {
+    input.value = "";
+    clear.hidden = true;
+    close();
+    input.focus();
+  });
+
+  input.addEventListener("focus", () => {
+    if (input.value.trim() && results.length) paint();
+  });
+  document.addEventListener("click", (e) => {
+    if (!root.contains(e.target)) close();
+  });
+
+  return { focus: () => input.focus() };
+}
+
+/** Basemap switcher: a compact pill over the canvas, one button per backdrop. */
+export function renderBasemaps(root, basemaps, current, onPick) {
+  root.innerHTML = `
+    <div class="basemap-pill" role="radiogroup" aria-label="Peta dasar">
+      ${basemaps
+        .map(
+          (b) => `
+        <button class="basemap-opt${b.id === current ? " is-active" : ""}" type="button"
+                role="radio" aria-checked="${b.id === current}"
+                data-basemap="${b.id}" title="${escapeHtml(b.hint)}">
+          ${escapeHtml(b.label)}
+        </button>`,
+        )
+        .join("")}
+    </div>`;
+  root.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-basemap]");
+    if (btn) onPick(btn.dataset.basemap);
+  });
+}
+
+export function updateBasemaps(root, current) {
+  for (const btn of root.querySelectorAll("[data-basemap]")) {
+    const on = btn.dataset.basemap === current;
+    btn.classList.toggle("is-active", on);
+    btn.setAttribute("aria-checked", String(on));
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Rail
 // ---------------------------------------------------------------------------
 
@@ -62,9 +226,10 @@ export function renderRail(root, on) {
           </button>`,
         ).join("")}
       </div>
-      <div class="field" id="cellsize-field">
-        <label for="cellsize">Ukuran sel <span class="field-val" id="cellsize-val"></span></label>
-        <input type="range" id="cellsize" min="24" max="120" step="4" value="52" />
+      <div class="field" id="size-field">
+        <label for="size-range"><span id="size-label">Ukuran sel</span>
+          <span class="field-val" id="size-val"></span></label>
+        <input type="range" id="size-range" min="24" max="120" step="4" value="52" />
       </div>
     </section>
 
@@ -136,12 +301,11 @@ export function renderRail(root, on) {
     if (seg) on.mode(seg.dataset.mode);
   });
 
-  const cellSize = el("#cellsize");
-  cellSize.addEventListener("input", () => {
-    el("#cellsize-val").textContent = `${cellSize.value} px`;
-    on.cellSize(Number(cellSize.value));
+  const size = el("#size-range");
+  size.addEventListener("input", () => {
+    el("#size-val").textContent = `${size.value} px`;
+    on.size(Number(size.value));
   });
-  el("#cellsize-val").textContent = `${cellSize.value} px`;
 
   el("#toggle-points").addEventListener("change", (e) => on.points(e.target.checked));
   el("#toggle-boundaries").addEventListener("change", (e) => on.boundaries(e.target.checked));
@@ -362,8 +526,22 @@ export function setBoundaryNote(root, text) {
   root.querySelector("#boundary-note").textContent = text;
 }
 
-export function setCellSizeVisible(root, visible) {
-  root.querySelector("#cellsize-field").hidden = !visible;
+/**
+ * Point the one size slider at the current scale.
+ *
+ * The control is the same control at every scale; only what it sizes changes —
+ * the aggregation cell on the grid, the glyph itself on an administrative
+ * scale, where there is no cell to speak of. Hiding it above the grid, as it
+ * was, left no way to make 7.235 kecamatan glyphs fit.
+ */
+export function setSizeControl(root, sizing, value) {
+  const input = root.querySelector("#size-range");
+  input.min = String(sizing.min);
+  input.max = String(sizing.max);
+  input.step = String(sizing.step);
+  input.value = String(value);
+  root.querySelector("#size-label").textContent = sizing.label;
+  root.querySelector("#size-val").textContent = `${value} px`;
 }
 
 export function renderFoot(root, manifest) {

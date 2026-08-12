@@ -49,7 +49,11 @@ const POINTS_SOURCE = "kopdes-points-src";
  * encodings of the same data and the larger polygons win on area alone — which
  * is exactly the distortion anchor glyphs avoid.
  */
-export function setBoundaries(map, geojson, { selectedId = null } = {}) {
+export function setBoundaries(map, geojson, { selectedId = null, dark = false } = {}) {
+  // Over imagery a charcoal hairline disappears; over paper a white one does.
+  const line = dark ? "#ffffff" : "#8f8674";
+  const fill = dark ? "#ffffff" : "#6b6255";
+
   if (!map.getSource(BOUNDARY_SOURCE)) {
     map.addSource(BOUNDARY_SOURCE, { type: "geojson", data: geojson, promoteId: "id" });
     map.addLayer({
@@ -61,13 +65,13 @@ export function setBoundaries(map, geojson, { selectedId = null } = {}) {
           "case",
           ["boolean", ["feature-state", "selected"], false],
           "#a00000",
-          "#6b6255",
+          fill,
         ],
         "fill-opacity": [
           "case",
           ["boolean", ["feature-state", "selected"], false],
           0.15,
-          0.05,
+          dark ? 0.03 : 0.05,
         ],
       },
     });
@@ -79,8 +83,8 @@ export function setBoundaries(map, geojson, { selectedId = null } = {}) {
         "line-color": [
           "case",
           ["boolean", ["feature-state", "selected"], false],
-          "#a00000",
-          "#8f8674",
+          dark ? "#ff5a5a" : "#a00000",
+          line,
         ],
         "line-width": [
           "case",
@@ -88,7 +92,7 @@ export function setBoundaries(map, geojson, { selectedId = null } = {}) {
           1.8,
           0.8,
         ],
-        "line-opacity": 0.75,
+        "line-opacity": dark ? 0.5 : 0.75,
       },
     });
   } else {
@@ -105,6 +109,17 @@ export function removeBoundaries(map) {
 }
 
 let selectedBoundary = null;
+
+/**
+ * Forget the outlined area without touching the map.
+ *
+ * Needed after a basemap switch: `setStyle` destroys the source, so the id held
+ * here refers to something that no longer exists and clearing it the normal way
+ * would target a dead source.
+ */
+export function clearBoundaryState() {
+  selectedBoundary = null;
+}
 
 /** Outline one admin area, clearing whichever was outlined before. */
 export function setBoundarySelection(map, id) {
@@ -134,7 +149,7 @@ export function setBoundarySelection(map, id) {
  * drawn twice. What this layer is for is the opposite question — where exactly
  * is this one, and does the dot land somewhere plausible.
  */
-export function setPoints(map, rows) {
+export function setPoints(map, rows, { dark = false } = {}) {
   const geojson = {
     type: "FeatureCollection",
     features: rows.map((r) => ({
@@ -154,10 +169,12 @@ export function setPoints(map, rows) {
         // At national zoom 83.000 dots are a smear, so they stay small and
         // translucent and only resolve into individual marks as you go in.
         "circle-radius": ["interpolate", ["linear"], ["zoom"], 4, 1.1, 8, 2.4, 12, 4.5, 16, 7],
-        "circle-color": "#1a1a1a",
-        "circle-opacity": ["interpolate", ["linear"], ["zoom"], 4, 0.28, 9, 0.55, 13, 0.8],
+        // Over imagery the dot inverts: a hot dot with a dark halo, which is
+        // what stays visible over both bright roofs and dark canopy.
+        "circle-color": dark ? "#ffd24a" : "#1a1a1a",
+        "circle-opacity": ["interpolate", ["linear"], ["zoom"], 4, 0.28, 9, 0.55, 13, 0.85],
         "circle-stroke-width": ["interpolate", ["linear"], ["zoom"], 9, 0, 12, 1],
-        "circle-stroke-color": "#fff",
+        "circle-stroke-color": dark ? "#1a1a1a" : "#fff",
       },
     });
   } else {
@@ -247,15 +264,13 @@ export function createGridLayer({ rows, spec, cellSizePixels, onStats, onHover, 
  * cooperative sits where the cooperatives actually are, which is the thing
  * being summarised.
  */
-export function createAnchorLayer({
-  collection,
-  spec,
-  maxPx,
-  uniformPx,
-  onStats,
-  onHover,
-  onClick,
-}) {
+/**
+ * @param {{maxPx: number, uniformPx: number}} sizing  read on every draw, so the
+ *   rail's size slider can mutate it in place instead of rebuilding the layer.
+ *   feature-anchors redraws each frame anyway; the only thing that must be told
+ *   separately is `anchorSizePixels`, because hit-testing derives from it.
+ */
+export function createAnchorLayer({ collection, spec, sizing, onStats, onHover, onClick }) {
   const counts = collection.features.map((f) => f.properties.cooperatives || 0);
   const reference = sizeReference(counts);
   const measure = spec.measures[0];
@@ -277,7 +292,7 @@ export function createAnchorLayer({
     placement: { strategy: "point" },
     // Uniform envelope; the per-glyph size comes from the count inside
     // onDrawCell, because feature-anchors draws every anchor at one size.
-    anchorSizePixels: maxPx,
+    anchorSizePixels: sizing.maxPx,
     enableGlyphs: true,
 
     onDrawCell: (ctx, x, y, _norm, cell) => {
@@ -286,7 +301,7 @@ export function createAnchorLayer({
       drawGlyph(ctx, x, y, summarizeAnchor(props, spec), {
         spec,
         domain,
-        size: sizeFor(spec, props.cooperatives, reference, maxPx, uniformPx),
+        size: sizeFor(spec, props.cooperatives, reference, sizing.maxPx, sizing.uniformPx),
         hovered: cell.isHovered === true,
       });
     },
