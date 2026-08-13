@@ -4,11 +4,11 @@ Seberapa jauh koperasi dari jalan? Untuk sekitar 4,5 juta segmen jalan nasional,
 
 ## Yang kami temukan
 
-**6,1% koperasi (5.106) tidak punya jalan beraspal dalam sekitar 5 km; 4.294 di antaranya tidak punya jalan sama sekali** — bahkan jalan setapak. Separuh dari kelompok terakhir ini berjarak lebih dari 9,7 km dari jalan beraspal, dan yang terjauh lebih dari 100 km (diukur dengan tepat di lampiran 08).
+**6,1% koperasi (5.106) tidak punya jalan beraspal dalam sekitar 5 km; 4.294 di antaranya tidak punya jalan sama sekali**, bahkan jalan setapak. Separuh dari kelompok terakhir ini berjarak lebih dari 9,7 km dari jalan beraspal, dan yang terjauh lebih dari 100 km (diukur dengan tepat di lampiran 08).
 
 <figure class="figure">
   <img src="../_figures/05-road.svg" alt="Sebaran jarak koperasi ke jalan beraspal: sebagian besar sangat dekat; ekor merah 6,1 persen tidak punya jalan beraspal dalam sekitar 5 km." />
-  <figcaption>Sebagian besar koperasi justru sangat dekat dengan jalan. Ekornya — 6,1%, batang merah — adalah yang menjadi perhatian.</figcaption>
+  <figcaption>Sebagian besar koperasi justru sangat dekat dengan jalan. Ekornya, 6,1% (batang merah), adalah yang menjadi perhatian.</figcaption>
 </figure>
 
 | Jarak ke jalan beraspal terdekat  | Koperasi  | Bagian   |
@@ -21,7 +21,7 @@ Seberapa jauh koperasi dari jalan? Untuk sekitar 4,5 juta segmen jalan nasional,
 | &lt; ±5 km                        | 5.506     | 6,6%     |
 | **&gt; ±5 km atau tak ditemukan** | **5.106** | **6,1%** |
 
-Angka ini diperkuat oleh sumber yang berdiri sendiri. Dari koperasi yang tanpa jalan, 87,4% juga berada di petak tanpa penduduk tercatat — padahal rata-rata nasionalnya 21,3%. Dua sumber dengan metode berbeda setuju, dan itu bukti terkuat di sini.
+Angka ini diperkuat oleh sumber yang berdiri sendiri. Dari koperasi yang tanpa jalan, 87,4% juga berada di petak tanpa penduduk tercatat, padahal rata-rata nasionalnya 21,3%. Dua sumber dengan metode berbeda setuju, dan itu bukti terkuat di sini.
 
 Geografinya persis seperti yang diduga kritikus: di Papua Selatan 71% koperasi jauh dari jalan; di Jawa Tengah, Jawa Barat, dan DI Yogyakarta angkanya 1% atau kurang.
 
@@ -39,6 +39,6 @@ Geografinya persis seperti yang diduga kritikus: di Papua Selatan 71% koperasi j
 
 ## Yang tidak bisa kami katakan
 
-Peta jalan yang kami pakai (OpenStreetMap) sangat baik di Jawa dan lebih tipis di pedalaman Papua — tepat di tempat temuannya terkonsentrasi. Karena itu klaim yang jujur adalah "tidak ada jalan **yang terpetakan** dalam 5 km", dan setiap angka di sini adalah batas atas keterjangkauan.
+Peta jalan yang kami pakai (OpenStreetMap) sangat baik di Jawa dan lebih tipis di pedalaman Papua, tepat di tempat temuannya terkonsentrasi. Karena itu klaim yang jujur adalah "tidak ada jalan **yang terpetakan** dalam 5 km", dan setiap angka di sini adalah batas atas keterjangkauan.
 
 Jarak juga diukur garis lurus, bukan jarak tempuh: sungai atau punggung bukit di antara titik dan jalan tidak terlihat. Angka ini sebaiknya dikutip dalam rentang, bukan sampai tiga desimal.

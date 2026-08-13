@@ -3,14 +3,14 @@
 Generate the /methods/ appendix pages.
 
 The public-facing method pages are hand-written, plain-language Indonesian
-markdown in methods/_content/NN-slug.md — no code, no jargon, the same register
+markdown in methods/_content/NN-slug.md, no code, no jargon, the same register
 as the rest of the report site. Each generated shell fetches that file at
 runtime and renders it with app/site.js, so the content lives in exactly one
 place.
 
 The authoritative technical reports stay in reports/NN-slug/README.md (English,
-with code, raw data and reproducibility instructions) and are linked — not
-embedded — from each page. That keeps the public page readable while keeping
+with code, raw data and reproducibility instructions) and are linked, not
+embedded, from each page. That keeps the public page readable while keeping
 every number traceable for anyone who wants to re-run the work.
 
 Run from the repo root:  python scripts/build_methods_pages.py
@@ -36,7 +36,7 @@ SHELL = """<!doctype html>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>{title} — Metode</title>
+  <title>{title} · Metode</title>
   <link rel="stylesheet" href="../../app/site.css" />
 </head>
 <body data-root="../../">
@@ -117,24 +117,24 @@ ID_LEDE = {
     ),
     "05-road-access": (
         "Seberapa jauh koperasi dari jalan? Kami mengukur jarak setiap koperasi "
-        "ke jalan terdekat di peta nasional \u2014 dan memisahkan jalan beraspal "
+        "ke jalan terdekat di peta nasional, dan memisahkan jalan beraspal "
         "dari jalan tanah."
     ),
     "06-minimarket-proximity": (
         "Apakah koperasi dibangun di atas minimarket yang sudah ada? Datanya "
-        "tidak sempurna, jadi kami katakan kelemahannya lebih dulu \u2014 lalu "
+        "tidak sempurna, jadi kami katakan kelemahannya lebih dulu, lalu "
         "mengujinya dengan lokasi acak yang sebanding."
     ),
     "07-landuse-polygons": (
         "Dua tuduhan yang tak terlihat analisis lain: di tanah kuburan dan di "
-        "tengah sawah. Keduanya diuji dengan peta \u2014 dan hasilnya berlawanan arah."
+        "tengah sawah. Keduanya diuji dengan peta, dan hasilnya berlawanan arah."
     ),
     "08-exact-geometry": (
         "Jarak yang diukur ulang satu per satu, dan sebuah temuan yang tidak "
         "disengaja: 19 koperasi ternyata tidak berada di Indonesia."
     ),
     "09-external-corroboration": (
-        "Angka resmi pemerintah cocok dengan dashboardnya \u2014 sampai selisih "
+        "Angka resmi pemerintah cocok dengan dashboardnya, sampai selisih "
         "0,04%. Bantahan \u201cwebsitenya belum diperbarui\u201d runtuh."
     ),
     "10-coop-clustering": (
@@ -143,7 +143,7 @@ ID_LEDE = {
     ),
     "11-savings-behaviour": (
         "Apakah anggota benar-benar menabung? Simpanan dibagi menjadi modal "
-        "sekali dan iuran berkala \u2014 dan perbandingan keduanya bercerita."
+        "sekali dan iuran berkala, dan perbandingan keduanya bercerita."
     ),
     "12-product-mix": (
         "Program ini sebenarnya menjual apa? Komposisinya sederhana dan "
@@ -159,7 +159,7 @@ ID_LEDE = {
     ),
     "15-construction-output": (
         "Apakah konstruksi sejalan dengan hasil? Dua fakta struktural perlu "
-        "dinyatakan \u2014 dan kami menahan diri dari klaim sebab-akibat."
+        "dinyatakan, dan kami menahan diri dari klaim sebab-akibat."
     ),
     "16-rat-compliance": (
         "Sebuah koreksi: \u201cRAT nol di semua provinsi\u201d ternyata salah baca "
@@ -167,7 +167,7 @@ ID_LEDE = {
     ),
     "17-building-proximity": (
         "Seberapa jauh koperasi dari rumah terdekat? Kami mengukur hal yang "
-        "harfiah \u2014 dan menahan diri untuk tidak membaca \u201ctidak "
+        "harfiah, dan menahan diri untuk tidak membaca \u201ctidak "
         "terpetakan\u201d sebagai \u201ctidak ada\u201d."
     ),
     "18-health-scoring": (
@@ -182,12 +182,12 @@ ID_SUMMARY = {
         "berjarak empat hari. Dari 80.553 desa yang nihil transaksi pada 5 Agustus, "
         "hanya satu yang melaporkan aktivitas pada 9 Agustus. Sistem ini tidak "
         "sedang aktif diisi. (Pada 13 Agustus, 209 desa baru mulai melaporkan "
-        "\u2014 jadi bacaan ini hanya berlaku untuk jendela itu.)"
+        ", jadi bacaan ini hanya berlaku untuk jendela itu.)"
     ),
     "02-zero-inflation": (
         "Berapa banyak data kinerja yang benar-benar nol? Ternyata hampir semuanya: "
         "hanya 3,3% desa yang melaporkan transaksi, dan nilainya terkonsentrasi "
-        "ekstrem — 100 desa membawa 34,8% dari seluruh nilai nasional. Kolom "
+        "ekstrem: 100 desa membawa 34,8% dari seluruh nilai nasional. Kolom "
         "administrasi (rekening, NPWP) hampir penuh; kolom aktivitas nyaris kosong."
     ),
     "03-population-coverage": (
@@ -213,29 +213,29 @@ ID_SUMMARY = {
         "Apakah koperasi dibangun di atas minimarket? Setelah memperhitungkan "
         "bahwa keduanya sama-sama suka berada di jalan utama daerah ramai, "
         "minimarket sekitar 9,6 poin lebih mungkin punya koperasi dalam 500 m "
-        "daripada lokasi acak yang sebanding \u2014 tetapi kelebihannya hilang pada "
+        "daripada lokasi acak yang sebanding, tetapi kelebihannya hilang pada "
         "jarak 2 km. Kedekatan ini nyata tapi sedang; bukan bukti persaingan dagang."
     ),
     "07-landuse-polygons": (
         "Di atas sawah atau kuburan? Koperasi \u201ctercatat\u201d di sawah 2,4 kali "
         "lebih sering dari biasanya (448 kasus dikonfirmasi oleh dua sumber peta "
-        "independen). Klaim \u201cdi kuburan\u201d tidak terbukti — hanya 22 kasus. "
-        "Penting: \u201ctercatat di\u201d belum tentu \u201cdibangun di\u201d — "
+        "independen). Klaim \u201cdi kuburan\u201d tidak terbukti, hanya 22 kasus. "
+        "Penting: \u201ctercatat di\u201d belum tentu \u201cdibangun di\u201d; "
         "koordinatnya bisa saja salah."
     ),
     "08-exact-geometry": (
         "Berapa jauh sebenarnya? Untuk koperasi yang paling terpencil, jarak ke "
         "jalan diukur ulang dengan teliti: separuhnya lebih dari 9,7 km, dan 16 "
         "koperasi lebih dari 100 km. Laporan ini juga menemukan 19 koperasi di "
-        "luar Indonesia \u2014 koordinat mustahil \u2014 dan mengoreksi angka "
+        "luar Indonesia, dengan koordinat mustahil, dan mengoreksi angka "
         "laporan 04 dan 05. Catatan 13-08-2026: pemerintah telah mengoreksi "
         "ke-19 koordinat itu."
     ),
     "09-external-corroboration": (
         "Apakah angka pemerintah cocok dengan angka kami? Nyaris persis: media "
         "melaporkan Rp 179,72 miliar, kami Rp 179,79 miliar. Laporan ini pula yang "
-        "meluruskan klaim \u201c179,5 triliun\u201d yang pernah beredar \u2014 termasuk "
-        "di catatan perencanaan kami sendiri \u2014 yang benar adalah miliar, "
+        "meluruskan klaim \u201c179,5 triliun\u201d yang pernah beredar, termasuk "
+        "di catatan perencanaan kami sendiri; yang benar adalah miliar, "
         "keliru 1000\u00d7."
     ),
     "10-coop-clustering": (
@@ -247,7 +247,7 @@ ID_SUMMARY = {
     ),
     "11-savings-behaviour": (
         "Apakah anggota benar-benar menabung? Hanya 12,5% desa melaporkan simpanan "
-        "apa pun — dan di yang ada, uangnya adalah modal awal (sekali setor saat "
+        "apa pun, dan di yang ada, uangnya adalah modal awal (sekali setor saat "
         "didirikan), bukan tabungan berjalan: median iuran wajib hanya 0,28\u00d7 "
         "modal pokok."
     ),
@@ -265,7 +265,7 @@ ID_SUMMARY = {
     "14-island-comparison": (
         "Program ini milik Jawa atau Indonesia? Jawa punya 30% koperasi tetapi "
         "sekitar 60% nilai transaksi; Papua 8,5% koperasi dan sekitar 0,6% nilai. "
-        "Ekor keterpencilan, verifikasi lahan yang minim, dan aktivitas yang senyap — "
+        "Ekor keterpencilan, verifikasi lahan yang minim, dan aktivitas yang senyap, "
         "semuanya tinggal di Indonesia timur."
     ),
     "15-construction-output": (
@@ -275,7 +275,7 @@ ID_SUMMARY = {
         "bisa dibaca sebagai sebab-akibat."
     ),
     "16-rat-compliance": (
-        "Apakah koperasi benar-benar menggelar rapat anggota tahunan (RAT)? Ya \u2014 "
+        "Apakah koperasi benar-benar menggelar rapat anggota tahunan (RAT)? Ya, "
         "60% koperasi tercatat telah melaksanakan RAT per 5 Agustus 2026, tetapi hanya "
         "6% di Papua Pegunungan. Temuan awal yang menyebut \u201cRAT nol di semua "
         "provinsi\u201d keliru karena salah membaca kolom data."
@@ -291,7 +291,7 @@ ID_SUMMARY = {
         "Apa arti \u201cindeks kesehatan\u201d koperasi? Label \u201ctidak sehat di semua "
         "provinsi\u201d adalah artefak: kolomnya konstan (30) di 38 provinsi, jadi tidak "
         "boleh dikutip. Indeks sungguhan (50\u201357) hanya dihitung untuk 38% "
-        "koperasi \u2014 62% tidak pernah dinilai \u2014 dan di antara yang dinilai, 91% "
+        "koperasi, 62% tidak pernah dinilai, dan di antara yang dinilai, 91% "
         "tetap \u201ctidak sehat\u201d. Indeks ini lebih mencerminkan kelengkapan data "
         "dan kepatuhan administrasi daripada kesehatan yang independen."
     ),
@@ -323,7 +323,7 @@ INDEX_HEAD = """<!doctype html>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Metode — lampiran</title>
+  <title>Metode · lampiran</title>
   <link rel="stylesheet" href="../app/site.css" />
 </head>
 <body data-root="../">
@@ -333,7 +333,7 @@ INDEX_HEAD = """<!doctype html>
     <h1>Metode: bagaimana setiap angka diperoleh</h1>
     <p class="lede">Setiap klaim di situs ini bisa ditelusuri ke salah satu
       halaman di bawah. Tiap halaman menjelaskan dalam bahasa sederhana: dari
-      mana datanya, bagaimana kami mengolahnya, apa yang kami temukan — dan apa
+      mana datanya, bagaimana kami mengolahnya, apa yang kami temukan, dan apa
       yang tidak bisa kami katakan. Laporan teknis lengkap (bahasa Inggris,
       dengan data mentah dan cara menjalankan ulang) ditautkan di tiap halaman
       bagi siapa pun yang ingin memeriksa pekerjaan kami.</p>
@@ -397,7 +397,7 @@ def main() -> None:
         if content.exists():
             print(f"  content: {content.relative_to(ROOT)}")
         else:
-            print(f"  warning: no {content.relative_to(ROOT)} — page will be thin")
+            print(f"  warning: no {content.relative_to(ROOT)}; page will be thin")
 
         out = METHODS / slug / "index.html"
         out.parent.mkdir(parents=True, exist_ok=True)

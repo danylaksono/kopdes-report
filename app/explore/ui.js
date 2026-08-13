@@ -396,7 +396,7 @@ export function renderModeDetail(root, state, on) {
   if (state.mode === "profile") {
     slot.innerHTML = `<p class="switch-note">Empat batang tetap: tiga ukuran
       keterpencilan (penduduk, jalan, rumah) dan satu ukuran persaingan
-      (koperasi terdekat). Makin tinggi, makin bermasalah — dan semua gliph
+      (koperasi terdekat). Makin tinggi, makin bermasalah, dan semua gliph
       berukuran sama, jadi tingginya bisa langsung dibandingkan.</p>`;
     return;
   }
@@ -493,7 +493,7 @@ export function renderLegend(root, state, stats, national) {
           .map(
             (c, i) =>
               `<span style="background:${c.color};flex:${Math.max(parts?.[i] ?? 1, 0.6)}"
-                     title="${escapeHtml(c.label)} — ${pctText(parts?.[i])}"></span>`,
+                     title="${escapeHtml(c.label)}: ${pctText(parts?.[i])}"></span>`,"
           )
           .join("")}
       </div>
@@ -532,7 +532,7 @@ export function renderLegend(root, state, stats, national) {
       <p class="legend-note">${
         stretched
           ? `Skala diregangkan ke rentang yang benar-benar muncul di skala ini.
-             Bandingkan hanya di dalam satu tampilan — ujung skala berpindah
+             Bandingkan hanya di dalam satu tampilan. Ujung skala berpindah
              saat skala atau ukuran diganti.`
           : `Skala tetap 0–100%, jadi warna tidak berubah arti saat peta digeser.`
       }${nat == null ? "" : ` Garis = angka nasional (${pctText(nat)}).`}</p>`;
@@ -603,9 +603,9 @@ export function renderFoot(root, manifest) {
   root.querySelector("#rail-foot").innerHTML = `
     <p>Ekspor SIMKOPDES ${escapeHtml(manifest?.source_snapshot?.match(/\d{4}-\d{2}-\d{2}/)?.[0] ?? "")} ·
       ${fmtId(manifest?.coverage?.cooperatives)} koperasi.</p>
-    <p>Nol transaksi berarti <em>belum melapor</em>, bukan tidak aktif —
+    <p>Nol transaksi berarti <em>belum melapor</em>, bukan tidak aktif:
       <a href="../methods/01-snapshot-drift/">metode 01</a>. Jarak dari OSM adalah
-      batas atas — <a href="../methods/05-road-access/">metode 05</a>.</p>`;
+      batas atas: <a href="../methods/05-road-access/">metode 05</a>.</p>`;
 }
 
 // ---------------------------------------------------------------------------
@@ -636,7 +636,7 @@ export function pointPopupHtml(r) {
     <span class="pt-status">${landBadge(r.land_status)}</span>
     ${
       r.coordinate_suspect
-        ? `<span class="pt-suspect">Koordinat janggal — belum tentu lokasi asli</span>`
+        ? `<span class="pt-suspect">Koordinat janggal: belum tentu lokasi asli</span>`
         : ""
     }
     ${
@@ -808,7 +808,7 @@ export function renderInspector(
           .join("")}
       </ul>
       ${rows.length > 6 ? `<p class="ins-caveat">…dan ${fmtId(rows.length - 6)} lainnya.</p>` : ""}
-      <p class="ins-caveat">Nama koperasi belum diverifikasi satu per satu —
+      <p class="ins-caveat">Nama koperasi belum diverifikasi satu per satu;
         lihat <a href="../about/">kebijakan verifikasi</a>.</p>`
       : "";
 

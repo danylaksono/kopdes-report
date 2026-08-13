@@ -31,7 +31,7 @@ const CHART = {
     title: "Pencilan keterpencilan",
     pct: false,
     caption:
-      "Hanya 0,18% koperasi tanpa penduduk dalam 5 km — tetapi itu 146 kasus konkret (laporan 03).",
+      "Hanya 0,18% koperasi tanpa penduduk dalam 5 km, tetapi itu 146 kasus konkret (laporan 03).",
     bars: [
       { label: "Tanpa penduduk 5 km", v: 146, hl: true },
       { label: "< 500 orang", v: 1569 },
@@ -68,7 +68,7 @@ const CHART = {
     title: "Berbagi petak sungguhan",
     pct: true,
     caption:
-      "Hanya 6,8% berbagi sel ±1 km dengan koperasi lain — dan tanpa penalti kinerja (laporan 10).",
+      "Hanya 6,8% berbagi sel ±1 km dengan koperasi lain, dan tanpa penalti kinerja (laporan 10).",
     bars: [
       { label: "Sendiri di selnya", v: 93.2 },
       { label: "≥ 2 di sel yang sama", v: 6.8, hl: true },

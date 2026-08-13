@@ -18,8 +18,8 @@ Di sisi ekonomi, jawabannya jelas: **Jawa punya 30% koperasi tetapi sekitar 60% 
 
 Di sisi penempatan, setiap "ekor" dalam investigasi ini adalah fenomena Indonesia timur. **70,7% koperasi Papua berada di petak tanpa penduduk tercatat** (nasional 21,3%), jarak ke minimarket terdekat median 75 km, dan hanya 3,2% yang lahannya terverifikasi. Jawa kebalikannya: 2,6% di petak kosong, 62,7% lahan terverifikasi.
 
-Tiga klaim utama investigasi ini mengikuti garis yang sama: keterpencilan yang nyata adalah ekor Indonesia timur; kedekatan ritel (kanibalisasi) adalah fenomena Jawa yang padat kota; dan soal anggaran-versus-hasil — uangnya di Jawa, registri kosongnya di Papua.
+Tiga klaim utama investigasi ini mengikuti garis yang sama: keterpencilan yang nyata adalah ekor Indonesia timur; kedekatan ritel (kanibalisasi) adalah fenomena Jawa yang padat kota; dan soal anggaran-versus-hasil: uangnya di Jawa, registri kosongnya di Papua.
 
 ## Yang tidak bisa kami katakan
 
-Kelompok pulau disusun dari nama provinsi, dan angka ekonomi berasal dari file desa yang lengkap sementara angka penempatan berasal dari per-koperasi — keduanya diukur dengan cara berbeda. Jika sebuah angka di sini tidak cocok dengan laporan sumbernya, laporan sumbernya yang benar.
+Kelompok pulau disusun dari nama provinsi, dan angka ekonomi berasal dari file desa yang lengkap sementara angka penempatan berasal dari per-koperasi. Keduanya diukur dengan cara berbeda. Jika sebuah angka di sini tidak cocok dengan laporan sumbernya, laporan sumbernya yang benar.

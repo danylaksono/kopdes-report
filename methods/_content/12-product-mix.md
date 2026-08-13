@@ -20,8 +20,8 @@ Nama produknya tidak konsisten (misalnya "BERAS SPHP" versus "BERAS MEDIUM SPHP 
 | Susu          | 0,5%         | 2        |
 | LPG           | 0,3%         | 17       |
 
-Gambaran yang muncul sederhana: **koperasi desa ini berperan sebagai toko sembako dan saprotan** — persis peran yang akan mereka perebutkan dengan warung dan minimarket yang sudah ada (pertanyaan kanibalisasi, lampiran 06).
+Gambaran yang muncul sederhana: **koperasi desa ini berperan sebagai toko sembako dan saprotan**, persis peran yang akan mereka perebutkan dengan warung dan minimarket yang sudah ada (pertanyaan kanibalisasi, lampiran 06).
 
 ## Yang tidak bisa kami katakan
 
-Sumbernya adalah daftar "produk terlaris" per provinsi, bukan buku penjualan lengkap — jadi ini komposisi dari apa yang dilaporkan sebagai produk terlaris, bukan seluruh catatan penjualan. Lima provinsi Papua tidak punya baris produk sama sekali: saluran ini kosong di tempat yang sama dengan saluran aktivitas lainnya. Dan dari data ini saja tidak ada bacaan sebab-akibat atau kesejahteraan: ini menunjukkan apa yang terjual, bukan siapa yang membeli atau dengan margin berapa.
+Sumbernya adalah daftar "produk terlaris" per provinsi, bukan buku penjualan lengkap, jadi ini komposisi dari apa yang dilaporkan sebagai produk terlaris, bukan seluruh catatan penjualan. Lima provinsi Papua tidak punya baris produk sama sekali: saluran ini kosong di tempat yang sama dengan saluran aktivitas lainnya. Dan dari data ini saja tidak ada bacaan sebab-akibat atau kesejahteraan: ini menunjukkan apa yang terjual, bukan siapa yang membeli atau dengan margin berapa.

@@ -442,6 +442,38 @@ is added, renamed, or its title changes.
 the deployed site while working locally. The root `.nojekyll` file (empty, committed)
 disables Jekyll; keep it.
 
+## No em-dashes in published copy (standing rule)
+
+The published report is written without em-dashes (`—`, U+2014) in prose.
+Sentences that would use one are paraphrased instead. This is a hard rule for
+any agent touching public-facing files:
+
+- every `*.html` in `/`, `/explore/`, `/findings/`, `/methods/`, `/data/`, `/about/`
+- `methods/_content/**/*.md` (the runtime-rendered method prose) and
+  `methods/_figures/**/*.svg`
+- user-facing string literals in `app/**/*.js` (tooltips, hints, inspector text)
+- the method metadata inside `scripts/build_methods_pages.py` (it generates the
+  `methods/*/index.html` shells)
+
+**When one of these files is modified**, rewrite every sentence containing an
+em-dash so the em-dash is gone — split the clause, use a colon or parentheses,
+or restart the sentence. Do not leave existing em-dashes in place while editing
+other parts of the file.
+
+Detector (lists file, line and containing sentence; exits non-zero when any are
+found, so it can gate a pre-commit hook or CI):
+
+```bash
+python scripts/check_emdashes.py           # pages only
+python scripts/check_emdashes.py --code    # also check JS UI strings
+python scripts/check_emdashes.py --report  # reporting mode, never exits non-zero
+```
+
+Deliberate non-prose uses that stay: `—` as a "no data" cell/placeholder (e.g.
+`<td class="num">—</td>` in `findings/remoteness/index.html`, the rail `—` in
+`app/explore/ui.js`). The detector still lists them; they are not sentences and
+are not paraphrased.
+
 ## The deliverable: an investigative report, not an academic paper
 
 **Decided 2026-08-09. This supersedes the earlier plan to write this up as a

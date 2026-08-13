@@ -257,7 +257,7 @@ async function syncBoundaries(token = generation) {
     ui.setBoundaryNote(
       els.rail,
       missing > 0
-        ? `${missing} wilayah tidak punya poligon yang cocok — gliph-nya tetap tampil.`
+        ? `${missing} wilayah tidak punya poligon yang cocok; gliph-nya tetap tampil.`
         : "",
     );
   } catch (err) {

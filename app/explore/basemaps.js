@@ -34,14 +34,34 @@ const ESRI_REFERENCE =
 /** A raster style: one imagery layer, optionally a labels layer on top. */
 function rasterStyle({ tiles, attribution, maxzoom = 19, reference = null }) {
   const sources = {
-    imagery: { type: "raster", tiles: [tiles], tileSize: 256, maxzoom, attribution },
+    imagery: {
+      type: "raster",
+      tiles: [tiles],
+      tileSize: 256,
+      maxzoom,
+      attribution,
+    },
   };
   const layers = [
-    { id: "background", type: "background", paint: { "background-color": "#0d0f12" } },
-    { id: "imagery", type: "raster", source: "imagery", paint: { "raster-opacity": 1 } },
+    {
+      id: "background",
+      type: "background",
+      paint: { "background-color": "#0d0f12" },
+    },
+    {
+      id: "imagery",
+      type: "raster",
+      source: "imagery",
+      paint: { "raster-opacity": 1 },
+    },
   ];
   if (reference) {
-    sources.reference = { type: "raster", tiles: [reference], tileSize: 256, maxzoom };
+    sources.reference = {
+      type: "raster",
+      tiles: [reference],
+      tileSize: 256,
+      maxzoom,
+    };
     layers.push({
       id: "reference",
       type: "raster",
@@ -76,7 +96,7 @@ export const BASEMAPS = [
   {
     id: "satelit",
     label: "Satelit",
-    hint: "Citra Esri World Imagery — untuk memeriksa lokasi satu per satu",
+    hint: "Citra Esri World Imagery, untuk memeriksa lokasi satu per satu",
     style: rasterStyle({
       tiles: ESRI_IMAGERY,
       reference: ESRI_REFERENCE,

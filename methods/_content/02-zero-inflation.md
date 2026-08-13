@@ -8,7 +8,7 @@ Kami menghitung satu per satu kolom dalam data tingkat desa (83.069 desa setelah
 
 ## Yang kami temukan
 
-Perbedaannya mencolok. Kolom yang diisi sekali saat pendaftaran nyaris lengkap — rekening 95,8%, NPWP 97%. Kolom yang menuntut laporan berjalan nyaris kosong: **hanya 3,3% desa yang melaporkan transaksi**, dan 12,5% yang melaporkan simpanan apa pun.
+Perbedaannya mencolok. Kolom yang diisi sekali saat pendaftaran nyaris lengkap: rekening 95,8%, NPWP 97%. Kolom yang menuntut laporan berjalan nyaris kosong: **hanya 3,3% desa yang melaporkan transaksi**, dan 12,5% yang melaporkan simpanan apa pun.
 
 | Kolom           | Jenis                        | Terisi |
 | --------------- | ---------------------------- | ------ |
@@ -20,7 +20,7 @@ Perbedaannya mencolok. Kolom yang diisi sekali saat pendaftaran nyaris lengkap �
 | Iuran wajib     | aktivitas                    | 9,2%   |
 | Transaksi       | aktivitas (laporan berjalan) | 3,3%   |
 
-Dan nilainya sangat terkonsentrasi. **100 desa dari 83.069 — 0,12% — membawa 34,8% dari seluruh nilai transaksi nasional.** Seribu desa membawa 90,6%. Jadi hasil yang dilaporkan program ini bukan "rendah merata"; hasil itu hampir tidak ada, kecuali di beberapa ratus titik.
+Dan nilainya sangat terkonsentrasi. **100 desa dari 83.069, atau 0,12%, membawa 34,8% dari seluruh nilai transaksi nasional.** Seribu desa membawa 90,6%. Jadi hasil yang dilaporkan program ini bukan "rendah merata"; hasil itu hampir tidak ada, kecuali di beberapa ratus titik.
 
 <figure class="figure">
   <img src="../_figures/02-concentration.svg" alt="Bagian nilai transaksi nasional: 100 desa membawa 34,8 persen, 1.000 desa 90,6 persen, sisanya 9,4 persen." />
@@ -42,4 +42,4 @@ Ini punya arti praktis untuk analisis. Karena 97% datanya nol, kami tidak bisa m
 
 Pola ini tidak membedakan dua penjelasan: "koperasi memang tidak beroperasi" atau "operasinya terjadi tapi belum dilaporkan". Kolom pendaftaran yang lengkap dan kolom operasional yang kosong konsisten dengan keduanya. Yang bisa memisahkan keduanya adalah uji lain (lihat lampiran 01 dan 09).
 
-Kami juga tidak boleh membaca sebaran antarpulau sebagai bukti: DKI Jakarta melaporkan transaksi di 17,2% desanya, Papua hampir nol — tetapi daerah yang lebih ramai dan lebih terhubung memang lebih banyak bertransaksi **dan** lebih baik dalam melapor. Arahnya sama untuk kedua penjelasan.
+Kami juga tidak boleh membaca sebaran antarpulau sebagai bukti: DKI Jakarta melaporkan transaksi di 17,2% desanya, Papua hampir nol, tetapi daerah yang lebih ramai dan lebih terhubung memang lebih banyak bertransaksi **dan** lebih baik dalam melapor. Arahnya sama untuk kedua penjelasan.

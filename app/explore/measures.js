@@ -246,7 +246,7 @@ export const MEASURES = [
     label: "Sekitarnya sepi",
     short: "Sepi",
     detail:
-      "Kurang dari 500 orang dalam radius 5 km — sekitarnya nyaris tak berpenghuni",
+      "Kurang dari 500 orang dalam radius 5 km, sekitarnya nyaris tak berpenghuni",
     chapter: "akses",
     color: "#d62728",
     known: (r) => r.pop_k != null,
