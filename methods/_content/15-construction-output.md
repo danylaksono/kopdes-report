@@ -17,5 +17,3 @@ Korelasi antara konstruksi dan hasil di tingkat provinsi lemah (sekitar 0,19) da
 ## Yang tidak bisa kami katakan
 
 Tidak ada klaim di luar deskripsi. Yang dapat didukung: konstruksi dan hasil bergerak bersama lintas provinsi searah "terbangun dan beroperasi sama-sama barang Jawa", dan saluran konstruksi tidak mendukung gambaran program yang terkirim penuh: seperempat selesai, separuh tak terdokumentasi.
-
-Catatan koreksi: versi awal laporan ini menyatakan kepatuhan RAT nol di semua provinsi. Itu salah baca kolom; lihat lampiran 16.

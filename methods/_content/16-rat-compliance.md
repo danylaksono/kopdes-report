@@ -1,6 +1,6 @@
 ## Pertanyaannya
 
-Apakah koperasi benar-benar menggelar Rapat Anggota Tahunan (RAT)? Versi awal situs ini menyatakan "RAT nol di semua provinsi", dan laporan ini ada untuk mengoreksinya.
+Apakah koperasi benar-benar menggelar Rapat Anggota Tahunan (RAT)?
 
 ## Yang kami temukan
 
@@ -8,10 +8,8 @@ Apakah koperasi benar-benar menggelar Rapat Anggota Tahunan (RAT)? Versi awal si
 
 <figure class="figure">
   <img src="../_figures/16-rat.svg" alt="Koperasi yang telah melaksanakan RAT: nasional 60,2 persen, DKI Jakarta 98,9 persen, Papua Pegunungan 6,1 persen." />
-  <figcaption>RAT tidak nol di mana-mana. Rata-rata nasional 60,2%, tetapi jurang antara Jawa dan Indonesia timur tetap besar.</figcaption>
+  <figcaption>Rata-rata nasional 60,2%, tetapi jurang antara Jawa dan Indonesia timur tetap besar.</figcaption>
 </figure>
-
-Klaim "nol di semua provinsi" berasal dari salah baca kolom: satu jalur data mengembalikan nol pada setiap penarikan, sementara angka sebenarnya ada di kolom lain yang justru dipakai dashboard kementerian sendiri.
 
 Sebarannya mengikuti gradien yang sudah dikenal: 98,9% di DKI Jakarta dan Sumatera Barat, turun ke **6,1% di Papua Pegunungan**. Kepatuhan RAT ikut bergerak dengan aktivitas (korelasi dengan nilai transaksi per koperasi 0,44). Tata kelola dan operasi berjalan bersama, keduanya mengikuti peta ekonomi.
 

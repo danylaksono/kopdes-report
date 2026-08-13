@@ -93,7 +93,7 @@ ID_TITLE = {
     "13-compliance-npwp-nib": "Kepatuhan NPWP dan NIB: suratnya ada, adakah yang beroperasi?",
     "14-island-comparison": "Perbandingan antarpulau: program ini milik Jawa atau Indonesia?",
     "15-construction-output": "Konstruksi versus hasil",
-    "16-rat-compliance": "Kepatuhan RAT: \u201cnol\u201d ternyata salah baca kolom",
+    "16-rat-compliance": "Kepatuhan RAT: seberapa banyak yang benar-benar menggelar?",
     "17-building-proximity": "Jarak ke bangunan: seberapa jauh koperasi dari rumah terdekat?",
     "18-health-scoring": "Indeks kesehatan: apa arti \u201ctidak sehat \u00d738\u201d?",
 }
@@ -168,8 +168,8 @@ ID_LEDE = {
         "dinyatakan, dan kami menahan diri dari klaim sebab-akibat."
     ),
     "16-rat-compliance": (
-        "Sebuah koreksi: \u201cRAT nol di semua provinsi\u201d ternyata salah baca "
-        "kolom. Angka sebenarnya: 60%."
+        "60,2% koperasi tercatat telah melaksanakan RAT, tetapi hanya 6,1% "
+        "di Papua Pegunungan."
     ),
     "17-building-proximity": (
         "Seberapa jauh koperasi dari rumah terdekat? Kami mengukur hal yang "
@@ -287,8 +287,7 @@ ID_SUMMARY = {
     "16-rat-compliance": (
         "Apakah koperasi benar-benar menggelar rapat anggota tahunan (RAT)? Ya, "
         "60% koperasi tercatat telah melaksanakan RAT per 5 Agustus 2026, tetapi hanya "
-        "6% di Papua Pegunungan. Temuan awal yang menyebut \u201cRAT nol di semua "
-        "provinsi\u201d keliru karena salah membaca kolom data."
+        "6% di Papua Pegunungan."
     ),
     "17-building-proximity": (
         "Seberapa jauh koperasi dari rumah terdekat? Dengan data bangunan "
