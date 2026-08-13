@@ -41,13 +41,29 @@ const INDONESIA_BOUNDS = [
 const FALLBACK_STYLE = {
   version: 8,
   sources: {},
-  layers: [{ id: "bg", type: "background", paint: { "background-color": "#f5f2ea" } }],
+  layers: [
+    { id: "bg", type: "background", paint: { "background-color": "#f5f2ea" } },
+  ],
 };
 
 const FILTERS = [
   { id: "all", label: "Semua", layer: "pts-all", color: "#b3a896", fit: true },
-  { id: "isolated", label: "Terpencil", layer: "pts-isolated", color: "#d62828", prop: "i", fit: true },
-  { id: "roadless", label: "Tanpa jalan", layer: "pts-roadless", color: "#e8801f", prop: "r", fit: true },
+  {
+    id: "isolated",
+    label: "Terpencil",
+    layer: "pts-isolated",
+    color: "#d62828",
+    prop: "i",
+    fit: true,
+  },
+  {
+    id: "roadless",
+    label: "Tanpa jalan",
+    layer: "pts-roadless",
+    color: "#e8801f",
+    prop: "r",
+    fit: true,
+  },
   {
     id: "impossible",
     label: "Di luar Indonesia",
@@ -72,7 +88,13 @@ function decode(data) {
     features[i] = {
       type: "Feature",
       geometry: { type: "Point", coordinates: [lon, lat] },
-      properties: { i: f & 1 ? 1 : 0, r: f & 2 ? 1 : 0, x: f & 4 ? 1 : 0, n: null, p: null },
+      properties: {
+        i: f & 1 ? 1 : 0,
+        r: f & 2 ? 1 : 0,
+        x: f & 4 ? 1 : 0,
+        n: null,
+        p: null,
+      },
     };
   }
   for (const [idx, name, province] of data.meta) {
@@ -84,7 +106,12 @@ function decode(data) {
 
 /** Counts recomputed from the flags, so the chips always match the dots. */
 function countFlags(features) {
-  const counts = { all: features.length, isolated: 0, roadless: 0, impossible: 0 };
+  const counts = {
+    all: features.length,
+    isolated: 0,
+    roadless: 0,
+    impossible: 0,
+  };
   for (const f of features) {
     if (f.properties.i) counts.isolated++;
     if (f.properties.r) counts.roadless++;
@@ -164,10 +191,14 @@ export async function initStoryMap() {
     pitchWithRotate: false,
     attributionControl: {
       compact: true,
-      customAttribution: "Data: SIMKOPDES 2026-08-05 · Koperasi Desa Merah Putih",
+      customAttribution:
+        "Data: SIMKOPDES 2026-08-05 · Koperasi Desa Merah Putih",
     },
   });
-  map.addControl(new window.maplibregl.NavigationControl({ showCompass: false }), "top-right");
+  map.addControl(
+    new window.maplibregl.NavigationControl({ showCompass: false }),
+    "top-right",
+  );
 
   if (attrib) {
     attrib.textContent =
@@ -243,11 +274,14 @@ export async function initStoryMap() {
       const showFilter = (id) => {
         for (const f of FILTERS) {
           const vis = f.id === id ? "visible" : "none";
-          if (map.getLayer(f.layer)) map.setLayoutProperty(f.layer, "visibility", vis);
+          if (map.getLayer(f.layer))
+            map.setLayoutProperty(f.layer, "visibility", vis);
         }
-        tools.querySelectorAll(".map-chip").forEach((c) =>
-          c.classList.toggle("is-active", c.dataset.filter === id),
-        );
+        tools
+          .querySelectorAll(".map-chip")
+          .forEach((c) =>
+            c.classList.toggle("is-active", c.dataset.filter === id),
+          );
         const active = byFilter[id];
         if (active.fit && counts[id] > 0) {
           const feats = collection.features.filter(
@@ -268,7 +302,8 @@ export async function initStoryMap() {
       renderChips(tools, counts, showFilter);
       // Default: "Semua" active, the rest hidden.
       for (const f of FILTERS) {
-        if (f.id !== "all") map.setLayoutProperty(f.layer, "visibility", "none");
+        if (f.id !== "all")
+          map.setLayoutProperty(f.layer, "visibility", "none");
       }
       const firstChip = tools.querySelector('.map-chip[data-filter="all"]');
       if (firstChip) firstChip.classList.add("is-active");
@@ -291,7 +326,9 @@ export async function initStoryMap() {
   // tiles are decoration. setStyle() fires style.load, so apply() re-runs.
   setTimeout(() => {
     if (!map.isStyleLoaded()) {
-      console.warn("[story-map] basemap not loaded after 6s; using plain background");
+      console.warn(
+        "[story-map] basemap not loaded after 6s; using plain background",
+      );
       applied = false;
       try {
         map.setStyle(FALLBACK_STYLE);
