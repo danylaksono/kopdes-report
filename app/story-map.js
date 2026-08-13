@@ -116,7 +116,10 @@ async function loadPoints() {
 
 function boundsFor(features) {
   const b = {
-    n: -90, s: 90, e: -180, w: 180,
+    n: -90,
+    s: 90,
+    e: -180,
+    w: 180,
   };
   for (const f of features) {
     const [lon, lat] = f.geometry.coordinates;
@@ -167,10 +170,14 @@ export async function initStoryMap() {
     pitchWithRotate: false,
     attributionControl: {
       compact: true,
-      customAttribution: "Data: SIMKOPDES 2026-08-05 · Kooperasi Koperasi Desa Merah Putih",
+      customAttribution:
+        "Data: SIMKOPDES 2026-08-05 · Kooperasi Koperasi Desa Merah Putih",
     },
   });
-  map.addControl(new window.maplibregl.NavigationControl({ showCompass: false }), "top-right");
+  map.addControl(
+    new window.maplibregl.NavigationControl({ showCompass: false }),
+    "top-right",
+  );
 
   if (attrib) {
     attrib.textContent =
@@ -227,7 +234,9 @@ export async function initStoryMap() {
           map.getCanvas().style.cursor = "default";
           popup
             .setLngLat(f.geometry.coordinates)
-            .setHTML(`<strong>${f.properties.name}</strong><br/><span style="color:#666;font-size:12px">${f.properties.province ?? ""}</span>`)
+            .setHTML(
+              `<strong>${f.properties.name}</strong><br/><span style="color:#666;font-size:12px">${f.properties.province ?? ""}</span>`,
+            )
             .addTo(map);
         }
       });
@@ -241,11 +250,14 @@ export async function initStoryMap() {
       const showFilter = (id) => {
         for (const f of FILTERS) {
           const vis = f.id === id ? "visible" : "none";
-          if (map.getLayer(f.layer)) map.setLayoutProperty(f.layer, "visibility", vis);
+          if (map.getLayer(f.layer))
+            map.setLayoutProperty(f.layer, "visibility", vis);
         }
-        tools.querySelectorAll(".map-chip").forEach((c) =>
-          c.classList.toggle("is-active", c.dataset.filter === id),
-        );
+        tools
+          .querySelectorAll(".map-chip")
+          .forEach((c) =>
+            c.classList.toggle("is-active", c.dataset.filter === id),
+          );
         const active = byFilter[id];
         if (active.fit && data.counts[id] > 0) {
           const feats = data.features.filter(

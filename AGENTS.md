@@ -45,11 +45,11 @@ All sourced from SIMKOPDES public API (no auth required). Snapshot date: **2026-
 
 ### External data (not committed, regenerable via scripts)
 
-| File                                  | Size   | Source           | How to get                                    |
-| ------------------------------------- | ------ | ---------------- | --------------------------------------------- |
-| `data/osm/indonesia_roads.gpkg`       | 1.6 GB | Geofabrik PBF    | `python scripts/download_osm.py --roads-only` |
-| `data/osm/indonesia_minimarkets.gpkg` | 1.7 MB | Overpass API     | `python scripts/download_osm.py --poi-only`   |
-| `geo/output/*.geojson`                | varies | BIG shapefiles   | `cd geo && python run_pipeline.py`            |
+| File                                  | Size   | Source         | How to get                                    |
+| ------------------------------------- | ------ | -------------- | --------------------------------------------- |
+| `data/osm/indonesia_roads.gpkg`       | 1.6 GB | Geofabrik PBF  | `python scripts/download_osm.py --roads-only` |
+| `data/osm/indonesia_minimarkets.gpkg` | 1.7 MB | Overpass API   | `python scripts/download_osm.py --poi-only`   |
+| `geo/output/*.geojson`                | varies | BIG shapefiles | `cd geo && python run_pipeline.py`            |
 
 ### The analysis mart (`data/web/kopdes_*.parquet`)
 

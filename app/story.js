@@ -91,7 +91,8 @@ const CHART = {
   nib: {
     title: "Izin usaha ada; operasinya tidak",
     pct: true,
-    caption: "70,1% desa memegang izin usaha tanpa transaksi yang dilaporkan (laporan 13).",
+    caption:
+      "70,1% desa memegang izin usaha tanpa transaksi yang dilaporkan (laporan 13).",
     bars: [
       { label: "Izin tanpa transaksi", v: 70.1, hl: true },
       { label: "Izin + transaksi", v: 3.0 },
@@ -102,7 +103,8 @@ const CHART = {
   concentration: {
     title: "Konsentrasi nilai",
     pct: true,
-    caption: "100 desa membawa 37% dari seluruh nilai transaksi yang dilaporkan (laporan 02).",
+    caption:
+      "100 desa membawa 37% dari seluruh nilai transaksi yang dilaporkan (laporan 02).",
     bars: [
       { label: "100 desa teratas", v: 37, hl: true },
       { label: "1.000 desa teratas", v: 93 },
@@ -141,7 +143,8 @@ function renderChart(name, slot, card) {
   const barW = (v) => Math.max((v / max) * (x1 - x0), 2);
 
   let svg = `<svg class="chart-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${c.title}" style="width:100%;height:auto">`;
-  svg += `<defs><linearGradient id="${grad}" x1="0" y1="0" x2="1" y2="0">` +
+  svg +=
+    `<defs><linearGradient id="${grad}" x1="0" y1="0" x2="1" y2="0">` +
     `<stop offset="0" stop-color="#c21c1c"/><stop offset="1" stop-color="#7a0000"/></linearGradient></defs>`;
 
   c.bars.forEach((b, i) => {
@@ -156,7 +159,8 @@ function renderChart(name, slot, card) {
   });
   svg += "</svg>";
 
-  slot.innerHTML = `<div class="figure-card-head"><h3>${c.title}</h3></div>${svg}` +
+  slot.innerHTML =
+    `<div class="figure-card-head"><h3>${c.title}</h3></div>${svg}` +
     `<figcaption>${c.caption}</figcaption>`;
 
   // Animate: lay out at zero, then grow on the next frame.
