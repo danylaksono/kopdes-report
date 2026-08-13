@@ -261,7 +261,7 @@ export function renderRail(root, on) {
 
     <section class="rail-sec">
       <h2 class="rail-h">${icon("bars", 13)} Yang digambar</h2>
-      <div class="segmented" id="modes" role="radiogroup" aria-label="Bentuk gliph">
+      <div class="segmented" id="modes" role="radiogroup" aria-label="Bentuk grafik">
         ${MODES.map(
           (m) => `
           <button class="seg" type="button" role="radio" aria-checked="false"
@@ -277,7 +277,7 @@ export function renderRail(root, on) {
       <h2 class="rail-h">${icon("polygon", 13)} Layer Peta</h2>
       <label class="switch">
         <input type="checkbox" id="toggle-glyphs" checked />
-        <span>${icon("stack", 14)} Gliph</span>
+        <span>${icon("stack", 14)} Grafik</span>
       </label>
       <label class="switch">
         <input type="checkbox" id="toggle-points" />
@@ -396,7 +396,7 @@ export function renderModeDetail(root, state, on) {
   if (state.mode === "profile") {
     slot.innerHTML = `<p class="switch-note">Empat batang tetap: tiga ukuran
       keterpencilan (penduduk, jalan, rumah) dan satu ukuran persaingan
-      (koperasi terdekat). Makin tinggi, makin bermasalah, dan semua gliph
+      (koperasi terdekat). Makin tinggi, makin bermasalah, dan semua grafik
       berukuran sama, jadi tingginya bisa langsung dibandingkan.</p>`;
     return;
   }
@@ -481,7 +481,7 @@ export function renderLegend(root, state, stats, national) {
             </tr>`;
         }).join("")}
       </table>
-      <p class="legend-note">Angka di kanan = rata-rata nasional. Batang gliph
+      <p class="legend-note">Angka di kanan = rata-rata nasional. Batang grafik
         yang lebih tinggi berarti di atas angka itu. Arahkan kursor ke ikon
         ${icon("info", 10)} untuk penjelasan tiap batang.</p>`;
   } else if (state.mode === "composition") {
@@ -493,7 +493,7 @@ export function renderLegend(root, state, stats, national) {
           .map(
             (c, i) =>
               `<span style="background:${c.color};flex:${Math.max(parts?.[i] ?? 1, 0.6)}"
-                     title="${escapeHtml(c.label)}: ${pctText(parts?.[i])}"></span>`,"
+                     title="${escapeHtml(c.label)}: ${pctText(parts?.[i])}"></span>`,
           )
           .join("")}
       </div>
@@ -543,10 +543,10 @@ export function renderLegend(root, state, stats, national) {
   // every glyph the same size is worse than no legend at all.
   const sizeNote =
     state.mode === "profile"
-      ? `Semua gliph berukuran sama, supaya tinggi batang bisa dibandingkan
-         langsung antar wilayah. Jumlah koperasi ada di rincian (klik gliph);
+      ? `Semua grafik berukuran sama, supaya tinggi batang bisa dibandingkan
+         langsung antar wilayah. Jumlah koperasi ada di rincian (klik grafik);
          terbanyak di sini ${fmtId(stats?.max ?? 0)}.`
-      : `Gliph makin besar makin banyak koperasi (terbanyak:
+      : `Grafik makin besar makin banyak koperasi (terbanyak:
          ${fmtId(stats?.max ?? 0)}).`;
 
   slot.innerHTML = `
@@ -555,7 +555,7 @@ export function renderLegend(root, state, stats, national) {
     <p class="legend-scope">${scope} · ${sizeNote}</p>
     ${
       state.tooDense
-        ? `<p class="legend-warn">${icon("warning", 12)} Pada zoom ini gliph
+        ? `<p class="legend-warn">${icon("warning", 12)} Pada zoom ini grafik
              ${escapeHtml(state.levelLabel.toLowerCase())} saling menumpuk.
              Perbesar peta untuk membacanya satu per satu.</p>`
         : ""
