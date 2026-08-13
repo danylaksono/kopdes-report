@@ -97,7 +97,9 @@ Things that will bite you:
   and the shares have no "worst" end. A new family is picked up everywhere by
   iterating `FAMILIES` (the grid summariser sizes `counts` from
   `fam.classes.length`, and the national baseline iterates the registry) —
-  never hardcode a family list.
+  never hardcode a family list. The rail's Penutup Lahan filter builds its
+  options from the same `FAMILIES` entry, so filter, glyph and table cannot
+  disagree about what a class means.
 - **Aggregate economics do not come from the points.** The village link reaches
   79.1% of cooperatives, which carry 88% of national transaction value — summing
   points would be both wrong and biased. Aggregates group straight off the

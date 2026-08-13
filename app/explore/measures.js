@@ -439,6 +439,13 @@ const KNOWN_LAND_STATUSES = new Set([
   "Tidak Ada Lahan",
 ]);
 
+// Land-cover class codes, keyed from the FAMILIES entry (reports/19) so the
+// filter stays in sync with the composition glyph and the table's palette.
+const LANDCOVER_FAMILY = FAMILIES.find((f) => f.id === "landcover");
+const LANDCOVER_K = Object.fromEntries(
+  LANDCOVER_FAMILY.classes.map((c, i) => [c.key, i + 1]),
+);
+
 export const FILTERS = [
   {
     id: "verification",
@@ -556,6 +563,18 @@ export const FILTERS = [
         label: "Tidak melaporkan",
         test: (r) => r.has_reported_transaction === false,
       },
+    ],
+  },
+  {
+    id: "landcover",
+    label: "Penutup Lahan",
+    options: [
+      { value: "all", label: "Semua" },
+      ...LANDCOVER_FAMILY.classes.map((c) => ({
+        value: c.key,
+        label: c.label,
+        test: (r) => r.landcover_k === LANDCOVER_K[c.key],
+      })),
     ],
   },
 ];
