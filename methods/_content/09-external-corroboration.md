@@ -22,7 +22,7 @@ Jawabannya: cocok, dan tidak tanggung-tanggung. Pada 9 Agustus, Liputan6 melapor
 
 Sumber kedua tidak menyentuh dashboard sama sekali. Pada 8 Juni, kepala badan komunikasi pemerintah menyebut **1.061 koperasi beroperasi** dari daftar sekitar 80.000, atau 1,3%. Ukuran kami dua bulan kemudian: 3,0% desa yang melaporkan transaksi apa pun. Dua pengukuran independen dengan metode berbeda berakhir di angka tunggal yang sama rendah, di dua provinsi yang sama (Jawa Timur dan Jawa Tengah).
 
-Laporan ini juga meluruskan angka yang salah di catatan kami sendiri: **"Rp 179,5 triliun" yang pernah beredar keliru 1000×**; yang benar miliar. Sekitar Rp 2,43 juta per koperasi, kira-kira setara sebulan belanja keluarga, untuk seumur hidup koperasi itu. (Angka total telah naik menjadi Rp 202,6 miliar pada 13 Agustus.)
+Sekitar Rp 2,43 juta per koperasi, kira-kira setara sebulan belanja keluarga, untuk seumur hidup koperasi itu. (Angka total telah naik menjadi Rp 202,6 miliar pada 13 Agustus.)
 
 | Hingga     | Total            | Desa yang melapor |
 | ---------- | ---------------- | ----------------- |

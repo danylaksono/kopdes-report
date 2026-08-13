@@ -233,10 +233,8 @@ ID_SUMMARY = {
     ),
     "09-external-corroboration": (
         "Apakah angka pemerintah cocok dengan angka kami? Nyaris persis: media "
-        "melaporkan Rp 179,72 miliar, kami Rp 179,79 miliar. Laporan ini pula yang "
-        "meluruskan klaim \u201c179,5 triliun\u201d yang pernah beredar, termasuk "
-        "di catatan perencanaan kami sendiri; yang benar adalah miliar, "
-        "keliru 1000\u00d7."
+        "melaporkan Rp 179,72 miliar, kami Rp 179,79 miliar. Dashboard itulah "
+        "angka resmi pemerintah."
     ),
     "10-coop-clustering": (
         "Apakah koperasi saling menumpuk? 22,2% koperasi punya koperasi lain dalam "
