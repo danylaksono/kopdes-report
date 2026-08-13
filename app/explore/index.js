@@ -629,6 +629,16 @@ async function boot() {
 
     status(null);
     await render();
+
+    // The admin parquets are tiny (≤0.5 MB) and live on the same shared data
+    // layer as the grid, so warm them in the background while the reader looks
+    // at the national view. The first click on Kecamatan / Kabupaten / Provinsi
+    // then finds its anchors already cached and only waits on the (lazy)
+    // boundary fill. Errors are ignored — a failed prefetch is retried on the
+    // real switch.
+    for (const level of LEVELS) {
+      if (level.kind === "admin") ensureLevel(level.id).catch(() => {});
+    }
   } catch (err) {
     status(`Gagal memuat data: ${err.message}`, true);
     throw err;

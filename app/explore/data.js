@@ -49,10 +49,22 @@ async function connect() {
   return connection;
 }
 
+/** Turn every wide integer that reaches the app into a plain JS number. */
+function toPlain(v) {
+  if (typeof v === "bigint") return Number(v);
+  if (v && typeof v === "object") {
+    if (Array.isArray(v)) return v.map(toPlain);
+    const out = {};
+    for (const k in v) out[k] = toPlain(v[k]);
+    return out;
+  }
+  return v;
+}
+
 async function rows(sql) {
   const con = await connect();
   const table = await con.query(sql);
-  return table.toArray().map((r) => r.toJSON());
+  return table.toArray().map((r) => toPlain(r.toJSON()));
 }
 
 // ---------------------------------------------------------------------------
@@ -131,6 +143,19 @@ function aggColumns() {
   return [...wanted];
 }
 
+/** Aggregate columns the SELECT already names explicitly (and casts to a
+ *  JS-safe type). `aggColumns()` must not re-emit these: a duplicate column
+ *  name makes DuckDB keep the LAST occurrence in the result, which silently
+ *  defeats the ::DOUBLE cast and hands the app a BigInt — the `cooperatives`
+ *  collision with the farmland measure is exactly how that happened. */
+const EXPLICIT_AGG_COLS = new Set([
+  "cooperatives",
+  "coordinate_suspect",
+  "villages",
+  "villages_reporting",
+  "transaction_value",
+]);
+
 /**
  * One admin level as a FeatureCollection of anchor points, which is what
  * screengrid's `feature-anchors` render mode consumes.
@@ -146,6 +171,7 @@ function aggColumns() {
 export async function loadLevel(levelId) {
   const level = LEVEL_BY_ID[levelId];
   const labels = [level.nameCol, ...level.parentCols];
+  const aggCols = aggColumns().filter((c) => !EXPLICIT_AGG_COLS.has(c));
   const data = await rows(`
     SELECT
       -- INTEGER, not the native BIGINT: this id is compared against the ids in
@@ -159,7 +185,7 @@ export async function loadLevel(levelId) {
       villages_reporting::DOUBLE AS villages_reporting,
       transaction_value::DOUBLE AS transaction_value,
       anchor_lat, anchor_lon,
-      ${aggColumns().join(", ")}
+      ${aggCols.join(", ")}
     FROM read_parquet('${url(level.table + ".parquet")}')
     WHERE anchor_lat IS NOT NULL AND anchor_lon IS NOT NULL
     -- Smallest first. feature-anchors draws in source order with no depth
