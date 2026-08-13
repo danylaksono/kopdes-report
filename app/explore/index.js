@@ -46,6 +46,7 @@ const state = {
   family: "road",
   stretch: false,
   basemap: "terang",
+  showGlyphs: true,
   showPoints: false,
   showBoundaries: true,
   filters: { ...FILTER_DEFAULTS },
@@ -110,6 +111,7 @@ async function setBasemap(id) {
 
   state.glyphLayer = null;
   clearBoundaryState();
+  closePointPopup();
   ui.updateBasemaps(els.basemaps, id);
 
   map.setStyle(def.style);
@@ -170,6 +172,8 @@ function restack() {
 async function rebuildGlyphs(token) {
   removeGlyphs(map, state.glyphLayer);
   state.glyphLayer = null;
+
+  if (!state.showGlyphs) return;
 
   const level = LEVEL_BY_ID[state.level];
   const spec = currentSpec();
@@ -316,6 +320,7 @@ function onHover(payload, event) {
 function onClick(payload) {
   ui.hideTip(els.tip);
   if (!payload) return closeInspector();
+  closePointPopup();
 
   state.selection = payload.kind === "admin" ? payload.props.admin_id : null;
   setBoundarySelection(map, state.selection);
@@ -334,6 +339,46 @@ function closeInspector() {
   ui.hideInspector(els.inspector);
   state.selection = null;
   setBoundarySelection(map, null);
+}
+
+// ---------------------------------------------------------------------------
+// Cooperative point popup
+// ---------------------------------------------------------------------------
+
+let pointPopup = null;
+
+function closePointPopup() {
+  pointPopup?.remove();
+  pointPopup = null;
+}
+
+/** Whether a screengrid glyph is under the pointer. If so the glyph layer
+ *  owns the interaction (tooltip / inspector) and the point beneath it stays
+ *  quiet — this is the same hit test screengrid uses, so the two cannot
+ *  disagree about what is under the cursor. */
+function overGlyph(point) {
+  const gl = state.glyphLayer;
+  return Boolean(
+    state.showGlyphs && gl?.getCellAt?.({ x: point.x, y: point.y }),
+  );
+}
+
+/** Clicking a cooperative dot opens a popup at the point itself. */
+function onPointClick(e) {
+  if (overGlyph(e.point)) return; // the glyph layer handles this click
+  const f = e.features?.[0];
+  if (!f) return;
+  closeInspector();
+  closePointPopup();
+  pointPopup = new maplibregl.Popup({
+    closeButton: true,
+    closeOnClick: true,
+    offset: 10,
+    maxWidth: "300px",
+  })
+    .setLngLat(e.lngLat)
+    .setHTML(ui.pointPopupHtml(f.properties))
+    .addTo(map);
 }
 
 /**
@@ -498,11 +543,16 @@ async function boot() {
     },
     points: (on) => {
       state.showPoints = on;
+      if (!on) closePointPopup();
       syncPoints();
     },
     boundaries: (on) => {
       state.showBoundaries = on;
       syncBoundaries();
+    },
+    glyphs: (on) => {
+      state.showGlyphs = on;
+      render();
     },
     filters: (filters) => {
       state.filters = filters;
@@ -560,6 +610,19 @@ map.getCanvasContainer().addEventListener("mouseleave", () => {
   ui.hideTip(els.tip);
   map.getCanvas().style.cursor = "";
 });
+// A cooperative dot is clickable unless a screengrid glyph owns that spot —
+// there the glyph layer opens its own inspector and the dot stays quiet.
+map.on("click", POINTS_LAYER, onPointClick);
+map.on("mousemove", POINTS_LAYER, (e) => {
+  if (!e.features?.length) return;
+  map.getCanvas().style.cursor = overGlyph(e.point) ? "" : "pointer";
+});
+map.on("mouseleave", POINTS_LAYER, () => {
+  map.getCanvas().style.cursor = "";
+});
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") closeInspector();
+  if (e.key === "Escape") {
+    closeInspector();
+    closePointPopup();
+  }
 });

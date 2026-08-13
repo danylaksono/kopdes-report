@@ -155,7 +155,20 @@ export function setPoints(map, rows, { dark = false } = {}) {
     features: rows.map((r) => ({
       type: "Feature",
       geometry: { type: "Point", coordinates: [r.longitude, r.latitude] },
-      properties: { cooperative_id: r.cooperative_id },
+      // The click popup reads these straight off the clicked feature, so they
+      // ride along on the source rather than being looked up by id at click
+      // time. verification status is SIMKOPDES's own `land_status`, verbatim.
+      properties: {
+        cooperative_id: r.cooperative_id,
+        cooperative: r.cooperative,
+        province: r.province,
+        district: r.district,
+        subdistrict: r.subdistrict,
+        village: r.village,
+        land_status: r.land_status,
+        coordinate_suspect: r.coordinate_suspect,
+        imagery_url: r.imagery_url,
+      },
     })),
   };
 

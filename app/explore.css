@@ -416,6 +416,18 @@
   padding-left: 8px !important;
   white-space: nowrap;
 }
+.key-info {
+  display: inline-block;
+  margin-left: 4px;
+  vertical-align: -1px;
+  color: var(--muted);
+  cursor: help;
+}
+.key-info:hover,
+.key-info:focus-visible {
+  color: #a00000;
+  outline: none;
+}
 .key-bar {
   width: 100%;
   padding: 0 10px !important;
@@ -687,6 +699,59 @@
   display: inline-block;
   margin-top: 6px;
   font-size: 11.5px;
+}
+
+/* Popup on clicking a cooperative point. */
+.pt-pop {
+  min-width: 190px;
+  max-width: 260px;
+}
+.pt-pop b {
+  display: block;
+  font-size: 13px;
+  line-height: 1.3;
+}
+.pt-pop .pt-place {
+  display: block;
+  margin-top: 3px;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+.pt-status {
+  display: block;
+  margin-top: 8px;
+}
+.pt-badge {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+}
+.pt-ok {
+  background: #e3f1e6;
+  color: #1c6b32;
+}
+.pt-warn {
+  background: #fbf0d9;
+  color: #8a5a12;
+}
+.pt-none {
+  background: #ececea;
+  color: #6f6a61;
+}
+.pt-suspect {
+  display: block;
+  margin-top: 7px;
+  font-size: 11px;
+  color: #a33a2a;
+}
+.pt-pop a {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 11.5px;
+  font-weight: 550;
 }
 
 /* ---- tooltip ------------------------------------------------------------- */

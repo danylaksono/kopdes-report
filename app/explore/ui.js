@@ -15,12 +15,13 @@ import {
   MEASURES,
   MEASURE_BY_ID,
   PROFILE,
+  VERIFIED_LAND_STATUSES,
 } from "./measures.js";
 import { measureRampCss } from "./glyph.js";
 import { icon } from "./icons.js";
 
 export const MODES = [
-  { id: "profile", label: "Profil", icon: "bars", hint: "Empat batang: sepi · jalan · dempet · senyap" },
+  { id: "profile", label: "Profil", icon: "bars", hint: "Empat batang: sepi · jalan · dempet · rumah" },
   { id: "composition", label: "Komposisi", icon: "pie", hint: "Satu kolom bertumpuk per kelas" },
   { id: "measure", label: "Ukuran", icon: "halfCircle", hint: "Warna sesuai satu persentase" },
 ];
@@ -248,7 +249,11 @@ export function renderRail(root, on) {
     </section>
 
     <section class="rail-sec">
-      <h2 class="rail-h">${icon("polygon", 13)} Lapisan tambahan</h2>
+      <h2 class="rail-h">${icon("polygon", 13)} Layer Peta</h2>
+      <label class="switch">
+        <input type="checkbox" id="toggle-glyphs" checked />
+        <span>${icon("stack", 14)} Gliph</span>
+      </label>
       <label class="switch">
         <input type="checkbox" id="toggle-points" />
         <span>${icon("pin", 14)} Titik koperasi</span>
@@ -307,6 +312,7 @@ export function renderRail(root, on) {
     on.size(Number(size.value));
   });
 
+  el("#toggle-glyphs").addEventListener("change", (e) => on.glyphs(e.target.checked));
   el("#toggle-points").addEventListener("change", (e) => on.points(e.target.checked));
   el("#toggle-boundaries").addEventListener("change", (e) => on.boundaries(e.target.checked));
 
@@ -352,9 +358,10 @@ export function updateModes(root, mode) {
 export function renderModeDetail(root, state, on) {
   const slot = root.querySelector("#mode-detail");
   if (state.mode === "profile") {
-    slot.innerHTML = `<p class="switch-note">Empat batang tetap, satu per pertanyaan
-      laporan. Makin tinggi, makin bermasalah — dan semua gliph berukuran sama,
-      jadi tingginya bisa langsung dibandingkan.</p>`;
+    slot.innerHTML = `<p class="switch-note">Empat batang tetap: tiga ukuran
+      keterpencilan (penduduk, jalan, rumah) dan satu ukuran persaingan
+      (koperasi terdekat). Makin tinggi, makin bermasalah — dan semua gliph
+      berukuran sama, jadi tingginya bisa langsung dibandingkan.</p>`;
     return;
   }
   if (state.mode === "composition") {
@@ -422,14 +429,19 @@ export function renderLegend(root, state, stats, national) {
           return `
             <tr>
               <td><span class="key-swatch" style="background:${m.color}"></span></td>
-              <td class="key-label">${escapeHtml(m.short)}</td>
+              <td class="key-label">${escapeHtml(m.short)}
+                <span class="key-info" tabindex="0" role="img"
+                      title="${escapeHtml(m.detail)}"
+                      aria-label="${escapeHtml(m.label)}: ${escapeHtml(m.detail)}">${icon("info", 11)}</span>
+              </td>
               <td class="key-bar"><span style="width:${Math.min(nat ?? 0, 100)}%;background:${m.color}"></span></td>
               <td class="key-num">${pctText(nat)}</td>
             </tr>`;
         }).join("")}
       </table>
       <p class="legend-note">Angka di kanan = rata-rata nasional. Batang gliph
-        yang lebih tinggi berarti di atas angka itu.</p>`;
+        yang lebih tinggi berarti di atas angka itu. Arahkan kursor ke ikon
+        ${icon("info", 10)} untuk penjelasan tiap batang.</p>`;
   } else if (state.mode === "composition") {
     const fam = FAMILIES.find((f) => f.id === state.family);
     const parts = national?.shares?.[fam.id];
@@ -551,6 +563,45 @@ export function renderFoot(root, manifest) {
     <p>Nol transaksi berarti <em>belum melapor</em>, bukan tidak aktif —
       <a href="../methods/01-snapshot-drift/">metode 01</a>. Jarak dari OSM adalah
       batas atas — <a href="../methods/05-road-access/">metode 05</a>.</p>`;
+}
+
+// ---------------------------------------------------------------------------
+// Cooperative point popup
+// ---------------------------------------------------------------------------
+
+/** Whether SIMKOPDES reports this land status as verified. Shares the status
+ *  set with the filter registry in measures.js, so the popup badge and the
+ *  filter cannot disagree. */
+function verifiedStatus(status) {
+  return VERIFIED_LAND_STATUSES.includes(status);
+}
+
+function landBadge(status) {
+  if (!status)
+    return `<span class="pt-badge pt-none">Tanpa catatan aset</span>`;
+  return `<span class="pt-badge ${verifiedStatus(status) ? "pt-ok" : "pt-warn"}">${escapeHtml(status)}</span>`;
+}
+
+/** The click card for one cooperative, shown at the point itself. */
+export function pointPopupHtml(r) {
+  const place = [r.village, r.subdistrict, r.district, r.province]
+    .filter(Boolean)
+    .join(", ");
+  return `<div class="pt-pop">
+    <b>${escapeHtml(r.cooperative)}</b>
+    ${place ? `<span class="pt-place">${escapeHtml(place)}</span>` : ""}
+    <span class="pt-status">${landBadge(r.land_status)}</span>
+    ${
+      r.coordinate_suspect
+        ? `<span class="pt-suspect">Koordinat janggal — belum tentu lokasi asli</span>`
+        : ""
+    }
+    ${
+      r.imagery_url
+        ? `<a href="${escapeHtml(r.imagery_url)}" target="_blank" rel="noopener">Lihat citra satelit ↗</a>`
+        : ""
+    }
+  </div>`;
 }
 
 // ---------------------------------------------------------------------------

@@ -245,9 +245,9 @@ export const MEASURES = [
     id: "pop_sparse",
     label: "Sekitarnya sepi",
     short: "Sepi",
-    detail: "Kurang dari 500 orang dalam radius 5 km",
+    detail: "Kurang dari 500 orang dalam radius 5 km — sekitarnya nyaris tak berpenghuni",
     chapter: "akses",
-    color: "#a13a2a",
+    color: "#d62728",
     known: (r) => r.pop_k != null,
     test: (r) => r.pop_k <= 2, // empty | under_500
     agg: (p) => sum2(p.pop_share_empty, p.pop_share_under_500),
@@ -260,7 +260,7 @@ export const MEASURES = [
     short: "Jalan",
     detail: "Lebih dari ±500 m dari jalan beraspal terdekat",
     chapter: "akses",
-    color: "#c2610a",
+    color: "#ff7f0e",
     known: (r) => r.road_k != null,
     test: (r) => r.road_k <= 2, // over_5km | under_5km
     agg: (p) => sum2(p.road_share_over_5km, p.road_share_under_5km),
@@ -274,9 +274,9 @@ export const MEASURES = [
     id: "nn_close",
     label: "Berdempetan",
     short: "Dempet",
-    detail: "Koperasi lain berjarak kurang dari 1 km",
+    detail: "Ada koperasi lain berjarak kurang dari 1 km",
     chapter: "kompetisi",
-    color: "#2f7d7a",
+    color: "#1f77b4",
     known: (r) => r.nn_k != null,
     test: (r) => r.nn_k === 1, // under_1km
     agg: (p) => pct(p.nn_share_under_1km),
@@ -287,9 +287,9 @@ export const MEASURES = [
     id: "building_far",
     label: "Jauh dari rumah",
     short: "Rumah",
-    detail: "Tidak ada bangunan terpetakan dalam ±500 m",
+    detail: "Tidak ada satu pun bangunan terpetakan dalam ±500 m",
     chapter: "akses",
-    color: "#6b4d8a",
+    color: "#9467bd",
     known: (r) => r.building_k != null,
     test: (r) => r.building_k <= 2, // over_5km | under_5km
     agg: (p) => sum2(p.building_share_over_5km, p.building_share_under_5km),
@@ -380,15 +380,15 @@ export const MEASURES = [
 export const MEASURE_BY_ID = Object.fromEntries(MEASURES.map((m) => [m.id, m]));
 
 /**
- * The four bars of the profile glyph, in drawing order: the report's three
- * acts, with access getting two bars because it is the only act the data
- * measures twice (people, then roads).
+ * The four bars of the profile glyph, in drawing order: three access measures
+ * (people, then roads, then houses — the reports' remoteness act) and one
+ * competition measure (the nearest neighbouring cooperative).
  *
  * Every bar points the same way — taller is worse — so a tall glyph means an
  * area is troubled on several fronts at once, which is the only reading a
  * four-bar glyph can support at 40 pixels.
  */
-export const PROFILE = ["pop_sparse", "road_far", "nn_close", "silent"];
+export const PROFILE = ["pop_sparse", "road_far", "nn_close", "building_far"];
 
 function sum2(a, b) {
   if (a == null && b == null) return null;
@@ -405,7 +405,52 @@ function sum2(a, b) {
  * area and cannot be re-cut in the browser; the UI disables the control and
  * says so rather than silently ignoring it.
  */
+/** SIMKOPDES land statuses treated as verified. Exported so the filter and
+ *  the cooperative point popup read the same set and cannot drift apart. */
+export const VERIFIED_LAND_STATUSES = ["Terverifikasi", "Selesai"];
+
+/** Statuses the verification filter names explicitly; any other reported
+ *  status lands in "Status lain" (Dipertimbangkan, Ditolak, entry noise, …). */
+const KNOWN_LAND_STATUSES = new Set([
+  ...VERIFIED_LAND_STATUSES,
+  "Sedang Diverifikasi",
+  "Tidak Ada Lahan",
+]);
+
 export const FILTERS = [
+  {
+    id: "verification",
+    label: "Status verifikasi",
+    options: [
+      { value: "all", label: "Semua" },
+      {
+        value: "verified",
+        label: "Terverifikasi",
+        test: (r) => VERIFIED_LAND_STATUSES.includes(r.land_status),
+      },
+      {
+        value: "in_progress",
+        label: "Sedang diverifikasi",
+        test: (r) => r.land_status === "Sedang Diverifikasi",
+      },
+      {
+        value: "no_land",
+        label: "Tidak ada lahan",
+        test: (r) => r.land_status === "Tidak Ada Lahan",
+      },
+      {
+        value: "other",
+        label: "Status lain",
+        test: (r) =>
+          r.land_status != null && !KNOWN_LAND_STATUSES.has(r.land_status),
+      },
+      {
+        value: "no_record",
+        label: "Tanpa catatan aset",
+        test: (r) => r.land_status == null,
+      },
+    ],
+  },
   {
     id: "population",
     label: "Penduduk",
@@ -488,49 +533,6 @@ export const FILTERS = [
         value: "silent",
         label: "Tidak melaporkan",
         test: (r) => r.has_reported_transaction === false,
-      },
-    ],
-  },
-  {
-    id: "land",
-    label: "Lahan",
-    options: [
-      { value: "all", label: "Semua" },
-      {
-        value: "verified",
-        label: "Terverifikasi",
-        test: (r) => r.land_verified === true,
-      },
-      {
-        value: "unverified",
-        label: "Belum terverifikasi",
-        test: (r) => r.land_status != null && r.land_verified !== true,
-      },
-      {
-        value: "no_record",
-        label: "Tanpa catatan aset",
-        test: (r) => r.land_status == null,
-      },
-    ],
-  },
-  {
-    id: "coordinate",
-    label: "Koordinat",
-    options: [
-      // The 19 impossible coordinates from report 08 were corrected by the
-      // ministry on 08-13, so none are suspect now (coordinate_suspect is
-      // false for all 83,379 rows). The filter is kept as infrastructure;
-      // "Hanya yang janggal" shows nothing.
-      {
-        value: "valid",
-        label: "Hanya yang masuk akal",
-        test: (r) => r.coordinate_suspect !== true,
-      },
-      { value: "all", label: "Termasuk yang janggal (0)" },
-      {
-        value: "suspect",
-        label: "Hanya yang janggal",
-        test: (r) => r.coordinate_suspect === true,
       },
     ],
   },
