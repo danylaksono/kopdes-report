@@ -251,6 +251,7 @@ linkable):
 | -------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `/` (`index.html`)                                       | The story — image hero + three two-column scrolly chapters + a MapLibre map interlude + verdicts                                                               |
 | `/explore/`                                              | The interactive map (`app/explore.js`)                                                                                                                         |
+| `/tabel/`                                                | The directory: every cooperative in one searchable, sortable table (`app/tabel.js`)                                                                            |
 | `/findings/`, `findings/{remoteness,competition,money}/` | The three acts, in Bahasa Indonesia, **anonymous until verified**                                                                                              |
 | `/methods/`, `methods/<nn-slug>/`                        | Methodology appendix — plain-language Indonesian write-ups in `methods/_content/`, rendered client-side; the technical English report is linked from each page |
 | `/data/`                                                 | Downloads, provenance, null semantics, snapshot log                                                                                                            |
@@ -442,11 +443,33 @@ is added, renamed, or its title changes.
 the deployed site while working locally. The root `.nojekyll` file (empty, committed)
 disables Jekyll; keep it.
 
-## No em-dashes in published copy (standing rule)
+### The directory (`/tabel/`)
 
-The published report is written without em-dashes (`—`, U+2014) in prose.
-Sentences that would use one are paraphrased instead. This is a hard rule for
-any agent touching public-facing files:
+A browsable table of every cooperative, added 2026-08-13. `app/tabel.js` loads
+a lean column set from `kopdes_points.parquet` through the same duckdb-wasm
+session (`rows` is exported from `app/explore/data.js`), then searches, filters,
+sorts and pages entirely in memory, so the first load is the only network round
+trip.
+
+- **No table library.** Sorting, filtering and pagination are plain JS over an
+  in-memory array. TanStack was considered and rejected: it is headless in
+  vanilla, so every `<tr>` and all CSS is yours anyway, and 83k rows in memory
+  need no virtualization once pagination caps the rendered rows.
+- **One encoding everywhere.** Badge colours and the road filter derive from
+  `FAMILIES` in `app/explore/measures.js`, so the table agrees with the map
+  about what a band means. `COLS` in `tabel.js` is the single column registry.
+- **Population sparkline** is a nested bar (cell 400 m, 1.4 km, 5.1 km)
+  normalised to the 99th percentile of catchment (`popP99`), the same
+  high-percentile rule the glyphs use. Three blues, deliberately not any
+  family ramp.
+- **Nulls carry meaning in the cells**: "> 5 km" for a never-found road or
+  minimarket, "Tidak terhubung" for a village with no transaction record,
+  "Belum melaporkan" (never "tidak aktif") for a linked village reporting
+  zero. The "—" cells are the standing no-data placeholder.
+- The road filter's `over_5km` count is exactly the 5.106 headline from
+  `reports/05`, which is the cheap correctness check.
+- The page pays the duckdb-wasm download like the explorer; the story page
+  deliberately does not.
 
 - every `*.html` in `/`, `/explore/`, `/findings/`, `/methods/`, `/data/`, `/about/`
 - `methods/_content/**/*.md` (the runtime-rendered method prose) and

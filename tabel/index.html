@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Direktori koperasi · Koperasi Desa Merah Putih</title>
+    <meta name="description"
+        content="Tabel lengkap 83.379 Koperasi Desa Merah Putih: cari, saring, dan urutkan nama, lokasi, transaksi, dan indikator tiap koperasi." />
+    <link href="../app/site.css" rel="stylesheet" />
+    <!-- duckdb-wasm imports apache-arrow as a bare specifier; the import map
+       resolves it so no bundler is needed (no-build-step site). -->
+    <script type="importmap">
+    {
+      "imports": {
+        "@duckdb/duckdb-wasm": "https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@1.29.0/dist/duckdb-browser.mjs",
+        "apache-arrow": "https://cdn.jsdelivr.net/npm/apache-arrow@17.0.0/+esm"
+      }
+    }
+  </script>
+</head>
+
+<body data-root="../">
+    <nav id="site-nav"></nav>
+    <main class="wrap">
+        <p class="kicker">Direktori</p>
+        <h1>Semua koperasi, satu tabel</h1>
+        <p class="lede">Tabel ini memuat setiap Koperasi Desa Merah Putih yang
+            terdaftar dalam data SIMKOPDES pada 5 Agustus 2026. Ketik nama koperasi
+            atau desa untuk mencarinya, saring berdasarkan provinsi, status laporan,
+            atau jarak ke jalan, dan klik judul kolom untuk mengurutkan.</p>
+
+        <p id="status" role="status">Memuat data…</p>
+
+        <div id="tabel" hidden>
+            <div class="tabel-toolbar">
+                <input id="search" type="search" autocomplete="off" spellcheck="false"
+                    placeholder="Cari nama, desa, kecamatan, kabupaten…" aria-label="Cari koperasi" />
+                <select id="f-province" aria-label="Saring berdasarkan provinsi">
+                    <option value="">Semua provinsi</option>
+                </select>
+                <select id="f-report" aria-label="Saring berdasarkan status laporan">
+                    <option value="">Semua status</option>
+                    <option value="melaporkan">Melaporkan transaksi</option>
+                    <option value="belum">Belum melaporkan</option>
+                    <option value="tidak">Tidak terhubung</option>
+                </select>
+                <select id="f-road" aria-label="Saring berdasarkan jarak ke jalan">
+                    <option value="">Semua jarak jalan</option>
+                </select>
+            </div>
+
+            <p class="tabel-count" id="count" aria-live="polite"></p>
+
+            <div class="tabel-scroll">
+                <table id="grid">
+                    <thead id="thead"></thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
+
+            <div class="tabel-footer">
+                <span id="page"></span>
+                <span class="tabel-pager">
+                    <button id="prev" type="button">Sebelumnya</button>
+                    <button id="next" type="button">Berikutnya</button>
+                    <select id="size" aria-label="Jumlah baris per halaman">
+                        <option value="25">25 per halaman</option>
+                        <option value="50" selected>50 per halaman</option>
+                        <option value="100">100 per halaman</option>
+                        <option value="250">250 per halaman</option>
+                    </select>
+                </span>
+            </div>
+
+            <ul class="tabel-note">
+                <li>Transaksi mencatat nilai yang <strong>dilaporkan</strong> koperasi ke
+                    SIMKOPDES. Angka nol berarti belum ada laporan, bukan berarti koperasi
+                    tidak beraktivitas.</li>
+                <li>"Tidak terhubung" berarti desa koperasi tidak tercantum dalam data
+                    transaksi; nilai transaksinya tidak diketahui, bukan nol.</li>
+                <li>Jalan atau minimarket "&gt; 5 km" berarti tidak ada yang terpetakan
+                    dalam radius 5 km. Itu batas bawah, bukan kepastian.</li>
+                <li>Batang populasi menunjukkan jumlah penduduk dalam sel 400 m, lingkaran
+                    1,4 km, dan lingkaran 5,1 km. Lebar batang relatif terhadap koperasi
+                    dengan penduduk terpadat.</li>
+                <li>Penempatan dan tanah berasal dari status aset dan penyaringan lokasi;
+                    "koordinat perlu dicek" berarti koordinatnya tidak masuk akal dan belum
+                    diverifikasi.</li>
+            </ul>
+        </div>
+    </main>
+
+    <script type="module" src="../app/site.js"></script>
+    <script type="module" src="../app/tabel.js"></script>
+</body>
+
+</html>

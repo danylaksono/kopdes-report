@@ -61,7 +61,7 @@ function toPlain(v) {
   return v;
 }
 
-async function rows(sql) {
+export async function rows(sql) {
   const con = await connect();
   const table = await con.query(sql);
   return table.toArray().map((r) => toPlain(r.toJSON()));
@@ -189,7 +189,7 @@ export async function loadLevel(levelId) {
     FROM read_parquet('${url(level.table + ".parquet")}')
     WHERE anchor_lat IS NOT NULL AND anchor_lon IS NOT NULL
     -- Smallest first. feature-anchors draws in source order with no depth
-    -- sorting, so whatever comes last wins the overlap — and around Java the
+    -- sorting, so whatever comes last wins the overlap. Around Java the
     -- anchors are closer together than the glyphs are wide. Ascending order
     -- puts the largest areas on top, which is the standard rule for
     -- proportional symbols and the only order in which the big ones stay

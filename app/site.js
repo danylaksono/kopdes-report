@@ -26,6 +26,7 @@ const ROOT = document.body.dataset.root ?? "";
 const NAV = [
   { href: "", label: "Cerita" },
   { href: "explore/", label: "Peta" },
+  { href: "tabel/", label: "Tabel" },
   { href: "findings/", label: "Temuan" },
   { href: "methods/", label: "Metode" },
   { href: "data/", label: "Data" },
