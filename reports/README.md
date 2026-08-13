@@ -126,6 +126,13 @@ Read this before quoting any number out of these reports.
   (55–82% of cooperatives merge), so KDMP form a saturated field in populated
   Indonesia rather than discrete over-concentrated pockets. The honest
   short-range footprint is 22% within 1 km (10).
+- **Buildings confirm the isolated tail but not much else.** 23.2% of KDMP sit
+  on a mapped OSM building cell; 62.6% have no mapped building within ~5 km —
+  but OSM rural coverage is too sparse to call that "no house": 99.7% of the
+  "no building within 1 km" set still has people nearby per the Kontur grid
+  (17). The defensible claim is the concordance: **145 of 03's 146 isolated
+  cooperatives also have no mapped building within 1 km** (140 roadless), and
+  1,221 no-house KDMP sit inside farmland (17).
 - **The "the website isn't up to date" rebuttal is closed.** On 2026-08-09 the
   press reported the national total as **Rp 179.72 miliar**; our own API pull the
   same day gives **Rp 179.79 miliar** — a **0.042%** difference (09). The

@@ -147,12 +147,17 @@ def main():
     m["no_bld_5km"] = m.building_band == "> ~5 km / none found"
 
     cross = {
-        "no building within 1 km": int(m.no_bld_1km.sum()),
-        "  ... and roadless": int((m.no_bld_1km & m.roadless).sum()),
-        "  ... and isolated (nobody within 5 km)": int((m.no_bld_1km & m.isolated).sum()),
-        "  ... and recorded in farmland": int((m.no_bld_1km & m.in_farmland).sum()),
-        "no building within 5 km": int(m.no_bld_5km.sum()),
+        "on a building cell (<70 m)": int((m.building_band == "on a building cell (<70 m)").sum()),
+        "no mapped building within 1 km": int(m.no_bld_1km.sum()),
+        "  ... but people nearby per Kontur (within 5 km)": int((m.no_bld_1km & ~m.isolated).sum()),
+        "  ... and isolated (Kontur: nobody within 5 km)": int((m.no_bld_1km & m.isolated).sum()),
+        "  ... and isolated + roadless": int((m.no_bld_1km & m.isolated & m.roadless).sum()),
+        "  ... and isolated + recorded in farmland": int((m.no_bld_1km & m.isolated & m.in_farmland).sum()),
+        "  ... and isolated + roadless + farmland": int((m.no_bld_1km & m.isolated & m.roadless & m.in_farmland).sum()),
+        "no mapped building within 5 km": int(m.no_bld_5km.sum()),
+        "  ... and isolated (5 km set)": int((m.no_bld_5km & m.isolated).sum()),
         "  ... and roadless (5 km set)": int((m.no_bld_5km & m.roadless).sum()),
+        "  ... and recorded in farmland": int((m.no_bld_5km & m.in_farmland).sum()),
     }
     print("\ncross-tabs (no mapped building):")
     for k, v in cross.items():

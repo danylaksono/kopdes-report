@@ -1,0 +1,12 @@
+case,n
+on a building cell (<70 m),19372
+no mapped building within 1 km,53419
+  ... but people nearby per Kontur (within 5 km),53274
+  ... and isolated (Kontur: nobody within 5 km),145
+  ... and isolated + roadless,140
+  ... and isolated + recorded in farmland,0
+  ... and isolated + roadless + farmland,0
+no mapped building within 5 km,52159
+  ... and isolated (5 km set),145
+  ... and roadless (5 km set),4829
+  ... and recorded in farmland,1221
