@@ -10,16 +10,6 @@
   <link href="app/site.css" rel="stylesheet" />
   <link href="app/story.css" rel="stylesheet" />
   <link href="https://unpkg.com/maplibre-gl@4/dist/maplibre-gl.css" rel="stylesheet" />
-  <!-- duckdb-wasm imports apache-arrow as a bare specifier; the import map
-       resolves it so no bundler is needed (no-build-step site). -->
-  <script type="importmap">
-    {
-      "imports": {
-        "@duckdb/duckdb-wasm": "https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@1.29.0/dist/duckdb-browser.mjs",
-        "apache-arrow": "https://cdn.jsdelivr.net/npm/apache-arrow@17.0.0/+esm"
-      }
-    }
-  </script>
 </head>
 
 <body data-root="">
@@ -45,6 +35,7 @@
         <a class="btn btn-primary btn-arrow" href="#mulai">Mulai membaca</a>
         <a class="btn btn-ghost" href="findings/">Langsung ke ringkasan temuan</a>
       </div>
+      <p class="story-byline reveal-on-load">Oleh <strong>Dany Laksono</strong> · investigasi independen, 2026</p>
       <div class="story-hero-meta reveal-on-load">
         <span><strong>83.342</strong> titik koperasi</span>
         <span><strong>38</strong> provinsi</span>
@@ -78,8 +69,13 @@
               <p class="step-num">Bab 1 · Akses</p>
               <h2>Jangkauannya nyaris sempurna.</h2>
               <p><strong>95% penduduk Indonesia tinggal tak lebih dari 1,4 km dari
-                  sebuah koperasi.</strong> Ini bukan program yang meleset dari
-                penduduknya — bahkan desa yang paling kosong pun umumnya tidak jauh.</p>
+                  sebuah koperasi.</strong> Jangkauan ini bukan kebetulan: program
+                menempatkan satu koperasi di hampir setiap desa, sehingga jarak ke
+                koperasi terdekat jadi pendek hampir di mana-mana. Perlu dicatat, kami
+                mengukur dengan sel heksagonal 400 meter — di desa kecil yang berbukit,
+                atau di luar pusat pemukiman, koperasi yang “hanya” 400 meter saja
+                sudah bisa terasa jauh. Maka kami tidak berhenti pada angka rata-rata:
+                kami juga mencari koperasi yang benar-benar di luar jangkauan.</p>
               <p>Grafik di samping: pangsa penduduk terhadap jarak ke koperasi terdekat.</p>
             </div>
           </div>
@@ -87,13 +83,13 @@
           <div class="step" data-chart="tail">
             <div class="step-inner">
               <p class="step-num">Bab 1 · Akses</p>
-              <h2>Tetapi ada ekor yang nyata.</h2>
+              <h2>Tetapi ada pencilan yang nyata.</h2>
               <p>Tidak terbukti massal bukan berarti tidak ada masalah. <strong>174
                   koperasi berdiri tanpa satu pun penduduk dalam radius 5 kilometer.</strong>
                 17.804 lainnya berada di petak 400 meter yang tak berpenghuni.</p>
               <p>174 dari 83.342 hanyalah 0,2% dari program — tetapi itu 174 kasus
                 nyata, dengan nama dan titik koordinat, yang bisa diperiksa satu per satu.</p>
-              <a class="step-link" href="findings/remoteness/">Ekor keterpencilan, per kasus →</a>
+              <a class="step-link" href="findings/remoteness/">Pencilan keterpencilan, per kasus →</a>
             </div>
           </div>
 
@@ -160,7 +156,7 @@
           <div class="step" data-chart="cluster">
             <div class="step-inner">
               <p class="step-num">Bab 2 · Kompetisi</p>
-              <h2>Penumpukan sejati langka — dan tidak merugikan.</h2>
+              <h2>Berbagi petak sungguhan tidak banyak terjadi — dan tidak merugikan.</h2>
               <p>Hanya 6,7% koperasi benar-benar berbagi petak 1 km dengan koperasi
                 lain. Sebagian besar “tumpang tindih” yang tampak pada peta ternyata
                 hanya jejak data: koordinat ganda, bukan bangunan bersebelahan.</p>
@@ -213,12 +209,15 @@
             <div class="step-inner">
               <p class="step-num">Bab 3 · Anggaran &amp; output</p>
               <h2>Angka yang salah 1000 kali.</h2>
-              <p>Angka nasional yang banyak dikutip — Rp 179,5 <em>triliun</em> —
-                keliru 1000×. Yang benar <strong>Rp 179,5 miliar</strong> (sekitar USD 11 juta),
-                dan angka itu nyaris sama persis dengan angka resmi kementerian. Rata-rata,
-                setiap koperasi baru “menghasilkan” sekitar <strong>USD 130 seumur hidupnya</strong>
-                — tak lebih dari sebulan belanja dapur.</p>
-              <p>Lihat corong di samping: sistem mencatat 96% desa punya rekening dan
+              <p>Angka yang beredar luas di media — Rp 179,5 <em>triliun</em> —
+                keliru 1000× (<a href="methods/09-external-corroboration/">koreksinya
+                didokumentasikan di metode 09</a>). Yang benar <strong>Rp 179,5 miliar</strong>,
+                nyaris sama persis dengan yang diberitakan
+                <a href="https://www.liputan6.com/bisnis/read/8265525/transaksi-koperasi-merah-putih-tembus-rp-179-miliar-beras-terlaris">Liputan6</a>
+                dari dashboard kementerian. Rata-rata, setiap koperasi baru “menghasilkan”
+                sekitar <strong>Rp 2,15 juta seumur hidupnya</strong> — tak lebih dari
+                sebulan belanja dapur.</p>
+              <p>Lihat grafik di samping: sistem mencatat 96% desa punya rekening dan
                 97% punya NPWP — tetapi hanya 3% yang melaporkan transaksi. Mesin
                 pendaftaran bekerja; mesin operasinya senyap.</p>
               <a class="step-link" href="findings/money/">Soal anggaran, selengkapnya →</a>
@@ -267,7 +266,7 @@
 
     <figure class="wrap story-photo reveal">
       <img src="assets/story/anggaran.jpg" alt="Tumpukan uang rupiah" loading="lazy" decoding="async" />
-      <figcaption>Rp 179,5 miliar terdengar besar — tetapi itu sekitar <strong>USD 130 per
+      <figcaption>Rp 179,5 miliar terdengar besar — tetapi itu sekitar <strong>Rp 2,15 juta per
           koperasi seumur hidupnya</strong>, dan angka itu adalah catatan pemerintah sendiri.
         <span class="photo-credit">Foto: “Rupiah swath”, Jonny-mt, CC BY 3.0.</span>
       </figcaption>
@@ -283,9 +282,9 @@
         <p class="chapter-num">Momen peta</p>
         <h2>83.342 titik, satu peta.</h2>
         <p>Setiap titik adalah satu koperasi terdaftar. Geser dan perbesar untuk melihat
-          bagaimana program ini ditebar — lalu gunakan filter untuk melihat ekor yang nyata:
-          koperasi yang tak tersentuh penduduk, yang jauh dari jalan, dan yang koordinatnya
-          mustahil.</p>
+          bagaimana program ini ditebar — lalu gunakan filter untuk melihat pencilan yang
+          nyata: koperasi yang tak tersentuh penduduk, yang jauh dari jalan, dan yang
+          koordinatnya mustahil.</p>
       </header>
 
       <div class="story-map-frame reveal">
@@ -304,7 +303,7 @@
       </div>
       <div class="story-map-cta">
         <a class="btn btn-primary btn-arrow" href="explore/">Buka penjelajah peta penuh</a>
-        <span class="map-cta-hint">filter, corong warna, dan inspeksi per wilayah</span>
+        <span class="map-cta-hint">filter, skala warna, dan inspeksi per wilayah</span>
       </div>
     </div>
   </section>
@@ -324,7 +323,7 @@
         <article class="verdict-card reveal">
           <span class="verdict-stamp ok">Tidak terbukti massal</span>
           <h3>“Terpencil”</h3>
-          <p>Jangkauan nyaris sempurna: 95% penduduk dalam ±1,4 km. Tetapi ekornya
+          <p>Jangkauan nyaris sempurna: 95% penduduk dalam ±1,4 km. Tetapi pencilannya
             nyata — 174 koperasi tanpa penduduk dalam 5 km, sebagian besar di timur —
             dan bisa diperiksa satu per satu.</p>
           <a class="verdict-link" href="findings/remoteness/">Baca bab Akses →</a>

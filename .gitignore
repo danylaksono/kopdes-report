@@ -21,6 +21,10 @@ data/web/*
 !data/web/kopdes_kabupaten.parquet
 !data/web/kopdes_provinsi.parquet
 !data/web/mart_manifest.json
+# Compact point layer for the home page's "Momen peta" map - derived from
+# kopdes_points.parquet, ~2 MB, built by scripts/build_story_points.py.
+# The story page does not load duckdb-wasm, so this is the map's only data file.
+!data/web/kopdes_story_points.json
 # Simplified admin polygons for /explore/ — context fills under the glyphs.
 # Same reasoning: committed because the deployed app fetches them. 9.7 MB for
 # all three levels, against 54 MB for the geo/output/ files they come from.

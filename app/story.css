@@ -108,6 +108,15 @@
   color: #fff;
   font-weight: 650;
 }
+.story-byline {
+  margin-top: 24px;
+  font-size: 14px;
+  letter-spacing: 0.01em;
+  color: #e8dfd0;
+}
+.story-byline strong {
+  color: #fff;
+}
 .story-hero-actions {
   margin-top: 34px;
   display: flex;
@@ -406,7 +415,7 @@
   fill: url(#bar-grad);
 }
 .axis {
-  font: 12px var(--sans);
+  font: 14px var(--sans);
   fill: var(--muted);
 }
 .axis.row-label {
@@ -418,7 +427,7 @@
 }
 .axis.val {
   fill: var(--ink);
-  font-weight: 700;
+  font-weight: 750;
   font-variant-numeric: tabular-nums;
 }
 .axis.val.hl {
@@ -514,6 +523,7 @@
 }
 .map-loading.is-done {
   opacity: 0;
+  visibility: hidden; /* also out of the accessibility tree, not just invisible */
   pointer-events: none;
 }
 
@@ -701,6 +711,18 @@
   }
   .scrolly-sticky .figure-card {
     box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+    /* Compact the card so the tallest chart still fits the 28vh sticky frame:
+       tighter padding, a one-line title, and a smaller caption. */
+    padding: 12px 14px 10px;
+  }
+  .scrolly-sticky .figure-card-head h3 {
+    font-size: 16px;
+  }
+  .scrolly-sticky .figure-card figcaption {
+    font-size: 11.5px;
+    margin-top: 6px;
+    padding-top: 8px;
+    line-height: 1.45;
   }
   .scrolly-steps .step {
     /* Full-height steps with the text pinned to the bottom, plus a low

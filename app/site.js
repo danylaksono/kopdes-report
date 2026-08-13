@@ -72,6 +72,7 @@ export function renderFooter(container) {
   f.innerHTML = `
     <div class="site-footer-inner">
       <p><strong>${SITE.name}</strong> — ${SITE.kicker}.</p>
+      <p>Investigasi ini disusun oleh <strong>Dany Laksono</strong>.</p>
       <p>Semua angka dapat ditelusuri ke laporan metode yang dapat direproduksi
       (<a href="${ROOT}methods/">Metode</a>). Data mentah dan jejak revisi:
       <a href="${ROOT}data/">Data</a> · <a href="${ROOT}about/">Kebijakan koreksi</a>.</p>

@@ -28,7 +28,7 @@ const CHART = {
     ],
   },
   tail: {
-    title: "Ekor keterpencilan",
+    title: "Pencilan keterpencilan",
     pct: false,
     caption:
       "Hanya 0,21% koperasi tanpa penduduk dalam 5 km — tetapi itu 174 kasus konkret (laporan 03).",
@@ -65,7 +65,7 @@ const CHART = {
     ],
   },
   cluster: {
-    title: "Penumpukan sejati",
+    title: "Berbagi petak sungguhan",
     pct: true,
     caption:
       "Hanya 6,7% berbagi sel ±1 km dengan koperasi lain — dan tanpa penalti kinerja (laporan 10).",
@@ -75,7 +75,7 @@ const CHART = {
     ],
   },
   funnel: {
-    title: "Corong pendaftaran → operasi",
+    title: "Grafik: pendaftaran → operasi",
     pct: true,
     caption:
       "Mesin pendaftaran bekerja (rekening, NPWP, izin); mesin operasinya senyap (laporan 11, 13).",
@@ -134,9 +134,9 @@ function renderChart(name, slot, card) {
   const W = 720,
     x0 = 356,
     x1 = W - 34,
-    rowH = 36,
-    barH = 20,
-    top = 26;
+    rowH = 44,
+    barH = 24,
+    top = 34;
   const H = top + c.bars.length * rowH + 8;
   const grad = `bar-grad-${name}`;
 
@@ -149,13 +149,15 @@ function renderChart(name, slot, card) {
 
   c.bars.forEach((b, i) => {
     const y = top + i * rowH;
+    const w = barW(b.v);
+    const val = c.pct ? fmtPct(b.v) + "%" : fmtCount(b.v);
     svg += `<line x1="${x0}" y1="${y + barH + 6}" x2="${x1}" y2="${y + barH + 6}" class="grid-line"/>`;
     svg += `<text x="${x0 - 14}" y="${y + barH / 2 + 4}" text-anchor="end" class="axis row-label${b.hl ? " hl" : ""}">${b.label}</text>`;
     svg += `<rect x="${x0}" y="${y}" width="0" height="${barH}" rx="5"
             class="bar${b.hl ? " hl" : " muted"}"/>`;
-    svg += `<text x="${x0}" y="${y + barH / 2 + 4}" class="axis val${b.hl ? " hl" : ""}">${
-      c.pct ? fmtPct(b.v) + "%" : fmtCount(b.v)
-    }</text>`;
+    // Value sits above the bar, centred — on the card, not on the bar fill, so
+    // it stays legible even when the bar is full-width.
+    svg += `<text x="${x0 + w / 2}" y="${y - 7}" text-anchor="middle" class="axis val${b.hl ? " hl" : ""}">${val}</text>`;
   });
   svg += "</svg>";
 
@@ -260,27 +262,40 @@ function initProgress() {
 }
 
 /** Boot the interactive map the first time it scrolls near (lazy: saves the
- *  duckdb + maplibre download for readers who never reach it). */
+ *  maplibre + point-layer download for readers who never reach the map). */
 function initMapLazy() {
   const section = document.getElementById("peta");
   if (!section) return;
   let started = false;
+
+  const start = () => {
+    if (started) return;
+    started = true;
+    window.removeEventListener("scroll", onScroll);
+    io.disconnect();
+    import("./story-map.js")
+      .then((m) => m.initStoryMap())
+      .catch((err) => {
+        console.error("story map failed to load:", err);
+        const loading = document.getElementById("story-map-loading");
+        if (loading) loading.textContent = "Peta gagal dimuat.";
+      });
+  };
+
+  // Belt and braces: an IntersectionObserver, plus a scroll-position fallback —
+  // the page smooth-scrolls, which can starve IO callbacks in some browsers.
   const io = new IntersectionObserver(
     (entries) => {
-      if (entries.some((e) => e.isIntersecting) && !started) {
-        started = true;
-        io.disconnect();
-        import("./story-map.js")
-          .then((m) => m.initStoryMap())
-          .catch((err) => {
-            console.error("story map failed to load:", err);
-            const loading = document.getElementById("story-map-loading");
-            if (loading) loading.textContent = "Peta gagal dimuat.";
-          });
-      }
+      if (entries.some((e) => e.isIntersecting)) start();
     },
     { rootMargin: "600px 0px" },
   );
+  const onScroll = () => {
+    const r = section.getBoundingClientRect();
+    if (r.top < window.innerHeight + 600) start();
+  };
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll(); // page may load mid-way down (e.g. after an in-page link)
   io.observe(section);
 }
 

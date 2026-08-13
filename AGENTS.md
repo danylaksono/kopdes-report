@@ -266,13 +266,19 @@ map in `app/story-map.js`), separate from `site.css`'s reading pages. Layout:
    text scrolled over is gone**, which is what fixed the chart-behind-text bug.
    Chapter photos (`assets/story/akses|kompetisi|anggaran.jpg`) sit between
    chapters with attribution in the caption + `assets/story/CREDITS.md`.
-3. **Map interlude** (`#peta`) — a MapLibre map over the SAME parquet via
-   `app/story-map.js`. Loaded **lazily** by `story.js` (dynamic `import()` the
-   first time it scrolls within 600px) so readers who never reach it don't pay
-   for the duckdb wasm. Reuses `tintBasemap`/`BASEMAP_BY_ID` from
-   `app/explore/basemaps.js`. Three data-grounded filter chips (Terpencil 174 /
-   Tanpa jalan 5.133 / Di luar Indonesia 19) whose counts come from the query,
-   never hard-coded. `scrollZoom: false` so the page keeps scrolling.
+3. **Map interlude** (`#peta`) — a MapLibre map over a compact, committed point
+   layer (`data/web/kopdes_story_points.json`, ~2 MB, built by
+   `scripts/build_story_points.py`). Loaded **lazily** by `story.js` (dynamic
+   `import()` the first time it scrolls within 600px). **Deliberately does NOT
+   use duckdb-wasm** — a national overview map is not worth the ~30 MB wasm
+   download on the narrative page; the explorer keeps that job. The layer is a
+   compact `pts:[[lon,lat,flags]]` + `meta:[[idx,name,province]]` format (not
+   GeoJSON — that is ~8 MB of structural overhead for 83 k points). Reuses
+   `tintBasemap`/`BASEMAP_BY_ID` from `app/explore/basemaps.js`. Three
+   data-grounded filter chips (Terpencil 174 / Tanpa jalan 5.133 / Di luar
+   Indonesia 19) whose counts are recomputed from the flags, never hard-coded.
+   `scrollZoom: false` so the page keeps scrolling. Popups only show for the
+   flagged tail (the only points that carry a name in the layer).
 4. **Verdict grid** — three cards, one per claim, each linking to `/findings/`.
 
 Gotchas: the mobile single-column layout reorders the figure FIRST and uses a
@@ -280,14 +286,18 @@ low activation band (`rootMargin` in `story.js`) so the active step's text sits
 below the sticky figure instead of scrolling under it. `data-root` is empty on
 the home page; the story CSS is not shared with sub-pages.
 
-**Data layer (one shared layer for every page)**: the committed parquet files
-(`data/web/kopdes_points.parquet` etc.) read in-browser through **duckdb-wasm**.
-Import map in `explore/index.html` maps `@duckdb/duckdb-wasm` →
-`dist/duckdb-browser.mjs` and `apache-arrow@17.0.0/+esm` (the ESM build imports
-apache-arrow as a bare specifier; the import map is required, there is no UMD
-build). `getJsDelivrBundles()` + `selectBundle()` + `AsyncDuckDB` is the load
-path. The old `data/web/points.geojson` (24 MB) and its builder
-`scripts/build_points.mjs` are **deleted**; the parquet replaces both.
+**Data layer (one shared layer for every page — except the home map)**: the
+committed parquet files (`data/web/kopdes_points.parquet` etc.) read in-browser
+through **duckdb-wasm**. Import map in `explore/index.html` maps
+`@duckdb/duckdb-wasm` → `dist/duckdb-browser.mjs` and `apache-arrow@17.0.0/+esm`
+(the ESM build imports apache-arrow as a bare specifier; the import map is
+required, there is no UMD build). `getJsDelivrBundles()` + `selectBundle()` +
+`AsyncDuckDB` is the load path. The old `data/web/points.geojson` (24 MB) and
+its builder `scripts/build_points.mjs` are **deleted**; the parquet replaces
+both. The home page's map is the deliberate exception: it reads a 2 MB derived
+JSON (`data/web/kopdes_story_points.json`, built by
+`scripts/build_story_points.py`) with MapLibre circle layers instead, so the
+narrative page never pays the ~30 MB wasm download.
 
 **screengrid**: pinned as `https://unpkg.com/screengrid@3.1.1/dist/screengrid.mjs`
 (source lives at `D:\Dissertation\screengrid`, npm `screengrid`). Bump the pin in
