@@ -26,6 +26,11 @@ REPORTS = ROOT / "reports"
 METHODS = ROOT / "methods"
 CONTENT = METHODS / "_content"
 
+# Reports that intentionally stay out of the public /methods/ appendix. The
+# technical write-up remains in reports/ (the evidence base); it is simply not
+# published as a public method page.
+EXCLUDED = {"18-health-scoring"}
+
 SHELL = """<!doctype html>
 <html lang="id">
 <head>
@@ -376,6 +381,9 @@ def main() -> None:
 
     rows = []
     for slug in slugs:
+        if slug in EXCLUDED:
+            print(f"  skipped {slug} (excluded from public methods)")
+            continue
         readme = REPORTS / slug / "README.md"
         if not readme.exists():
             print(f"  skipping {slug} (no README.md)")

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="310" viewBox="0 0 640 310" font-family="Inter, system-ui, sans-serif">
+  <text x="20" y="28" font-size="15" font-weight="700" fill="#1a1a1a">Jarak setiap koperasi ke jalan beraspal terdekat (bagian koperasi)</text>
+
+  <!-- row template: y = 52, 86, 120, 154, 188, 222, 256 -->
+  <text x="182" y="68" text-anchor="end" font-size="12.5" fill="#1a1a1a">di atas jalan (&lt;70 m)</text>
+  <rect x="190" y="52" width="159" height="20" fill="#9a958a"/>
+  <text x="357" y="66" font-size="12.5" font-weight="700" fill="#1a1a1a">37,8%</text>
+
+  <text x="182" y="102" text-anchor="end" font-size="12.5" fill="#1a1a1a">&lt; ±260 m</text>
+  <rect x="190" y="86" width="108" height="20" fill="#9a958a"/>
+  <text x="306" y="100" font-size="12.5" font-weight="700" fill="#1a1a1a">25,7%</text>
+
+  <text x="182" y="136" text-anchor="end" font-size="12.5" fill="#1a1a1a">&lt; ±530 m</text>
+  <rect x="190" y="120" width="38" height="20" fill="#9a958a"/>
+  <text x="236" y="134" font-size="12.5" font-weight="700" fill="#1a1a1a">9,0%</text>
+
+  <text x="182" y="170" text-anchor="end" font-size="12.5" fill="#1a1a1a">&lt; ±1 km</text>
+  <rect x="190" y="154" width="35" height="20" fill="#9a958a"/>
+  <text x="233" y="168" font-size="12.5" font-weight="700" fill="#1a1a1a">8,3%</text>
+
+  <text x="182" y="204" text-anchor="end" font-size="12.5" fill="#1a1a1a">&lt; ±2 km</text>
+  <rect x="190" y="188" width="27" height="20" fill="#9a958a"/>
+  <text x="225" y="202" font-size="12.5" font-weight="700" fill="#1a1a1a">6,4%</text>
+
+  <text x="182" y="238" text-anchor="end" font-size="12.5" fill="#1a1a1a">&lt; ±5 km</text>
+  <rect x="190" y="222" width="28" height="20" fill="#9a958a"/>
+  <text x="226" y="236" font-size="12.5" font-weight="700" fill="#1a1a1a">6,6%</text>
+
+  <text x="182" y="272" text-anchor="end" font-size="12.5" font-weight="700" fill="#a00">&gt; ±5 km / tak ada</text>
+  <rect x="190" y="256" width="26" height="20" fill="#a00"/>
+  <text x="224" y="270" font-size="12.5" font-weight="700" fill="#a00">6,1%</text>
+</svg>

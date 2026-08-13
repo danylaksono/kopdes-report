@@ -10,9 +10,22 @@ Tiga hal keluar dari pengukuran ini.
 
 **Kedua, kelompok tanpa jalan diukur ulang.** Yang tadinya hanya bisa dikatakan "lebih dari 5 km" sekarang punya angka: **median 9,7 km** ke jalan beraspal terdekat, persentil ke-90 sejauh 26,5 km, dan yang terjauh 292 km. Lebih dari 600 koperasi berjarak lebih dari 25 km. "Tidak ada jalan dalam 5 km" ternyata pernyataan yang terlalu lunak — separuh kelompok ini lebih jauh dari itu.
 
+| Jarak tepat ke jalan beraspal | Koperasi |
+| --- | --- |
+| 5–10 km | 2.466 |
+| 10–25 km | 1.870 |
+| 25–50 km | 526 |
+| 50–100 km | 58 |
+| **Lebih dari 100 km** | **16** |
+
 **Ketiga, setiap koperasi kini punya jarak ritel yang pasti.** Jarak median ke minimarket terdekat: 17,3 km.
 
 Pengukuran ini juga mengaudit laporan lama. Jarak jalan pada lampiran 05 akurat (galat median 34 m). Jarak minimarket pada lampiran 06 bias: jaraknya **terlalu besar** sekitar 169 m, artinya 06 meremehkan berapa banyak koperasi yang dekat minimarket. Akan tetapi temuan utama 06 — perbandingan dengan lokasi acak — tidak berubah, karena kedua sisi dibandingkan dengan cara yang sama.
+
+| Laporan yang diaudit | Galat median | Akurat dalam satu petak |
+| --- | --- | --- |
+| 05 — jarak jalan | 34 m | 92% |
+| 06 — jarak minimarket | +169 m | 41% |
 
 ## Yang tidak bisa kami katakan
 

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="200" viewBox="0 0 640 200" font-family="Inter, system-ui, sans-serif">
+  <text x="20" y="28" font-size="15" font-weight="700" fill="#1a1a1a">Bagian nilai transaksi nasional yang dibawa N desa teratas</text>
+
+  <!-- bar 1 -->
+  <text x="182" y="73" text-anchor="end" font-size="13" fill="#1a1a1a">100 desa (0,12%)</text>
+  <rect x="190" y="55" width="146" height="26" fill="#a00"/>
+  <text x="344" y="73" font-size="13" font-weight="700" fill="#1a1a1a">34,8%</text>
+
+  <!-- bar 2 -->
+  <text x="182" y="113" text-anchor="end" font-size="13" fill="#1a1a1a">1.000 desa (1,2%)</text>
+  <rect x="190" y="95" width="380" height="26" fill="#a00"/>
+  <text x="578" y="113" font-size="13" font-weight="700" fill="#1a1a1a">90,6%</text>
+
+  <!-- bar 3 -->
+  <text x="182" y="153" text-anchor="end" font-size="13" fill="#5c5c5c">82.969 desa lainnya</text>
+  <rect x="190" y="135" width="39" height="26" fill="#b9b4a8"/>
+  <text x="237" y="153" font-size="13" font-weight="700" fill="#5c5c5c">9,4%</text>
+</svg>

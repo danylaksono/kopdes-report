@@ -431,8 +431,11 @@ metadata in the script. Each shell fetches `methods/_content/<slug>.md` at
 runtime and renders it with `marked`. Those content files are plain-language
 write-ups in the same register as the narrative; the authoritative technical
 report (`reports/<slug>/README.md`, English, with code and raw data) is linked
-from each page, never embedded. Re-run the generator when a report is added,
-renamed, or its title changes.
+from each page, never embedded. Charts and diagrams are hand-authored SVGs in
+`methods/_figures/`, referenced from the markdown via `../_figures/<name>.svg`.
+Reports in `EXCLUDED` (currently `18-health-scoring`) are kept in `reports/` as
+evidence but not published as a method page. Re-run the generator when a report
+is added, renamed, or its title changes.
 
 ## The deliverable: an investigative report, not an academic paper
 
@@ -496,7 +499,7 @@ Reuters Graphics / Mongabay pattern:
 | `/explore/`                                         | **The interactive map.** Full screengrid explorer — layer switching, filters, per-cell inspection. The reader's own investigation. |
 | `/findings/`                                        | Index of the detailed write-ups                                                                                                    |
 | `/findings/remoteness/`, `/competition/`, `/money/` | One page per act, in depth, with the tables and figures the story only gestures at                                                 |
-| `/methods/`, `/methods/<nn-slug>/`                  | Methodology appendix — one page per `reports/` entry                                                                               |
+| `/methods/`, `/methods/<nn-slug>/`                  | Methodology appendix — one page per published `reports/` entry (`18-health-scoring` stays unpublished)                                                          |
 | `/data/`                                            | Downloads, provenance, the snapshot log                                                                                            |
 | `/about/`                                           | Who, why, and the corrections policy                                                                                               |
 

@@ -12,6 +12,14 @@ Kami juga memeriksa apakah sistem menyimpan catatan waktu untuk setiap data. Ter
 
 Dari 80.553 desa yang melaporkan nol transaksi pada 5 Agustus, hanya **satu** desa yang mulai melaporkan kegiatan empat hari kemudian. Pada laju itu, butuh sekitar 883 tahun untuk "menghabiskan" antrean yang ada. Sekali lagi: itu bukan ramalan — itu cara mengungkapkan laju yang kami amati.
 
+| Kolom | Berubah dalam 4 hari | Nol → mulai melapor |
+| --- | --- | --- |
+| Nilai transaksi | 31 desa | **1** |
+| Simpanan | 150 desa | 6 |
+| Jumlah rekening | 0 | 0 |
+| NPWP | 1 desa | 1 |
+| NIB | 4 desa | 4 |
+
 Pada periode yang sama, sistem justru menambah 40 koperasi dan 23 aset lahan baru. Daftarnya tumbuh; kegiatannya tidak dilaporkan.
 
 Kami juga menemukan bahwa ekspor data 5 Agustus memuat 1.555 baris desa ganda. Itu membuat penjumlahan menjadi dua kali lipat, jadi sebelum menghitung apa pun, data harus dibersihkan dulu dari baris duplikat.
@@ -19,6 +27,12 @@ Kami juga menemukan bahwa ekspor data 5 Agustus memuat 1.555 baris desa ganda. I
 ## Catatan penting (13 Agustus)
 
 Ada tambahan yang mengubah bacaannya. Potret ketiga (13 Agustus) menunjukkan **209 desa baru** mulai melaporkan antara 9 dan 13 Agustus, sementara nilai total naik 12,7%. Jadi "tidak ada yang bergerak" hanya benar untuk jendela 5–9 Agustus, dan tidak boleh dipakai untuk periode sesudahnya. Apakah lonjakan itu awal dari antrean yang mulai mengalir, atau sekadar isian sekali waktu — itulah yang akan dijawab oleh seri potret bulanan.
+
+| Tanggal potret | Nilai transaksi nasional | Desa yang melaporkan |
+| --- | --- | --- |
+| 5 Agustus | Rp 179,56 miliar | 2.516 |
+| 9 Agustus | Rp 179,79 miliar | 2.517 |
+| 13 Agustus | Rp 202,60 miliar | 2.726 |
 
 ## Yang tidak bisa kami katakan
 
