@@ -30,15 +30,15 @@ so the bands below are **identical to report 05's**, and "far from a road" and
 [`building_access_bands.csv`](building_access_bands.csv) ·
 [`building_access_by_province.csv`](building_access_by_province.csv)
 
-| Distance to nearest building | Cooperatives | Share |
-|---|---|---|
-| on a building cell (<70 m) | 19,372 | 23.2% |
-| < ~260 m | 5,711 | 6.9% |
-| < ~530 m | 3,129 | 3.8% |
-| < ~1 km | 1,748 | 2.1% |
-| < ~2 km | 921 | 1.1% |
-| < ~5 km | 339 | 0.4% |
-| **> ~5 km / none found** | **52,159** | **62.6%** |
+| Distance to nearest building | Cooperatives | Share     |
+| ---------------------------- | ------------ | --------- |
+| on a building cell (<70 m)   | 19,372       | 23.2%     |
+| < ~260 m                     | 5,711        | 6.9%      |
+| < ~530 m                     | 3,129        | 3.8%      |
+| < ~1 km                      | 1,748        | 2.1%      |
+| < ~2 km                      | 921          | 1.1%      |
+| < ~5 km                      | 339          | 0.4%      |
+| **> ~5 km / none found**     | **52,159**   | **62.6%** |
 
 Only a quarter of cooperatives sit on a mapped building; 62.6% have no mapped
 building within ~5 km. **That headline must not be read as "no house".** See
@@ -53,9 +53,9 @@ Of the **53,419** cooperatives with no mapped building within ~1 km,
 grid. The two sources disagree almost everywhere — the signature of an
 incomplete OSM rural building layer, not a truly uninhabited landscape.
 
-**Consequence:** write "no *mapped* house", never "no house". The population
+**Consequence:** write "no _mapped_ house", never "no house". The population
 grid (03) is the better "is anyone there" measure; OSM buildings are the better
-*independent confirmation* of the tail. This is a lower bound, exactly like
+_independent confirmation_ of the tail. This is a lower bound, exactly like
 roads (05).
 
 ## Finding 3 — the concordance: two independent sources agree on the tail
@@ -71,8 +71,8 @@ triple-confirmed (population, buildings, roads).
 ## Finding 4 — the paddy-field connection
 
 **1,221 cooperatives with no mapped building within ~5 km are recorded inside a
-farmland polygon** (07). A cooperative *in a paddy field and with no mapped
-house nearby* is exactly the individual case a field check should target — and
+farmland polygon** (07). A cooperative _in a paddy field and with no mapped
+house nearby_ is exactly the individual case a field check should target — and
 the intersection with the confirmed-agricultural set (448, two independent maps)
 is where the strongest cases live.
 
