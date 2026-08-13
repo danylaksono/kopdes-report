@@ -31,26 +31,26 @@ const CHART = {
     title: "Pencilan keterpencilan",
     pct: false,
     caption:
-      "Hanya 0,21% koperasi tanpa penduduk dalam 5 km — tetapi itu 174 kasus konkret (laporan 03).",
+      "Hanya 0,18% koperasi tanpa penduduk dalam 5 km — tetapi itu 146 kasus konkret (laporan 03).",
     bars: [
-      { label: "Tanpa penduduk 5 km", v: 174, hl: true },
-      { label: "< 500 orang", v: 1574 },
-      { label: "500–2.000", v: 2408 },
-      { label: "2.000–10.000", v: 8133 },
-      { label: "> 10.000", v: 71053 },
+      { label: "Tanpa penduduk 5 km", v: 146, hl: true },
+      { label: "< 500 orang", v: 1569 },
+      { label: "500–2.000", v: 2406 },
+      { label: "2.000–10.000", v: 8139 },
+      { label: "> 10.000", v: 71119 },
     ],
   },
   road: {
     title: "Jarak ke jalan, bagi yang “tanpa jalan”",
     pct: false,
     caption:
-      "5.114 koperasi tanpa jalan beraspal dalam ±5 km; jarak median 9,7 km (laporan 05, 08).",
+      "5.106 koperasi tanpa jalan beraspal dalam ±5 km; jarak median 9,7 km (laporan 05, 08).",
     bars: [
-      { label: "5–10 km", v: 2466 },
-      { label: "10–25 km", v: 1870 },
-      { label: "25–50 km", v: 526 },
-      { label: "50–100 km", v: 58 },
-      { label: "> 100 km", v: 16, hl: true },
+      { label: "5–10 km", v: 2467 },
+      { label: "10–25 km", v: 1872 },
+      { label: "25–50 km", v: 523 },
+      { label: "50–100 km", v: 57 },
+      { label: "> 100 km", v: 7, hl: true },
     ],
   },
   nn: {
@@ -58,20 +58,20 @@ const CHART = {
     pct: true,
     caption: "1 dari 5 koperasi punya koperasi lain dalam 1 km (laporan 10).",
     bars: [
-      { label: "dalam 500 m", v: 4.6 },
-      { label: "dalam 1 km", v: 22.1, hl: true },
+      { label: "dalam 500 m", v: 4.7 },
+      { label: "dalam 1 km", v: 22.2, hl: true },
       { label: "dalam 2 km", v: 58.9 },
-      { label: "dalam 5 km", v: 91.2 },
+      { label: "dalam 5 km", v: 91.3 },
     ],
   },
   cluster: {
     title: "Berbagi petak sungguhan",
     pct: true,
     caption:
-      "Hanya 6,7% berbagi sel ±1 km dengan koperasi lain — dan tanpa penalti kinerja (laporan 10).",
+      "Hanya 6,8% berbagi sel ±1 km dengan koperasi lain — dan tanpa penalti kinerja (laporan 10).",
     bars: [
-      { label: "Sendiri di selnya", v: 93.3 },
-      { label: "≥ 2 di sel yang sama", v: 6.7, hl: true },
+      { label: "Sendiri di selnya", v: 93.2 },
+      { label: "≥ 2 di sel yang sama", v: 6.8, hl: true },
     ],
   },
   funnel: {
@@ -85,17 +85,17 @@ const CHART = {
       { label: "NIB (izin usaha)", v: 72.9 },
       { label: "Modal pokok", v: 11.9 },
       { label: "Iuran wajib", v: 9.2 },
-      { label: "Transaksi", v: 3.0, hl: true },
+      { label: "Transaksi", v: 3.3, hl: true },
     ],
   },
   nib: {
     title: "Izin usaha ada; operasinya tidak",
     pct: true,
     caption:
-      "70,1% desa memegang izin usaha tanpa transaksi yang dilaporkan (laporan 13).",
+      "69,9% desa memegang izin usaha tanpa transaksi yang dilaporkan (laporan 13).",
     bars: [
-      { label: "Izin tanpa transaksi", v: 70.1, hl: true },
-      { label: "Izin + transaksi", v: 3.0 },
+      { label: "Izin tanpa transaksi", v: 69.9, hl: true },
+      { label: "Izin + transaksi", v: 3.3 },
       { label: "Transaksi tanpa izin", v: 0.03 },
       { label: "Tanpa keduanya", v: 26.9 },
     ],
@@ -104,10 +104,10 @@ const CHART = {
     title: "Konsentrasi nilai",
     pct: true,
     caption:
-      "100 desa membawa 37% dari seluruh nilai transaksi yang dilaporkan (laporan 02).",
+      "100 desa membawa 34,8% dari seluruh nilai transaksi yang dilaporkan (laporan 02).",
     bars: [
-      { label: "100 desa teratas", v: 37, hl: true },
-      { label: "1.000 desa teratas", v: 93 },
+      { label: "100 desa teratas", v: 34.8, hl: true },
+      { label: "1.000 desa teratas", v: 90.6 },
     ],
   },
 };

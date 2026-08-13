@@ -26,14 +26,14 @@ land asset → village stats), which reaches **79.3%** of cooperatives.
 
 ## The load-bearing caveat, up front
 
-**821 cooperatives (1.0%) are excluded from every "clean" number here and
+**798 cooperatives (0.96%) are excluded from every "clean" number here and
 reported separately in [`coord_artifacts.csv`](coord_artifacts.csv):**
 
-- **19** have impossible coordinates (08's lat-sign flips and the Papua garbage
-  point);
-- **802** share an _exact duplicate coordinate_ with another cooperative — 388
-  groups, up to 11 cooperatives at one point, concentrated in ACEH (119),
-  PAPUA PEGUNUNGAN (82), JAWA BARAT (62).
+- all **798** share an _exact duplicate coordinate_ with another cooperative —
+  386 groups, up to 11 cooperatives at one point, concentrated in ACEH (119),
+  PAPUA PEGUNUNGAN (79), JAWA BARAT (62). The 19 previously-impossible
+  coordinates from 08 were corrected by the ministry on 08-13 and are no
+  longer artifacts.
 
 Exact duplicates are the signature of a geocoding fallback — cooperatives
 snapped to an admin centroid, not physically co-located. **At the fine r9 scale
@@ -42,19 +42,19 @@ cooperatives "on top of each other" must be written against the clean set.
 
 ## Finding 1 — most KDMP have a sibling nearby; few are stacked on top of each other
 
-[`nn_bands.csv`](nn_bands.csv) · [`nn_within.csv`](nn_within.csv) · exact geodesic, 82,521 clean cooperatives
+[`nn_bands.csv`](nn_bands.csv) · [`nn_within.csv`](nn_within.csv) · exact geodesic, 82,581 clean cooperatives
 
 | Another cooperative within | Cooperatives | Share      |
 | -------------------------- | ------------ | ---------- |
-| **500 m**                  | 3,826        | **4.64%**  |
-| **1 km**                   | 18,238       | **22.10%** |
-| **2 km**                   | 48,596       | **58.89%** |
-| **5 km**                   | 75,291       | **91.24%** |
+| **500 m**                  | 3,836        | **4.65%**  |
+| **1 km**                   | 18,300       | **22.16%** |
+| **2 km**                   | 48,673       | **58.94%** |
+| **5 km**                   | 75,363       | **91.26%** |
 
 Read both ends. 91% having a sibling within 5 km is the program's
 1-per-desa saturation in populated Indonesia — the same geometry that produced
 03's "95% of people within 1.4 km of a KDMP". But it is not nothing: **one in
-five cooperatives has another one within a kilometre**, and 4.6% within 500 m —
+five cooperatives has another one within a kilometre**, and 4.7% within 500 m —
 which is the real footprint of the "they built them too close together" claim.
 
 ## Finding 2 — true co-location is 6.7% of cooperatives, and most of it is pairs
@@ -63,11 +63,11 @@ which is the real footprint of the "they built them too close together" claim.
 
 | H3 res | cell edge | coops sharing a cell with ≥1 other | share    | max in one cell |
 | ------ | --------- | ---------------------------------- | -------- | --------------- |
-| r7     | ~1.2 km   | 34,966                             | 42.4%    | 23              |
-| **r8** | ~0.5 km   | 5,546                              | **6.7%** | **17**          |
-| r9     | ~0.2 km   | 450                                | 0.55%    | 12              |
+| r7     | ~1.2 km   | 35,056                             | 42.4%    | 23              |
+| **r8** | ~0.5 km   | 5,572                              | **6.8%** | **17**          |
+| r9     | ~0.2 km   | 450                                | 0.54%    | 12              |
 
-5,546 cooperatives sit in 2,501 r8 cells with at least one sibling. The
+5,572 cooperatives sit in 2,513 r8 cells with at least one sibling. The
 distribution is dominated by pairs — 2,100 cells hold exactly 2, and only 8
 cells hold 10 or more. The maximum is **17 cooperatives in one ~1 km cell**.
 
@@ -97,12 +97,12 @@ column is the checklist.
 
 | group                    | n linked | pct reporting a transaction | mean Rp/coop | share of linked value |
 | ------------------------ | -------- | --------------------------- | ------------ | --------------------- |
-| clustered (same r8 cell) | 3,928    | **3.92%**                   | 2.35M        | 5.84%                 |
-| isolated                 | 61,516   | **3.47%**                   | 2.42M        | 94.16%                |
-| all                      | 65,444   | 3.50%                       | 2.42M        | 100%                  |
+| clustered (same r8 cell) | 3,952    | **4.50%**                   | 3.19M        | 7.19%                 |
+| isolated                 | 61,548   | **3.72%**                   | 2.65M        | 92.81%                |
+| all                      | 65,500   | 3.76%                       | 2.68M        | 100%                  |
 
 Spearman correlation between cluster size and per-cooperative transaction
-value: **−0.016** over all clustered cooperatives, **+0.045** over those
+value: **−0.008** over all clustered cooperatives, **+0.097** over those
 reporting at all. There is no signal in either.
 
 The plan's B1 hypothesis — _clustered KDMP have lower per-unit transaction
@@ -134,7 +134,7 @@ for "on top of each other".
 ## Caveats
 
 - "Co-located" here means _recorded at_ the same cell, not _built_ there. The
-  821 artifacts show how often the data itself is the explanation; dense Papua
+  798 artifacts show how often the data itself is the explanation; dense Papua
   cells are the open question. Same imagery bar as 04.
 - An r8 cell is ~0.46 km edge length; two cooperatives in one cell can be up to
   ~0.9 km apart (opposite corners). The nearest-neighbour distances are exact

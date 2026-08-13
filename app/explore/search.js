@@ -2,7 +2,7 @@
  * search.js — find a cooperative or an area by name.
  *
  * The index is built once from the rows already in memory, so searching costs
- * no extra fetch and works offline of the mart. 83.342 cooperatives plus ~7.800
+ * no extra fetch and works offline of the mart. 83.379 cooperatives plus ~7.800
  * administrative names is small enough to scan linearly per keystroke; the one
  * thing that matters for that to stay true is that the lowercased name is
  * precomputed, because lowercasing 83.000 strings on every keystroke is not.
@@ -63,8 +63,22 @@ export function buildIndex(rows) {
       row: r,
     });
     addArea("provinsi", r.province_id, r.province, "", r.longitude, r.latitude);
-    addArea("kabupaten", r.district_id, r.district, r.province, r.longitude, r.latitude);
-    addArea("kecamatan", r.subdistrict_id, r.subdistrict, r.district, r.longitude, r.latitude);
+    addArea(
+      "kabupaten",
+      r.district_id,
+      r.district,
+      r.province,
+      r.longitude,
+      r.latitude,
+    );
+    addArea(
+      "kecamatan",
+      r.subdistrict_id,
+      r.subdistrict,
+      r.district,
+      r.longitude,
+      r.latitude,
+    );
   }
 
   for (const a of areas.values()) {

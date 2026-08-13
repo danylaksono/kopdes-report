@@ -1,6 +1,6 @@
 # 11 — Savings behaviour: are members actually saving, or are the accounts dormant?
 
-**Run**: `python reports/11-savings-behaviour/run.py` · No network · **Last run**: 2026-08-12
+**Run**: `python reports/11-savings-behaviour/run.py` · No network · **Last run**: 2026-08-13 (on 08-13 snapshot)
 **Source**: `kopdes_stats_village.csv` (deduplicated, 83,069 villages)
 
 F2 of `analytics-plan.md`. Transactions are 97% zero ([02](../02-zero-inflation/)),
@@ -67,14 +67,14 @@ saving month to month.
 
 |                | no transaction  | transaction   |
 | -------------- | --------------- | ------------- |
-| **savings**    | 9,192 (11.07%)  | 1,180 (1.42%) |
-| **no savings** | 71,361 (85.91%) | 1,336 (1.61%) |
+| **savings**    | 9,127 (10.99%)  | 1,255 (1.51%) |
+| **no savings** | 71,216 (85.73%) | 1,471 (1.77%) |
 
-**14.1%** of villages report _some_ financial footprint (savings or
-transactions), against the 3.0% that report transactions. The two signals barely
-overlap — 9,192 villages report savings with zero transactions. Transactions
-alone understate the "anything is happening" share by a factor of ~4.7; savings
-is the less degenerate activity channel (12.5% vs 3.0% non-zero).
+**14.3%** of villages report _some_ financial footprint (savings or
+transactions), against the 3.3% that report transactions. The two signals barely
+overlap — 9,127 villages report savings with zero transactions. Transactions
+alone understate the "anything is happening" share by a factor of ~4.3; savings
+is the less degenerate activity channel (12.5% vs 3.3% non-zero).
 
 ## Finding 4 — where savings is reported, it is real money
 
@@ -97,8 +97,8 @@ has no time anchor, only a lifetime total.)
 
 | Top-N villages | Share of savings | Share of transactions (02) |
 | -------------- | ---------------- | -------------------------- |
-| 100            | 24.4%            | 37%                        |
-| 1,000          | 56.9%            | 93%                        |
+| 100            | 24.4%            | 34.8%                      |
+| 1,000          | 56.9%            | 90.6%                      |
 
 Savings spread much more evenly than transactions — consistent with savings
 being a _registration-era_ phenomenon (pokok collected across many villages at
@@ -108,9 +108,9 @@ founding) rather than the deep operating concentration of transactions.
 
 [`savings_national.csv`](savings_national.csv) · [`savings_by_province.csv`](savings_by_province.csv)
 
-Total savings **Rp 40.1 miliar (~USD 2.5M)** against total transactions
-**Rp 179.6 miliar (~USD 11.2M)** — savings are about a fifth of reported
-economic activity. Savings per village: ~Rp 483k.
+Total savings **Rp 40.3 miliar (~USD 2.4M)** against total transactions
+**Rp 202.6 miliar (~USD 12.1M)** — savings are about a fifth of reported
+economic activity. Savings per village: ~Rp 486k.
 
 Savings uptake has a **~400× geographic gradient**: 31.3% of villages in DIY
 Yogyakarta report savings, down through Java and Bali (~17–22%) to 4.95% in

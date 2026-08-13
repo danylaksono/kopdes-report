@@ -1,9 +1,9 @@
 field,kind,rows,nonzero,pct_nonzero
 accounts_count,administrative,83069,79579,95.8
-npwp_count,administrative,83069,80733,97.19
-nib_count,administrative,83069,60723,73.1
-transaction_volume,activity,83069,2516,3.03
-transaction_value,activity,83069,2516,3.03
-simpanan_pokok_amount,activity,83069,9857,11.87
-simpanan_wajib_amount,activity,83069,7666,9.23
-savings_total_amount,activity,83069,10372,12.49
+npwp_count,administrative,83069,80734,97.19
+nib_count,administrative,83069,60730,73.11
+transaction_volume,activity,83069,2726,3.28
+transaction_value,activity,83069,2726,3.28
+simpanan_pokok_amount,activity,83069,9867,11.88
+simpanan_wajib_amount,activity,83069,7679,9.24
+savings_total_amount,activity,83069,10382,12.5

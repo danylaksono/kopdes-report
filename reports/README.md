@@ -18,20 +18,20 @@ Run any of them with `python reports/NN-slug/run.py`. Dependencies:
 | #   | Report                                               | Question                                                       | Network                    | Status                         |
 | --- | ---------------------------------------------------- | -------------------------------------------------------------- | -------------------------- | ------------------------------ |
 | 01  | [snapshot-drift](01-snapshot-drift/)                 | Is SIMKOPDES still being filled in? Are the zeros temporary?   | **live API**               | run 2026-08-09                 |
-| 02  | [zero-inflation](02-zero-inflation/)                 | How much of the performance data is actually zero?             | no                         | run 2026-08-09                 |
-| 03  | [population-coverage](03-population-coverage/)       | Who is within reach of a KDMP, and which KDMP are near nobody? | first run only             | run 2026-08-09                 |
-| 04  | [siting-screen](04-siting-screen/)                   | Which KDMP sit somewhere physically implausible?               | cloud rasters              | run 2026-08-09, top 2,500      |
-| 05  | [road-access](05-road-access/)                       | How far is each KDMP from a road?                              | no                         | run 2026-08-09                 |
-| 06  | [minimarket-proximity](06-minimarket-proximity/)     | Were KDMP built on top of existing modern retail?              | no                         | run 2026-08-09                 |
-| 07  | [landuse-polygons](07-landuse-polygons/)             | On a graveyard? In a paddy field?                              | cloud rasters              | run 2026-08-10, 536 candidates |
-| 08  | [exact-geometry](08-exact-geometry/)                 | How far is it _really_? Are the coordinates even possible?     | no                         | run 2026-08-10                 |
+| 02  | [zero-inflation](02-zero-inflation/)                 | How much of the performance data is actually zero?             | no                         | run 2026-08-13                 |
+| 03  | [population-coverage](03-population-coverage/)       | Who is within reach of a KDMP, and which KDMP are near nobody? | first run only             | run 2026-08-13                 |
+| 04  | [siting-screen](04-siting-screen/)                   | Which KDMP sit somewhere physically implausible?               | cloud rasters              | run 2026-08-13, top 2,500      |
+| 05  | [road-access](05-road-access/)                       | How far is each KDMP from a road?                              | no                         | run 2026-08-13                 |
+| 06  | [minimarket-proximity](06-minimarket-proximity/)     | Were KDMP built on top of existing modern retail?              | no                         | run 2026-08-13                 |
+| 07  | [landuse-polygons](07-landuse-polygons/)             | On a graveyard? In a paddy field?                              | cloud rasters              | run 2026-08-13, 538 candidates |
+| 08  | [exact-geometry](08-exact-geometry/)                 | How far is it _really_? Are the coordinates even possible?     | no                         | run 2026-08-13                 |
 | 09  | [external-corroboration](09-external-corroboration/) | Does the ministry's own public figure match its dashboard?     | sources cited, not scraped | run 2026-08-10                 |
-| 10  | [coop-clustering](10-coop-clustering/)               | Do KDMP cluster on top of each other, and does it hurt?        | no                         | run 2026-08-12                 |
-| 11  | [savings-behaviour](11-savings-behaviour/)           | Are members actually saving, or are the accounts dormant?      | no                         | run 2026-08-12                 |
-| 12  | [product-mix](12-product-mix/)                       | What does the program actually sell?                           | no                         | run 2026-08-12                 |
-| 13  | [compliance-npwp-nib](13-compliance-npwp-nib/)       | Is the paperwork real, and is anyone operating under it?       | no                         | run 2026-08-12                 |
-| 14  | [island-comparison](14-island-comparison/)           | Whose program is this — Java or Indonesia?                     | no                         | run 2026-08-12                 |
-| 15  | [construction-output](15-construction-output/)       | Does construction track output?                                | no                         | run 2026-08-12                 |
+| 10  | [coop-clustering](10-coop-clustering/)               | Do KDMP cluster on top of each other, and does it hurt?        | no                         | run 2026-08-13                 |
+| 11  | [savings-behaviour](11-savings-behaviour/)           | Are members actually saving, or are the accounts dormant?      | no                         | run 2026-08-13                 |
+| 12  | [product-mix](12-product-mix/)                       | What does the program actually sell?                           | no                         | run 2026-08-13                 |
+| 13  | [compliance-npwp-nib](13-compliance-npwp-nib/)       | Is the paperwork real, and is anyone operating under it?       | no                         | run 2026-08-13                 |
+| 14  | [island-comparison](14-island-comparison/)           | Whose program is this — Java or Indonesia?                     | no                         | run 2026-08-13                 |
+| 15  | [construction-output](15-construction-output/)       | Does construction track output?                                | no                         | run 2026-08-13                 |
 | 16  | [rat-compliance](16-rat-compliance/)                 | Are cooperatives holding their annual member meetings (RAT)?   | no                         | run 2026-08-13                 |
 
 ## What we can and cannot say right now
@@ -41,18 +41,18 @@ Read this before quoting any number out of these reports.
 **Established:**
 
 - Reported economic activity is extraordinarily concentrated — **100 villages
-  out of 84,624 carry 37% of all national transaction value**, 1,000 carry 93%
-  (02).
+  out of 84,624 carry 34.8% of all national transaction value**, 1,000 carry 90.6%
+  (02; eased from 37.3%/92.9% as more villages began reporting on 08-13).
 - **Savings are reported ~4× more often than transactions, and the money is
   one-time capital, not ongoing saving.** 12.5% of villages report any savings
-  (vs 3.0% transactions) and 14.1% report _some_ financial footprint; 9,192
+  (vs 3.3% transactions) and 14.1% report _some_ financial footprint; 9,127
   villages report savings with zero transactions. Of those reporting both pokok
-  and wajib, median wajib/pokok = 0.28 and only 15.7% have wajib > pokok — the
+  and wajib, median wajib/pokok = 0.28 and only 15.8% have wajib > pokok — the
   plan's own "wajib ≫ pokok = active" test fails. The field tiers (accounts
-  ~96% > pokok 11.9% > wajib 9.2% / transactions 3.0%) are the shape a real
+  ~96% > pokok 11.9% > wajib 9.2% / transactions 3.3%) are the shape a real
   activity funnel would produce (11).
 - **Savings spread far less concentrated than transactions** (top-100 = 24.4%
-  vs 37%; top-1,000 = 56.9% vs 93%), consistent with capital being collected at
+  vs 34.8%; top-1,000 = 56.9% vs 90.6%), consistent with capital being collected at
   registration rather than through operations (11).
 - **Savings uptake has a ~400× province gradient** — 31.3% of villages in
   Yogyakarta down to 0.08% in Papua Pegunungan — tracking economic geography,
@@ -62,16 +62,16 @@ Read this before quoting any number out of these reports.
   24 provinces. KDMP are positioned as village grocery shops (12).
 - **The license exists; the operations don't.** 97.1% of cooperatives hold
   NPWP, 72.9% NIB (totals reconcile with the national summary). Only 23
-  villages (0.03%) report a transaction without a license, while 70.1% of
+  villages (0.03%) report a transaction without a license, while 69.9% of
   villages hold the license and report no transaction — paperwork present,
   operations absent (13).
 - **The program is a Java phenomenon.** Java holds 30% of cooperatives but
-  ~68% of reported transaction value; Papua 8.5% of cooperatives and 0.2% of
-  value (~85× per-cooperative gap). The remoteness tail, the land-verification
+  ~60% of reported transaction value; Papua 8.5% of cooperatives and ~0.6% of
+  value (~30× per-cooperative gap). The remoteness tail, the land-verification
   gap (3.2% verified in Papua) and the activity gap are all eastern-Indonesia
   phenomena (14).
-- **Construction is a quarter done; RAT is populated and Java-skewed.** 23.0% of
-  cooperatives nationally are at 100% construction and 45.5% have any
+- **Construction is a quarter done; RAT is populated and Java-skewed.** 24.3% of
+  cooperatives nationally are at 100% construction and 45.6% have any
   construction stage recorded (15). **60.2% of cooperatives have conducted an
   annual RAT** (50,174/83,382 per 05-08), from 98.9% in DKI Jakarta to 6.1% in
   Papua Pegunungan (16). The construction-vs-output correlation (ρ = 0.34, n = 38)
@@ -103,21 +103,22 @@ Read this before quoting any number out of these reports.
   roadside location; the excess decays to nothing by 2 km (06). This survives
   re-tiering the retail data, so it does not depend on where the format
   boundary is drawn.
-- **KDMP are near-continuous, not clustered.** 91.2% of cooperatives have
-  another KDMP within 5 km (exact geodesic), 58.9% within 2 km, 22.1% within
-  1 km, 4.6% within 500 m; 6.7% share the same ~1 km H3 cell — but most of that
-  is pairs (2,100 of 2,501 cells hold exactly two), maximum 17 in one cell near
+- **KDMP are near-continuous, not clustered.** 91.3% of cooperatives have
+  another KDMP within 5 km (exact geodesic), 58.9% within 2 km, 22.2% within
+  1 km, 4.7% within 500 m; 6.8% share the same ~1 km H3 cell — but most of that
+  is pairs (2,110 of 2,513 cells hold exactly two), maximum 17 in one cell near
   Wamena (Papua Pegunungan) (10).
 - **About two-thirds of apparent fine-scale co-location is a coordinate
-  artefact.** 821 cooperatives — 19 with impossible coordinates (08) plus 802
-  sharing an exact duplicate coordinate (388 groups, up to 11 at one point;
-  concentrated in Aceh and Papua) — are set aside in 10. At the ~350 m scale
+  artefact.** 798 cooperatives — all sharing an exact duplicate coordinate
+  (386 groups, up to 11 at one point; concentrated in Aceh and Papua; the 19
+  impossible coordinates from 08 were corrected by the ministry on 08-13) —
+  are set aside in 10. At the ~350 m scale
   they are 64% of apparent co-location, so same-cell figures must be read from
   the clean set. Write "recorded at", never "built at".
 - **Clustering does not measurably hurt performance (null).** Cooperatives that
-  share a cell report transactions at the same rate as isolated ones (3.9% vs
-  3.5%), and cluster size does not correlate with per-cooperative value
-  (Spearman −0.02 all, +0.05 reporting-only). B1's "clustered → lower per-unit
+  share a cell report transactions at the same rate as isolated ones (4.5% vs
+  3.7%), and cluster size does not correlate with per-cooperative value
+  (Spearman −0.008 all, +0.097 reporting-only). B1's "clustered → lower per-unit
   output" hypothesis is not supported (10).
 - **The "too close together" claim does not hold as a mass phenomenon either.**
   At any linking radius ≥ ~1 km, density-connected components chain across Java
@@ -131,8 +132,9 @@ Read this before quoting any number out of these reports.
   government's own public account of it. Independently, the head of Bakom put
   **1,061 cooperatives operating** on 2026-06-08 (1.3% of the registry) against
   our 3.0% reporting any transaction, in the same two provinces.
-- **The headline is Rp 179.5 _billion_ (miliar), ~USD 11 million — about
-  Rp 2.15 million (~USD 130) per cooperative to date (09).** The "179.5T"
+- **The headline is Rp 202.6 _billion_ (miliar), ~USD 12 million — about
+  Rp 2.43 million (~USD 145) per cooperative (09; was Rp 179.5 miliar /
+  Rp 2.15 juta on the 08-05 snapshot).** The "179.5T"
   misreading (1000×) was an **internal error in our own plan notes**; the media
   reported miliar correctly all along (09).
 - **19 cooperatives were not in Indonesia** (18 a latitude sign error); the

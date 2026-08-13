@@ -131,7 +131,7 @@
 /* ---- the scale ladder ---------------------------------------------------- */
 /* The one place this page spends its boldness. Each rung carries the number of
    units at that scale, so switching from provinsi to the dynamic grid is not a
-   relabelled radio group — you watch 38 become 83.342. The spine is what makes
+   relabelled radio group — you watch 38 become 83.379. The spine is what makes
    it read as one hierarchy rather than four unrelated choices. */
 
 .ladder {

@@ -44,7 +44,7 @@
 
 /**
  * The four scales, coarsest last. Cardinalities are filled in at load from the
- * manifest — hardcoding 83.342 here would be a second source of truth that goes
+ * manifest — hardcoding 83.379 here would be a second source of truth that goes
  * stale the next time SIMKOPDES is re-scraped.
  *
  * `sizing` drives the one slider in the rail, whose meaning changes with the
@@ -61,7 +61,14 @@ export const LEVELS = [
     note: "Sel layar, dihitung ulang tiap kali peta digeser",
     kind: "grid",
     table: "kopdes_points",
-    sizing: { label: "Ukuran sel", min: 24, max: 120, step: 4, default: 52, ratio: 0.92 },
+    sizing: {
+      label: "Ukuran sel",
+      min: 24,
+      max: 120,
+      step: 4,
+      default: 52,
+      ratio: 0.92,
+    },
   },
   {
     id: "kecamatan",
@@ -74,7 +81,14 @@ export const LEVELS = [
     parentCols: ["district", "province"],
     boundaries: "kecamatan",
     minzoom: 6,
-    sizing: { label: "Ukuran grafik", min: 12, max: 64, step: 2, default: 30, ratio: 0.74 },
+    sizing: {
+      label: "Ukuran grafik",
+      min: 12,
+      max: 64,
+      step: 2,
+      default: 30,
+      ratio: 0.74,
+    },
   },
   {
     id: "kabupaten",
@@ -86,7 +100,14 @@ export const LEVELS = [
     nameCol: "district",
     parentCols: ["province"],
     boundaries: "kabupaten",
-    sizing: { label: "Ukuran grafik", min: 16, max: 90, step: 2, default: 42, ratio: 0.76 },
+    sizing: {
+      label: "Ukuran grafik",
+      min: 16,
+      max: 90,
+      step: 2,
+      default: 42,
+      ratio: 0.76,
+    },
     // Profile glyphs are a fixed size, so dense areas no longer thin themselves
     // out the way proportional symbols did. 514 anchors at a legible size
     // overlap across Java below about this zoom — the legend says so rather
@@ -104,7 +125,14 @@ export const LEVELS = [
     nameCol: "province",
     parentCols: [],
     boundaries: "provinsi",
-    sizing: { label: "Ukuran grafik", min: 24, max: 140, step: 4, default: 70, ratio: 0.74 },
+    sizing: {
+      label: "Ukuran grafik",
+      min: 24,
+      max: 140,
+      step: 4,
+      default: 70,
+      ratio: 0.74,
+    },
   },
 ];
 
@@ -168,7 +196,7 @@ export const FAMILY_BY_ID = Object.fromEntries(FAMILIES.map((f) => [f.id, f]));
 
 /**
  * SQL that turns a `<family>_class` string into its 1-based position in
- * `classes`, so the browser never carries 83.342 copies of the same few
+ * `classes`, so the browser never carries 83.379 copies of the same few
  * strings. NULL stays NULL — unmeasured is not a class.
  */
 export function classCodeSql(family) {
@@ -177,8 +205,7 @@ export function classCodeSql(family) {
 }
 
 /** Percent share of `classes[i]` at admin level, e.g. `road_share_on_road`. */
-const shareCol = (family, i) =>
-  `${family.id}_share_${family.classes[i].key}`;
+const shareCol = (family, i) => `${family.id}_share_${family.classes[i].key}`;
 
 /** Every aggregate column a family needs, in class order. */
 export function familyShareCols(family) {
@@ -250,8 +277,14 @@ export const MEASURES = [
     color: "#a00000",
     known: (r) => r.has_reported_transaction != null,
     test: (r) => r.has_reported_transaction === false,
-    agg: (p) => (p.pct_reported_transaction == null ? null : 100 - p.pct_reported_transaction),
-    cols: { point: ["has_reported_transaction"], agg: ["pct_reported_transaction"] },
+    agg: (p) =>
+      p.pct_reported_transaction == null
+        ? null
+        : 100 - p.pct_reported_transaction,
+    cols: {
+      point: ["has_reported_transaction"],
+      agg: ["pct_reported_transaction"],
+    },
     source: "reports/01 + 02",
     // The one measure whose denominator genuinely differs by scale, and the
     // difference is documented in mart_manifest.json: at grid level it counts
@@ -272,7 +305,10 @@ export const MEASURES = [
     known: (r) => r.m_to_minimarket_exact != null,
     test: (r) => r.m_to_minimarket_exact <= 500,
     agg: (p) => pct(p.pct_minimarket_within_500m),
-    cols: { point: ["m_to_minimarket_exact"], agg: ["pct_minimarket_within_500m"] },
+    cols: {
+      point: ["m_to_minimarket_exact"],
+      agg: ["pct_minimarket_within_500m"],
+    },
     source: "reports/06 + 08",
   },
   {
@@ -284,8 +320,12 @@ export const MEASURES = [
     color: "#8a5a2b",
     known: (r) => r.land_status != null,
     test: (r) => r.land_verified !== true,
-    agg: (p) => (p.pct_land_verified == null ? null : 100 - p.pct_land_verified),
-    cols: { point: ["land_status", "land_verified"], agg: ["pct_land_verified"] },
+    agg: (p) =>
+      p.pct_land_verified == null ? null : 100 - p.pct_land_verified,
+    cols: {
+      point: ["land_status", "land_verified"],
+      agg: ["pct_land_verified"],
+    },
     source: "data/raw/kopdes_land_assets.csv",
   },
 ];
@@ -324,8 +364,16 @@ export const FILTERS = [
     label: "Penduduk",
     options: [
       { value: "all", label: "Semua" },
-      { value: "sparse", label: "Sekitarnya sepi (<500 orang)", test: (r) => r.pop_k != null && r.pop_k <= 2 },
-      { value: "populated", label: "Ada penduduk (≥500)", test: (r) => r.pop_k != null && r.pop_k >= 3 },
+      {
+        value: "sparse",
+        label: "Sekitarnya sepi (<500 orang)",
+        test: (r) => r.pop_k != null && r.pop_k <= 2,
+      },
+      {
+        value: "populated",
+        label: "Ada penduduk (≥500)",
+        test: (r) => r.pop_k != null && r.pop_k >= 3,
+      },
     ],
   },
   {
@@ -333,8 +381,16 @@ export const FILTERS = [
     label: "Jalan",
     options: [
       { value: "all", label: "Semua" },
-      { value: "far", label: "Lebih dari ±500 m", test: (r) => r.road_k != null && r.road_k <= 2 },
-      { value: "near", label: "±500 m atau kurang", test: (r) => r.road_k != null && r.road_k >= 3 },
+      {
+        value: "far",
+        label: "Lebih dari ±500 m",
+        test: (r) => r.road_k != null && r.road_k <= 2,
+      },
+      {
+        value: "near",
+        label: "±500 m atau kurang",
+        test: (r) => r.road_k != null && r.road_k >= 3,
+      },
     ],
   },
   {
@@ -342,8 +398,16 @@ export const FILTERS = [
     label: "Transaksi",
     options: [
       { value: "all", label: "Semua" },
-      { value: "reporting", label: "Melaporkan transaksi", test: (r) => r.has_reported_transaction === true },
-      { value: "silent", label: "Tidak melaporkan", test: (r) => r.has_reported_transaction === false },
+      {
+        value: "reporting",
+        label: "Melaporkan transaksi",
+        test: (r) => r.has_reported_transaction === true,
+      },
+      {
+        value: "silent",
+        label: "Tidak melaporkan",
+        test: (r) => r.has_reported_transaction === false,
+      },
     ],
   },
   {
@@ -351,9 +415,21 @@ export const FILTERS = [
     label: "Lahan",
     options: [
       { value: "all", label: "Semua" },
-      { value: "verified", label: "Terverifikasi", test: (r) => r.land_verified === true },
-      { value: "unverified", label: "Belum terverifikasi", test: (r) => r.land_status != null && r.land_verified !== true },
-      { value: "no_record", label: "Tanpa catatan aset", test: (r) => r.land_status == null },
+      {
+        value: "verified",
+        label: "Terverifikasi",
+        test: (r) => r.land_verified === true,
+      },
+      {
+        value: "unverified",
+        label: "Belum terverifikasi",
+        test: (r) => r.land_status != null && r.land_verified !== true,
+      },
+      {
+        value: "no_record",
+        label: "Tanpa catatan aset",
+        test: (r) => r.land_status == null,
+      },
     ],
   },
   {
@@ -363,9 +439,17 @@ export const FILTERS = [
       // Default excludes the 19 impossible coordinates from report 08: they are
       // real rows and belong in the data, but leaving them on by default puts
       // koperasi in the Indian Ocean on the opening view.
-      { value: "valid", label: "Hanya yang masuk akal", test: (r) => r.coordinate_suspect !== true },
+      {
+        value: "valid",
+        label: "Hanya yang masuk akal",
+        test: (r) => r.coordinate_suspect !== true,
+      },
       { value: "all", label: "Termasuk yang janggal (19)" },
-      { value: "suspect", label: "Hanya yang janggal", test: (r) => r.coordinate_suspect === true },
+      {
+        value: "suspect",
+        label: "Hanya yang janggal",
+        test: (r) => r.coordinate_suspect === true,
+      },
     ],
   },
 ];

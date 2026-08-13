@@ -16,16 +16,16 @@ the 19 unplaced are 08's impossible coordinates, excluded from medians).
 
 | Island        | Coops  | % reporting tx | Rp tx per coop | % any savings |
 | ------------- | ------ | -------------- | -------------- | ------------- |
-| **JAVA**      | 25,248 | **7.85%**      | **4,819,782**  | 20.6%         |
-| KALIMANTAN    | 7,160  | 1.82%          | 2,137,211      | 9.9%          |
-| NUSA TENGGARA | 5,342  | 0.90%          | 1,575,089      | 17.5%         |
-| SUMATRA       | 25,589 | 1.18%          | 1,243,838      | 9.2%          |
-| SULAWESI      | 10,555 | 0.48%          | 161,012        | 10.2%         |
-| MALUKU        | 2,427  | 0.08%          | 93,436         | 2.6%          |
-| **PAPUA**     | 7,060  | **0.09%**      | **56,390**     | **1.1%**      |
+| **JAVA**      | 25,247 | **7.86%**      | **4,829,531**  | 20.6%         |
+| KALIMANTAN    | 7,160  | 1.82%          | 2,148,973      | 9.9%          |
+| NUSA TENGGARA | 5,342  | 2.39%          | 3,017,832      | 17.5%         |
+| SUMATRA       | 25,587 | 1.19%          | 1,245,256      | 9.2%          |
+| SULAWESI      | 10,554 | 1.56%          | 1,428,560      | 10.2%         |
+| MALUKU        | 2,427  | 0.25%          | 449,010        | 2.6%          |
+| **PAPUA**     | 7,062  | **0.21%**      | **160,706**    | **1.1%**      |
 
-Java has 30% of the cooperatives and **~68% of the reported transaction value**;
-Papua has 8.5% of the cooperatives and **0.2%** of the value. The gap is ~85×
+Java has 30% of the cooperatives and **~60% of the reported transaction value**;
+Papua has 8.5% of the cooperatives and **~0.6%** of the value. The gap is ~30×
 in per-cooperative output.
 
 ## Finding 2 — spatial: the placement story is a Papua/Maluku story

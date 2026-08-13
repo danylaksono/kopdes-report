@@ -103,7 +103,7 @@ export function id(n, maxFrac = 0) {
   return Number(n).toLocaleString("id-ID", { maximumFractionDigits: maxFrac });
 }
 
-/** Rupiah shorthand: 179,5 miliar / 40,1 miliar. */
+/** Rupiah shorthand: 202,6 miliar / 40,3 miliar. */
 export function rp(n) {
   if (n == null || Number.isNaN(n)) return "—";
   const abs = Math.abs(n);

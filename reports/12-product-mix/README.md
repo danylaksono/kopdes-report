@@ -15,18 +15,18 @@ lists). Product names are inconsistent in the source (`BERAS SPHP` vs
 
 | Category        | Share of reported value | Provinces |
 | --------------- | ----------------------- | --------- |
-| **rice**        | **48.2%**               | 29        |
-| **cooking oil** | **26.9%**               | 24        |
-| **fertilizer**  | 16.5%                   | 24        |
-| other           | 6.8%                    | 29        |
-| sugar           | 0.8%                    | 18        |
-| dairy           | 0.6%                    | 2         |
-| LPG             | 0.3%                    | 16        |
+| **rice**        | **51.2%**               | 33        |
+| **cooking oil** | **25.6%**               | 31        |
+| **fertilizer**  | 14.3%                   | 24        |
+| other           | 7.4%                    | 29        |
+| sugar           | 0.8%                    | 25        |
+| dairy           | 0.5%                    | 2         |
+| LPG             | 0.3%                    | 17        |
 
-Three-quarters of reported sales value is **rice and cooking oil**; fertilizer
-is the main agricultural input, present in 24 provinces. KDMP are positioned as
-village grocery + farm-input shops — which is exactly the role they would
-compete for with existing minimarkets and warungs (the cannibalisation
+Just over three-quarters of reported sales value is **rice and cooking oil**;
+fertilizer is the main agricultural input, present in 24 provinces. KDMP are
+positioned as village grocery + farm-input shops — which is exactly the role they
+would compete for with existing minimarkets and warungs (the cannibalisation
 question, [06](../06-minimarket-proximity/)).
 
 ## Finding 2 — the top of the list is highly consistent across provinces

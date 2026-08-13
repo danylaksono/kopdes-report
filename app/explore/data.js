@@ -73,7 +73,7 @@ function pointColumns() {
  * Every cooperative, as flat rows ready to hand straight to screengrid.
  *
  * Deliberately not GeoJSON: the layer only ever reads `longitude`/`latitude`
- * through `getPosition`, and wrapping 83.342 rows in Feature objects with
+ * through `getPosition`, and wrapping 83.379 rows in Feature objects with
  * nested coordinate arrays triples the allocation for nothing.
  */
 export async function loadPoints() {
@@ -208,7 +208,8 @@ export async function loadBoundaries(levelId) {
 
   const promise = fetch(url(`boundaries/${name}.geojson`))
     .then((res) => {
-      if (!res.ok) throw new Error(`boundaries/${name}.geojson -> ${res.status}`);
+      if (!res.ok)
+        throw new Error(`boundaries/${name}.geojson -> ${res.status}`);
       return res.json();
     })
     .catch((err) => {

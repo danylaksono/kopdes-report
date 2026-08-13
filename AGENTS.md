@@ -453,8 +453,8 @@ the vein of Mongabay or bandungbergerak.id (reference the team gave:
   "lower bound" all need a plain-language gloss on first use or replacement.
   Prefer "we compared it against 10,000 random spots that look just as
   plausible" over "population-weighted null model".
-- Numbers need a referent. "IDR 2.15 million per cooperative" means nothing;
-  "about USD 130 — one month of groceries — for the entire lifetime of a
+- Numbers need a referent. "IDR 2.43 million per cooperative" means nothing;
+  "about USD 145 — one month of groceries — for the entire lifetime of a
   cooperative" lands.
 - Uncertainty is stated in sentences, not hedged into invisibility. "We can't
   tell whether these zeros mean no business or no paperwork" is honest and

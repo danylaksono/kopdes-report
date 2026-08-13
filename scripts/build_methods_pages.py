@@ -73,8 +73,8 @@ ID_SUMMARY = {
     ),
     "02-zero-inflation": (
         "Berapa banyak data kinerja yang benar-benar nol? Ternyata hampir semuanya: "
-        "hanya 3,03% desa yang melaporkan transaksi, dan nilainya terkonsentrasi "
-        "ekstrem — 100 desa membawa 37% dari seluruh nilai nasional. Kolom "
+        "hanya 3,3% desa yang melaporkan transaksi, dan nilainya terkonsentrasi "
+        "ekstrem — 100 desa membawa 34,8% dari seluruh nilai nasional. Kolom "
         "administrasi (rekening, NPWP) hampir penuh; kolom aktivitas nyaris kosong."
     ),
     "03-population-coverage": (
@@ -99,7 +99,7 @@ ID_SUMMARY = {
     "06-minimarket-proximity": (
         "Apakah koperasi dibangun di atas minimarket? Setelah memperhitungkan bahwa "
         "keduanya sama-sama suka berada di jalan utama daerah ramai, minimarket "
-        "sekitar 9,6 poin lebih mungkin punya koperasi dalam 500 m daripada lokasi "
+        "sekitar 9,4 poin lebih mungkin punya koperasi dalam 500 m daripada lokasi "
         "acak yang sebanding — tetapi kelebihannya hilang pada jarak 2 km. Kedekatan "
         "ini nyata tapi sedang; bukan bukti kompetisi dagang."
     ),
@@ -126,9 +126,9 @@ ID_SUMMARY = {
         "keliru 1000\u00d7."
     ),
     "10-coop-clustering": (
-        "Apakah koperasi saling menumpuk? 22,1% koperasi punya koperasi lain dalam "
-        "1 km, dan 6,7% berbagi petak 1 km yang sama. Tetapi sebagian besar "
-        "\u201cpenumpukan\u201d halus ternyata koordinat ganda (821 koperasi), bukan "
+        "Apakah koperasi saling menumpuk? 22,2% koperasi punya koperasi lain dalam "
+        "1 km, dan 6,8% berbagi petak 1 km yang sama. Tetapi sebagian besar "
+        "\u201cpenumpukan\u201d halus ternyata koordinat ganda (798 koperasi), bukan "
         "bangunan yang bersebelahan. Dan koperasi yang berdekatan tidak berkinerja "
         "lebih buruk."
     ),
@@ -139,24 +139,24 @@ ID_SUMMARY = {
         "modal pokok."
     ),
     "12-product-mix": (
-        "Program ini menjual apa? Tiga perempat nilai penjualan yang dilaporkan "
+        "Program ini menjual apa? Lebih dari tiga perempat nilai penjualan yang dilaporkan "
         "adalah beras dan minyak goreng, dengan pupuk sebagai barang utama lainnya. "
         "Koperasi desa ini berperan sebagai toko sembako dan saprotan."
     ),
     "13-compliance-npwp-nib": (
         "Apakah surat-suratnya lengkap? NPWP 97%, NIB 73%. Tetapi uji \u201czombie\u201d "
-        "menunjukkan: 70,1% desa memegang izin usaha tanpa transaksi apa pun, "
+        "menunjukkan: 69,9% desa memegang izin usaha tanpa transaksi apa pun, "
         "sementara hanya 0,03% yang melaporkan transaksi tanpa izin. Suratnya ada; "
         "bisnisnya tidak."
     ),
     "14-island-comparison": (
         "Program ini milik Jawa atau Indonesia? Jawa punya 30% koperasi tetapi "
-        "sekitar 68% nilai transaksi; Papua 8,5% koperasi dan 0,2% nilai. Ekor "
-        "keterpencilan, verifikasi lahan yang minim, dan aktivitas yang senyap — "
+        "sekitar 60% nilai transaksi; Papua 8,5% koperasi dan sekitar 0,6% nilai. "
+        "Ekor keterpencilan, verifikasi lahan yang minim, dan aktivitas yang senyap — "
         "semuanya tinggal di Indonesia timur."
     ),
     "15-construction-output": (
-        "Apakah konstruksi sejalan dengan hasil? Hanya 23% koperasi yang konstruksinya "
+        "Apakah konstruksi sejalan dengan hasil? Hanya 24% koperasi yang konstruksinya "
         "100% selesai, lebih dari separuh tanpa catatan konstruksi sama sekali. "
         "Kaitan konstruksi\u2013hasil lemah dan tercampur faktor geografi, jadi tidak "
         "bisa dibaca sebagai sebab-akibat."

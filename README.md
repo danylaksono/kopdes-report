@@ -15,14 +15,14 @@ git clone <this-repo-url>
 Or grab a single file without cloning: open it on GitHub and use the "Raw"
 button (or `raw.githubusercontent.com/<owner>/<repo>/main/data/raw/<file>.csv`).
 
-| File | What's in it |
-|---|---|
-| `kopdes_locations.csv` | every cooperative: id, name, province/district/subdistrict, lat/lon |
-| `kopdes_land_assets.csv` | surveyed land/building per cooperative, incl. verification `status` |
+| File                                                                                | What's in it                                                             |
+| ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `kopdes_locations.csv`                                                              | every cooperative: id, name, province/district/subdistrict, lat/lon      |
+| `kopdes_land_assets.csv`                                                            | surveyed land/building per cooperative, incl. verification `status`      |
 | `kopdes_stats_province.csv` / `_district.csv` / `_subdistrict.csv` / `_village.csv` | roll-up stats (accounts, transactions, savings, ...) at each admin level |
-| `kopdes_national_summary.csv` | headline national metrics |
-| `kopdes_province_rat_and_construction.csv` | annual-meeting (RAT) and building-progress status by province |
-| `kopdes_province_top_products.csv` | top traded products by province |
+| `kopdes_national_summary.csv`                                                       | headline national metrics                                                |
+| `kopdes_province_rat_and_construction.csv`                                          | annual-meeting (RAT) and building-progress status by province            |
+| `kopdes_province_top_products.csv`                                                  | top traded products by province                                          |
 
 The CSVs in the repo are a snapshot from whenever they were last regenerated
 (check `git log -- data/raw` for the date). If you want a fresh pull straight
@@ -49,7 +49,7 @@ geo/               boundary-shapefile download/convert/join pipeline (see geo/RE
 
 `geo/raw/`, `geo/geojson/` and `geo/output/` are gitignored - they're
 regenerated from `data/raw/` by the scripts below and run into the hundreds of
-MB. `data/web/` is gitignored *except* for the files the deployed app fetches:
+MB. `data/web/` is gitignored _except_ for the files the deployed app fetches:
 the four parquet tables, `mart_manifest.json`, and `boundaries/*.geojson`.
 
 ## Regenerating the data
@@ -87,12 +87,12 @@ one visualisation spec works at every zoom:
 python scripts/build_analysis_mart.py
 ```
 
-| File | Rows | Unit |
-|---|---|---|
-| `data/web/kopdes_points.parquet` | 83,342 | one cooperative ≈ one desa — **70 columns** |
-| `data/web/kopdes_kecamatan.parquet` | 7,277 | subdistrict |
-| `data/web/kopdes_kabupaten.parquet` | 514 | district |
-| `data/web/kopdes_provinsi.parquet` | 38 | province |
+| File                                | Rows   | Unit                                        |
+| ----------------------------------- | ------ | ------------------------------------------- |
+| `data/web/kopdes_points.parquet`    | 83,342 | one cooperative ≈ one desa — **70 columns** |
+| `data/web/kopdes_kecamatan.parquet` | 7,277  | subdistrict                                 |
+| `data/web/kopdes_kabupaten.parquet` | 514    | district                                    |
+| `data/web/kopdes_provinsi.parquet`  | 38     | province                                    |
 
 These four (and `mart_manifest.json`) are **committed** — ~7 MB total, small
 enough to serve from GitHub Pages, unlike the 25 MB `points.geojson` they
@@ -106,7 +106,7 @@ drawing points. Filter on `anchor_lat is not null`: 4 kecamatan have villages in
 the statistics but no name-matched cooperative.
 
 **Read `mart_manifest.json` before encoding anything.** It records the schema,
-join coverage, and — most importantly — what a null *means* per column. Several
+join coverage, and — most importantly — what a null _means_ per column. Several
 nulls carry the finding rather than marking absence: a null `km_to_minimarket`
 means "no minimarket within 5 km" (66,846 cooperatives), not "unknown", and
 rendering it as missing data inverts the result of
@@ -115,7 +115,7 @@ rendering it as missing data inverts the result of
 Two joins are lossy and the manifest publishes both rates: admin ids resolve for
 **99.95%** of cooperatives by subdistrict name, while village-level economics
 need a two-hop join through the land-asset file and reach **79.1%**. Aggregate
-economics therefore do *not* come from the points — they are grouped straight off
+economics therefore do _not_ come from the points — they are grouped straight off
 the complete village file and reconcile exactly with the raw export. **Never sum
 point economics for a regional total; read the aggregate table.**
 
@@ -133,13 +133,13 @@ python -m http.server 8000
 ### The map (`/explore/`)
 
 **Four scales of the same 83,342 cooperatives**, picked from the ladder in the
-left rail, which shows what each one costs you: 83.342 points → 7.273 kecamatan
+left rail, which shows what each one costs you: 83.379 points → 7.273 kecamatan
 → 514 kabupaten → 38 provinsi.
 
 - **Kisi dinamis** - screen-space cells via screengrid, fixed pixel size
   (slider), re-binned on every pan and zoom.
 - **Kecamatan / Kabupaten / Provinsi** - one glyph per area, drawn at the
-  *median position of its member cooperatives*, not the polygon centroid, which
+  _median position of its member cooperatives_, not the polygon centroid, which
   can sit offshore. Simplified boundaries render underneath as context.
 
 **Three ways to encode a cell**, all of them shares of cooperatives so the four

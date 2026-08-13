@@ -110,8 +110,10 @@ show — 01's “one village in four days” framing must not be extended to 08-
 **miliar** — billion. The correct figure is **Rp 179.5 billion, roughly USD 11
 million**, for the entire national programme.
 
-Per cooperative that is about **Rp 2.15 million — roughly USD 130 — for the
-whole life of the cooperative to date.** That is the number a reader can hold,
+Per cooperative that is about **Rp 2.43 million — roughly USD 145 — for the
+whole life of the cooperative to date** (at the 08-05/08-09 reconciliation it
+was Rp 2.15 million / USD 130; the total has since grown to Rp 202.6 miliar on
+08-13). That is the number a reader can hold,
 and it is the one to publish. (`analytics-plan-review.md` had already flagged
 this as a correction to make; this closes it with an external source.)
 
