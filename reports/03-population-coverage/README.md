@@ -6,15 +6,15 @@ run · **Source**: Kontur 400m population (H3 r8) + `kopdes_locations.csv` ·
 
 ## The method, in one paragraph
 
-Kontur's population grid is *already* H3 at resolution 8, so it needs no
+Kontur's population grid is _already_ H3 at resolution 8, so it needs no
 spatial processing at all — drop the geometry column and it becomes a 3 MB
 parquet keyed by cell id, and every question becomes a hash join in DuckDB.
 Catchments are k-rings, not buffers. The whole national analysis runs in about
 a minute on a laptop with no PostGIS, no rasters and no geometry library.
 
-| | Size |
-|---|---|
-| `kontur_population_ID.gpkg` | 172.4 MB |
+|                                                  | Size       |
+| ------------------------------------------------ | ---------- |
+| `kontur_population_ID.gpkg`                      | 172.4 MB   |
 | `population_h3.parquet` (zstd, geometry dropped) | **3.0 MB** |
 
 874,919 cells, 277,542,182 people — which matches Indonesia's population, so
@@ -24,13 +24,13 @@ the grid is complete.
 
 [`coverage_by_radius.csv`](coverage_by_radius.csv)
 
-| Catchment | Population covered | Share of national |
-|---|---|---|
-| own 400 m cell | 64,927,494 | 23.4% |
-| ~0.5 km | 203,140,113 | 73.2% |
-| **~1.4 km** | **263,687,843** | **95.0%** |
-| ~2.8 km | 274,452,461 | 98.9% |
-| ~5.1 km | 276,989,563 | 99.8% |
+| Catchment      | Population covered | Share of national |
+| -------------- | ------------------ | ----------------- |
+| own 400 m cell | 64,927,494         | 23.4%             |
+| ~0.5 km        | 203,140,113        | 73.2%             |
+| **~1.4 km**    | **263,687,843**    | **95.0%**         |
+| ~2.8 km        | 274,452,461        | 98.9%             |
+| ~5.1 km        | 276,989,563        | 99.8%             |
 
 `analytics-plan.md` §A2 asks what share of the population is within reach of a
 KDMP and proposes to deliver a list of "coverage deserts" and the "top-100 most
@@ -58,13 +58,13 @@ the story.
 
 By population within ~5 km:
 
-| Band | Cooperatives | Share |
-|---|---|---|
-| nobody within 5 km | 146 | 0.18% |
-| < 500 | 1,569 | 1.88% |
-| 500 – 2k | 2,406 | 2.89% |
-| 2k – 10k | 8,139 | 9.76% |
-| > 10k | 71,119 | 85.30% |
+| Band               | Cooperatives | Share  |
+| ------------------ | ------------ | ------ |
+| nobody within 5 km | 146          | 0.18%  |
+| < 500              | 1,569        | 1.88%  |
+| 500 – 2k           | 2,406        | 2.89%  |
+| 2k – 10k           | 8,139        | 9.76%  |
+| > 10k              | 71,119       | 85.30% |
 
 Read these two findings together and the honest summary is: **the placement
 critique is not a mass phenomenon, but it has a real tail.** 146 cooperatives

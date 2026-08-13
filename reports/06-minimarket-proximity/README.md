@@ -17,12 +17,12 @@ The file is named `minimarkets` but it is an Overpass pull of
 has to be split into formats that a village cooperative actually competes with
 ([`retail_tiers.csv`](retail_tiers.csv)):
 
-| Tier | POIs | Share | Used for proximity? |
-|---|---|---|---|
-| 0 traditional warung / toko | 858 | 8.1% | no — see §5 |
-| **1 convenience / minimarket** | **7,617** | **72.0%** | **yes, primary** |
-| 2 supermarket (town-level) | 1,838 | 17.4% | reported separately |
-| 3 department store (not food retail) | 267 | 2.5% | excluded |
+| Tier                                 | POIs      | Share     | Used for proximity? |
+| ------------------------------------ | --------- | --------- | ------------------- |
+| 0 traditional warung / toko          | 858       | 8.1%      | no — see §5         |
+| **1 convenience / minimarket**       | **7,617** | **72.0%** | **yes, primary**    |
+| 2 supermarket (town-level)           | 1,838     | 17.4%     | reported separately |
+| 3 department store (not food retail) | 267       | 2.5%      | excluded            |
 
 **28% of the file is not a minimarket.** A Matahari or a Ramayana is not
 competition for a village cooperative selling rice and LPG, and a Hypermart
@@ -45,10 +45,10 @@ direction that **exonerates the programme**.
 **Deficit against published outlet counts**
 ([`osm_brand_coverage.csv`](osm_brand_coverage.csv)):
 
-| Brand | In OSM | Published outlets | OSM share |
-|---|---|---|---|
-| Indomaret | 3,030 | ~22,000 | **13.8%** |
-| Alfamart | 2,181 | ~20,000 | **10.9%** |
+| Brand     | In OSM | Published outlets | OSM share |
+| --------- | ------ | ----------------- | --------- |
+| Indomaret | 3,030  | ~22,000           | **13.8%** |
+| Alfamart  | 2,181  | ~20,000           | **10.9%** |
 
 > Published totals are hardcoded in `run.py` as `PUBLISHED_OUTLETS`, from
 > company reporting. **Verify and cite before publication.** No downstream
@@ -57,10 +57,10 @@ direction that **exonerates the programme**.
 **Urban bias, measured from the data itself**, needing no external benchmark
 ([`urban_bias_diagnostic.csv`](urban_bias_diagnostic.csv)):
 
-| | Median population in own 400 m cell | Share in a zero-population cell |
-|---|---|---|
-| KDMP | 261 | 21.3% |
-| OSM minimarket (tier 1) | **3,786** | **0.1%** |
+|                         | Median population in own 400 m cell | Share in a zero-population cell |
+| ----------------------- | ----------------------------------- | ------------------------------- |
+| KDMP                    | 261                                 | 21.3%                           |
+| OSM minimarket (tier 1) | **3,786**                           | **0.1%**                        |
 
 Mapped minimarkets sit in cells ~15× more populous than cooperatives do, and
 essentially never in an empty one. Provincial density says the same
@@ -73,11 +73,11 @@ per 100 KDMP in DKI Jakarta, 0.15 in Sulawesi Barat, **0 in Papua Tengah**.
 ([`kdmp_near_minimarket_lower_bounds.csv`](kdmp_near_minimarket_lower_bounds.csv)):
 
 | Within | Cooperatives (≥) | Share (≥) |
-|---|---|---|
-| ~500 m | 2,069 | **2.5%** |
-| ~1 km | 4,150 | 5.0% |
-| ~2 km | 7,416 | 8.9% |
-| ~5 km | 16,496 | 19.8% |
+| ------ | ---------------- | --------- |
+| ~500 m | 2,069            | **2.5%**  |
+| ~1 km  | 4,150            | 5.0%      |
+| ~2 km  | 7,416            | 8.9%      |
+| ~5 km  | 16,496           | 19.8%     |
 
 Supermarkets separately
 ([`kdmp_near_supermarket_lower_bounds.csv`](kdmp_near_supermarket_lower_bounds.csv)):
@@ -98,7 +98,7 @@ statistic is conditional on the store existing
 minimarkets have a KDMP within ~1 km**, 95.7% within ~2 km.
 
 On its own that proves nothing — KDMP are one-per-village and cover 95% of the
-population within ~1.4 km ([03](../03-population-coverage/)), so *any* populated
+population within ~1.4 km ([03](../03-population-coverage/)), so _any_ populated
 point has one nearby almost by construction. Two controls, each matched to the
 minimarket count ([`null_model_comparison.csv`](null_model_comparison.csv)):
 
@@ -109,11 +109,11 @@ minimarket count ([`null_model_comparison.csv`](null_model_comparison.csv)):
   alone would manufacture apparent co-location.
 
 | Within | Minimarkets | Pop null | **Road+pop null** | Excess vs pop | **Excess vs road** |
-|---|---|---|---|---|---|
-| ~500 m | 43.8% | 27.6% | 34.2% | +16.2 pts | **+9.6 pts** |
-| ~1 km | 78.3% | 61.6% | 71.2% | +16.7 pts | **+7.1 pts** |
-| ~2 km | 95.7% | 86.6% | 92.7% | +9.1 pts | +3.0 pts |
-| ~5 km | 99.6% | 98.5% | 99.5% | +1.2 pts | +0.1 pts |
+| ------ | ----------- | -------- | ----------------- | ------------- | ------------------ |
+| ~500 m | 43.8%       | 27.6%    | 34.2%             | +16.2 pts     | **+9.6 pts**       |
+| ~1 km  | 78.3%       | 61.6%    | 71.2%             | +16.7 pts     | **+7.1 pts**       |
+| ~2 km  | 95.7%       | 86.6%    | 92.7%             | +9.1 pts      | +3.0 pts           |
+| ~5 km  | 99.6%       | 98.5%    | 99.5%             | +1.2 pts      | +0.1 pts           |
 
 **About half the apparent co-location is just "both sit on roads in populated
 places."** The residual is real but modest: a mapped minimarket is ~9.6
@@ -135,7 +135,7 @@ chance placement on the road network would produce.
 **Does not**: establish intent, or cannibalisation. Both formats plausibly
 target the same village focal point — market, junction, balai desa — a sub-cell
 feature no null at this resolution can control for. And cannibalisation is a
-claim about *trade*, which needs the transaction data that is 97% zero
+claim about _trade_, which needs the transaction data that is 97% zero
 ([02](../02-zero-inflation/)). Proximity is a precondition for competition, not
 evidence of it.
 
@@ -172,15 +172,15 @@ PODES village-facility counts, or field survey.
 
 ## Outputs
 
-| File | Contents |
-|---|---|
-| [`retail_tiers.csv`](retail_tiers.csv) | what the dataset actually contains |
-| [`osm_brand_coverage.csv`](osm_brand_coverage.csv) | OSM counts vs published outlets |
-| [`urban_bias_diagnostic.csv`](urban_bias_diagnostic.csv) | population context, KDMP vs minimarket |
-| [`osm_density_by_province.csv`](osm_density_by_province.csv) | minimarkets per 100 KDMP |
-| [`kdmp_near_minimarket_lower_bounds.csv`](kdmp_near_minimarket_lower_bounds.csv) | forward, tier 1 |
-| [`kdmp_near_supermarket_lower_bounds.csv`](kdmp_near_supermarket_lower_bounds.csv) | forward, tier 2 |
-| [`minimarket_near_kdmp.csv`](minimarket_near_kdmp.csv) | reverse direction |
-| [`null_model_comparison.csv`](null_model_comparison.csv) | both nulls |
-| [`scope_restricted_lower_bounds.csv`](scope_restricted_lower_bounds.csv) | 27-province subset |
-| `kopdes_minimarket_distance.csv` | per-cooperative (gitignored, rebuilds in ~1 min) |
+| File                                                                               | Contents                                         |
+| ---------------------------------------------------------------------------------- | ------------------------------------------------ |
+| [`retail_tiers.csv`](retail_tiers.csv)                                             | what the dataset actually contains               |
+| [`osm_brand_coverage.csv`](osm_brand_coverage.csv)                                 | OSM counts vs published outlets                  |
+| [`urban_bias_diagnostic.csv`](urban_bias_diagnostic.csv)                           | population context, KDMP vs minimarket           |
+| [`osm_density_by_province.csv`](osm_density_by_province.csv)                       | minimarkets per 100 KDMP                         |
+| [`kdmp_near_minimarket_lower_bounds.csv`](kdmp_near_minimarket_lower_bounds.csv)   | forward, tier 1                                  |
+| [`kdmp_near_supermarket_lower_bounds.csv`](kdmp_near_supermarket_lower_bounds.csv) | forward, tier 2                                  |
+| [`minimarket_near_kdmp.csv`](minimarket_near_kdmp.csv)                             | reverse direction                                |
+| [`null_model_comparison.csv`](null_model_comparison.csv)                           | both nulls                                       |
+| [`scope_restricted_lower_bounds.csv`](scope_restricted_lower_bounds.csv)           | 27-province subset                               |
+| `kopdes_minimarket_distance.csv`                                                   | per-cooperative (gitignored, rebuilds in ~1 min) |

@@ -17,12 +17,12 @@ cells once and proximity becomes ring arithmetic on integer cell ids:
    over 85M points)
 4. keep the distinct cells
 
-| | |
-|---|---|
-| Input | 4,494,742 LineStrings, 1.67 GB GPKG |
-| Output | **9,051,169 distinct H3 r10 cells** (7,760,070 with a non-track road) |
-| Cached index | `data/osm/road_cells_h3r10.parquet`, **34 MB** |
-| Build time | **129 s**, once |
+|              |                                                                       |
+| ------------ | --------------------------------------------------------------------- |
+| Input        | 4,494,742 LineStrings, 1.67 GB GPKG                                   |
+| Output       | **9,051,169 distinct H3 r10 cells** (7,760,070 with a non-track road) |
+| Cached index | `data/osm/road_cells_h3r10.parquet`, **34 MB**                        |
+| Build time   | **129 s**, once                                                       |
 
 Distance then comes from a staged outward ring search: grow the H3 disk one
 shell at a time and drop cooperatives as they resolve. Most resolve at k ≤ 2, so
@@ -30,26 +30,26 @@ only the genuinely remote ones pay for large disks — a flat `grid_disk(38)` ov
 83k points would be 4.5 billion rows; this runs in ~12 s.
 
 `track` is reported separately from made roads throughout. A track is evidence
-of *some* access; it is not a road you drive a delivery van down, and merging
+of _some_ access; it is not a road you drive a delivery van down, and merging
 the two would flatter the result.
 
 ## Finding 1 — 6.2% of KDMP have no made road within ~5 km
 
 [`road_access_bands.csv`](road_access_bands.csv)
 
-| Distance to nearest non-track road | Cooperatives | Share |
-|---|---|---|
-| on a road cell (<70 m) | 31,550 | 37.8% |
-| < ~260 m | 21,437 | 25.7% |
-| < ~530 m | 7,484 | 9.0% |
-| < ~1 km | 6,936 | 8.3% |
-| < ~2 km | 5,360 | 6.4% |
-| < ~5 km | 5,506 | 6.6% |
-| **> ~5 km or none found** | **5,106** | **6.1%** |
+| Distance to nearest non-track road | Cooperatives | Share    |
+| ---------------------------------- | ------------ | -------- |
+| on a road cell (<70 m)             | 31,550       | 37.8%    |
+| < ~260 m                           | 21,437       | 25.7%    |
+| < ~530 m                           | 7,484        | 9.0%     |
+| < ~1 km                            | 6,936        | 8.3%     |
+| < ~2 km                            | 5,360        | 6.4%     |
+| < ~5 km                            | 5,506        | 6.6%     |
+| **> ~5 km or none found**          | **5,106**    | **6.1%** |
 
 Two sharper cuts of the same data:
 
-- **4,321 cooperatives have no road of *any* kind — not even a track — within
+- **4,321 cooperatives have no road of _any_ kind — not even a track — within
   ~5 km.**
 - **812 have a track but no made road** within ~5 km. Reachable on foot or by
   motorbike in dry weather; not by a supply vehicle.
@@ -60,18 +60,18 @@ Road distance (crowdsourced OSM) and population (Kontur, from satellite imagery
 and building footprints) are derived by completely different methods. They
 converge:
 
-| | Zero population in own cell | Has population |
-|---|---|---|
-| **No made road within 5 km** | **4,484** | 649 |
-| Road within 5 km | 13,320 | 64,889 |
+|                              | Zero population in own cell | Has population |
+| ---------------------------- | --------------------------- | -------------- |
+| **No made road within 5 km** | **4,484**                   | 649            |
+| Road within 5 km             | 13,320                      | 64,889         |
 
 **87.4% of the no-road cooperatives also sit in a cell with zero recorded
 population**, against a 21.3% baseline. Median population within ~5 km:
 
-| | Median pop within ~5 km |
-|---|---|
-| No made road within 5 km | **1,723** |
-| All others | **87,991** |
+|                          | Median pop within ~5 km |
+| ------------------------ | ----------------------- |
+| No made road within 5 km | **1,723**               |
+| All others               | **87,991**              |
 
 A 51× difference. These are not scattered geocoding errors — they are a
 coherent set of cooperatives in genuinely empty, roadless places.
@@ -81,20 +81,20 @@ coherent set of cooperatives in genuinely empty, roadless places.
 [`road_access_by_province.csv`](road_access_by_province.csv) — share more than
 ~1 km from a made road, or with none found:
 
-| Province | Cooperatives | % far from road |
-|---|---|---|
-| Papua Selatan | 628 | **71.3%** |
-| Papua Tengah | 1,200 | 64.8% |
-| Papua Barat Daya | 1,024 | 62.7% |
-| Papua Pegunungan | 2,366 | 62.1% |
-| Kalimantan Utara | 411 | 57.7% |
-| Maluku | 1,236 | 56.1% |
-| … | | |
-| Jawa Timur | 8,494 | 1.7% |
-| Jawa Barat | 5,968 | 1.7% |
-| DKI Jakarta | 268 | 1.1% |
-| Jawa Tengah | 8,524 | 1.0% |
-| DI Yogyakarta | 438 | **0.0%** |
+| Province         | Cooperatives | % far from road |
+| ---------------- | ------------ | --------------- |
+| Papua Selatan    | 628          | **71.3%**       |
+| Papua Tengah     | 1,200        | 64.8%           |
+| Papua Barat Daya | 1,024        | 62.7%           |
+| Papua Pegunungan | 2,366        | 62.1%           |
+| Kalimantan Utara | 411          | 57.7%           |
+| Maluku           | 1,236        | 56.1%           |
+| …                |              |                 |
+| Jawa Timur       | 8,494        | 1.7%            |
+| Jawa Barat       | 5,968        | 1.7%            |
+| DKI Jakarta      | 268          | 1.1%            |
+| Jawa Tengah      | 8,524        | 1.0%            |
+| DI Yogyakarta    | 438          | **0.0%**        |
 
 ## Caveats — read before citing
 
@@ -117,8 +117,8 @@ coherent set of cooperatives in genuinely empty, roadless places.
 
 ## Outputs
 
-| File | Contents |
-|---|---|
-| [`road_access_bands.csv`](road_access_bands.csv) | national distribution |
-| [`road_access_by_province.csv`](road_access_by_province.csv) | per-province far-from-road share |
-| `kopdes_road_access.csv` | per-cooperative, joins to [03](../03-population-coverage/) on `cooperative_id` (gitignored, ~10 MB, rebuilds in seconds once the index is cached) |
+| File                                                         | Contents                                                                                                                                          |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`road_access_bands.csv`](road_access_bands.csv)             | national distribution                                                                                                                             |
+| [`road_access_by_province.csv`](road_access_by_province.csv) | per-province far-from-road share                                                                                                                  |
+| `kopdes_road_access.csv`                                     | per-cooperative, joins to [03](../03-population-coverage/) on `cooperative_id` (gitignored, ~10 MB, rebuilds in seconds once the index is cached) |
