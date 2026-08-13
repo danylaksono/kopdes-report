@@ -437,6 +437,11 @@ Reports in `EXCLUDED` (currently `18-health-scoring`) are kept in `reports/` as
 evidence but not published as a method page. Re-run the generator when a report
 is added, renamed, or its title changes.
 
+**Deployment gotcha**: GitHub Pages runs Jekyll by default, which silently drops
+`_`-prefixed directories — `methods/_content/` and `methods/_figures/` 404'd on
+the deployed site while working locally. The root `.nojekyll` file (empty, committed)
+disables Jekyll; keep it.
+
 ## The deliverable: an investigative report, not an academic paper
 
 **Decided 2026-08-09. This supersedes the earlier plan to write this up as a
