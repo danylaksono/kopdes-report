@@ -59,7 +59,7 @@ const COLS = [
     num: true,
   },
   { key: "catchment", label: "Populasi di sekitar", sort: false },
-  { key: "coordinate", label: "Koordinat", sort: "number" },
+  { key: "maps", label: "Peta", sort: false },
   { key: "siting", label: "Penempatan", sort: "number" },
   { key: "land", label: "Tanah", sort: "number" },
 ];
@@ -93,6 +93,8 @@ const km = (v) =>
 const mtr = (v) => (v == null ? "—" : `${id(Math.round(v))} m`);
 const people = (v) => (v == null ? "—" : id(Math.round(v)));
 const coord = (v) => v.toFixed(4).replace(".", ",");
+const mapsUrl = (r) =>
+  `https://www.google.com/maps/@${r.latitude},${r.longitude},250m/data=!3m1!1e3`;
 
 // ---------------------------------------------------------------------------
 // State
@@ -165,8 +167,6 @@ function sortValue(col, r) {
       return r.in_siting_shortlist ? 1 : 0;
     case "land":
       return r.land_verified ? 1 : 0;
-    case "coordinate":
-      return r.coordinate_suspect ? 1 : 0;
     case "catchment":
       return r.pop_within_5_1km ?? 0;
     default:
@@ -245,11 +245,12 @@ function cell(col, r) {
       return people(r.pop_within_5_1km);
     case "catchment":
       return sparkline(r);
-    case "coordinate": {
+    case "maps": {
       const c = `${coord(r.latitude)}, ${coord(r.longitude)}`;
+      const link = `<a class="map-link" href="${mapsUrl(r)}" target="_blank" rel="noopener" title="Buka lokasi di Google Maps (${c})">Lihat peta ↗</a>`;
       return r.coordinate_suspect
-        ? `<span class="badge badge-danger" title="Koordinat ${c} tidak masuk akal dan belum diverifikasi">Perlu dicek</span>`
-        : `<span class="coord">${c}</span>`;
+        ? `<span class="badge badge-danger" title="Koordinat ${c} tidak masuk akal dan belum diverifikasi">Perlu dicek</span> ${link}`
+        : link;
     }
     case "siting":
       return r.in_siting_shortlist
@@ -282,6 +283,7 @@ const searchEl = $("#search");
 const provinceSel = $("#f-province");
 const reportSel = $("#f-report");
 const roadSel = $("#f-road");
+const wideBtn = $("#wide");
 
 function renderHeader() {
   theadEl.innerHTML =
@@ -381,6 +383,11 @@ sizeSel.addEventListener("change", () => {
   state.pageSize = Number(sizeSel.value);
   state.page = 0;
   renderBody();
+});
+wideBtn.addEventListener("click", () => {
+  const wide = document.body.classList.toggle("tabel-wide");
+  wideBtn.setAttribute("aria-pressed", String(wide));
+  wideBtn.textContent = wide ? "Lebar normal" : "Lebar penuh";
 });
 
 // ---------------------------------------------------------------------------

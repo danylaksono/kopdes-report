@@ -28,49 +28,54 @@
         <p class="lede">Tabel ini memuat setiap Koperasi Desa Merah Putih yang
             terdaftar dalam data SIMKOPDES pada 5 Agustus 2026. Ketik nama koperasi
             atau desa untuk mencarinya, saring berdasarkan provinsi, status laporan,
-            atau jarak ke jalan, dan klik judul kolom untuk mengurutkan.</p>
+            atau jarak ke jalan, klik judul kolom untuk mengurutkan, atau gunakan
+            tombol "Lebar penuh" untuk memperluas tabel ke seluruh halaman.</p>
 
         <p id="status" role="status">Memuat data…</p>
 
         <div id="tabel" hidden>
-            <div class="tabel-toolbar">
-                <input id="search" type="search" autocomplete="off" spellcheck="false"
-                    placeholder="Cari nama, desa, kecamatan, kabupaten…" aria-label="Cari koperasi" />
-                <select id="f-province" aria-label="Saring berdasarkan provinsi">
-                    <option value="">Semua provinsi</option>
-                </select>
-                <select id="f-report" aria-label="Saring berdasarkan status laporan">
-                    <option value="">Semua status</option>
-                    <option value="melaporkan">Melaporkan transaksi</option>
-                    <option value="belum">Belum melaporkan</option>
-                    <option value="tidak">Tidak terhubung</option>
-                </select>
-                <select id="f-road" aria-label="Saring berdasarkan jarak ke jalan">
-                    <option value="">Semua jarak jalan</option>
-                </select>
-            </div>
-
-            <p class="tabel-count" id="count" aria-live="polite"></p>
-
-            <div class="tabel-scroll">
-                <table id="grid">
-                    <thead id="thead"></thead>
-                    <tbody id="tbody"></tbody>
-                </table>
-            </div>
-
-            <div class="tabel-footer">
-                <span id="page"></span>
-                <span class="tabel-pager">
-                    <button id="prev" type="button">Sebelumnya</button>
-                    <button id="next" type="button">Berikutnya</button>
-                    <select id="size" aria-label="Jumlah baris per halaman">
-                        <option value="25">25 per halaman</option>
-                        <option value="50" selected>50 per halaman</option>
-                        <option value="100">100 per halaman</option>
-                        <option value="250">250 per halaman</option>
+            <div class="tabel-bleed">
+                <div class="tabel-toolbar">
+                    <input id="search" type="search" autocomplete="off" spellcheck="false"
+                        placeholder="Cari nama, desa, kecamatan, kabupaten…" aria-label="Cari koperasi" />
+                    <select id="f-province" aria-label="Saring berdasarkan provinsi">
+                        <option value="">Semua provinsi</option>
                     </select>
-                </span>
+                    <select id="f-report" aria-label="Saring berdasarkan status laporan">
+                        <option value="">Semua status</option>
+                        <option value="melaporkan">Melaporkan transaksi</option>
+                        <option value="belum">Belum melaporkan</option>
+                        <option value="tidak">Tidak terhubung</option>
+                    </select>
+                    <select id="f-road" aria-label="Saring berdasarkan jarak ke jalan">
+                        <option value="">Semua jarak jalan</option>
+                    </select>
+                    <button id="wide" class="tabel-wide-btn" type="button"
+                        aria-pressed="false" title="Isi seluruh lebar halaman">Lebar penuh</button>
+                </div>
+
+                <p class="tabel-count" id="count" aria-live="polite"></p>
+
+                <div class="tabel-scroll">
+                    <table id="grid">
+                        <thead id="thead"></thead>
+                        <tbody id="tbody"></tbody>
+                    </table>
+                </div>
+
+                <div class="tabel-footer">
+                    <span id="page"></span>
+                    <span class="tabel-pager">
+                        <button id="prev" type="button">Sebelumnya</button>
+                        <button id="next" type="button">Berikutnya</button>
+                        <select id="size" aria-label="Jumlah baris per halaman">
+                            <option value="25">25 per halaman</option>
+                            <option value="50" selected>50 per halaman</option>
+                            <option value="100">100 per halaman</option>
+                            <option value="250">250 per halaman</option>
+                        </select>
+                    </span>
+                </div>
             </div>
 
             <ul class="tabel-note">
@@ -84,9 +89,11 @@
                 <li>Batang populasi menunjukkan jumlah penduduk dalam sel 400 m, lingkaran
                     1,4 km, dan lingkaran 5,1 km. Lebar batang relatif terhadap koperasi
                     dengan penduduk terpadat.</li>
-                <li>Penempatan dan tanah berasal dari status aset dan penyaringan lokasi;
-                    "koordinat perlu dicek" berarti koordinatnya tidak masuk akal dan belum
-                    diverifikasi.</li>
+                <li>Kolom Peta membuka lokasi koperasi di Google Maps. "Koordinat perlu
+                    dicek" berarti koordinatnya tidak masuk akal dan belum diverifikasi;
+                    tombol peta tetap tersedia.</li>
+                <li>Penempatan menandai koperasi yang masuk daftar pendek kandidat
+                    penyaringan lokasi; itu undangan untuk dicek, bukan vonis.</li>
             </ul>
         </div>
     </main>

@@ -462,6 +462,14 @@ trip.
   normalised to the 99th percentile of catchment (`popP99`), the same
   high-percentile rule the glyphs use. Three blues, deliberately not any
   family ramp.
+- **Peta column** opens Google Maps at the coordinate (`@lat,lon,250m/data=!3m1!1e3`,
+  the same `imagery_url` format the mart and the explorer use) in a new tab; the
+  raw coordinates live in the link's tooltip. "Perlu dicek" rows keep the
+  warning badge above the link.
+- **"Lebar penuh" toggle** (toolbar button, sets `body.tabel-wide`) breaks the
+  table out of the 1080 px measure: `.tabel-bleed` spans `100vw` and `#grid`
+  stretches to fill it (`width: 100%`, so it fills wide monitors; content and
+  `min-width: 1080px` still cap it on narrower ones).
 - **Nulls carry meaning in the cells**: "> 5 km" for a never-found road or
   minimarket, "Tidak terhubung" for a village with no transaction record,
   "Belum melaporkan" (never "tidak aktif") for a linked village reporting

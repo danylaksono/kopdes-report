@@ -314,6 +314,38 @@ caption {
   border-color: var(--accent);
 }
 
+.tabel-toolbar .tabel-wide-btn {
+  margin-left: auto;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--panel);
+  color: var(--ink);
+  cursor: pointer;
+}
+.tabel-toolbar .tabel-wide-btn:hover {
+  background: #f0ede4;
+}
+body.tabel-wide .tabel-toolbar .tabel-wide-btn {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: #faf6f0;
+}
+
+/* Full-width table: break the instrument out of the 1080 px measure. */
+.tabel-bleed {
+  /* no-op unless body.tabel-wide is set */
+}
+body.tabel-wide .tabel-bleed {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
 .tabel-count {
   font-size: 13px;
   color: var(--muted);
@@ -327,6 +359,7 @@ caption {
   background: var(--panel);
 }
 #grid {
+  width: 100%;
   min-width: 1080px;
   margin: 0;
   font-size: 14px;
@@ -362,11 +395,20 @@ caption {
   font-size: 11px;
   color: var(--muted);
 }
-.coord {
-  font-family: ui-monospace, "Cascadia Code", Menlo, monospace;
+.map-link {
+  display: inline-block;
   font-size: 12px;
-  color: var(--muted);
+  font-weight: 600;
+  padding: 3px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel);
+  color: var(--link);
+  text-decoration: none;
   white-space: nowrap;
+}
+.map-link:hover {
+  background: #f0ede4;
 }
 .dot {
   display: inline-block;
