@@ -414,6 +414,21 @@ def main():
         national_rows.append({"metric": "landing_" + key, "value": value})
     for key, value in (land.get("data") or {}).items():
         national_rows.append({"metric": "land_" + key, "value": value})
+
+    # The dashboard's headline numbers come from nested_data.totals (rat_count,
+    # transaction_value), NOT from /cooperatives/landing-summary. The two have
+    # been observed to diverge (08-13: nested 202.6M vs landing 180.7M), so
+    # record BOTH in every snapshot or the divergence is invisible.
+    nested_totals = national.get("nested_data") or {}
+    totals = nested_totals.get("totals") or {}
+    for key in ("count", "accounts_count", "npwp_count", "nib_count", "rat_count",
+                "transaction_volume", "transaction_value", "generated_at"):
+        if key in totals:
+            national_rows.append({"metric": "nested_" + key, "value": totals.get(key)})
+    for item in national.get("store_readiness") or []:
+        label = item.get("label")
+        if label:
+            national_rows.append({"metric": "readiness_" + label, "value": item.get("value")})
     write_csv("kopdes_national_summary.csv", ["metric", "value"], national_rows)
 
     write_manifest(started_at)

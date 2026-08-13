@@ -115,12 +115,15 @@ ID_SUMMARY = {
         "jalan diukur ulang dengan teliti: separuhnya lebih dari 9,7 km, dan 16 "
         "koperasi lebih dari 100 km. Laporan ini juga menemukan 19 koperasi di luar "
         "Indonesia — koordinat mustahil (18 di antaranya salah tanda garis lintang) "
-        "— dan mengoreksi angka laporan 04 dan 05."
+        "— dan mengoreksi angka laporan 04 dan 05. Catatan 13-08-2026: pemerintah "
+        "telah mengoreksi ke-19 koordinat itu, sehingga angka di sini adalah kondisi "
+        "per cuplikan 5 Agustus."
     ),
     "09-external-corroboration": (
         "Apakah angka pemerintah cocok dengan angka kami? Nyaris persis: media "
         "melaporkan Rp 179,72 miliar, kami Rp 179,79 miliar. Laporan ini pula yang "
-        "mengoreksi klaim \u201c179,5 triliun\u201d — yang benar adalah miliar, "
+        "meluruskan klaim \u201c179,5 triliun\u201d yang pernah beredar \u2014 termasuk "
+        "di catatan perencanaan kami sendiri \u2014 yang benar adalah miliar, "
         "keliru 1000\u00d7."
     ),
     "10-coop-clustering": (
@@ -155,9 +158,15 @@ ID_SUMMARY = {
     ),
     "15-construction-output": (
         "Apakah konstruksi sejalan dengan hasil? Hanya 23% koperasi yang konstruksinya "
-        "100% selesai, lebih dari separuh tanpa catatan konstruksi sama sekali, dan "
-        "RAT nol di semua provinsi. Kaitan konstruksi–hasil lemah dan tercampur "
-        "faktor geografi, jadi tidak bisa dibaca sebagai sebab-akibat."
+        "100% selesai, lebih dari separuh tanpa catatan konstruksi sama sekali. "
+        "Kaitan konstruksi\u2013hasil lemah dan tercampur faktor geografi, jadi tidak "
+        "bisa dibaca sebagai sebab-akibat."
+    ),
+    "16-rat-compliance": (
+        "Apakah koperasi benar-benar menggelar rapat anggota tahunan (RAT)? Ya \u2014 "
+        "60% koperasi tercatat telah melaksanakan RAT per 5 Agustus 2026, tetapi hanya "
+        "6% di Papua Pegunungan. Temuan awal yang menyebut \u201cRAT nol di semua "
+        "provinsi\u201d keliru karena salah membaca kolom data."
     ),
 }
 

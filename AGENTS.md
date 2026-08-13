@@ -39,7 +39,13 @@ All sourced from SIMKOPDES public API (no auth required). Snapshot date: **2026-
 ### Key data quality issues
 
 - **No shared ID** between `kopdes_locations.csv` and `kopdes_land_assets.csv` — joined by exact cooperative name (99.96% match rate, 55 duplicate names)
-- **RAT = 0 everywhere**: `total_rat` and `total_done_rat` are zero for all 38 provinces — either data not collected, or genuine non-compliance
+- **RAT is NOT zero — the old red flag was a field misread.** `total_rat` /
+  `total_done_rat` in `kopdes_province_rat_and_construction.csv` come from the
+  province `rat_summary` endpoint, which returns zeros on every pull. The real
+  RAT channel is **`rat_count`** in `kopdes_stats_province.csv` (~60% of
+  cooperatives, 50,174 on 08-05 → 50,200 live 08-13). See `reports/16-rat-compliance`.
+  The `rat_count` field is only populated at **province level** — district/
+  subdistrict/village walks return 0.
 - **All provinces "unhealthy"**: health scores clustered 51–57, likely driven by zero RAT
 - **Name-only geo-linking**: stats joined to boundary polygons via fuzzy name matching (difflib, cutoff 0.82), not ID codes. Match rates: provinsi 100%, kabupaten ~97.9%
 

@@ -1,0 +1,8 @@
+as_of,source,metric,value,notes
+2026-08-13,landing-summary,transaction_value,180743497416,"endpoint /cooperatives/landing-summary - what report 09 historically reconciled against media"
+2026-08-13,landing-summary,transaction_count,72106,""
+2026-08-13,nested_data.totals,transaction_value,202603008336,"endpoint /statistics/national-readiness/cooperative-stats period=2026 - what the dashboard displays"
+2026-08-13,nested_data.totals,transaction_volume,29072779.68,"unit volume, not transaction count"
+2026-08-13,nested_data.totals,rat_count,50200,"dashboard 'Koperasi Telah Melaksanakan RAT'"
+2026-08-13,nested_data.totals,count,83379,"dashboard 'Total Koperasi'"
+2026-08-13,store_readiness,Pembangunan_100,20221,"national store_readiness bucket"

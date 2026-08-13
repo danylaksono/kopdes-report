@@ -9,15 +9,7 @@ confounder control — the plan-review's verdict is explicit: _"a correlation on
 report is that scatter plot, printed because two structural facts in the same
 file need stating once, not because it proves anything.
 
-## Structural fact 1 — RAT compliance is zero everywhere
-
-`total_rat` and `total_done_rat` are **0 in all 38 provinces**. No annual
-member meeting has been reported anywhere — either not collected, or a genuine,
-nationwide non-compliance. This is the C3 blocker from
-`analytics-plan-review.md` §1.2, restated: the one governance channel in the
-data is completely empty.
-
-## Structural fact 2 — fewer than a quarter of cooperatives are at 100% construction
+## Structural fact 1 — fewer than a quarter of cooperatives are at 100% construction
 
 [`construction_vs_output.csv`](construction_vs_output.csv)
 
@@ -45,9 +37,14 @@ recording, not where it stopped building.
 
 No claim beyond description. What is supportable: construction completion and
 reported output co-vary across provinces in the direction of "built and
-operating are both Java things", and neither the RAT channel nor the
-construction channel supports a picture of a fully delivered program — a
-quarter completed, half undocumented, governance reporting zero.
+operating are both Java things", and the construction channel does not support
+a picture of a fully delivered program — a quarter completed, half undocumented.
+
+> **Correction (2026-08-13):** an earlier version of this report claimed RAT
+> compliance was zero in all 38 provinces. That was a field misread — `total_rat`
+> from the province readiness endpoint is empty on every pull, while the real
+> RAT channel (`rat_count` in the stats file) shows ~60% compliance. See
+> [16-rat-compliance](../16-rat-compliance/).
 
 ## Caveats
 

@@ -32,6 +32,7 @@ Run any of them with `python reports/NN-slug/run.py`. Dependencies:
 | 13  | [compliance-npwp-nib](13-compliance-npwp-nib/)       | Is the paperwork real, and is anyone operating under it?       | no                         | run 2026-08-12                 |
 | 14  | [island-comparison](14-island-comparison/)           | Whose program is this — Java or Indonesia?                     | no                         | run 2026-08-12                 |
 | 15  | [construction-output](15-construction-output/)       | Does construction track output?                                | no                         | run 2026-08-12                 |
+| 16  | [rat-compliance](16-rat-compliance/)                 | Are cooperatives holding their annual member meetings (RAT)?   | no                         | run 2026-08-13                 |
 
 ## What we can and cannot say right now
 
@@ -69,11 +70,12 @@ Read this before quoting any number out of these reports.
   value (~85× per-cooperative gap). The remoteness tail, the land-verification
   gap (3.2% verified in Papua) and the activity gap are all eastern-Indonesia
   phenomena (14).
-- **Construction is a quarter done; the RAT channel is empty.** 23.0% of
+- **Construction is a quarter done; RAT is populated and Java-skewed.** 23.0% of
   cooperatives nationally are at 100% construction and 45.5% have any
-  construction stage recorded; `total_rat` is zero in all 38 provinces. The
-  construction-vs-output correlation (ρ = 0.34, n = 38) is a geography
-  confound, not evidence (15).
+  construction stage recorded (15). **60.2% of cooperatives have conducted an
+  annual RAT** (50,174/83,382 per 05-08), from 98.9% in DKI Jakarta to 6.1% in
+  Papua Pegunungan (16). The construction-vs-output correlation (ρ = 0.34, n = 38)
+  is a geography confound, not evidence (15).
 - **Coverage is not the problem**: 95% of Indonesians live within ~1.4 km of a
   KDMP (03). The "they built them where nobody can reach them" claim does not
   hold as a mass phenomenon.
@@ -130,8 +132,9 @@ Read this before quoting any number out of these reports.
   **1,061 cooperatives operating** on 2026-06-08 (1.3% of the registry) against
   our 3.0% reporting any transaction, in the same two provinces.
 - **The headline is Rp 179.5 _billion_ (miliar), ~USD 11 million — about
-  Rp 2.15 million (~USD 130) per cooperative to date.** Any "179.5T" is wrong by
-  1000× (09).
+  Rp 2.15 million (~USD 130) per cooperative to date (09).** The "179.5T"
+  misreading (1000×) was an **internal error in our own plan notes**; the media
+  reported miliar correctly all along (09).
 - **19 cooperatives are not in Indonesia**, and 18 are a latitude sign error
   (08). All 19 sit in 04's candidate list and 05's roadless set, so: 04's
   land-verified candidates **401 → 388**, its water/mangrove cases **69 → 67**,
@@ -146,15 +149,15 @@ Read this before quoting any number out of these reports.
 - SIMKOPDES **carries no per-record timestamp**, and its `updated_at` is the API
   response time, not a data-freshness stamp (01). Dated snapshots plus diffing
   is the only way to measure currency.
-- **Value grows; participation does not.** Comparing two full snapshots four days
-  apart: of 80,553 villages reporting zero transactions on 2026-08-05, **exactly
-  one** reported any activity by 2026-08-09 (01). **09 refines this**: over a
-  longer window the national total is _not_ flat — it rose 13.8% between
-  2026-07-31 and 2026-08-09 — but it rose inside an almost perfectly static set
-  of reporting villages (2,516 → 2,517). The supportable claim is the reported
-  total rises while the number of cooperatives reporting anything does not; it is
-  concentration deepening, not a backlog draining. Do not write "nothing is being
-  entered".
+- **Value grows; participation was static in the first window, then expanded.**
+  Comparing full snapshots: of 80,553 villages reporting zero transactions on
+  2026-08-05, **exactly one** reported any activity by 2026-08-09 (01), and the
+  total rose 13.8% between 07-31 and 08-09 inside an almost static set (2,516 →
+  2,517). But by **2026-08-13 the reporting set jumped to 2,726 (+209 villages)**
+  while value grew a further 12.7% (09). The "participation does not move"
+  reading must not be extended past 08-09; whether the second window is a
+  backlog starting to drain is what the monthly series will decide. Do not write
+  "nothing is being entered".
 - The 2026-08-05 export contains **1,555 duplicate village rows** (plus 148
   subdistricts, 5 districts), which inflate any sum over rows. Always
   `drop_duplicates` on the id (01).

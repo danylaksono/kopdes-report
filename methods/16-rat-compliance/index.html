@@ -3,18 +3,18 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>09 — External corroboration: is the dashboard the official number? — Metode</title>
+  <title>16 — RAT compliance: the "zero" was a field misread — Metode</title>
   <link rel="stylesheet" href="../../app/site.css" />
 </head>
 <body data-root="../../">
   <nav id="site-nav"></nav>
   <main class="wrap">
-    <p class="kicker">Metode · lampiran 09-external-corroboration</p>
-    <h1>09 — External corroboration: is the dashboard the official number?</h1>
+    <p class="kicker">Metode · lampiran 16-rat-compliance</p>
+    <h1>16 — RAT compliance: the "zero" was a field misread</h1>
     <p class="lede">Laporan teknis lengkap dari analisis ini ditulis dalam bahasa
       Inggris demi ketelitian. Ringkasannya dalam bahasa Indonesia ada di bawah.</p>
     <div class="callout"><span class="callout-label">Ringkasan</span>
-      <p>Apakah angka pemerintah cocok dengan angka kami? Nyaris persis: media melaporkan Rp 179,72 miliar, kami Rp 179,79 miliar. Laporan ini pula yang meluruskan klaim “179,5 triliun” yang pernah beredar — termasuk di catatan perencanaan kami sendiri — yang benar adalah miliar, keliru 1000×.</p>
+      <p>Apakah koperasi benar-benar menggelar rapat anggota tahunan (RAT)? Ya — 60% koperasi tercatat telah melaksanakan RAT per 5 Agustus 2026, tetapi hanya 6% di Papua Pegunungan. Temuan awal yang menyebut “RAT nol di semua provinsi” keliru karena salah membaca kolom data.</p>
     </div>
     <h2>Laporan lengkap (Inggris)</h2>
     <div id="md"></div>
@@ -28,7 +28,7 @@
     import { fetchMarkdown, renderMarkdownInto } from "../../app/site.js";
     const md = document.getElementById("md");
     try {
-      const text = await fetchMarkdown("../../reports/09-external-corroboration/README.md");
+      const text = await fetchMarkdown("../../reports/16-rat-compliance/README.md");
       await renderMarkdownInto(md, text);
     } catch (e) {
       md.innerHTML = `<p style="color:#a00">Gagal memuat laporan: ${e.message}</p>`;

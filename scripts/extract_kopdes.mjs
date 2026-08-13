@@ -54,14 +54,17 @@ async function pool(items, limit, worker, label) {
   const out = new Array(items.length);
   let next = 0;
   let done = 0;
-  const runners = Array.from({ length: Math.min(limit, items.length) }, async () => {
-    while (next < items.length) {
-      const index = next++;
-      out[index] = await worker(items[index]);
-      done++;
-      if (label && done % 500 === 0) log(label, done + "/" + items.length);
-    }
-  });
+  const runners = Array.from(
+    { length: Math.min(limit, items.length) },
+    async () => {
+      while (next < items.length) {
+        const index = next++;
+        out[index] = await worker(items[index]);
+        done++;
+        if (label && done % 500 === 0) log(label, done + "/" + items.length);
+      }
+    },
+  );
   await Promise.all(runners);
   return out;
 }
@@ -72,7 +75,11 @@ async function discoverCipher() {
   const html = await (await fetch(SITE + "/pers/dashboard")).text();
   const chunks = [];
   for (const piece of html.split('"')) {
-    if (piece.startsWith("/_next/static/chunks/") && piece.endsWith(".js") && !chunks.includes(piece)) {
+    if (
+      piece.startsWith("/_next/static/chunks/") &&
+      piece.endsWith(".js") &&
+      !chunks.includes(piece)
+    ) {
       chunks.push(piece);
     }
   }
@@ -82,7 +89,9 @@ async function discoverCipher() {
     const js = await (await fetch(SITE + chunk)).text();
     let at = js.indexOf(marker);
     while (at !== -1) {
-      const parts = js.slice(at + marker.length, at + marker.length + 400).split('"');
+      const parts = js
+        .slice(at + marker.length, at + marker.length + 400)
+        .split('"');
       const secret = parts[1];
       const iv = parts[3];
       if (secret && iv && iv.length === 16 && secret.length >= 16) {
@@ -92,7 +101,9 @@ async function discoverCipher() {
       at = js.indexOf(marker, at + 1);
     }
   }
-  throw new Error("Could not locate the AES parameters in the SIMKOPDES bundle - the site build changed.");
+  throw new Error(
+    "Could not locate the AES parameters in the SIMKOPDES bundle - the site build changed.",
+  );
 }
 
 // ---------------------------------------------------------------- 2. client
@@ -101,7 +112,9 @@ function makeClient(cipher) {
   const iv = Buffer.from(cipher.iv, "utf8");
   return function get(endpoint) {
     return retry(async () => {
-      const res = await fetch(API + endpoint, { headers: { accept: "application/json" } });
+      const res = await fetch(API + endpoint, {
+        headers: { accept: "application/json" },
+      });
       if (!res.ok) throw new Error("HTTP " + res.status + " for " + endpoint);
       const body = await res.json();
       if (typeof body.data !== "string") return body.data;
@@ -127,17 +140,27 @@ function csvCell(value) {
 
 async function writeCsv(name, headers, rows) {
   const lines = [headers.join(",")];
-  for (const row of rows) lines.push(headers.map((h) => csvCell(row[h])).join(","));
+  for (const row of rows)
+    lines.push(headers.map((h) => csvCell(row[h])).join(","));
   await writeFile(path.join(OUT_DIR, name), lines.join(NL) + NL, "utf8");
   log("wrote", name, "(" + rows.length + " rows)");
 }
 
 // ---------------------------------------------------------------- 4. shapes
 const STAT_COLS = [
-  "cooperatives", "accounts_count", "npwp_count", "nib_count", "rat_count",
-  "transaction_volume", "transaction_value",
-  "simpanan_pokok_amount", "simpanan_pokok_members", "simpanan_pokok_tx",
-  "simpanan_wajib_amount", "simpanan_wajib_members", "simpanan_wajib_tx",
+  "cooperatives",
+  "accounts_count",
+  "npwp_count",
+  "nib_count",
+  "rat_count",
+  "transaction_volume",
+  "transaction_value",
+  "simpanan_pokok_amount",
+  "simpanan_pokok_members",
+  "simpanan_pokok_tx",
+  "simpanan_wajib_amount",
+  "simpanan_wajib_members",
+  "simpanan_wajib_tx",
   "savings_total_amount",
 ];
 
@@ -189,9 +212,19 @@ async function main() {
       }
     }
   }
-  await writeCsv("kopdes_locations.csv",
-    ["cooperative_id", "name", "province", "district", "subdistrict", "latitude", "longitude"],
-    locations);
+  await writeCsv(
+    "kopdes_locations.csv",
+    [
+      "cooperative_id",
+      "name",
+      "province",
+      "district",
+      "subdistrict",
+      "latitude",
+      "longitude",
+    ],
+    locations,
+  );
 
   // B. surveyed land / asset points (one bulk call, ~66k records)
   log("fetching /cooperative-assets/get-all ...");
@@ -199,13 +232,18 @@ async function main() {
   const assetRows = [];
   for (const [province, pNode] of Object.entries(assetTree.grouped || {})) {
     for (const [district, dNode] of Object.entries(pNode.districts || {})) {
-      for (const [subdistrict, sNode] of Object.entries(dNode.subdistricts || {})) {
+      for (const [subdistrict, sNode] of Object.entries(
+        dNode.subdistricts || {},
+      )) {
         for (const [village, vNode] of Object.entries(sNode.villages || {})) {
           for (const asset of vNode.assets || []) {
             assetRows.push({
               asset_id: asset.asset_id,
               cooperative: asset.cooperative,
-              province, district, subdistrict, village,
+              province,
+              district,
+              subdistrict,
+              village,
               status: asset.status,
               surveyor: asset.surveyor,
               latitude: asset.latitude,
@@ -216,20 +254,37 @@ async function main() {
       }
     }
   }
-  await writeCsv("kopdes_land_assets.csv",
-    ["asset_id", "cooperative", "province", "district", "subdistrict", "village", "status", "surveyor", "latitude", "longitude"],
-    assetRows);
+  await writeCsv(
+    "kopdes_land_assets.csv",
+    [
+      "asset_id",
+      "cooperative",
+      "province",
+      "district",
+      "subdistrict",
+      "village",
+      "status",
+      "surveyor",
+      "latitude",
+      "longitude",
+    ],
+    assetRows,
+  );
 
   // C. province level statistics + centroid + health
   log("fetching national and province level statistics ...");
-  const nationalStats = await get("/statistics/national-readiness/cooperative-stats?period=" + PERIOD);
+  const nationalStats = await get(
+    "/statistics/national-readiness/cooperative-stats?period=" + PERIOD,
+  );
   const healthMap = await get("/cooperative-financial/statistics/national/map");
   const consolidation = await get("/statistics/dashboard-consolidation");
 
   const coordByProvince = {};
-  for (const item of healthMap.cooperatives || []) coordByProvince[item.province_id] = item;
+  for (const item of healthMap.cooperatives || [])
+    coordByProvince[item.province_id] = item;
   const healthByProvince = {};
-  for (const item of (consolidation.maps_economic_impact_card || {}).maps || []) healthByProvince[item.province_id] = item;
+  for (const item of (consolidation.maps_economic_impact_card || {}).maps || [])
+    healthByProvince[item.province_id] = item;
 
   const provinceRows = (nationalStats.nested_data.grouped || []).map((p) => {
     const coord = coordByProvince[p.province_id] || {};
@@ -249,78 +304,138 @@ async function main() {
       average_health_index: health.average_health_index,
     };
   });
-  await writeCsv("kopdes_stats_province.csv",
-    ["province_id", "province", "latitude", "longitude", ...STAT_COLS,
-     "health_score", "health_status", "health_total_cooperative",
-     "healthy_count", "fairly_healthy_count", "unhealthy_count", "average_health_index"],
-    provinceRows);
+  await writeCsv(
+    "kopdes_stats_province.csv",
+    [
+      "province_id",
+      "province",
+      "latitude",
+      "longitude",
+      ...STAT_COLS,
+      "health_score",
+      "health_status",
+      "health_total_cooperative",
+      "healthy_count",
+      "fairly_healthy_count",
+      "unhealthy_count",
+      "average_health_index",
+    ],
+    provinceRows,
+  );
 
   // D. district level (38 calls)
   const provinceDetails = await pool(
-    provinceRows.map((r) => r.province_id), CONCURRENCY,
-    (id) => get("/statistics/national-readiness/province/" + id), "provinces");
+    provinceRows.map((r) => r.province_id),
+    CONCURRENCY,
+    (id) => get("/statistics/national-readiness/province/" + id),
+    "provinces",
+  );
   const districtRows = [];
   for (const detail of provinceDetails) {
     const td = detail && detail.territorial_data;
     if (!td) continue;
     for (const d of td.districts || []) {
       districtRows.push({
-        province_id: td.province_id, province: td.province,
-        district_id: d.district_id, district: d.district, ...stats(d),
+        province_id: td.province_id,
+        province: td.province,
+        district_id: d.district_id,
+        district: d.district,
+        ...stats(d),
       });
     }
   }
-  await writeCsv("kopdes_stats_district.csv",
-    ["province_id", "province", "district_id", "district", ...STAT_COLS], districtRows);
+  await writeCsv(
+    "kopdes_stats_district.csv",
+    ["province_id", "province", "district_id", "district", ...STAT_COLS],
+    districtRows,
+  );
 
   // E. subdistrict level (~525 calls)
   const districtDetails = await pool(
-    districtRows.map((r) => r.district_id), CONCURRENCY,
-    (id) => get("/statistics/national-readiness/district/" + id), "districts");
+    districtRows.map((r) => r.district_id),
+    CONCURRENCY,
+    (id) => get("/statistics/national-readiness/district/" + id),
+    "districts",
+  );
   const subdistrictRows = [];
   for (const detail of districtDetails) {
     const td = detail && detail.territorial_data;
     if (!td) continue;
     for (const s of td.subdistricts || []) {
       subdistrictRows.push({
-        province_id: td.province_id, province: td.province,
-        district_id: td.district_id, district: td.district,
-        subdistrict_id: s.subdistrict_id, subdistrict: s.subdistrict, ...stats(s),
+        province_id: td.province_id,
+        province: td.province,
+        district_id: td.district_id,
+        district: td.district,
+        subdistrict_id: s.subdistrict_id,
+        subdistrict: s.subdistrict,
+        ...stats(s),
       });
     }
   }
-  await writeCsv("kopdes_stats_subdistrict.csv",
-    ["province_id", "province", "district_id", "district", "subdistrict_id", "subdistrict", ...STAT_COLS],
-    subdistrictRows);
+  await writeCsv(
+    "kopdes_stats_subdistrict.csv",
+    [
+      "province_id",
+      "province",
+      "district_id",
+      "district",
+      "subdistrict_id",
+      "subdistrict",
+      ...STAT_COLS,
+    ],
+    subdistrictRows,
+  );
 
   // F. village level = effectively one row per kopdes (~7.4k calls, a few minutes)
   if (process.env.SKIP_VILLAGES !== "1") {
     const subdistrictDetails = await pool(
-      subdistrictRows.map((r) => r.subdistrict_id), CONCURRENCY,
-      (id) => get("/statistics/national-readiness/subdistrict/" + id), "subdistricts");
+      subdistrictRows.map((r) => r.subdistrict_id),
+      CONCURRENCY,
+      (id) => get("/statistics/national-readiness/subdistrict/" + id),
+      "subdistricts",
+    );
     const villageRows = [];
     for (const detail of subdistrictDetails) {
       const td = detail && detail.territorial_data;
       if (!td) continue;
       for (const v of td.villages || []) {
         villageRows.push({
-          province_id: td.province_id, province: td.province,
-          district_id: td.district_id, district: td.district,
-          subdistrict_id: td.subdistrict_id, subdistrict: td.subdistrict,
-          village_id: v.village_id, village: v.village, ...stats(v),
+          province_id: td.province_id,
+          province: td.province,
+          district_id: td.district_id,
+          district: td.district,
+          subdistrict_id: td.subdistrict_id,
+          subdistrict: td.subdistrict,
+          village_id: v.village_id,
+          village: v.village,
+          ...stats(v),
         });
       }
     }
-    await writeCsv("kopdes_stats_village.csv",
-      ["province_id", "province", "district_id", "district", "subdistrict_id", "subdistrict",
-       "village_id", "village", ...STAT_COLS], villageRows);
+    await writeCsv(
+      "kopdes_stats_village.csv",
+      [
+        "province_id",
+        "province",
+        "district_id",
+        "district",
+        "subdistrict_id",
+        "subdistrict",
+        "village_id",
+        "village",
+        ...STAT_COLS,
+      ],
+      villageRows,
+    );
   } else {
     log("SKIP_VILLAGES=1 - skipping the per-village pass");
   }
 
   // G. per province RAT status, construction progress, top products
   const provinceNameById = {};
-  for (const row of provinceRows) provinceNameById[row.province_id] = row.province;
+  for (const row of provinceRows)
+    provinceNameById[row.province_id] = row.province;
   const ratRows = [];
   const productRows = [];
   provinceDetails.forEach((detail, index) => {
@@ -329,12 +444,18 @@ async function main() {
     const provinceName = provinceNameById[provinceId];
     const rat = detail.rat_summary || {};
     const readiness = {};
-    for (const item of detail.store_readiness || []) readiness[item.label] = item.value;
+    for (const item of detail.store_readiness || [])
+      readiness[item.label] = item.value;
     const economic = detail.economic_impact || {};
     ratRows.push({
-      province_id: provinceId, province: provinceName,
-      rat_period: rat.period, total_rat: rat.total_rat, total_done_rat: rat.total_done_rat,
-      total_verified_rat: rat.total_verified_rat, total_draft_rat: rat.total_draft_rat, total_no_rat: rat.total_no_rat,
+      province_id: provinceId,
+      province: provinceName,
+      rat_period: rat.period,
+      total_rat: rat.total_rat,
+      total_done_rat: rat.total_done_rat,
+      total_verified_rat: rat.total_verified_rat,
+      total_draft_rat: rat.total_draft_rat,
+      total_no_rat: rat.total_no_rat,
       build_upto_20: readiness["Total Pembangunan hingga 20%"],
       build_21_50: readiness["Total Pembangunan 21% - 50%"],
       build_51_75: readiness["Total Pembangunan 51% - 75%"],
@@ -346,18 +467,41 @@ async function main() {
     });
     for (const product of economic.rows || []) {
       productRows.push({
-        province_id: provinceId, province: provinceName,
-        product: product.product, volume: product.volume, value: product.value,
+        province_id: provinceId,
+        province: provinceName,
+        product: product.product,
+        volume: product.volume,
+        value: product.value,
       });
     }
   });
-  await writeCsv("kopdes_province_rat_and_construction.csv",
-    ["province_id", "province", "rat_period", "total_rat", "total_done_rat", "total_verified_rat",
-     "total_draft_rat", "total_no_rat", "build_upto_20", "build_21_50", "build_51_75",
-     "build_76_99", "build_100", "economic_total_volume", "economic_total_value", "updated_at"],
-    ratRows);
-  await writeCsv("kopdes_province_top_products.csv",
-    ["province_id", "province", "product", "volume", "value"], productRows);
+  await writeCsv(
+    "kopdes_province_rat_and_construction.csv",
+    [
+      "province_id",
+      "province",
+      "rat_period",
+      "total_rat",
+      "total_done_rat",
+      "total_verified_rat",
+      "total_draft_rat",
+      "total_no_rat",
+      "build_upto_20",
+      "build_21_50",
+      "build_51_75",
+      "build_76_99",
+      "build_100",
+      "economic_total_volume",
+      "economic_total_value",
+      "updated_at",
+    ],
+    ratRows,
+  );
+  await writeCsv(
+    "kopdes_province_top_products.csv",
+    ["province_id", "province", "product", "volume", "value"],
+    productRows,
+  );
 
   // H. national headline numbers
   const landingSummary = await get("/cooperatives/landing-summary");
@@ -371,9 +515,39 @@ async function main() {
     { metric: "with_nib", value: coopStats.total_with_nib },
     { metric: "stats_updated_at", value: coopStats.updated_at },
   ];
-  for (const [k, v] of Object.entries(landingSummary || {})) nationalRows.push({ metric: "landing_" + k, value: v });
-  for (const [k, v] of Object.entries((landMapping || {}).data || {})) nationalRows.push({ metric: "land_" + k, value: v });
-  await writeCsv("kopdes_national_summary.csv", ["metric", "value"], nationalRows);
+  for (const [k, v] of Object.entries(landingSummary || {}))
+    nationalRows.push({ metric: "landing_" + k, value: v });
+  for (const [k, v] of Object.entries((landMapping || {}).data || {}))
+    nationalRows.push({ metric: "land_" + k, value: v });
+  // The dashboard's headline numbers come from nested_data.totals (rat_count,
+  // transaction_value), NOT landing-summary; the two diverge. Record both so
+  // every snapshot can detect the divergence (see scripts/extract_kopdes.py).
+  const nestedTotals = (nationalStats.nested_data || {}).totals || {};
+  for (const k of [
+    "count",
+    "accounts_count",
+    "npwp_count",
+    "nib_count",
+    "rat_count",
+    "transaction_volume",
+    "transaction_value",
+    "generated_at",
+  ]) {
+    if (k in nestedTotals)
+      nationalRows.push({ metric: "nested_" + k, value: nestedTotals[k] });
+  }
+  for (const item of nationalStats.store_readiness || []) {
+    if (item.label)
+      nationalRows.push({
+        metric: "readiness_" + item.label,
+        value: item.value,
+      });
+  }
+  await writeCsv(
+    "kopdes_national_summary.csv",
+    ["metric", "value"],
+    nationalRows,
+  );
 
   log("done - files are in", path.resolve(OUT_DIR));
 }

@@ -7,11 +7,15 @@ confounder control, so this is a descriptive scatter, never evidence of
 causation. The plan-review's verdict is explicit - "a correlation on 38 points
 with no confounder control is a scatter plot, not evidence."
 
-Two things are worth printing anyway, because both are structural facts the
-report should state once:
-  - RAT (annual member meeting) compliance is zero in every province.
+One thing is worth printing because it is a structural fact the report should
+state once:
   - Fewer than a quarter of cooperatives nationally are at 100% construction,
     and more than half have no construction stage recorded at all.
+
+(An earlier draft also claimed RAT compliance was zero in every province. That
+was a field misread - `total_rat` from the province readiness endpoint is
+empty; the real RAT channel is `rat_count`, ~60% compliance. See
+16-rat-compliance.)
 
 Reads only committed CSVs; no network; deterministic.
 
@@ -35,8 +39,9 @@ def main():
     c = pd.read_csv(RAW / "kopdes_province_rat_and_construction.csv")
     s = pd.read_csv(RAW / "kopdes_stats_province.csv")[["province", "cooperatives", "transaction_value"]]
 
-    print(f"RAT compliance: {c.total_rat.sum():,} total, {c.total_done_rat.sum():,} done "
-          f"across all provinces - the RAT channel is empty\n")
+    # RAT is deliberately NOT analysed here: `total_rat` (province readiness
+    # endpoint) is empty on every pull and the real channel is `rat_count` in
+    # the stats file (~60% compliance) - see 16-rat-compliance.
 
     df = c.merge(s, on="province", how="left")
     df["with_stage"] = df[BUILD_STAGES].sum(axis=1)

@@ -14,23 +14,33 @@ reported any activity four days later.**
 Full population, every village matched on `village_id`
 ([`snapshot_diff_summary.csv`](snapshot_diff_summary.csv)):
 
-| Measure | Changed | Was zero | 0 → positive | Conversion | Net delta |
-|---|---|---|---|---|---|
-| `transaction_value` | 31 | 80,553 | **1** | 0.0012% | +IDR 235,573,832 |
-| `transaction_volume` | 31 | 80,553 | 1 | 0.0012% | +7,268 |
-| `savings_total_amount` | 150 | 72,697 | 6 | 0.0083% | +IDR 172,615,000 |
-| `accounts_count` | 0 | 3,490 | 0 | 0% | 0 |
-| `npwp_count` | 1 | 2,336 | 1 | 0.043% | +1 |
-| `nib_count` | 4 | 22,346 | 4 | 0.018% | +4 |
+| Measure                | Changed | Was zero | 0 → positive | Conversion | Net delta        |
+| ---------------------- | ------- | -------- | ------------ | ---------- | ---------------- |
+| `transaction_value`    | 31      | 80,553   | **1**        | 0.0012%    | +IDR 235,573,832 |
+| `transaction_volume`   | 31      | 80,553   | 1            | 0.0012%    | +7,268           |
+| `savings_total_amount` | 150     | 72,697   | 6            | 0.0083%    | +IDR 172,615,000 |
+| `accounts_count`       | 0       | 3,490    | 0            | 0%         | 0                |
+| `npwp_count`           | 1       | 2,336    | 1            | 0.043%     | +1               |
+| `nib_count`            | 4       | 22,346   | 4            | 0.018%     | +4               |
 
 At the rate observed, ~91 villages a year would begin reporting, and clearing
 the current 80,553 would take **~883 years**.
 
 > **Read that horizon carefully.** It assumes the backlog drains at a constant
 > trickle. A single batch upload would invalidate it completely, and four days
-> is a short window. What it *does* establish is that **no backlog is currently
+> is a short window. What it _does_ establish is that **no backlog is currently
 > draining** — the state of the system today is not "mid-rollout", it is
 > static.
+
+> **Addendum 2026-08-13:** the constant-trickle assumption did not hold. The
+> third snapshot (`data/snapshots/2026-08-13/`) shows **+209 villages** began
+> reporting between 08-09 and 08-13 (2,517 → 2,726) — two orders of magnitude
+> above the 08-05→08-09 rate — while value grew a further 12.7%. The "no
+> backlog is draining" claim is true of the first window and _not_ of the
+> second. Whether the burst is a one-off entry or the start of a real drain is
+> exactly what the monthly series is designed to settle. Do not extend this
+> report's ~91/year rate to 08-13; see [09](../09-external-corroboration/)
+> Finding 3.
 
 Every village whose transactions moved is listed in
 [`snapshot_diff_changed_villages.csv`](snapshot_diff_changed_villages.csv) — 31
@@ -57,11 +67,11 @@ uses transaction volume as an outcome depends on which of these is true.
 I probed the live API to check whether the extractor was dropping any freshness
 field. It isn't — the API simply doesn't carry one:
 
-| Endpoint | Fields returned per record |
-|---|---|
-| `/cooperatives/get-all-nested` | `cooperative_id`, `name`, `latitude`, `longitude` — **that's all** |
-| `/cooperative-assets/get-all` | `asset_id`, `cooperative`, `status`, `surveyor`, `latitude`, `longitude` |
-| `/statistics/national-readiness/subdistrict/{id}` | carries an `updated_at`… |
+| Endpoint                                          | Fields returned per record                                               |
+| ------------------------------------------------- | ------------------------------------------------------------------------ |
+| `/cooperatives/get-all-nested`                    | `cooperative_id`, `name`, `latitude`, `longitude` — **that's all**       |
+| `/cooperative-assets/get-all`                     | `asset_id`, `cooperative`, `status`, `surveyor`, `latitude`, `longitude` |
+| `/statistics/national-readiness/subdistrict/{id}` | carries an `updated_at`…                                                 |
 
 …but that `updated_at` is **the API's response time, not a data-freshness
 stamp**. Ten subdistricts queried in sequence returned
@@ -78,11 +88,11 @@ Found by this comparison: the 2026-08-09 pull came back 1,555 village rows
 shorter with an **identical `village_id` set**. Nothing disappeared — the older
 export was duplicated.
 
-| File | 2026-08-05 rows | Duplicate ids | 2026-08-09 rows |
-|---|---|---|---|
-| `kopdes_stats_village.csv` | 84,624 | **1,555** | 83,069 |
-| `kopdes_stats_subdistrict.csv` | 7,425 | 148 | 7,277 |
-| `kopdes_stats_district.csv` | 525 | 5 | 514 |
+| File                           | 2026-08-05 rows | Duplicate ids | 2026-08-09 rows |
+| ------------------------------ | --------------- | ------------- | --------------- |
+| `kopdes_stats_village.csv`     | 84,624          | **1,555**     | 83,069          |
+| `kopdes_stats_subdistrict.csv` | 7,425           | 148           | 7,277           |
+| `kopdes_stats_district.csv`    | 525             | 5             | 514             |
 
 They matter: summing over rows double-counts, which put the village-level
 transaction total **IDR 18.8M above** the province-level total (179,574,847,612
@@ -104,14 +114,14 @@ coverage, no network, and reproducible by anyone with the repo.
 apart. Full numbers in [`drift_summary.csv`](drift_summary.csv), the rows that
 moved in [`drift_changed_rows.csv`](drift_changed_rows.csv).
 
-| | `transaction_value` | `savings_total_amount` |
-|---|---|---|
-| sampled | 400 | 400 |
-| changed at all | 3 (0.8%) | 9 (2.2%) |
-| **was 0, now > 0** | **0** | **0** |
-| was > 0, increased | 3 | 8 |
-| was > 0, decreased | 0 | 1 |
-| net delta over 4 days | +IDR 15,138,350 | +IDR 6,270,000 |
+|                       | `transaction_value` | `savings_total_amount` |
+| --------------------- | ------------------- | ---------------------- |
+| sampled               | 400                 | 400                    |
+| changed at all        | 3 (0.8%)            | 9 (2.2%)               |
+| **was 0, now > 0**    | **0**               | **0**                  |
+| was > 0, increased    | 3                   | 8                      |
+| was > 0, decreased    | 0                   | 1                      |
+| net delta over 4 days | +IDR 15,138,350     | +IDR 6,270,000         |
 
 Two things follow:
 
@@ -135,7 +145,7 @@ one village. **No backlog is draining.**
 
 - **Four days is a short window.** If the ministry uploads in quarterly batches,
   a four-day window sees nothing by construction. The 883-year horizon is a way
-  of expressing the observed rate, *not* a forecast.
+  of expressing the observed rate, _not_ a forecast.
 - **Non-reporting and non-activity remain formally indistinguishable.** This
   measurement narrows the gap hard — a system being actively populated should
   show movement — but it does not close it. A cooperative could be trading
