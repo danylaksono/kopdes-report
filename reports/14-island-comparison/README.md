@@ -44,7 +44,7 @@ in per-cooperative output.
 
 Every "tail" finding in the investigation is disproportionately a
 Papua/Maluku/Kalimantan phenomenon: 70.7% of Papua cooperatives sit in a
-zero-population 400 m cell (national 21.4%, 03), 75 km to the nearest
+zero-population 400 m cell (national 21.3%, 03), 75 km to the nearest
 minimarket, and only 3.2% have their land verified. Java is the opposite:
 2.6% in zero-pop cells, 62.7% land verified.
 

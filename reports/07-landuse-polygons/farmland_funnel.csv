@@ -1,5 +1,5 @@
 step,cooperatives
-inside a mapped farmland polygon,2206
->= 100 m from the field edge,1023
-... and >= 100 people within 1.4 km,1023
-... and polygon has < 2 villages inside it,536
+inside a mapped farmland polygon,2209
+>= 100 m from the field edge,1027
+... and >= 100 people within 1.4 km,1027
+... and polygon has < 2 villages inside it,538

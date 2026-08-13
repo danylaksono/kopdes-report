@@ -79,16 +79,16 @@ Read this before quoting any number out of these reports.
 - **Coverage is not the problem**: 95% of Indonesians live within ~1.4 km of a
   KDMP (03). The "they built them where nobody can reach them" claim does not
   hold as a mass phenomenon.
-- There is a **real tail**: 21.4% of cooperatives sit in a 400 m cell with zero
-  recorded population, and 174 have nobody within 5 km (03).
+- There is a **real tail**: 21.3% of cooperatives sit in a 400 m cell with zero
+  recorded population, and 146 have nobody within 5 km (03).
 - That tail contains **concrete, nameable candidates**: of the 2,500 most
-  isolated, 2,346 are in closed forest, 69 on water/mangrove/wetland, 993 on
-  steep ground — and **401 of them carry an officially `Terverifikasi` land
-  asset**, 171 both verified and steep (04).
-- **6.2% of cooperatives (5,133) have no made road within ~5 km**; 4,321 have no
-  road of any kind, not even a track (05). Two methodologically independent
-  sources agree: 87.4% of those also sit in a zero-population cell, against a
-  21.4% baseline.
+  isolated, 2,385 are in closed forest, 54 on water/mangrove/wetland, 1,008 on
+  steep ground — and **384 of them carry an officially `Terverifikasi` land
+  asset**, 175 both verified and steep (04; re-run on 08-13 coordinates).
+- **6.1% of cooperatives (5,106) have no made road within ~5 km**; 4,294 have no
+  road of any kind, not even a track (05; re-run on 08-13 coordinates). Two
+  methodologically independent sources agree: 87.4% of those also sit in a
+  zero-population cell, against a 21.3% baseline.
 - **The paddy-field claim holds; the graveyard claim does not.** KDMP fall inside
   a mapped `landuse=farmland` polygon at **2.65%** against **1.10%** for OSM's own
   village-centre nodes — 2.4× — and **448** are placed on cropland by OSM _and_ by
@@ -135,12 +135,13 @@ Read this before quoting any number out of these reports.
   Rp 2.15 million (~USD 130) per cooperative to date (09).** The "179.5T"
   misreading (1000×) was an **internal error in our own plan notes**; the media
   reported miliar correctly all along (09).
-- **19 cooperatives are not in Indonesia**, and 18 are a latitude sign error
-  (08). All 19 sit in 04's candidate list and 05's roadless set, so: 04's
-  land-verified candidates **401 → 388**, its water/mangrove cases **69 → 67**,
-  05's no-made-road set **5,133 → 5,114**, no-road-at-all **4,321 → 4,302**.
+- **19 cooperatives were not in Indonesia** (18 a latitude sign error); the
+  ministry corrected **all 19** between 08-10 and 08-13 (08). Re-run on the
+  08-13 coordinates: 04's land-verified candidates **384**, its water/mangrove
+  cases **54**, 05's no-made-road set **5,106**, no-road-at-all **4,294**.
 - **The roadless set, measured exactly**: median **9.7 km** to the nearest made
-  road, 90th percentile 26.5 km, maximum 292 km; 600 are beyond 25 km (08).
+  road, 90th percentile 26.4 km, maximum 186 km; 587 are beyond 25 km (08;
+  re-run on 08-13 coordinates).
 - **05's ring distances are sound; 06's are biased.** Re-measured against real
   geometry: roads median absolute error **34 m** (92% within one cell width);
   minimarkets **+169 m median signed error**, i.e. 06 _overstated_ distance and

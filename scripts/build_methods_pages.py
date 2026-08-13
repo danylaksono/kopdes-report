@@ -79,20 +79,20 @@ ID_SUMMARY = {
     ),
     "03-population-coverage": (
         "Siapa yang terjangkau koperasi? Hampir semua orang: 95% penduduk tinggal "
-        "dalam 1,4 km dari sebuah koperasi. Tetapi ada ekor yang nyata: 174 koperasi "
-        "tanpa penduduk dalam radius 5 km, dan 21,4% koperasi berada di petak 400 "
+        "dalam 1,4 km dari sebuah koperasi. Tetapi ada ekor yang nyata: 146 koperasi "
+        "tanpa penduduk dalam radius 5 km, dan 21,3% koperasi berada di petak 400 "
         "meter yang kosong."
     ),
     "04-siting-screen": (
         "Koperasi mana yang berada di lokasi yang mustahil? Dari 2.500 koperasi "
-        "paling terpencil, 2.346 berada di hutan tertutup, 993 di lereng curam, dan "
-        "388 (setelah koreksi) punya sertifikat lahan \u201cTerverifikasi\u201d. "
+        "paling terpencil, 2.385 berada di hutan tertutup, 1.008 di lereng curam, dan "
+        "384 punya sertifikat lahan \u201cTerverifikasi\u201d. "
         "Catatan penting: cara ini tidak bisa membedakan koperasi yang benar-benar "
         "dibangun di tempat mustahil dari yang koordinatnya salah."
     ),
     "05-road-access": (
-        "Berapa jauh koperasi dari jalan? 6,2% koperasi (5.114, setelah koreksi) "
-        "tidak punya jalan beraspal dalam 5 km; 4.302 tidak punya jalan sama sekali. "
+        "Berapa jauh koperasi dari jalan? 6,1% koperasi (5.106) "
+        "tidak punya jalan beraspal dalam 5 km; 4.294 tidak punya jalan sama sekali. "
         "Angka ini berdasarkan peta OpenStreetMap yang belum lengkap di pedesaan, "
         "jadi merupakan batas bawah."
     ),
@@ -112,12 +112,11 @@ ID_SUMMARY = {
     ),
     "08-exact-geometry": (
         "Berapa jauh sebenarnya? Untuk koperasi yang paling terpencil, jarak ke "
-        "jalan diukur ulang dengan teliti: separuhnya lebih dari 9,7 km, dan 16 "
+        "jalan diukur ulang dengan teliti: separuhnya lebih dari 9,7 km, dan 7 "
         "koperasi lebih dari 100 km. Laporan ini juga menemukan 19 koperasi di luar "
-        "Indonesia — koordinat mustahil (18 di antaranya salah tanda garis lintang) "
-        "— dan mengoreksi angka laporan 04 dan 05. Catatan 13-08-2026: pemerintah "
-        "telah mengoreksi ke-19 koordinat itu, sehingga angka di sini adalah kondisi "
-        "per cuplikan 5 Agustus."
+        "Indonesia \u2014 koordinat mustahil \u2014 dan mengoreksi angka laporan 04 "
+        "dan 05. Catatan 13-08-2026: pemerintah telah mengoreksi ke-19 koordinat "
+        "itu, dan laporan 03\u201308 telah dijalankan ulang pada koordinat terbaru."
     ),
     "09-external-corroboration": (
         "Apakah angka pemerintah cocok dengan angka kami? Nyaris persis: media "

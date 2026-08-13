@@ -1,6 +1,6 @@
 # 05 — Road access: how far is each KDMP from a road?
 
-**Run**: `python reports/05-road-access/run.py` · No network · **Last run**: 2026-08-09
+**Run**: `python reports/05-road-access/run.py` · No network · **Last run**: 2026-08-13 (on 08-13 coordinates)
 **Source**: `data/osm/indonesia_roads.gpkg` (4,494,742 LineStrings) + `kopdes_locations.csv`
 
 ## Method — H3 line rasterisation instead of a spatial index
@@ -39,13 +39,13 @@ the two would flatter the result.
 
 | Distance to nearest non-track road | Cooperatives | Share |
 |---|---|---|
-| on a road cell (<70 m) | 31,483 | 37.8% |
-| < ~260 m | 21,438 | 25.7% |
-| < ~530 m | 7,481 | 9.0% |
-| < ~1 km | 6,942 | 8.3% |
-| < ~2 km | 5,358 | 6.4% |
-| < ~5 km | 5,507 | 6.6% |
-| **> ~5 km or none found** | **5,133** | **6.2%** |
+| on a road cell (<70 m) | 31,550 | 37.8% |
+| < ~260 m | 21,437 | 25.7% |
+| < ~530 m | 7,484 | 9.0% |
+| < ~1 km | 6,936 | 8.3% |
+| < ~2 km | 5,360 | 6.4% |
+| < ~5 km | 5,506 | 6.6% |
+| **> ~5 km or none found** | **5,106** | **6.1%** |
 
 Two sharper cuts of the same data:
 
@@ -66,7 +66,7 @@ converge:
 | Road within 5 km | 13,320 | 64,889 |
 
 **87.4% of the no-road cooperatives also sit in a cell with zero recorded
-population**, against a 21.4% baseline. Median population within ~5 km:
+population**, against a 21.3% baseline. Median population within ~5 km:
 
 | | Median pop within ~5 km |
 |---|---|

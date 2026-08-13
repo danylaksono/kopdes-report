@@ -1,7 +1,8 @@
 # 03 — Population coverage and remoteness
 
 **Run**: `python reports/03-population-coverage/run.py` · No network after first
-run · **Source**: Kontur 400m population (H3 r8) + `kopdes_locations.csv`
+run · **Source**: Kontur 400m population (H3 r8) + `kopdes_locations.csv` ·
+**Last run**: 2026-08-13 (on 08-13 coordinates)
 
 ## The method, in one paragraph
 
@@ -46,28 +47,28 @@ the story.
 > populations gives 17.2 billion at k=11 — 62× the population of Indonesia.
 > The script does the union; don't "simplify" it into a sum.
 
-## Finding 2 — the mirror statistic: 21.4% of KDMP have nobody in their own cell
+## Finding 2 — the mirror statistic: 21.3% of KDMP have nobody in their own cell
 
 [`remoteness_bands.csv`](remoteness_bands.csv),
 [`kopdes_remoteness.csv`](kopdes_remoteness.csv) (per-cooperative)
 
-- **17,804 cooperatives (21.4%)** sit in a 400 m cell with **zero** recorded
+- **17,774 cooperatives (21.3%)** sit in a 400 m cell with **zero** recorded
   population.
-- Median own-cell population for the remaining 78.6%: **502 people**.
+- Median own-cell population for the remaining 78.7%: **503 people**.
 
 By population within ~5 km:
 
 | Band | Cooperatives | Share |
 |---|---|---|
-| nobody within 5 km | 174 | 0.21% |
-| < 500 | 1,574 | 1.89% |
-| 500 – 2k | 2,408 | 2.89% |
-| 2k – 10k | 8,133 | 9.76% |
-| > 10k | 71,053 | 85.25% |
+| nobody within 5 km | 146 | 0.18% |
+| < 500 | 1,569 | 1.88% |
+| 500 – 2k | 2,406 | 2.89% |
+| 2k – 10k | 8,139 | 9.76% |
+| > 10k | 71,119 | 85.30% |
 
 Read these two findings together and the honest summary is: **the placement
-critique is not a mass phenomenon, but it has a real tail.** 174 cooperatives
-with nobody within 5 km is 0.2% of the program — and it is also 174 concrete,
+critique is not a mass phenomenon, but it has a real tail.** 146 cooperatives
+with nobody within 5 km is 0.2% of the program — and it is also 146 concrete,
 nameable, checkable cases. That tail is what
 [04-siting-screen](../04-siting-screen/) is built to surface.
 
@@ -75,7 +76,7 @@ nameable, checkable cases. That tail is what
 
 - "Zero population in the cell" is a Kontur modelling output, not ground truth.
   Kontur fuses GHSL, Facebook HRSL, Microsoft Buildings and OSM; all four
-  under-detect in forest and on small islands. Some of the 21.4% will be real
+  under-detect in forest and on small islands. Some of the 21.3% will be real
   settlements the model missed.
 - It also catches **coordinate errors**, not just remote siting — a cooperative
   whose lat/lon is wrong lands wherever the wrong coordinate points, often in

@@ -1,4 +1,4 @@
 group,n_linked,pct_reporting_transaction,mean_transaction_value_per_coop,median_transaction_value_reporting,share_of_linked_value,pct_with_savings,median_savings_amount,median_accounts_count
-clustered,3928,3.92,2350567.0,20290000.0,5.84,13.49,0.0,1.0
-isolated,61516,3.47,2419907.0,21133000.0,94.16,14.62,0.0,1.0
-all,65444,3.5,2415745.0,20946000.0,100.0,14.55,0.0,1.0
+clustered,3952,4.5,3194751.0,22338000.0,7.19,13.54,0.0,1.0
+isolated,61548,3.72,2649546.0,22466500.0,92.81,14.63,0.0,1.0
+all,65500,3.76,2682442.0,22442283.0,100.0,14.57,0.0,1.0

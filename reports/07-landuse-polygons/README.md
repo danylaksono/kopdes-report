@@ -1,7 +1,7 @@
 # 07 — Land use: is the KDMP standing on a graveyard, or in a paddy field?
 
 **Run**: `python reports/07-landuse-polygons/run.py` · Samples cloud rasters over
-HTTP (`--skip-rasters` to go fully offline) · **Last run**: 2026-08-10
+HTTP (`--skip-rasters` to go fully offline) · **Last run**: 2026-08-13 (on 08-13 coordinates)
 **Source**: `data/osm/indonesia-latest.osm.pbf` (Geofabrik, 2026-08-07) +
 `kopdes_locations.csv`
 

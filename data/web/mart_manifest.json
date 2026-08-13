@@ -1,5 +1,5 @@
 {
-  "built": "2026-08-12",
+  "built": "2026-08-13",
   "source_snapshot": "data/raw (SIMKOPDES export 2026-08-05)",
   "h3_resolutions": [
     5,
@@ -17,9 +17,9 @@
   ],
   "anchor": "median latitude/longitude of member cooperatives",
   "coverage": {
-    "cooperatives": 83342,
-    "admin_ids_resolved": 83301,
-    "village_stats_linked": 65905,
+    "cooperatives": 83379,
+    "admin_ids_resolved": 83379,
+    "village_stats_linked": 65944,
     "village_stats_linked_pct": 79.1
   },
   "caveats": [
@@ -47,7 +47,7 @@
   "schema": {
     "kopdes_points": {
       "file": "kopdes_points.parquet",
-      "rows": 83342,
+      "rows": 83379,
       "columns": [
         {
           "name": "cooperative_id",
@@ -540,7 +540,7 @@
           "type": "HUGEINT"
         }
       ],
-      "rows_without_anchor": 4
+      "rows_without_anchor": 0
     },
     "kopdes_kabupaten": {
       "file": "kopdes_kabupaten.parquet",

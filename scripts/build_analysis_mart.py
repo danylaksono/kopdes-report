@@ -61,6 +61,7 @@ Usage:
 
 import argparse
 import json
+import os
 import sys
 from datetime import date
 from pathlib import Path
@@ -68,7 +69,11 @@ from pathlib import Path
 import duckdb
 
 ROOT = Path(__file__).resolve().parent.parent
-RAW = ROOT / "data" / "raw"
+# Defaults to the committed 08-05 baseline; set KOPDES_RAW to a snapshot dir to
+# rebuild the mart from a newer pull (reports/ must be re-run against the same
+# snapshot first):
+#   $env:KOPDES_RAW='data/snapshots/2026-08-13'; python scripts/build_analysis_mart.py
+RAW = Path(os.environ["KOPDES_RAW"]) if os.environ.get("KOPDES_RAW") else ROOT / "data" / "raw"
 REPORTS = ROOT / "reports"
 
 # H3 resolutions written onto every point. r8 is Kontur's native 400 m grid (03);
@@ -455,7 +460,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default=str(ROOT / "data" / "web"))
     args = ap.parse_args()
-    out = Path(args.out)
+    out = Path(args.out).resolve()  # resolve so relative_to(ROOT) works in the progress prints
     out.mkdir(parents=True, exist_ok=True)
 
     con = duckdb.connect()

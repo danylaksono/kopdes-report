@@ -1,7 +1,7 @@
 # 04 — Siting screen: which KDMP sit somewhere implausible?
 
 **Run**: `python reports/04-siting-screen/run.py --top 2500` · Samples cloud
-rasters over HTTP · **Last run**: 2026-08-09 (2,500 candidates, ~25 min)
+rasters over HTTP · **Last run**: 2026-08-13 (2,500 candidates, on 08-13 coordinates)
 
 > **These are candidates, not findings.** Read
 > [Verification is mandatory](#verification-is-mandatory) before citing any row.
@@ -67,11 +67,11 @@ review) needs to be local, and by then it runs on a few dozen cases.
 |---|---|
 | `flag_no_population` | 2,500 |
 | `flag_not_builtup` | 2,500 |
-| `flag_implausible_cover` | 2,416 |
-| `flag_steep` (>60 m relief over ~200 m) | 993 |
+| `flag_implausible_cover` | 2,440 |
+| `flag_steep` (>60 m relief over ~200 m) | 1,008 |
 
-**The sharpest subset**: of the 2,500, **401 carry a land-asset status of
-`Terverifikasi`** — the land was officially signed off — and **171 are both
+**The sharpest subset**: of the 2,500, **384 carry a land-asset status of
+`Terverifikasi`** — the land was officially signed off — and **175 are both
 land-verified and on steep ground**. A verified land asset in closed forest at
 1,700 m is a much harder thing to explain than an unverified one.
 

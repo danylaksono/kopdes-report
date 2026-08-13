@@ -1,6 +1,6 @@
 # 10 — KDMP-to-KDMP clustering: how much does the program overlap with itself?
 
-**Run**: `python reports/10-coop-clustering/run.py` · No network · **Last run**: 2026-08-12
+**Run**: `python reports/10-coop-clustering/run.py` · No network · **Last run**: 2026-08-13 (on 08-13 coordinates)
 **Source**: `kopdes_locations.csv`, `kopdes_land_assets.csv`, `kopdes_stats_village.csv`,
 08's [`suspect_coordinates.csv`](../08-exact-geometry/suspect_coordinates.csv)
 

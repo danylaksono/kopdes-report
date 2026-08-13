@@ -1,7 +1,7 @@
 # 06 — Minimarket proximity: were KDMP built on top of existing retail?
 
 **Run**: `python reports/06-minimarket-proximity/run.py` · No network ·
-**Last run**: 2026-08-09
+**Last run**: 2026-08-13 (on 08-13 coordinates)
 **Source**: `data/osm/indonesia_minimarkets.gpkg` (10,580 POIs) + Kontur population + the
 road cell index from [05](../05-road-access/)
 
@@ -59,7 +59,7 @@ direction that **exonerates the programme**.
 
 | | Median population in own 400 m cell | Share in a zero-population cell |
 |---|---|---|
-| KDMP | 260 | 21.4% |
+| KDMP | 261 | 21.3% |
 | OSM minimarket (tier 1) | **3,786** | **0.1%** |
 
 Mapped minimarkets sit in cells ~15× more populous than cooperatives do, and

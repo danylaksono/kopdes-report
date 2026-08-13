@@ -1,6 +1,6 @@
 # 08 — Exact geometry: real distances, and coordinates that cannot be real
 
-**Run**: `python reports/08-exact-geometry/run.py` · No network · **Last run**: 2026-08-10
+**Run**: `python reports/08-exact-geometry/run.py` · No network · **Last run**: 2026-08-13 (on 08-13 coordinates)
 **Source**: `data/osm/indonesia_roads.gpkg`, `indonesia_minimarkets.gpkg`, 05's cached
 H3 index, `kopdes_locations.csv`
 

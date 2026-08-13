@@ -19,11 +19,15 @@ Conventions:
 from __future__ import annotations
 
 import importlib.util
+import os
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-RAW = ROOT / "data" / "raw"
+# Reports default to the committed 08-05 baseline (data/raw). Set KOPDES_RAW
+# to a snapshot dir to re-run a report against a newer pull, e.g.
+#   KOPDES_RAW=data/snapshots/2026-08-13 python reports/05-road-access/run.py
+RAW = Path(os.environ["KOPDES_RAW"]) if os.environ.get("KOPDES_RAW") else ROOT / "data" / "raw"
 
 
 def out_dir(report_file: str) -> Path:

@@ -281,8 +281,8 @@ map in `app/story-map.js`), separate from `site.css`'s reading pages. Layout:
    compact `pts:[[lon,lat,flags]]` + `meta:[[idx,name,province]]` format (not
    GeoJSON — that is ~8 MB of structural overhead for 83 k points). Reuses
    `tintBasemap`/`BASEMAP_BY_ID` from `app/explore/basemaps.js`. Three
-   data-grounded filter chips (Terpencil 174 / Tanpa jalan 5.133 / Di luar
-   Indonesia 19) whose counts are recomputed from the flags, never hard-coded.
+   data-grounded filter chips (Terpencil 146 / Tanpa jalan 5.106 / Di luar
+   Indonesia 0) whose counts are recomputed from the flags, never hard-coded.
    `scrollZoom: false` so the page keeps scrolling. Popups only show for the
    flagged tail (the only points that carry a name in the layer).
 4. **Verdict grid** — three cards, one per claim, each linking to `/findings/`.
