@@ -35,7 +35,7 @@ Run any of them with `python reports/NN-slug/run.py`. Dependencies:
 | 16  | [rat-compliance](16-rat-compliance/)                 | Are cooperatives holding their annual member meetings (RAT)?   | no                         | run 2026-08-13                 |
 | 17  | [building-proximity](17-building-proximity/)         | How far is each KDMP from the nearest building?                | no                         | run 2026-08-13                 |
 | 18  | [health-scoring](18-health-scoring/)                 | What does the ministry's health index actually say?            | no                         | run 2026-08-13                 |
-| 19  | [land-cover](19-land-cover/)                     | What land cover is every KDMP on?                               | cloud rasters              | run 2026-08-13                 |
+| 19  | [land-cover](19-land-cover/)                         | What land cover is every KDMP on?                              | cloud rasters              | run 2026-08-13                 |
 
 ## What we can and cannot say right now
 

@@ -119,13 +119,19 @@ function landCoverInfo(r) {
     return {
       label: "Pemakaman",
       color: "#6b4d8a",
-      title: "Polygon pemakaman OSM (laporan 07); citra satelit tidak punya kelas makam.",
+      title:
+        "Polygon pemakaman OSM (laporan 07); citra satelit tidak punya kelas makam.",
     };
-  if (r.in_farmland && (r.farmland_depth_m ?? 0) >= 100 && !r.farmland_polygon_coarse)
+  if (
+    r.in_farmland &&
+    (r.farmland_depth_m ?? 0) >= 100 &&
+    !r.farmland_polygon_coarse
+  )
     return {
       label: "Lahan pertanian",
       color: "#b58a2e",
-      title: "Polygon lahan pertanian OSM, minimal 100 m dari tepi (laporan 07).",
+      title:
+        "Polygon lahan pertanian OSM, minimal 100 m dari tepi (laporan 07).",
     };
   const base = LAND_COVER[r.land_cover_code];
   return base

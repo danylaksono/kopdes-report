@@ -41,7 +41,7 @@ resolved.
 | Shrubland                    | 150          | 0.2%  |
 
 **Read the numbers with the grain of the data.** ~61% of recorded coordinates
-fall on a tree-cover pixel. That is the classification at the *coordinate*,
+fall on a tree-cover pixel. That is the classification at the _coordinate_,
 not a statement that cooperatives stand in forest: most coordinates are desa
 centres, and a 10 m pixel around a settlement is frequently classified as tree
 cover (2021). The caveat runs both ways, a "Built-up" pixel is likewise not
