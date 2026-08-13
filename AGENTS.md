@@ -92,6 +92,12 @@ Things that will bite you:
   re-deriving it in JavaScript is how a grid cell and a kecamatan glyph start
   disagreeing about what "near a road" means. Denominators are non-null counts:
   unmeasured is not a class.
+- **`landcover_class` is the same pattern but categorical, not a severity ramp**
+  (reports/19): WorldCover labels are folded to compact keys in `CLASS_COLUMNS`
+  and the shares have no "worst" end. A new family is picked up everywhere by
+  iterating `FAMILIES` (the grid summariser sizes `counts` from
+  `fam.classes.length`, and the national baseline iterates the registry) —
+  never hardcode a family list.
 - **Aggregate economics do not come from the points.** The village link reaches
   79.1% of cooperatives, which carry 88% of national transaction value — summing
   points would be both wrong and biased. Aggregates group straight off the

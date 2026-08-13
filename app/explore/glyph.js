@@ -79,7 +79,7 @@ export function summarizeCell(cellData, spec, get = cellMember) {
   if (spec.family) {
     const fam = spec.family;
     const key = `${fam.id}_k`;
-    const counts = [0, 0, 0, 0];
+    const counts = new Array(fam.classes.length).fill(0);
     let known = 0;
     for (let i = 0; i < n; i++) {
       const k = get(cellData[i])[key];
@@ -87,9 +87,7 @@ export function summarizeCell(cellData, spec, get = cellMember) {
       counts[k - 1]++; // class codes are 1-based, from list_position()
       known++;
     }
-    shares[fam.id] = known
-      ? counts.map((c) => (100 * c) / known)
-      : null;
+    shares[fam.id] = known ? counts.map((c) => (100 * c) / known) : null;
   }
 
   return { count: n, values, shares };
@@ -104,7 +102,9 @@ export function summarizeAnchor(props, spec) {
   if (spec.family) {
     const fam = spec.family;
     const parts = fam.classes.map((c) => props[`${fam.id}_share_${c.key}`]);
-    shares[fam.id] = parts.every((p) => p == null) ? null : parts.map((p) => p ?? 0);
+    shares[fam.id] = parts.every((p) => p == null)
+      ? null
+      : parts.map((p) => p ?? 0);
   }
 
   return { count: props.cooperatives ?? 0, values, shares };
@@ -127,7 +127,10 @@ export function summarizeAnchor(props, spec) {
 export function sizeReference(counts, q = 0.92) {
   if (!counts.length) return 1;
   const sorted = Float64Array.from(counts).sort();
-  return Math.max(1, sorted[Math.min(sorted.length - 1, Math.floor(sorted.length * q))]);
+  return Math.max(
+    1,
+    sorted[Math.min(sorted.length - 1, Math.floor(sorted.length * q))],
+  );
 }
 
 /**
@@ -260,8 +263,10 @@ export function drawGlyph(ctx, x, y, summary, opts) {
     ctx.stroke();
   }
 
-  if (spec.mode === "composition") drawComposition(ctx, x, y, size, summary, spec);
-  else if (spec.mode === "measure") drawMeasure(ctx, x, y, size, summary, spec, domain);
+  if (spec.mode === "composition")
+    drawComposition(ctx, x, y, size, summary, spec);
+  else if (spec.mode === "measure")
+    drawMeasure(ctx, x, y, size, summary, spec, domain);
   else drawProfile(ctx, x, y, size, summary, spec);
 
   ctx.restore();
@@ -345,7 +350,14 @@ function drawMeasure(ctx, x, y, size, summary, spec, domain) {
   const inner = size - pad * 2;
 
   ctx.fillStyle = measureColor(v, domain);
-  roundRect(ctx, x - inner / 2, y - inner / 2, inner, inner, Math.min(2, inner * 0.12));
+  roundRect(
+    ctx,
+    x - inner / 2,
+    y - inner / 2,
+    inner,
+    inner,
+    Math.min(2, inner * 0.12),
+  );
   ctx.fill();
 
   if (v == null) {

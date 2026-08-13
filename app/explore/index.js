@@ -12,6 +12,7 @@ import {
   LEVEL_BY_ID,
   FILTERS,
   FILTER_DEFAULTS,
+  FAMILIES,
   MEASURES,
   PROFILE,
 } from "./measures.js";
@@ -618,7 +619,11 @@ async function boot() {
       ),
       identity,
     );
-    for (const fam of ["road", "pop", "nn"]) {
+    // One composition summarisation per class family, so the legend always has
+    // a national figure next to every encoding. Iterate FAMILIES rather than
+    // hardcoding ids: a new family (e.g. landcover) must not silently lose its
+    // national baseline, which is what happened to building before this loop.
+    for (const fam of FAMILIES.map((f) => f.id)) {
       const s = summarizeCell(
         state.rows,
         makeSpec("composition", [], fam),

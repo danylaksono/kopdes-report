@@ -205,6 +205,27 @@ export const FAMILIES = [
       { key: "on_road", label: "Di rumah (< 70 m)", color: "#e4dcf0" },
     ],
   },
+  {
+    id: "landcover",
+    label: "Penutup Lahan",
+    col: "landcover_class",
+    // Categorical, not a severity ramp (reports/19, ESA WorldCover 10 m): the
+    // order is the WorldCover code order and the colours are distinct hues,
+    // not a dark-to-pale ramp, because there is no "worst" end. The table's
+    // Penutup Lahan column shares this palette.
+    source: "reports/19 (ESA WorldCover 10 m)",
+    classes: [
+      { key: "tree", label: "Hutan / pepohonan", color: "#2f7d4f" },
+      { key: "shrub", label: "Semak belukar", color: "#8a9b4f" },
+      { key: "grass", label: "Padang rumput", color: "#c2a54f" },
+      { key: "crop", label: "Lahan pertanian", color: "#b58a2e" },
+      { key: "built", label: "Pemukiman / terbangun", color: "#8a5a3a" },
+      { key: "bare", label: "Tanah terbuka", color: "#a89f91" },
+      { key: "water", label: "Perairan", color: "#3a6ea8" },
+      { key: "wetland", label: "Rawa", color: "#4d7a72" },
+      { key: "mangrove", label: "Mangrove", color: "#2f6d5a" },
+    ],
+  },
 ];
 
 export const FAMILY_BY_ID = Object.fromEntries(FAMILIES.map((f) => [f.id, f]));

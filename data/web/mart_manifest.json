@@ -344,6 +344,10 @@
           "type": "VARCHAR"
         },
         {
+          "name": "landcover_class",
+          "type": "VARCHAR"
+        },
+        {
           "name": "imagery_url",
           "type": "VARCHAR"
         }
@@ -531,6 +535,42 @@
         },
         {
           "name": "building_share_on_road",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "landcover_share_tree",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "landcover_share_shrub",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "landcover_share_grass",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "landcover_share_crop",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "landcover_share_built",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "landcover_share_bare",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "landcover_share_water",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "landcover_share_wetland",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "landcover_share_mangrove",
           "type": "DOUBLE"
         },
         {
@@ -753,6 +793,42 @@
           "type": "DOUBLE"
         },
         {
+          "name": "landcover_share_tree",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "landcover_share_shrub",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "landcover_share_grass",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "landcover_share_crop",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "landcover_share_built",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "landcover_share_bare",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "landcover_share_water",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "landcover_share_wetland",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "landcover_share_mangrove",
+          "type": "DOUBLE"
+        },
+        {
           "name": "villages",
           "type": "BIGINT"
         },
@@ -961,6 +1037,42 @@
         },
         {
           "name": "building_share_on_road",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "landcover_share_tree",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "landcover_share_shrub",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "landcover_share_grass",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "landcover_share_crop",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "landcover_share_built",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "landcover_share_bare",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "landcover_share_water",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "landcover_share_wetland",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "landcover_share_mangrove",
           "type": "DOUBLE"
         },
         {

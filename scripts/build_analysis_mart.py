@@ -123,6 +123,7 @@ SOURCES = {
 #   road_class  over_5km  < under_5km < under_500m < on_road
 #   pop_class   empty     < under_500 < under_10k  < over_10k
 #   nn_class    under_1km < 1_2km     < 2_5km      < over_5km   (proximity, not quality)
+#   landcover   categorical (not a severity ramp): WorldCover code order, 19
 CLASS_COLUMNS = """
             case rd.road_band
                 when 'on a road cell (<70 m)'  then 'on_road'
@@ -158,7 +159,21 @@ CLASS_COLUMNS = """
                 when '< ~2 km'                 then 'under_5km'
                 when '< ~5 km'                 then 'under_5km'
                 when '> ~5 km / none found'    then 'over_5km'
-            end                                     as building_class"""
+            end                                     as building_class,
+
+            -- 19 land cover: compact keys for the WorldCover labels so the
+            -- share columns below get names without spaces.
+            case lc.landcover
+                when 'Tree cover'         then 'tree'
+                when 'Shrubland'          then 'shrub'
+                when 'Grassland'          then 'grass'
+                when 'Cropland'           then 'crop'
+                when 'Built-up'           then 'built'
+                when 'Bare / sparse'      then 'bare'
+                when 'Water'              then 'water'
+                when 'Herbaceous wetland' then 'wetland'
+                when 'Mangrove'           then 'mangrove'
+            end                                 as landcover_class"""
 
 
 def class_shares(family: str, classes: list[str]) -> str:
@@ -432,7 +447,8 @@ AGG_MEASURES = f"""
 {class_shares('road', ['over_5km', 'under_5km', 'under_500m', 'on_road'])},
 {class_shares('pop', ['empty', 'under_500', 'under_10k', 'over_10k'])},
 {class_shares('nn', ['under_1km', '1_2km', '2_5km', 'over_5km'])},
-{class_shares('building', ['over_5km', 'under_5km', 'under_500m', 'on_road'])}
+{class_shares('building', ['over_5km', 'under_5km', 'under_500m', 'on_road'])},
+{class_shares('landcover', ['tree', 'shrub', 'grass', 'crop', 'built', 'bare', 'water', 'wetland', 'mangrove'])}
 """
 
 
