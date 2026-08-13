@@ -237,7 +237,7 @@ linkable):
 
 | Route                                                    | Role                                                                                                   |
 | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `/` (`index.html`)                                       | The story — scrollytelling (hero + `app/story.js` charts)                                              |
+| `/` (`index.html`)                                       | The story — image hero + three two-column scrolly chapters + a MapLibre map interlude + verdicts       |
 | `/explore/`                                              | The interactive map (`app/explore.js`)                                                                 |
 | `/findings/`, `findings/{remoteness,competition,money}/` | The three acts, in Bahasa Indonesia, **anonymous until verified**                                      |
 | `/methods/`, `methods/<nn-slug>/`                        | Methodology appendix — generated from `reports/*/README.md`, rendered client-side, never written twice |
@@ -249,6 +249,36 @@ footer from `data-root`, `marked` markdown renderer, ID-locale number helpers).
 The old single-page viewer (`index.html` map + `app/main.js` + `app/style.css`)
 is **deleted**, and so are its successors `app/explore.js`, `app/grid-layer.js`
 and `app/points-layer.js` — the explorer below replaces all three.
+
+### The home page (`/`) — rebuilt 2026-08-13
+
+The story is its own instrument, in `app/story.css` + `app/story.js` (+ the
+map in `app/story-map.js`), separate from `site.css`'s reading pages. Layout:
+
+1. **Hero** — full-bleed photo (`assets/story/hero.jpg`) with a scrim, staggered
+   entrance animation, and a stat strip. The hero image URL lives in CSS
+   (`story.css`), not inline markup.
+2. **Three two-column scrolly chapters** (Akses / Kompetisi / Anggaran). Each
+   is its own `.scrolly` block: text steps left, a sticky `.figure-card`
+   right. `story.js` observes each block and swaps the card's hand-built SVG
+   chart as steps cross the viewport; bars grow in via a two-frame width
+   transition. **The figure is in its own column — the old centred card that
+   text scrolled over is gone**, which is what fixed the chart-behind-text bug.
+   Chapter photos (`assets/story/akses|kompetisi|anggaran.jpg`) sit between
+   chapters with attribution in the caption + `assets/story/CREDITS.md`.
+3. **Map interlude** (`#peta`) — a MapLibre map over the SAME parquet via
+   `app/story-map.js`. Loaded **lazily** by `story.js` (dynamic `import()` the
+   first time it scrolls within 600px) so readers who never reach it don't pay
+   for the duckdb wasm. Reuses `tintBasemap`/`BASEMAP_BY_ID` from
+   `app/explore/basemaps.js`. Three data-grounded filter chips (Terpencil 174 /
+   Tanpa jalan 5.133 / Di luar Indonesia 19) whose counts come from the query,
+   never hard-coded. `scrollZoom: false` so the page keeps scrolling.
+4. **Verdict grid** — three cards, one per claim, each linking to `/findings/`.
+
+Gotchas: the mobile single-column layout reorders the figure FIRST and uses a
+low activation band (`rootMargin` in `story.js`) so the active step's text sits
+below the sticky figure instead of scrolling under it. `data-root` is empty on
+the home page; the story CSS is not shared with sub-pages.
 
 **Data layer (one shared layer for every page)**: the committed parquet files
 (`data/web/kopdes_points.parquet` etc.) read in-browser through **duckdb-wasm**.

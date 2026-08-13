@@ -354,81 +354,8 @@ caption {
 }
 
 /* ---- scrollytelling ------------------------------------------------------ */
-
-.scrolly {
-  position: relative;
-}
-.scrolly .sticky {
-  position: sticky;
-  top: 72px;
-  height: calc(100vh - 120px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 0;
-}
-.scrolly .sticky > .figure {
-  width: 100%;
-  max-width: 900px;
-  margin: 0;
-}
-/* The steps scroll OVER the sticky figure: pulled up so the first step starts
-   on the figure, each step a readable card on the paper background. */
-.scrolly .steps {
-  position: relative;
-  z-index: 1;
-  margin-top: -56vh;
-}
-.scrolly .step {
-  min-height: 78vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 32px 0;
-}
-.scrolly .step .step-num {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--accent);
-}
-.scrolly .step h2 {
-  margin-top: 4px;
-}
-.scrolly .step-inner {
-  background: rgba(251, 250, 247, 0.94);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 26px 30px;
-  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.08);
-  opacity: 0.45;
-  transform: translateY(8px);
-  transition:
-    opacity 0.3s ease,
-    transform 0.3s ease;
-  max-width: 560px;
-}
-.scrolly .step.is-active .step-inner {
-  opacity: 1;
-  transform: none;
-}
-
-/* svg helpers */
-.bar {
-  fill: var(--accent);
-}
-.bar.muted {
-  fill: #d8d3c7;
-}
-.axis text {
-  font: 11px var(--sans);
-  fill: var(--muted);
-}
-.grid-line {
-  stroke: #efe9dd;
-  stroke-width: 1;
-}
+/* The home page's two-column scrolly, hero, map and verdict styling live in
+   app/story.css — the front page is its own instrument. */
 
 /* ---- markdown (methods) -------------------------------------------------- */
 
@@ -463,11 +390,5 @@ caption {
   }
   .lede {
     font-size: 18px;
-  }
-  .scrolly .sticky {
-    height: 60vh;
-  }
-  .scrolly .step {
-    min-height: 55vh;
   }
 }
