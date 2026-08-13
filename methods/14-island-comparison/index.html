@@ -3,24 +3,26 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>14 — Island comparison: whose program is this anyway? — Metode</title>
+  <title>Perbandingan antarpulau: program ini milik Jawa atau Indonesia? — Metode</title>
   <link rel="stylesheet" href="../../app/site.css" />
 </head>
 <body data-root="../../">
   <nav id="site-nav"></nav>
   <main class="wrap">
-    <p class="kicker">Metode · lampiran 14-island-comparison</p>
-    <h1>14 — Island comparison: whose program is this anyway?</h1>
-    <p class="lede">Laporan teknis lengkap dari analisis ini ditulis dalam bahasa
-      Inggris demi ketelitian. Ringkasannya dalam bahasa Indonesia ada di bawah.</p>
+    <p class="kicker">Metode · 14-island-comparison</p>
+    <h1>Perbandingan antarpulau: program ini milik Jawa atau Indonesia?</h1>
+    <p class="lede">Program ini milik Jawa atau Indonesia? Dari ekonomi sampai penempatan, jawabannya konsisten.</p>
     <div class="callout"><span class="callout-label">Ringkasan</span>
       <p>Program ini milik Jawa atau Indonesia? Jawa punya 30% koperasi tetapi sekitar 60% nilai transaksi; Papua 8,5% koperasi dan sekitar 0,6% nilai. Ekor keterpencilan, verifikasi lahan yang minim, dan aktivitas yang senyap — semuanya tinggal di Indonesia timur.</p>
     </div>
-    <h2>Laporan lengkap (Inggris)</h2>
     <div id="md"></div>
-    <p class="md-note">Laporan ini memuat tabel data mentah, termasuk nama kandidat
-      yang <strong>belum diverifikasi</strong>. Lihat <a href="../../about/">kebijakan
-      verifikasi &amp; koreksi</a> sebelum mengutip nama desa/koperasi apa pun.</p>
+    <hr />
+    <p class="md-note">Laporan teknis lengkap dari analisis ini (bahasa Inggris,
+      dengan data mentah dan cara menjalankan ulang) tersedia di
+      <a href="../../reports/14-island-comparison/README.md">reports/14-island-comparison/README.md</a>.
+      Daftar kandidat yang <strong>belum diverifikasi</strong> (jika ada) hanya
+      ada di sana; lihat <a href="../../about/">kebijakan verifikasi &amp;
+      koreksi</a>.</p>
   </main>
   <footer id="site-footer"></footer>
   <script type="module" src="../../app/site.js"></script>
@@ -28,10 +30,10 @@
     import { fetchMarkdown, renderMarkdownInto } from "../../app/site.js";
     const md = document.getElementById("md");
     try {
-      const text = await fetchMarkdown("../../reports/14-island-comparison/README.md");
+      const text = await fetchMarkdown("../../methods/_content/14-island-comparison.md");
       await renderMarkdownInto(md, text);
     } catch (e) {
-      md.innerHTML = `<p style="color:#a00">Gagal memuat laporan: ${e.message}</p>`;
+      md.innerHTML = `<p style="color:#a00">Gagal memuat metode: ${e.message}</p>`;
     }
   </script>
 </body>

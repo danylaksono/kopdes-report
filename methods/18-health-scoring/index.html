@@ -3,24 +3,26 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>18 — The health index: what "unhealthy ×38" actually says — Metode</title>
+  <title>Indeks kesehatan: apa arti “tidak sehat ×38”? — Metode</title>
   <link rel="stylesheet" href="../../app/site.css" />
 </head>
 <body data-root="../../">
   <nav id="site-nav"></nav>
   <main class="wrap">
-    <p class="kicker">Metode · lampiran 18-health-scoring</p>
-    <h1>18 — The health index: what "unhealthy ×38" actually says</h1>
-    <p class="lede">Laporan teknis lengkap dari analisis ini ditulis dalam bahasa
-      Inggris demi ketelitian. Ringkasannya dalam bahasa Indonesia ada di bawah.</p>
+    <p class="kicker">Metode · 18-health-scoring</p>
+    <h1>Indeks kesehatan: apa arti “tidak sehat ×38”?</h1>
+    <p class="lede">Apa arti “tidak sehat ×38”? Ternyata kolomnya konstan. Indeks yang sebenarnya bercerita lain.</p>
     <div class="callout"><span class="callout-label">Ringkasan</span>
       <p>Apa arti “indeks kesehatan” koperasi? Label “tidak sehat di semua provinsi” adalah artefak: kolomnya konstan (30) di 38 provinsi, jadi tidak boleh dikutip. Indeks sungguhan (50–57) hanya dihitung untuk 38% koperasi — 62% tidak pernah dinilai — dan di antara yang dinilai, 91% tetap “tidak sehat”. Indeks ini lebih mencerminkan kelengkapan data dan kepatuhan administrasi daripada kesehatan yang independen.</p>
     </div>
-    <h2>Laporan lengkap (Inggris)</h2>
     <div id="md"></div>
-    <p class="md-note">Laporan ini memuat tabel data mentah, termasuk nama kandidat
-      yang <strong>belum diverifikasi</strong>. Lihat <a href="../../about/">kebijakan
-      verifikasi &amp; koreksi</a> sebelum mengutip nama desa/koperasi apa pun.</p>
+    <hr />
+    <p class="md-note">Laporan teknis lengkap dari analisis ini (bahasa Inggris,
+      dengan data mentah dan cara menjalankan ulang) tersedia di
+      <a href="../../reports/18-health-scoring/README.md">reports/18-health-scoring/README.md</a>.
+      Daftar kandidat yang <strong>belum diverifikasi</strong> (jika ada) hanya
+      ada di sana; lihat <a href="../../about/">kebijakan verifikasi &amp;
+      koreksi</a>.</p>
   </main>
   <footer id="site-footer"></footer>
   <script type="module" src="../../app/site.js"></script>
@@ -28,10 +30,10 @@
     import { fetchMarkdown, renderMarkdownInto } from "../../app/site.js";
     const md = document.getElementById("md");
     try {
-      const text = await fetchMarkdown("../../reports/18-health-scoring/README.md");
+      const text = await fetchMarkdown("../../methods/_content/18-health-scoring.md");
       await renderMarkdownInto(md, text);
     } catch (e) {
-      md.innerHTML = `<p style="color:#a00">Gagal memuat laporan: ${e.message}</p>`;
+      md.innerHTML = `<p style="color:#a00">Gagal memuat metode: ${e.message}</p>`;
     }
   </script>
 </body>

@@ -240,8 +240,9 @@ any `geo/run_pipeline.py` run, or the map keeps serving the old shapes.
 
 Static multi-page site served from the **repo root**, so a plain
 `python -m http.server 8000` at the root serves it at `/`. No build step;
-dependencies are CDN ES modules. Language: **Bahasa Indonesia** (narrative);
-the methods appendix stays in English (it _is_ the reports).
+dependencies are CDN ES modules. Language: **Bahasa Indonesia** — the narrative
+and the methods appendix are both Indonesian; only the technical reports in
+`reports/` stay English (they are the reproducible source).
 
 Real directories with `index.html` (works on GitHub Pages, independently
 linkable):
@@ -251,7 +252,7 @@ linkable):
 | `/` (`index.html`)                                       | The story — image hero + three two-column scrolly chapters + a MapLibre map interlude + verdicts       |
 | `/explore/`                                              | The interactive map (`app/explore.js`)                                                                 |
 | `/findings/`, `findings/{remoteness,competition,money}/` | The three acts, in Bahasa Indonesia, **anonymous until verified**                                      |
-| `/methods/`, `methods/<nn-slug>/`                        | Methodology appendix — generated from `reports/*/README.md`, rendered client-side, never written twice |
+| `/methods/`, `methods/<nn-slug>/`                        | Methodology appendix — plain-language Indonesian write-ups in `methods/_content/`, rendered client-side; the technical English report is linked from each page |
 | `/data/`                                                 | Downloads, provenance, null semantics, snapshot log                                                    |
 | `/about/`                                                | Who/why, verification & corrections policy, public corrections log                                     |
 
@@ -425,12 +426,13 @@ those areas keep their anchor glyph and simply lose the fill. Kecamatan is 8.4 M
 and fetched lazily.
 
 **/methods/ generation**: `python scripts/build_methods_pages.py` scaffolds
-`methods/<nn-slug>/index.html` shells + the index from
-`reports/README.md` (titles and per-report questions come from the index table).
-Each shell fetches its own `reports/<slug>/README.md` at runtime and renders it
-with `marked` — single source of truth. Re-run the generator when a report is
-added or renamed. Named cooperatives in the appendix carry a verification
-disclaimer (see `/about/`).
+`methods/<nn-slug>/index.html` shells + the index from hand-written Indonesian
+metadata in the script. Each shell fetches `methods/_content/<slug>.md` at
+runtime and renders it with `marked`. Those content files are plain-language
+write-ups in the same register as the narrative; the authoritative technical
+report (`reports/<slug>/README.md`, English, with code and raw data) is linked
+from each page, never embedded. Re-run the generator when a report is added,
+renamed, or its title changes.
 
 ## The deliverable: an investigative report, not an academic paper
 
@@ -503,10 +505,10 @@ Design decisions:
 - **Real directories with `index.html`, not a hash router.** Works on GitHub
   Pages as-is, gives clean URLs, keeps each page independently linkable — which
   matters when other outlets cite a specific finding.
-- **`/methods/` pages must be generated from `reports/*/README.md`, never
-  written twice.** Single source of truth. Rendering the markdown client-side
-  keeps the no-build-step property; a build step is the alternative if the
-  render quality isn't good enough.
+- **`/methods/` pages are plain-language Indonesian, written once in
+  `methods/_content/`.** The technical English reports stay in `reports/` as the
+  reproducible source and are linked, not embedded — the public page reads like
+  the report, the appendix stays auditable.
 - **One shared data layer** across all pages: the same parquet files and
   DuckDB-wasm setup, so the story and the explorer use one screengrid component
   configured differently, not two implementations.
@@ -520,8 +522,9 @@ table is of the same order, which is small enough to commit outright.
 
 ### Open questions to settle before building
 
-- **Language**: Bahasa Indonesia, English, or both? Audience and reach depend on
-  it, and it affects every string in the app.
+- **Language**: Bahasa Indonesia — settled 2026-08-13. The narrative and the
+  methods appendix are both Indonesian; the technical reports stay English as
+  the reproducible source.
 - **Naming individual cooperatives**: the siting candidates in
   `reports/04-siting-screen/` are nameable village institutions. A wrong
   coordinate would unfairly tar a specific desa. Set a verification bar

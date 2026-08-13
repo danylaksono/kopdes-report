@@ -3,24 +3,26 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>12 — Product mix: what does the KDMP program actually sell? — Metode</title>
+  <title>Jenis produk: program ini sebenarnya menjual apa? — Metode</title>
   <link rel="stylesheet" href="../../app/site.css" />
 </head>
 <body data-root="../../">
   <nav id="site-nav"></nav>
   <main class="wrap">
-    <p class="kicker">Metode · lampiran 12-product-mix</p>
-    <h1>12 — Product mix: what does the KDMP program actually sell?</h1>
-    <p class="lede">Laporan teknis lengkap dari analisis ini ditulis dalam bahasa
-      Inggris demi ketelitian. Ringkasannya dalam bahasa Indonesia ada di bawah.</p>
+    <p class="kicker">Metode · 12-product-mix</p>
+    <h1>Jenis produk: program ini sebenarnya menjual apa?</h1>
+    <p class="lede">Program ini sebenarnya menjual apa? Komposisinya sederhana dan konsisten: sembako dan pupuk.</p>
     <div class="callout"><span class="callout-label">Ringkasan</span>
       <p>Program ini menjual apa? Lebih dari tiga perempat nilai penjualan yang dilaporkan adalah beras dan minyak goreng, dengan pupuk sebagai barang utama lainnya. Koperasi desa ini berperan sebagai toko sembako dan saprotan.</p>
     </div>
-    <h2>Laporan lengkap (Inggris)</h2>
     <div id="md"></div>
-    <p class="md-note">Laporan ini memuat tabel data mentah, termasuk nama kandidat
-      yang <strong>belum diverifikasi</strong>. Lihat <a href="../../about/">kebijakan
-      verifikasi &amp; koreksi</a> sebelum mengutip nama desa/koperasi apa pun.</p>
+    <hr />
+    <p class="md-note">Laporan teknis lengkap dari analisis ini (bahasa Inggris,
+      dengan data mentah dan cara menjalankan ulang) tersedia di
+      <a href="../../reports/12-product-mix/README.md">reports/12-product-mix/README.md</a>.
+      Daftar kandidat yang <strong>belum diverifikasi</strong> (jika ada) hanya
+      ada di sana; lihat <a href="../../about/">kebijakan verifikasi &amp;
+      koreksi</a>.</p>
   </main>
   <footer id="site-footer"></footer>
   <script type="module" src="../../app/site.js"></script>
@@ -28,10 +30,10 @@
     import { fetchMarkdown, renderMarkdownInto } from "../../app/site.js";
     const md = document.getElementById("md");
     try {
-      const text = await fetchMarkdown("../../reports/12-product-mix/README.md");
+      const text = await fetchMarkdown("../../methods/_content/12-product-mix.md");
       await renderMarkdownInto(md, text);
     } catch (e) {
-      md.innerHTML = `<p style="color:#a00">Gagal memuat laporan: ${e.message}</p>`;
+      md.innerHTML = `<p style="color:#a00">Gagal memuat metode: ${e.message}</p>`;
     }
   </script>
 </body>

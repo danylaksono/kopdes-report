@@ -3,24 +3,26 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>01 — Snapshot drift: are the zeros real, or just not entered yet? — Metode</title>
+  <title>Angka nol itu nyata, atau hanya belum diisi? — Metode</title>
   <link rel="stylesheet" href="../../app/site.css" />
 </head>
 <body data-root="../../">
   <nav id="site-nav"></nav>
   <main class="wrap">
-    <p class="kicker">Metode · lampiran 01-snapshot-drift</p>
-    <h1>01 — Snapshot drift: are the zeros real, or just not entered yet?</h1>
-    <p class="lede">Laporan teknis lengkap dari analisis ini ditulis dalam bahasa
-      Inggris demi ketelitian. Ringkasannya dalam bahasa Indonesia ada di bawah.</p>
+    <p class="kicker">Metode · 01-snapshot-drift</p>
+    <h1>Angka nol itu nyata, atau hanya belum diisi?</h1>
+    <p class="lede">Apakah 97% angka nol itu berarti program ini mati, atau hanya belum diisi? Jawabannya menentukan hampir semua temuan lain di situs ini.</p>
     <div class="callout"><span class="callout-label">Ringkasan</span>
-      <p>Apakah data SIMKOPDES masih diisi? Kami membandingkan dua cuplikan data berjarak empat hari. Dari 80.553 desa yang nihil transaksi pada 5 Agustus, hanya satu yang melaporkan aktivitas pada 9 Agustus. Artinya, angka nol di sistem ini nyaris tidak berubah dari waktu ke waktu — dan itu menguatkan dugaan bahwa nol berarti “belum ada laporan”, bukan sekadar “belum sempat diisi”.</p>
+      <p>Apakah data SIMKOPDES masih diisi? Kami membandingkan dua cuplikan data berjarak empat hari. Dari 80.553 desa yang nihil transaksi pada 5 Agustus, hanya satu yang melaporkan aktivitas pada 9 Agustus. Sistem ini tidak sedang aktif diisi. (Pada 13 Agustus, 209 desa baru mulai melaporkan — jadi bacaan ini hanya berlaku untuk jendela itu.)</p>
     </div>
-    <h2>Laporan lengkap (Inggris)</h2>
     <div id="md"></div>
-    <p class="md-note">Laporan ini memuat tabel data mentah, termasuk nama kandidat
-      yang <strong>belum diverifikasi</strong>. Lihat <a href="../../about/">kebijakan
-      verifikasi &amp; koreksi</a> sebelum mengutip nama desa/koperasi apa pun.</p>
+    <hr />
+    <p class="md-note">Laporan teknis lengkap dari analisis ini (bahasa Inggris,
+      dengan data mentah dan cara menjalankan ulang) tersedia di
+      <a href="../../reports/01-snapshot-drift/README.md">reports/01-snapshot-drift/README.md</a>.
+      Daftar kandidat yang <strong>belum diverifikasi</strong> (jika ada) hanya
+      ada di sana; lihat <a href="../../about/">kebijakan verifikasi &amp;
+      koreksi</a>.</p>
   </main>
   <footer id="site-footer"></footer>
   <script type="module" src="../../app/site.js"></script>
@@ -28,10 +30,10 @@
     import { fetchMarkdown, renderMarkdownInto } from "../../app/site.js";
     const md = document.getElementById("md");
     try {
-      const text = await fetchMarkdown("../../reports/01-snapshot-drift/README.md");
+      const text = await fetchMarkdown("../../methods/_content/01-snapshot-drift.md");
       await renderMarkdownInto(md, text);
     } catch (e) {
-      md.innerHTML = `<p style="color:#a00">Gagal memuat laporan: ${e.message}</p>`;
+      md.innerHTML = `<p style="color:#a00">Gagal memuat metode: ${e.message}</p>`;
     }
   </script>
 </body>

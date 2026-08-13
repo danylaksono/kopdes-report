@@ -3,24 +3,26 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>07 — Land use: is the KDMP standing on a graveyard, or in a paddy field? — Metode</title>
+  <title>Penggunaan lahan: di atas kuburan, atau di tengah sawah? — Metode</title>
   <link rel="stylesheet" href="../../app/site.css" />
 </head>
 <body data-root="../../">
   <nav id="site-nav"></nav>
   <main class="wrap">
-    <p class="kicker">Metode · lampiran 07-landuse-polygons</p>
-    <h1>07 — Land use: is the KDMP standing on a graveyard, or in a paddy field?</h1>
-    <p class="lede">Laporan teknis lengkap dari analisis ini ditulis dalam bahasa
-      Inggris demi ketelitian. Ringkasannya dalam bahasa Indonesia ada di bawah.</p>
+    <p class="kicker">Metode · 07-landuse-polygons</p>
+    <h1>Penggunaan lahan: di atas kuburan, atau di tengah sawah?</h1>
+    <p class="lede">Dua tuduhan yang tak terlihat analisis lain: di tanah kuburan dan di tengah sawah. Keduanya diuji dengan peta — dan hasilnya berlawanan arah.</p>
     <div class="callout"><span class="callout-label">Ringkasan</span>
       <p>Di atas sawah atau kuburan? Koperasi “tercatat” di sawah 2,4 kali lebih sering dari biasanya (448 kasus dikonfirmasi oleh dua sumber peta independen). Klaim “di kuburan” tidak terbukti — hanya 22 kasus. Penting: “tercatat di” belum tentu “dibangun di” — koordinatnya bisa saja salah.</p>
     </div>
-    <h2>Laporan lengkap (Inggris)</h2>
     <div id="md"></div>
-    <p class="md-note">Laporan ini memuat tabel data mentah, termasuk nama kandidat
-      yang <strong>belum diverifikasi</strong>. Lihat <a href="../../about/">kebijakan
-      verifikasi &amp; koreksi</a> sebelum mengutip nama desa/koperasi apa pun.</p>
+    <hr />
+    <p class="md-note">Laporan teknis lengkap dari analisis ini (bahasa Inggris,
+      dengan data mentah dan cara menjalankan ulang) tersedia di
+      <a href="../../reports/07-landuse-polygons/README.md">reports/07-landuse-polygons/README.md</a>.
+      Daftar kandidat yang <strong>belum diverifikasi</strong> (jika ada) hanya
+      ada di sana; lihat <a href="../../about/">kebijakan verifikasi &amp;
+      koreksi</a>.</p>
   </main>
   <footer id="site-footer"></footer>
   <script type="module" src="../../app/site.js"></script>
@@ -28,10 +30,10 @@
     import { fetchMarkdown, renderMarkdownInto } from "../../app/site.js";
     const md = document.getElementById("md");
     try {
-      const text = await fetchMarkdown("../../reports/07-landuse-polygons/README.md");
+      const text = await fetchMarkdown("../../methods/_content/07-landuse-polygons.md");
       await renderMarkdownInto(md, text);
     } catch (e) {
-      md.innerHTML = `<p style="color:#a00">Gagal memuat laporan: ${e.message}</p>`;
+      md.innerHTML = `<p style="color:#a00">Gagal memuat metode: ${e.message}</p>`;
     }
   </script>
 </body>

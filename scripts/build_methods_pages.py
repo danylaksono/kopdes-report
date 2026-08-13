@@ -1,14 +1,20 @@
 #!/usr/bin/env python3
 """
-Generate the /methods/ appendix pages from reports/*/README.md.
+Generate the /methods/ appendix pages.
 
-The site rule is "generated from reports/*/README.md, never written twice" —
-the READMEs are the single source of truth and are rendered client-side by
-app/site.js. This script only scaffolds the thin per-report HTML shells (and
-the index); it does not copy the content.
+The public-facing method pages are hand-written, plain-language Indonesian
+markdown in methods/_content/NN-slug.md — no code, no jargon, the same register
+as the rest of the report site. Each generated shell fetches that file at
+runtime and renders it with app/site.js, so the content lives in exactly one
+place.
+
+The authoritative technical reports stay in reports/NN-slug/README.md (English,
+with code, raw data and reproducibility instructions) and are linked — not
+embedded — from each page. That keeps the public page readable while keeping
+every number traceable for anyone who wants to re-run the work.
 
 Run from the repo root:  python scripts/build_methods_pages.py
-Re-run whenever a report is added or its slug/title changes.
+Re-run whenever a report is added, renamed, or its title changes.
 """
 
 import re
@@ -18,6 +24,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 REPORTS = ROOT / "reports"
 METHODS = ROOT / "methods"
+CONTENT = METHODS / "_content"
 
 SHELL = """<!doctype html>
 <html lang="id">
@@ -30,18 +37,20 @@ SHELL = """<!doctype html>
 <body data-root="../../">
   <nav id="site-nav"></nav>
   <main class="wrap">
-    <p class="kicker">Metode · lampiran {slug}</p>
+    <p class="kicker">Metode · {slug}</p>
     <h1>{title}</h1>
-    <p class="lede">Laporan teknis lengkap dari analisis ini ditulis dalam bahasa
-      Inggris demi ketelitian. Ringkasannya dalam bahasa Indonesia ada di bawah.</p>
+    <p class="lede">{lede}</p>
     <div class="callout"><span class="callout-label">Ringkasan</span>
       <p>{summary}</p>
     </div>
-    <h2>Laporan lengkap (Inggris)</h2>
     <div id="md"></div>
-    <p class="md-note">Laporan ini memuat tabel data mentah, termasuk nama kandidat
-      yang <strong>belum diverifikasi</strong>. Lihat <a href="../../about/">kebijakan
-      verifikasi &amp; koreksi</a> sebelum mengutip nama desa/koperasi apa pun.</p>
+    <hr />
+    <p class="md-note">Laporan teknis lengkap dari analisis ini (bahasa Inggris,
+      dengan data mentah dan cara menjalankan ulang) tersedia di
+      <a href="../../reports/{slug}/README.md">reports/{slug}/README.md</a>.
+      Daftar kandidat yang <strong>belum diverifikasi</strong> (jika ada) hanya
+      ada di sana; lihat <a href="../../about/">kebijakan verifikasi &amp;
+      koreksi</a>.</p>
   </main>
   <footer id="site-footer"></footer>
   <script type="module" src="../../app/site.js"></script>
@@ -49,27 +58,126 @@ SHELL = """<!doctype html>
     import {{ fetchMarkdown, renderMarkdownInto }} from "../../app/site.js";
     const md = document.getElementById("md");
     try {{
-      const text = await fetchMarkdown("../../reports/{slug}/README.md");
+      const text = await fetchMarkdown("../../methods/_content/{slug}.md");
       await renderMarkdownInto(md, text);
     }} catch (e) {{
-      md.innerHTML = `<p style="color:#a00">Gagal memuat laporan: ${{e.message}}</p>`;
+      md.innerHTML = `<p style="color:#a00">Gagal memuat metode: ${{e.message}}</p>`;
     }}
   </script>
 </body>
 </html>
 """
 
-# Indonesian plain-language summary per report, written by hand so the public
-# page reads like a report, not a machine translation. The English README below
-# it remains the authoritative, reproducible source.
+# Indonesian public-facing metadata, written by hand. The `title` and `lede`
+# head the page; `summary` fills the callout under the lede; `question` is the
+# one-line card on /methods/.
+ID_TITLE = {
+    "01-snapshot-drift": "Angka nol itu nyata, atau hanya belum diisi?",
+    "02-zero-inflation": "Hampir semua data kinerja adalah nol",
+    "03-population-coverage": "Jangkauan penduduk dan keterpencilan",
+    "04-siting-screen": "Layar penapisan lokasi: koperasi mana yang lingkungannya mustahil?",
+    "05-road-access": "Jarak ke jalan: seberapa jauh setiap koperasi dari jalan?",
+    "06-minimarket-proximity": "Kedekatan dengan minimarket: dibangun di atas ritel yang sudah ada?",
+    "07-landuse-polygons": "Penggunaan lahan: di atas kuburan, atau di tengah sawah?",
+    "08-exact-geometry": "Geometri yang presisi: jarak sebenarnya, dan koordinat yang mustahil",
+    "09-external-corroboration": "Pemeriksaan silang: apakah dashboard adalah angka resmi?",
+    "10-coop-clustering": "Penumpukan koperasi: seberapa banyak program ini menumpuk dengan dirinya sendiri?",
+    "11-savings-behaviour": "Perilaku menabung: apakah anggota benar-benar menabung?",
+    "12-product-mix": "Jenis produk: program ini sebenarnya menjual apa?",
+    "13-compliance-npwp-nib": "Kepatuhan NPWP dan NIB: suratnya ada, adakah yang beroperasi?",
+    "14-island-comparison": "Perbandingan antarpulau: program ini milik Jawa atau Indonesia?",
+    "15-construction-output": "Konstruksi versus hasil",
+    "16-rat-compliance": "Kepatuhan RAT: \u201cnol\u201d ternyata salah baca kolom",
+    "17-building-proximity": "Jarak ke bangunan: seberapa jauh koperasi dari rumah terdekat?",
+    "18-health-scoring": "Indeks kesehatan: apa arti \u201ctidak sehat \u00d738\u201d?",
+}
+
+ID_LEDE = {
+    "01-snapshot-drift": (
+        "Apakah 97% angka nol itu berarti program ini mati, atau hanya belum "
+        "diisi? Jawabannya menentukan hampir semua temuan lain di situs ini."
+    ),
+    "02-zero-inflation": (
+        "Hampir semua data kinerja dalam sistem ini adalah nol. Berapa banyak "
+        "yang benar-benar terisi, dan apa artinya untuk angka yang boleh kita kutip."
+    ),
+    "03-population-coverage": (
+        "Siapa yang terjangkau program ini? Hasilnya membelah dua: jangkauan "
+        "sangat baik, tetapi ekornya nyata."
+    ),
+    "04-siting-screen": (
+        "Koperasi mana yang lingkungannya mustahil? Kami mengurutkan 83 ribu "
+        "koperasi dari yang paling sepi, lalu memeriksa ketinggian, kemiringan, "
+        "dan penutup lahannya."
+    ),
+    "05-road-access": (
+        "Seberapa jauh koperasi dari jalan? Kami mengukur jarak setiap koperasi "
+        "ke jalan terdekat di peta nasional \u2014 dan memisahkan jalan beraspal "
+        "dari jalan tanah."
+    ),
+    "06-minimarket-proximity": (
+        "Apakah koperasi dibangun di atas minimarket yang sudah ada? Datanya "
+        "tidak sempurna, jadi kami katakan kelemahannya lebih dulu \u2014 lalu "
+        "mengujinya dengan lokasi acak yang sebanding."
+    ),
+    "07-landuse-polygons": (
+        "Dua tuduhan yang tak terlihat analisis lain: di tanah kuburan dan di "
+        "tengah sawah. Keduanya diuji dengan peta \u2014 dan hasilnya berlawanan arah."
+    ),
+    "08-exact-geometry": (
+        "Jarak yang diukur ulang satu per satu, dan sebuah temuan yang tidak "
+        "disengaja: 19 koperasi ternyata tidak berada di Indonesia."
+    ),
+    "09-external-corroboration": (
+        "Angka resmi pemerintah cocok dengan dashboardnya \u2014 sampai selisih "
+        "0,04%. Bantahan \u201cwebsitenya belum diperbarui\u201d runtuh."
+    ),
+    "10-coop-clustering": (
+        "Apakah koperasi menumpuk dengan koperasi lain? Kami mengukur jarak "
+        "sebenarnya, dan menemukan: hampir menyambung, bukan menumpuk."
+    ),
+    "11-savings-behaviour": (
+        "Apakah anggota benar-benar menabung? Simpanan dibagi menjadi modal "
+        "sekali dan iuran berkala \u2014 dan perbandingan keduanya bercerita."
+    ),
+    "12-product-mix": (
+        "Program ini sebenarnya menjual apa? Komposisinya sederhana dan "
+        "konsisten: sembako dan pupuk."
+    ),
+    "13-compliance-npwp-nib": (
+        "Uji zombie: surat-suratnya nyaris lengkap, tetapi adakah yang "
+        "beroperasi dengan surat itu?"
+    ),
+    "14-island-comparison": (
+        "Program ini milik Jawa atau Indonesia? Dari ekonomi sampai penempatan, "
+        "jawabannya konsisten."
+    ),
+    "15-construction-output": (
+        "Apakah konstruksi sejalan dengan hasil? Dua fakta struktural perlu "
+        "dinyatakan \u2014 dan kami menahan diri dari klaim sebab-akibat."
+    ),
+    "16-rat-compliance": (
+        "Sebuah koreksi: \u201cRAT nol di semua provinsi\u201d ternyata salah baca "
+        "kolom. Angka sebenarnya: 60%."
+    ),
+    "17-building-proximity": (
+        "Seberapa jauh koperasi dari rumah terdekat? Kami mengukur hal yang "
+        "harfiah \u2014 dan menahan diri untuk tidak membaca \u201ctidak "
+        "terpetakan\u201d sebagai \u201ctidak ada\u201d."
+    ),
+    "18-health-scoring": (
+        "Apa arti \u201ctidak sehat \u00d738\u201d? Ternyata kolomnya konstan. "
+        "Indeks yang sebenarnya bercerita lain."
+    ),
+}
+
 ID_SUMMARY = {
     "01-snapshot-drift": (
         "Apakah data SIMKOPDES masih diisi? Kami membandingkan dua cuplikan data "
         "berjarak empat hari. Dari 80.553 desa yang nihil transaksi pada 5 Agustus, "
-        "hanya satu yang melaporkan aktivitas pada 9 Agustus. Artinya, angka nol di "
-        "sistem ini nyaris tidak berubah dari waktu ke waktu — dan itu menguatkan "
-        "dugaan bahwa nol berarti \u201cbelum ada laporan\u201d, bukan sekadar "
-        "\u201cbelum sempat diisi\u201d."
+        "hanya satu yang melaporkan aktivitas pada 9 Agustus. Sistem ini tidak "
+        "sedang aktif diisi. (Pada 13 Agustus, 209 desa baru mulai melaporkan "
+        "\u2014 jadi bacaan ini hanya berlaku untuk jendela itu.)"
     ),
     "02-zero-inflation": (
         "Berapa banyak data kinerja yang benar-benar nol? Ternyata hampir semuanya: "
@@ -97,11 +205,11 @@ ID_SUMMARY = {
         "jadi merupakan batas bawah."
     ),
     "06-minimarket-proximity": (
-        "Apakah koperasi dibangun di atas minimarket? Setelah memperhitungkan bahwa "
-        "keduanya sama-sama suka berada di jalan utama daerah ramai, minimarket "
-        "sekitar 9,4 poin lebih mungkin punya koperasi dalam 500 m daripada lokasi "
-        "acak yang sebanding — tetapi kelebihannya hilang pada jarak 2 km. Kedekatan "
-        "ini nyata tapi sedang; bukan bukti kompetisi dagang."
+        "Apakah koperasi dibangun di atas minimarket? Setelah memperhitungkan "
+        "bahwa keduanya sama-sama suka berada di jalan utama daerah ramai, "
+        "minimarket sekitar 9,6 poin lebih mungkin punya koperasi dalam 500 m "
+        "daripada lokasi acak yang sebanding \u2014 tetapi kelebihannya hilang pada "
+        "jarak 2 km. Kedekatan ini nyata tapi sedang; bukan bukti persaingan dagang."
     ),
     "07-landuse-polygons": (
         "Di atas sawah atau kuburan? Koperasi \u201ctercatat\u201d di sawah 2,4 kali "
@@ -112,11 +220,11 @@ ID_SUMMARY = {
     ),
     "08-exact-geometry": (
         "Berapa jauh sebenarnya? Untuk koperasi yang paling terpencil, jarak ke "
-        "jalan diukur ulang dengan teliti: separuhnya lebih dari 9,7 km, dan 7 "
-        "koperasi lebih dari 100 km. Laporan ini juga menemukan 19 koperasi di luar "
-        "Indonesia \u2014 koordinat mustahil \u2014 dan mengoreksi angka laporan 04 "
-        "dan 05. Catatan 13-08-2026: pemerintah telah mengoreksi ke-19 koordinat "
-        "itu, dan laporan 03\u201308 telah dijalankan ulang pada koordinat terbaru."
+        "jalan diukur ulang dengan teliti: separuhnya lebih dari 9,7 km, dan 16 "
+        "koperasi lebih dari 100 km. Laporan ini juga menemukan 19 koperasi di "
+        "luar Indonesia \u2014 koordinat mustahil \u2014 dan mengoreksi angka "
+        "laporan 04 dan 05. Catatan 13-08-2026: pemerintah telah mengoreksi "
+        "ke-19 koordinat itu."
     ),
     "09-external-corroboration": (
         "Apakah angka pemerintah cocok dengan angka kami? Nyaris persis: media "
@@ -169,10 +277,10 @@ ID_SUMMARY = {
     ),
     "17-building-proximity": (
         "Seberapa jauh koperasi dari rumah terdekat? Dengan data bangunan "
-        "OpenStreetMap (44 juta bangunan), sebagian koperasi tidak punya satu pun "
-        "bangunan terpetakan dalam 500 m \u2014 tidak ada rumah di sekitarnya. Ini "
-        "batas bawah: peta bangunan belum lengkap di pedesaan, jadi tuliskan \u201ctidak "
-        "ada rumah terpetakan\u201d, bukan \u201ctidak ada rumah\u201d."
+        "OpenStreetMap (44 juta bangunan), 62,6% koperasi tidak punya satu pun "
+        "bangunan terpetakan dalam 5 km. Ini batas bawah: peta bangunan belum "
+        "lengkap di pedesaan, jadi tuliskan \u201ctidak ada rumah terpetakan\u201d, "
+        "bukan \u201ctidak ada rumah\u201d."
     ),
     "18-health-scoring": (
         "Apa arti \u201cindeks kesehatan\u201d koperasi? Label \u201ctidak sehat di semua "
@@ -182,6 +290,27 @@ ID_SUMMARY = {
         "tetap \u201ctidak sehat\u201d. Indeks ini lebih mencerminkan kelengkapan data "
         "dan kepatuhan administrasi daripada kesehatan yang independen."
     ),
+}
+
+ID_QUESTION = {
+    "01-snapshot-drift": "Apakah data SIMKOPDES masih diisi? Apakah nol hanya sementara?",
+    "02-zero-inflation": "Berapa banyak data kinerja yang benar-benar nol?",
+    "03-population-coverage": "Siapa yang terjangkau koperasi, dan koperasi mana yang dekat dengan siapa pun?",
+    "04-siting-screen": "Koperasi mana yang berada di lokasi yang mustahil?",
+    "05-road-access": "Seberapa jauh setiap koperasi dari jalan?",
+    "06-minimarket-proximity": "Apakah koperasi dibangun di atas minimarket yang sudah ada?",
+    "07-landuse-polygons": "Di atas kuburan atau di tengah sawah?",
+    "08-exact-geometry": "Berapa jauh sebenarnya? Apakah koordinatnya masuk akal?",
+    "09-external-corroboration": "Apakah angka resmi pemerintah sama dengan angka di dashboard?",
+    "10-coop-clustering": "Seberapa banyak program ini menumpuk dengan dirinya sendiri?",
+    "11-savings-behaviour": "Apakah anggota benar-benar menabung, atau rekeningnya tidur?",
+    "12-product-mix": "Program ini sebenarnya menjual apa?",
+    "13-compliance-npwp-nib": "Apakah surat-suratnya nyata, dan adakah yang beroperasi dengan surat itu?",
+    "14-island-comparison": "Program ini milik Jawa atau Indonesia?",
+    "15-construction-output": "Apakah konstruksi sejalan dengan hasil?",
+    "16-rat-compliance": "Apakah koperasi benar-benar menggelar RAT?",
+    "17-building-proximity": "Seberapa jauh koperasi dari rumah terdekat?",
+    "18-health-scoring": "Apa sebenarnya arti \u201ctidak sehat\u201d pada indeks kesehatan?",
 }
 
 INDEX_HEAD = """<!doctype html>
@@ -197,12 +326,14 @@ INDEX_HEAD = """<!doctype html>
   <main class="wrap">
     <p class="kicker">Lampiran metode</p>
     <h1>Metode: bagaimana setiap angka diperoleh</h1>
-    <p class="lede">Setiap klaim di situs ini dapat ditelusuri ke salah satu
-      laporan berikut. Tiap laporan bisa dijalankan ulang, ditulis lengkap dalam
-      bahasa Inggris demi ketelitian, dan disertai ringkasan bahasa Indonesia.
-      Halaman ini dibuat langsung dari laporan aslinya — tidak ada salinan kedua.</p>
+    <p class="lede">Setiap klaim di situs ini bisa ditelusuri ke salah satu
+      halaman di bawah. Tiap halaman menjelaskan dalam bahasa sederhana: dari
+      mana datanya, bagaimana kami mengolahnya, apa yang kami temukan — dan apa
+      yang tidak bisa kami katakan. Laporan teknis lengkap (bahasa Inggris,
+      dengan data mentah dan cara menjalankan ulang) ditautkan di tiap halaman
+      bagi siapa pun yang ingin memeriksa pekerjaan kami.</p>
     <div class="callout"><span class="callout-label">Perhatian</span>
-      Laporan metode memuat nama kandidat yang <strong>belum diverifikasi</strong>
+      Sebagian laporan memuat kandidat yang <strong>belum diverifikasi</strong>
       (satu koordinat yang salah dapat menimpa nama desa yang tidak bersalah).
       Halaman naratif di <a href="../findings/">Temuan</a> mengikuti kebijakan
       <em>anonim sampai terverifikasi</em>; lihat <a href="../about/">Tentang</a>.</div>
@@ -232,33 +363,6 @@ def report_title(readme: Path) -> str:
     return readme.parent.name
 
 
-def index_questions() -> dict:
-    """slug -> question, read from the Question column of reports/README.md.
-
-    That index table is the authoritative one-line question per report; the
-    README bodies rarely phrase it as a standalone sentence.
-    """
-    q = {}
-    readme = REPORTS / "README.md"
-    if not readme.exists():
-        return q
-    for line in readme.read_text(encoding="utf-8").splitlines():
-        m = re.match(r"\|\s*\d+\s*\|\s*\[[^]]+\]\(([^)]+)\)\s*\|\s*([^|]+)\|", line)
-        if m:
-            q[m.group(1).rstrip("/")] = m.group(2).strip()
-    return q
-
-
-def first_question(readme: Path, slug: str) -> str:
-    for line in readme.read_text(encoding="utf-8").splitlines():
-        s = line.strip()
-        if not s or s.startswith("#") or s.startswith("|"):
-            continue
-        if "?" in s:
-            return s[:140]
-    return "Lampiran metode untuk " + slug
-
-
 def main() -> None:
     slugs = sorted(
         p.name for p in REPORTS.iterdir()
@@ -267,8 +371,8 @@ def main() -> None:
     if not slugs:
         sys.exit("no report directories found under reports/")
 
+    CONTENT.mkdir(exist_ok=True)
     METHODS.mkdir(exist_ok=True)
-    questions = index_questions()
 
     rows = []
     for slug in slugs:
@@ -276,18 +380,28 @@ def main() -> None:
         if not readme.exists():
             print(f"  skipping {slug} (no README.md)")
             continue
-        title = report_title(readme)
+        title = ID_TITLE.get(slug) or report_title(readme)
+        lede = ID_LEDE.get(slug, "")
+        summary = ID_SUMMARY.get(slug, "Ringkasan bahasa Indonesia belum tersedia.")
+        question = ID_QUESTION.get(slug, title)
+
+        content = CONTENT / f"{slug}.md"
+        if content.exists():
+            print(f"  content: {content.relative_to(ROOT)}")
+        else:
+            print(f"  warning: no {content.relative_to(ROOT)} — page will be thin")
+
         out = METHODS / slug / "index.html"
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(
             SHELL.format(
                 title=title,
                 slug=slug,
-                summary=ID_SUMMARY.get(slug, "Ringkasan bahasa Indonesia belum tersedia."),
+                lede=lede,
+                summary=summary,
             ),
             encoding="utf-8",
         )
-        question = questions.get(slug) or first_question(readme, slug)
         rows.append((slug, title, question))
         print(f"  wrote {out.relative_to(ROOT)}")
 

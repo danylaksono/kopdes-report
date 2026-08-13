@@ -3,24 +3,26 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>17 — Building proximity: how far is each KDMP from the nearest house? — Metode</title>
+  <title>Jarak ke bangunan: seberapa jauh koperasi dari rumah terdekat? — Metode</title>
   <link rel="stylesheet" href="../../app/site.css" />
 </head>
 <body data-root="../../">
   <nav id="site-nav"></nav>
   <main class="wrap">
-    <p class="kicker">Metode · lampiran 17-building-proximity</p>
-    <h1>17 — Building proximity: how far is each KDMP from the nearest house?</h1>
-    <p class="lede">Laporan teknis lengkap dari analisis ini ditulis dalam bahasa
-      Inggris demi ketelitian. Ringkasannya dalam bahasa Indonesia ada di bawah.</p>
+    <p class="kicker">Metode · 17-building-proximity</p>
+    <h1>Jarak ke bangunan: seberapa jauh koperasi dari rumah terdekat?</h1>
+    <p class="lede">Seberapa jauh koperasi dari rumah terdekat? Kami mengukur hal yang harfiah — dan menahan diri untuk tidak membaca “tidak terpetakan” sebagai “tidak ada”.</p>
     <div class="callout"><span class="callout-label">Ringkasan</span>
-      <p>Seberapa jauh koperasi dari rumah terdekat? Dengan data bangunan OpenStreetMap (44 juta bangunan), sebagian koperasi tidak punya satu pun bangunan terpetakan dalam 500 m — tidak ada rumah di sekitarnya. Ini batas bawah: peta bangunan belum lengkap di pedesaan, jadi tuliskan “tidak ada rumah terpetakan”, bukan “tidak ada rumah”.</p>
+      <p>Seberapa jauh koperasi dari rumah terdekat? Dengan data bangunan OpenStreetMap (44 juta bangunan), 62,6% koperasi tidak punya satu pun bangunan terpetakan dalam 5 km. Ini batas bawah: peta bangunan belum lengkap di pedesaan, jadi tuliskan “tidak ada rumah terpetakan”, bukan “tidak ada rumah”.</p>
     </div>
-    <h2>Laporan lengkap (Inggris)</h2>
     <div id="md"></div>
-    <p class="md-note">Laporan ini memuat tabel data mentah, termasuk nama kandidat
-      yang <strong>belum diverifikasi</strong>. Lihat <a href="../../about/">kebijakan
-      verifikasi &amp; koreksi</a> sebelum mengutip nama desa/koperasi apa pun.</p>
+    <hr />
+    <p class="md-note">Laporan teknis lengkap dari analisis ini (bahasa Inggris,
+      dengan data mentah dan cara menjalankan ulang) tersedia di
+      <a href="../../reports/17-building-proximity/README.md">reports/17-building-proximity/README.md</a>.
+      Daftar kandidat yang <strong>belum diverifikasi</strong> (jika ada) hanya
+      ada di sana; lihat <a href="../../about/">kebijakan verifikasi &amp;
+      koreksi</a>.</p>
   </main>
   <footer id="site-footer"></footer>
   <script type="module" src="../../app/site.js"></script>
@@ -28,10 +30,10 @@
     import { fetchMarkdown, renderMarkdownInto } from "../../app/site.js";
     const md = document.getElementById("md");
     try {
-      const text = await fetchMarkdown("../../reports/17-building-proximity/README.md");
+      const text = await fetchMarkdown("../../methods/_content/17-building-proximity.md");
       await renderMarkdownInto(md, text);
     } catch (e) {
-      md.innerHTML = `<p style="color:#a00">Gagal memuat laporan: ${e.message}</p>`;
+      md.innerHTML = `<p style="color:#a00">Gagal memuat metode: ${e.message}</p>`;
     }
   </script>
 </body>
