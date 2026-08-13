@@ -15,13 +15,13 @@ Klaim "nol di semua provinsi" berasal dari salah baca kolom: satu jalur data men
 
 Sebarannya mengikuti gradien yang sudah dikenal: 98,9% di DKI Jakarta dan Sumatera Barat, turun ke **6,1% di Papua Pegunungan**. Kepatuhan RAT ikut bergerak dengan aktivitas (korelasi dengan nilai transaksi per koperasi 0,44) — tata kelola dan operasi berjalan bersama, keduanya mengikuti peta ekonomi.
 
-| Provinsi | Bagian telah RAT |
-| --- | --- |
-| DKI Jakarta | 98,9% |
-| Sumatera Barat | 98,9% |
-| Papua Barat Daya | 21,3% |
-| Papua Selatan | 16,2% |
-| Papua Pegunungan | **6,1%** |
+| Provinsi         | Bagian telah RAT |
+| ---------------- | ---------------- |
+| DKI Jakarta      | 98,9%            |
+| Sumatera Barat   | 98,9%            |
+| Papua Barat Daya | 21,3%            |
+| Papua Selatan    | 16,2%            |
+| Papua Pegunungan | **6,1%**         |
 
 ## Yang tidak bisa kami katakan
 

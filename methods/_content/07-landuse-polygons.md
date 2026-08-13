@@ -10,19 +10,19 @@ Kami menandai semua 83.342 titik koperasi, lalu menghitung apakah titik itu jatu
 
 Tuduhan sawah bertahan. **Koperasi jatuh di dalam poligon sawah 2,4 kali lebih sering daripada pusat desa biasa** (2,65% berbanding 1,10%). Lalu kami saring lebih ketat untuk menyingkirkan artefak — hanya yang berada 100 meter atau lebih dari tepi sawah, dengan penduduk di sekitarnya, dan bukan poligon gambar kasar yang merangkum seluruh dataran. Tersisa 536 kandidat, dan **448 di antaranya dikonfirmasi oleh peta satelit kedua yang berdiri sendiri (ESA WorldCover)** sebagai lahan pertanian.
 
-| Di dalam… | KDMP | Titik pusat desa |
-| --- | --- | --- |
-| Poligon sawah | **2,65%** (2.206) | 1,10% (832) |
-| Poligon kuburan | 0,026% (22) | 0,022% (17) |
+| Di dalam…       | KDMP              | Titik pusat desa |
+| --------------- | ----------------- | ---------------- |
+| Poligon sawah   | **2,65%** (2.206) | 1,10% (832)      |
+| Poligon kuburan | 0,026% (22)       | 0,022% (17)      |
 
 Dua sumber independen sepakat: 448 koperasi tercatat di lahan pertanian, jauh dari tepi, di desa yang berpenduduk. Dua ratus sembilan di antaranya membawa status lahan resmi "Terverifikasi".
 
-| Tahap penyaringan | Koperasi |
-| --- | --- |
-| Di dalam poligon sawah | 2.206 |
-| ≥100 m dari tepi, ada penduduk | 1.023 |
-| Bukan poligon kasar seluas dataran | 536 |
-| Dikonfirmasi peta satelit kedua | **448** |
+| Tahap penyaringan                  | Koperasi |
+| ---------------------------------- | -------- |
+| Di dalam poligon sawah             | 2.206    |
+| ≥100 m dari tepi, ada penduduk     | 1.023    |
+| Bukan poligon kasar seluas dataran | 536      |
+| Dikonfirmasi peta satelit kedua    | **448**  |
 
 Tuduhan kuburan tidak bertahan. Hanya 22 koperasi yang jatuh di dalam kuburan terpetakan — laju yang tidak bisa dibedakan dari pusat desa biasa. Sebagian besar adalah efek tepi (kantor kelurahan di sebelah tembok kuburan), dan 16 dari 22 berada di kota besar, tempat kuburan umum memang sebesar blok kota.
 

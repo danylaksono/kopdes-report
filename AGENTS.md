@@ -499,7 +499,7 @@ Reuters Graphics / Mongabay pattern:
 | `/explore/`                                         | **The interactive map.** Full screengrid explorer — layer switching, filters, per-cell inspection. The reader's own investigation. |
 | `/findings/`                                        | Index of the detailed write-ups                                                                                                    |
 | `/findings/remoteness/`, `/competition/`, `/money/` | One page per act, in depth, with the tables and figures the story only gestures at                                                 |
-| `/methods/`, `/methods/<nn-slug>/`                  | Methodology appendix — one page per published `reports/` entry (`18-health-scoring` stays unpublished)                                                          |
+| `/methods/`, `/methods/<nn-slug>/`                  | Methodology appendix — one page per published `reports/` entry (`18-health-scoring` stays unpublished)                             |
 | `/data/`                                            | Downloads, provenance, the snapshot log                                                                                            |
 | `/about/`                                           | Who, why, and the corrections policy                                                                                               |
 

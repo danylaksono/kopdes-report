@@ -10,15 +10,15 @@ Nama produknya tidak konsisten (misalnya "BERAS SPHP" versus "BERAS MEDIUM SPHP 
 
 **Lebih dari tiga perempat nilai penjualan yang dilaporkan adalah beras (51,2%) dan minyak goreng (25,6%).** Pupuk adalah barang utama ketiga (14,3%, hadir di 24 provinsi). Produk terlaris per provinsi hampir selalu salah satu dari tiga ini: beras bersubsidi, minyak goreng, atau pupuk NPK.
 
-| Kategori | Bagian nilai | Provinsi |
-| --- | --- | --- |
-| Beras | **51,2%** | 33 |
-| Minyak goreng | **25,6%** | 31 |
-| Pupuk | 14,3% | 24 |
-| Lainnya | 7,4% | 29 |
-| Gula | 0,8% | 25 |
-| Susu | 0,5% | 2 |
-| LPG | 0,3% | 17 |
+| Kategori      | Bagian nilai | Provinsi |
+| ------------- | ------------ | -------- |
+| Beras         | **51,2%**    | 33       |
+| Minyak goreng | **25,6%**    | 31       |
+| Pupuk         | 14,3%        | 24       |
+| Lainnya       | 7,4%         | 29       |
+| Gula          | 0,8%         | 25       |
+| Susu          | 0,5%         | 2        |
+| LPG           | 0,3%         | 17       |
 
 Gambaran yang muncul sederhana: **koperasi desa ini berperan sebagai toko sembako dan saprotan** — persis peran yang akan mereka perebutkan dengan warung dan minimarket yang sudah ada (pertanyaan kanibalisasi, lampiran 06).
 

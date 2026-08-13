@@ -6,15 +6,15 @@ Program ini milik Jawa atau Indonesia? Kami membandingkan seluruh 38 provinsi da
 
 Di sisi ekonomi, jawabannya jelas: **Jawa punya 30% koperasi tetapi sekitar 60% nilai transaksi yang dilaporkan; Papua punya 8,5% koperasi dan sekitar 0,6% nilai.** Kesenjangan per koperasi sekitar 30×.
 
-| Pulau | Koperasi | Melapor transaksi | Nilai per koperasi |
-| --- | --- | --- | --- |
-| **Jawa** | 25.247 | **7,86%** | **Rp 4,83 juta** |
-| Kalimantan | 7.160 | 1,82% | Rp 2,15 juta |
-| Nusa Tenggara | 5.342 | 2,39% | Rp 3,02 juta |
-| Sumatra | 25.587 | 1,19% | Rp 1,25 juta |
-| Sulawesi | 10.554 | 1,56% | Rp 1,43 juta |
-| Maluku | 2.427 | 0,25% | Rp 0,45 juta |
-| **Papua** | 7.062 | **0,21%** | **Rp 0,16 juta** |
+| Pulau         | Koperasi | Melapor transaksi | Nilai per koperasi |
+| ------------- | -------- | ----------------- | ------------------ |
+| **Jawa**      | 25.247   | **7,86%**         | **Rp 4,83 juta**   |
+| Kalimantan    | 7.160    | 1,82%             | Rp 2,15 juta       |
+| Nusa Tenggara | 5.342    | 2,39%             | Rp 3,02 juta       |
+| Sumatra       | 25.587   | 1,19%             | Rp 1,25 juta       |
+| Sulawesi      | 10.554   | 1,56%             | Rp 1,43 juta       |
+| Maluku        | 2.427    | 0,25%             | Rp 0,45 juta       |
+| **Papua**     | 7.062    | **0,21%**         | **Rp 0,16 juta**   |
 
 Di sisi penempatan, setiap "ekor" dalam investigasi ini adalah fenomena Indonesia timur. **70,7% koperasi Papua berada di petak tanpa penduduk tercatat** (nasional 21,3%), jarak ke minimarket terdekat median 75 km, dan hanya 3,2% yang lahannya terverifikasi. Jawa kebalikannya: 2,6% di petak kosong, 62,7% lahan terverifikasi.
 

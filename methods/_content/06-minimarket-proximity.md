@@ -13,22 +13,22 @@ Artinya semua angka "seberapa dekat" di sini adalah **batas bawah** — kenyataa
 Setidaknya 2,5% koperasi (2.069) berada dalam sekitar 500 m dari minimarket yang terpetakan, dan setidaknya 19,8% dalam 5 km.
 
 | Dalam jarak | Koperasi (minimal) | Bagian (minimal) |
-| --- | --- | --- |
-| ±500 m | 2.069 | 2,5% |
-| ±1 km | 4.150 | 5,0% |
-| ±2 km | 7.416 | 8,9% |
-| ±5 km | 16.496 | 19,8% |
+| ----------- | ------------------ | ---------------- |
+| ±500 m      | 2.069              | 2,5%             |
+| ±1 km       | 4.150              | 5,0%             |
+| ±2 km       | 7.416              | 8,9%             |
+| ±5 km       | 16.496             | 19,8%            |
 
 Arah sebaliknya lebih menarik. 78,3% minimarket yang terpetakan punya koperasi dalam 1 km. Tapi ini saja belum membuktikan apa-apa: koperasi ada satu per desa dan menjangkau 95% penduduk, jadi titik mana pun yang berpenduduk hampir pasti punya koperasi di dekatnya.
 
 Untuk menguji, kami membandingkan dengan lokasi acak yang "masuk akal" — di jalan utama di daerah ramai, tempat ritel memang biasa berdiri. Hasilnya: **minimarket sekitar 9,6 poin persentase lebih mungkin punya koperasi dalam 500 m daripada lokasi acak yang sebanding** — dan kelebihannya mengecil mengikuti jarak, hilang pada 2 km. Itulah tanda tumpang-tindih jarak dekat yang nyata tapi sedang.
 
-| Dalam | Minimarket | Lokasi acak (jalan + populasi) | Kelebihan |
-| --- | --- | --- | --- |
-| ±500 m | 43,8% | 34,2% | **+9,6 poin** |
-| ±1 km | 78,3% | 71,2% | +7,1 poin |
-| ±2 km | 95,7% | 92,7% | +3,0 poin |
-| ±5 km | 99,6% | 99,5% | +0,1 poin |
+| Dalam  | Minimarket | Lokasi acak (jalan + populasi) | Kelebihan     |
+| ------ | ---------- | ------------------------------ | ------------- |
+| ±500 m | 43,8%      | 34,2%                          | **+9,6 poin** |
+| ±1 km  | 78,3%      | 71,2%                          | +7,1 poin     |
+| ±2 km  | 95,7%      | 92,7%                          | +3,0 poin     |
+| ±5 km  | 99,6%      | 99,5%                          | +0,1 poin     |
 
 ## Yang tidak bisa kami katakan
 

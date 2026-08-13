@@ -10,13 +10,13 @@ Kami mengurutkan seluruh 83.342 koperasi dari yang paling "mustahil" lingkungann
 
 Dari 2.500 kandidat paling terpencil: sekitar **2.385 berada di kawasan berhutan**, 1.008 di lereng curam, dan 54 di atas air, mangrove, atau lahan basah. Yang paling sulit dijelaskan: **384 di antaranya membawa status lahan resmi "Terverifikasi"** — tanahnya sudah ditandatangani pihak berwenang — dan 175 berada di lereng curam sekaligus.
 
-| Tanda | Kandidat (dari 2.500) |
-| --- | --- |
-| Kawasan berhutan | 2.385 |
-| Lereng curam | 1.008 |
-| Air, mangrove, lahan basah | 54 |
-| Status lahan “Terverifikasi” | 384 |
-| … dan juga di lereng curam | 175 |
+| Tanda                        | Kandidat (dari 2.500) |
+| ---------------------------- | --------------------- |
+| Kawasan berhutan             | 2.385                 |
+| Lereng curam                 | 1.008                 |
+| Air, mangrove, lahan basah   | 54                    |
+| Status lahan “Terverifikasi” | 384                   |
+| … dan juga di lereng curam   | 175                   |
 
 Kami menguji keandalan cara ini. Dari 248 kandidat yang diambil acak, tidak satu pun memiliki satu piksel bangunan pun dalam radius 250 meter. Ini bukan koperasi yang berdiri 30 meter dari tepi desa; dalam seperempat kilometer di sekitar semuanya, tidak ada yang terbangun.
 
