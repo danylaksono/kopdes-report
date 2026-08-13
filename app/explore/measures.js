@@ -190,6 +190,21 @@ export const FAMILIES = [
       { key: "over_5km", label: "> 5 km", color: "#dcebe9" },
     ],
   },
+  {
+    id: "building",
+    label: "Jarak ke rumah terdekat",
+    col: "building_class",
+    // Same band structure as road (reports/17 uses 05's k's), so the two
+    // compose at the same cell scale. Mauve so it does not read as the road
+    // ramp. OSM coverage is incomplete: "no house" means "no *mapped* house".
+    source: "reports/17 (OSM buildings)",
+    classes: [
+      { key: "over_5km", label: "> ±5 km / tidak ada", color: "#3f2b56" },
+      { key: "under_5km", label: "±500 m – 5 km", color: "#6b4d8a" },
+      { key: "under_500m", label: "< ±500 m", color: "#a98fc4" },
+      { key: "on_road", label: "Di rumah (< 70 m)", color: "#e4dcf0" },
+    ],
+  },
 ];
 
 export const FAMILY_BY_ID = Object.fromEntries(FAMILIES.map((f) => [f.id, f]));
@@ -267,6 +282,38 @@ export const MEASURES = [
     agg: (p) => pct(p.nn_share_under_1km),
     cols: { point: ["nn_k"], agg: ["nn_share_under_1km"] },
     source: "reports/10",
+  },
+  {
+    id: "building_far",
+    label: "Jauh dari rumah",
+    short: "Rumah",
+    detail: "Tidak ada bangunan terpetakan dalam ±500 m",
+    chapter: "akses",
+    color: "#6b4d8a",
+    known: (r) => r.building_k != null,
+    test: (r) => r.building_k <= 2, // over_5km | under_5km
+    agg: (p) => sum2(p.building_share_over_5km, p.building_share_under_5km),
+    cols: {
+      point: ["building_k"],
+      agg: ["building_share_over_5km", "building_share_under_5km"],
+    },
+    source: "reports/17 (OSM)",
+  },
+  {
+    id: "farmland",
+    label: "Tercatat di sawah",
+    short: "Sawah",
+    detail: "Koordinat jatuh di dalam bidang lahan pertanian (OSM)",
+    chapter: "akses",
+    color: "#4a7c3f",
+    known: (r) => r.in_farmland != null,
+    test: (r) => r.in_farmland === true,
+    agg: (p) =>
+      p.in_farmland == null || p.cooperatives == null
+        ? null
+        : (100 * p.in_farmland) / p.cooperatives,
+    cols: { point: ["in_farmland"], agg: ["in_farmland", "cooperatives"] },
+    source: "reports/07",
   },
   {
     id: "silent",
@@ -394,6 +441,40 @@ export const FILTERS = [
     ],
   },
   {
+    id: "building",
+    label: "Rumah",
+    options: [
+      { value: "all", label: "Semua" },
+      {
+        value: "far",
+        label: "Tanpa rumah ±500 m",
+        test: (r) => r.building_k != null && r.building_k <= 2,
+      },
+      {
+        value: "near",
+        label: "Ada rumah ±500 m",
+        test: (r) => r.building_k != null && r.building_k >= 3,
+      },
+    ],
+  },
+  {
+    id: "farmland",
+    label: "Sawah",
+    options: [
+      { value: "all", label: "Semua" },
+      {
+        value: "in",
+        label: "Tercatat di sawah",
+        test: (r) => r.in_farmland === true,
+      },
+      {
+        value: "out",
+        label: "Tidak di sawah",
+        test: (r) => r.in_farmland === false,
+      },
+    ],
+  },
+  {
     id: "transaction",
     label: "Transaksi",
     options: [
@@ -436,15 +517,16 @@ export const FILTERS = [
     id: "coordinate",
     label: "Koordinat",
     options: [
-      // Default excludes the 19 impossible coordinates from report 08: they are
-      // real rows and belong in the data, but leaving them on by default puts
-      // koperasi in the Indian Ocean on the opening view.
+      // The 19 impossible coordinates from report 08 were corrected by the
+      // ministry on 08-13, so none are suspect now (coordinate_suspect is
+      // false for all 83,379 rows). The filter is kept as infrastructure;
+      // "Hanya yang janggal" shows nothing.
       {
         value: "valid",
         label: "Hanya yang masuk akal",
         test: (r) => r.coordinate_suspect !== true,
       },
-      { value: "all", label: "Termasuk yang janggal (19)" },
+      { value: "all", label: "Termasuk yang janggal (0)" },
       {
         value: "suspect",
         label: "Hanya yang janggal",

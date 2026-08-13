@@ -102,6 +102,8 @@ SOURCES = {
                 "cooperative_id", "python reports/08-exact-geometry/run.py"),
     "clustering": (REPORTS / "10-coop-clustering" / "nn_distances.csv",
                     "cooperative_id", "python reports/10-coop-clustering/run.py"),
+    "building": (REPORTS / "17-building-proximity" / "kopdes_building_access.csv",
+                  "cooperative_id", "python reports/17-building-proximity/run.py"),
 }
 
 
@@ -144,7 +146,17 @@ CLASS_COLUMNS = """
                 when '1-2km'                   then '1_2km'
                 when '2-5km'                   then '2_5km'
                 when '>5km'                    then 'over_5km'
-            end                                     as nn_class"""
+            end                                     as nn_class,
+
+            case bd.building_band
+                when 'on a building cell (<70 m)' then 'on_road'
+                when '< ~260 m'                then 'under_500m'
+                when '< ~530 m'                then 'under_500m'
+                when '< ~1 km'                 then 'under_5km'
+                when '< ~2 km'                 then 'under_5km'
+                when '< ~5 km'                 then 'under_5km'
+                when '> ~5 km / none found'    then 'over_5km'
+            end                                     as building_class"""
 
 
 def class_shares(family: str, classes: list[str]) -> str:
@@ -281,6 +293,9 @@ def build_points(con, missing):
             -- 05 road access
             rd.km_any_road, rd.km_non_track, rd.road_band, rd.track_only,
 
+            -- 17 building proximity (nearest OSM building footprint, H3 r10)
+            bd.building_band,
+
             -- 06 modern retail (ring bands) and 08 (exact geodesic, all points).
             -- Prefer the exact column: 08 showed the ring version overstates
             -- distance by ~169 m and is capped at ~5 km.
@@ -339,6 +354,7 @@ def build_points(con, missing):
         left join src_road_exact   dx using (cooperative_id)
         left join src_suspect      sc using (cooperative_id)
         left join src_clustering   cl using (cooperative_id)
+        left join src_building     bd using (cooperative_id)
     """)
 
     n, = con.execute("select count(*) from points").fetchone()
@@ -408,7 +424,8 @@ AGG_MEASURES = f"""
     -- distributed, which is the thing a single number hides.
 {class_shares('road', ['over_5km', 'under_5km', 'under_500m', 'on_road'])},
 {class_shares('pop', ['empty', 'under_500', 'under_10k', 'over_10k'])},
-{class_shares('nn', ['under_1km', '1_2km', '2_5km', 'over_5km'])}
+{class_shares('nn', ['under_1km', '1_2km', '2_5km', 'over_5km'])},
+{class_shares('building', ['over_5km', 'under_5km', 'under_500m', 'on_road'])}
 """
 
 
@@ -568,8 +585,11 @@ def main():
         "null_semantics": {
             "km_to_minimarket": "no mapped minimarket within ~5 km (the ring search "
                                 "caps at k=38). 66,846 cooperatives. NOT unknown.",
-            "km_any_road": "no mapped road of any kind within ~5 km (4,321). NOT unknown.",
-            "km_non_track": "no made road within ~5 km (5,133). NOT unknown.",
+            "km_any_road": "no mapped road of any kind within ~5 km (4,294). NOT unknown.",
+            "km_non_track": "no made road within ~5 km (5,106). NOT unknown.",
+            "building_band": "no *mapped* building within ~5 km (ring caps at k=38). "
+                             "NOT unknown, but a LOWER BOUND: OSM building coverage is "
+                             "incomplete in rural Indonesia (reports/17).",
             "pop_within_1_4km": "no populated Kontur cell within the ring - read as 0.",
             "transaction_value": "the village link failed (21% of cooperatives). "
                                  "Genuinely unknown. 0 means linked and nothing reported.",

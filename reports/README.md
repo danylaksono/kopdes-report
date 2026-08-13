@@ -33,6 +33,7 @@ Run any of them with `python reports/NN-slug/run.py`. Dependencies:
 | 14  | [island-comparison](14-island-comparison/)           | Whose program is this — Java or Indonesia?                     | no                         | run 2026-08-13                 |
 | 15  | [construction-output](15-construction-output/)       | Does construction track output?                                | no                         | run 2026-08-13                 |
 | 16  | [rat-compliance](16-rat-compliance/)                 | Are cooperatives holding their annual member meetings (RAT)?   | no                         | run 2026-08-13                 |
+| 17  | [building-proximity](17-building-proximity/)         | How far is each KDMP from the nearest building?                | no                         | run 2026-08-13                 |
 
 ## What we can and cannot say right now
 

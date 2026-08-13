@@ -167,6 +167,13 @@ ID_SUMMARY = {
         "6% di Papua Pegunungan. Temuan awal yang menyebut \u201cRAT nol di semua "
         "provinsi\u201d keliru karena salah membaca kolom data."
     ),
+    "17-building-proximity": (
+        "Seberapa jauh koperasi dari rumah terdekat? Dengan data bangunan "
+        "OpenStreetMap (44 juta bangunan), sebagian koperasi tidak punya satu pun "
+        "bangunan terpetakan dalam 500 m \u2014 tidak ada rumah di sekitarnya. Ini "
+        "batas bawah: peta bangunan belum lengkap di pedesaan, jadi tuliskan \u201ctidak "
+        "ada rumah terpetakan\u201d, bukan \u201ctidak ada rumah\u201d."
+    ),
 }
 
 INDEX_HEAD = """<!doctype html>
