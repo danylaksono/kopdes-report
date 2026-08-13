@@ -124,7 +124,8 @@ function measureRowLabel(label) {
   const probe = document.createElement("span");
   probe.className = "axis row-label";
   probe.textContent = label;
-  probe.style.cssText = "position:absolute;visibility:hidden;white-space:nowrap;";
+  probe.style.cssText =
+    "position:absolute;visibility:hidden;white-space:nowrap;";
   document.body.appendChild(probe);
   const w = probe.getBoundingClientRect().width;
   probe.remove();
