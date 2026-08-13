@@ -247,14 +247,14 @@ and the methods appendix are both Indonesian; only the technical reports in
 Real directories with `index.html` (works on GitHub Pages, independently
 linkable):
 
-| Route                                                    | Role                                                                                                   |
-| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `/` (`index.html`)                                       | The story — image hero + three two-column scrolly chapters + a MapLibre map interlude + verdicts       |
-| `/explore/`                                              | The interactive map (`app/explore.js`)                                                                 |
-| `/findings/`, `findings/{remoteness,competition,money}/` | The three acts, in Bahasa Indonesia, **anonymous until verified**                                      |
+| Route                                                    | Role                                                                                                                                                           |
+| -------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/` (`index.html`)                                       | The story — image hero + three two-column scrolly chapters + a MapLibre map interlude + verdicts                                                               |
+| `/explore/`                                              | The interactive map (`app/explore.js`)                                                                                                                         |
+| `/findings/`, `findings/{remoteness,competition,money}/` | The three acts, in Bahasa Indonesia, **anonymous until verified**                                                                                              |
 | `/methods/`, `methods/<nn-slug>/`                        | Methodology appendix — plain-language Indonesian write-ups in `methods/_content/`, rendered client-side; the technical English report is linked from each page |
-| `/data/`                                                 | Downloads, provenance, null semantics, snapshot log                                                    |
-| `/about/`                                                | Who/why, verification & corrections policy, public corrections log                                     |
+| `/data/`                                                 | Downloads, provenance, null semantics, snapshot log                                                                                                            |
+| `/about/`                                                | Who/why, verification & corrections policy, public corrections log                                                                                             |
 
 Shared shell: `app/site.css` (design system) + `app/site.js` (injects nav +
 footer from `data-root`, `marked` markdown renderer, ID-locale number helpers).
