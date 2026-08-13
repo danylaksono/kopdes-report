@@ -78,6 +78,7 @@ SHELL = """<!doctype html>
 # one-line card on /methods/.
 ID_TITLE = {
     "01-snapshot-drift": "Angka nol itu nyata, atau hanya belum diisi?",
+    "19-land-cover": "Penutup lahan: apa yang ada di bawah setiap koperasi?",
     "02-zero-inflation": "Hampir semua data kinerja adalah nol",
     "03-population-coverage": "Jangkauan penduduk dan keterpencilan",
     "04-siting-screen": "Layar penapisan lokasi: koperasi mana yang lingkungannya mustahil?",
@@ -101,6 +102,11 @@ ID_LEDE = {
     "01-snapshot-drift": (
         "Apakah 97% angka nol itu berarti program ini mati, atau hanya belum "
         "diisi? Jawabannya menentukan hampir semua temuan lain di situs ini."
+    ),
+    "19-land-cover": (
+        "Setiap koperasi punya koordinat, dan setiap koordinat punya satu "
+        "kelas tutupan lahan. Kini seluruh 83.379 koperasi terklasifikasi, "
+        "sehingga tabel bisa menunjukkan penutup lahannya satu per satu."
     ),
     "02-zero-inflation": (
         "Hampir semua data kinerja dalam sistem ini adalah nol. Berapa banyak "
@@ -183,6 +189,12 @@ ID_SUMMARY = {
         "hanya satu yang melaporkan aktivitas pada 9 Agustus. Sistem ini tidak "
         "sedang aktif diisi. (Pada 13 Agustus, 209 desa baru mulai melaporkan "
         ", jadi bacaan ini hanya berlaku untuk jendela itu.)"
+    ),
+    "19-land-cover": (
+        "Dari peta citra satelit ESA WorldCover 10 meter (2021), koordinat "
+        "setiap koperasi diklasifikasikan: sekitar 61% pada piksel hutan, "
+        "17,5% pada pemukiman, 12,6% pada lahan pertanian. Nilai ini piksel "
+        "di titik koordinat, bukan jejak bangunan, dan berasal dari tahun 2021."
     ),
     "02-zero-inflation": (
         "Berapa banyak data kinerja yang benar-benar nol? Ternyata hampir semuanya: "
@@ -297,6 +309,7 @@ ID_SUMMARY = {
 
 ID_QUESTION = {
     "01-snapshot-drift": "Apakah data SIMKOPDES masih diisi? Apakah nol hanya sementara?",
+    "19-land-cover": "Apa kelas tutupan lahan di bawah setiap koperasi?",
     "02-zero-inflation": "Berapa banyak data kinerja yang benar-benar nol?",
     "03-population-coverage": "Siapa yang terjangkau koperasi, dan koperasi mana yang dekat dengan siapa pun?",
     "04-siting-screen": "Koperasi mana yang berada di lokasi yang mustahil?",

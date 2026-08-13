@@ -42,7 +42,8 @@
     "cemetery_depth_m": "not inside a burial ground.",
     "land_status": "no land-asset record exists for this cooperative.",
     "m_to_made_road_exact": "not in 05's roadless set - the ring distance in km_non_track is accurate to ~34 m, use that (08).",
-    "coordinate_diagnosis": "the coordinate is inside Indonesia and was never suspect."
+    "coordinate_diagnosis": "the coordinate is inside Indonesia and was never suspect.",
+    "land_cover": "no WorldCover tile or nodata pixel at the coordinate. The 08-13 snapshot resolves all 83,379; only the older 08-05 baseline had unresolvable points."
   },
   "missing_sources": [],
   "schema": {
@@ -305,6 +306,14 @@
         {
           "name": "farmland_confirmed_cropland",
           "type": "BOOLEAN"
+        },
+        {
+          "name": "land_cover",
+          "type": "VARCHAR"
+        },
+        {
+          "name": "land_cover_code",
+          "type": "BIGINT"
         },
         {
           "name": "land_status",

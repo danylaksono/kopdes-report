@@ -60,7 +60,7 @@ const COLS = [
   },
   { key: "catchment", label: "Populasi di sekitar", sort: false },
   { key: "maps", label: "Peta", sort: false },
-  { key: "siting", label: "Penempatan", sort: "number" },
+  { key: "land_cover", label: "Penutup Lahan", sort: "text" },
   { key: "land", label: "Tanah", sort: "number" },
 ];
 const COLS_BY_KEY = Object.fromEntries(COLS.map((c) => [c.key, c]));
@@ -96,6 +96,43 @@ const coord = (v) => v.toFixed(4).replace(".", ",");
 const mapsUrl = (r) =>
   `https://www.google.com/maps/@${r.latitude},${r.longitude},250m/data=!3m1!1e3`;
 
+// Penutup Lahan: ESA WorldCover 10 m class at the recorded coordinate (reports/19),
+// with two OSM overrides that are unambiguous and specific (reports/07). The
+// class is a satellite pixel, not the cooperative's footprint, so the tooltip
+// says so rather than letting "Hutan" overclaim.
+const LAND_COVER = {
+  10: { label: "Hutan / pepohonan", color: "#2f7d4f" },
+  20: { label: "Semak belukar", color: "#8a9b4f" },
+  30: { label: "Padang rumput", color: "#c2a54f" },
+  40: { label: "Lahan pertanian", color: "#b58a2e" },
+  50: { label: "Pemukiman / terbangun", color: "#8a5a3a" },
+  60: { label: "Tanah terbuka", color: "#a89f91" },
+  80: { label: "Perairan", color: "#3a6ea8" },
+  90: { label: "Rawa", color: "#4d7a72" },
+  95: { label: "Mangrove", color: "#2f6d5a" },
+};
+const LAND_TITLE =
+  "ESA WorldCover 10 m (2021) pada koordinat koperasi: klasifikasi citra satelit, bukan jejak bangunan koperasi.";
+
+function landCoverInfo(r) {
+  if (r.in_cemetery)
+    return {
+      label: "Pemakaman",
+      color: "#6b4d8a",
+      title: "Polygon pemakaman OSM (laporan 07); citra satelit tidak punya kelas makam.",
+    };
+  if (r.in_farmland && (r.farmland_depth_m ?? 0) >= 100 && !r.farmland_polygon_coarse)
+    return {
+      label: "Lahan pertanian",
+      color: "#b58a2e",
+      title: "Polygon lahan pertanian OSM, minimal 100 m dari tepi (laporan 07).",
+    };
+  const base = LAND_COVER[r.land_cover_code];
+  return base
+    ? { ...base, title: LAND_TITLE }
+    : { label: "Tidak terklasifikasi", color: "#9a9a9a", title: LAND_TITLE };
+}
+
 // ---------------------------------------------------------------------------
 // State
 // ---------------------------------------------------------------------------
@@ -126,7 +163,9 @@ async function loadRows() {
       transaction_value::DOUBLE AS transaction_value,
       km_non_track, km_to_minimarket, m_to_nearest_other,
       pop_within_1_4km, pop_within_5_1km, own_cell_pop,
-      in_siting_shortlist, coordinate_suspect, land_verified,
+      coordinate_suspect, land_verified,
+      in_cemetery, in_farmland, farmland_depth_m, farmland_polygon_coarse,
+      land_cover, land_cover_code,
       road_class, nn_class
     FROM read_parquet('${PARQUET}')
     WHERE latitude IS NOT NULL AND longitude IS NOT NULL
@@ -163,8 +202,8 @@ function sortValue(col, r) {
   switch (col.key) {
     case "report_status":
       return r.has_village_stats ? (r.has_reported_transaction ? 2 : 1) : 0;
-    case "siting":
-      return r.in_siting_shortlist ? 1 : 0;
+    case "land_cover":
+      return landCoverInfo(r).label;
     case "land":
       return r.land_verified ? 1 : 0;
     case "catchment":
@@ -252,10 +291,10 @@ function cell(col, r) {
         ? `<span class="badge badge-danger" title="Koordinat ${c} tidak masuk akal dan belum diverifikasi">Perlu dicek</span> ${link}`
         : link;
     }
-    case "siting":
-      return r.in_siting_shortlist
-        ? `<span class="badge badge-accent" title="Masuk daftar pendek kandidat penempatan">Kandidat penempatan</span>`
-        : "";
+    case "land_cover": {
+      const lu = landCoverInfo(r);
+      return `<span class="land-cover" title="${esc(lu.title)}"><span class="dot" style="background:${lu.color}"></span>${lu.label}</span>`;
+    }
     case "land":
       return r.land_verified
         ? `<span class="badge badge-ok">Tanah terverifikasi</span>`

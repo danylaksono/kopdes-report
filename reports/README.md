@@ -35,6 +35,7 @@ Run any of them with `python reports/NN-slug/run.py`. Dependencies:
 | 16  | [rat-compliance](16-rat-compliance/)                 | Are cooperatives holding their annual member meetings (RAT)?   | no                         | run 2026-08-13                 |
 | 17  | [building-proximity](17-building-proximity/)         | How far is each KDMP from the nearest building?                | no                         | run 2026-08-13                 |
 | 18  | [health-scoring](18-health-scoring/)                 | What does the ministry's health index actually say?            | no                         | run 2026-08-13                 |
+| 19  | [land-cover](19-land-cover/)                     | What land cover is every KDMP on?                               | cloud rasters              | run 2026-08-13                 |
 
 ## What we can and cannot say right now
 
@@ -78,6 +79,11 @@ Read this before quoting any number out of these reports.
   annual RAT** (50,174/83,382 per 05-08), from 98.9% in DKI Jakarta to 6.1% in
   Papua Pegunungan (16). The construction-vs-output correlation (ρ = 0.34, n = 38)
   is a geography confound, not evidence (15).
+- **The land cover under every recorded coordinate is now classified (19).**
+  ~61% sit on a tree-cover pixel, 17.5% built-up, 12.6% cropland. Read as the
+  10 m pixel under the coordinate in the 2021 WorldCover snapshot, never as the
+  cooperative's footprint; OSM cemetery and deep-farmland polygons override the
+  raster where they exist (07).
 - **Coverage is not the problem**: 95% of Indonesians live within ~1.4 km of a
   KDMP (03). The "they built them where nobody can reach them" claim does not
   hold as a mass phenomenon.

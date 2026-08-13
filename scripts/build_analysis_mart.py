@@ -104,6 +104,8 @@ SOURCES = {
                     "cooperative_id", "python reports/10-coop-clustering/run.py"),
     "building": (REPORTS / "17-building-proximity" / "kopdes_building_access.csv",
                   "cooperative_id", "python reports/17-building-proximity/run.py"),
+    "landcover": (REPORTS / "19-land-cover" / "kopdes_landcover.csv",
+                   "cooperative_id", "python reports/19-land-cover/run.py"),
 }
 
 
@@ -331,6 +333,10 @@ def build_points(con, missing):
             (fc.cooperative_id is not null)         as farmland_candidate,
             fc.confirmed_agricultural               as farmland_confirmed_cropland,
 
+            -- 19 land cover (ESA WorldCover 10m, sampled at every coordinate)
+            lc.landcover                            as land_cover,
+            lc.landcover_code                       as land_cover_code,
+
             -- land assets (name join; see the module docstring)
             vl.land_status, vl.land_surveyor,
             (vl.land_status = 'Terverifikasi')       as land_verified,
@@ -350,6 +356,7 @@ def build_points(con, missing):
         left join src_retail    rt using (cooperative_id)
         left join src_landuse   lu using (cooperative_id)
         left join src_farmcand  fc using (cooperative_id)
+        left join src_landcover lc using (cooperative_id)
         left join src_retail_exact rx using (cooperative_id)
         left join src_road_exact   dx using (cooperative_id)
         left join src_suspect      sc using (cooperative_id)
@@ -602,6 +609,9 @@ def main():
                                     "km_non_track is accurate to ~34 m, use that (08).",
             "coordinate_diagnosis": "the coordinate is inside Indonesia and was never "
                                     "suspect.",
+            "land_cover": "no WorldCover tile or nodata pixel at the coordinate. "
+                           "The 08-13 snapshot resolves all 83,379; only the older "
+                           "08-05 baseline had unresolvable points.",
         },
         "missing_sources": sorted(missing),
         "schema": schema,

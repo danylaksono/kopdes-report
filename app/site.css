@@ -417,6 +417,9 @@ body.tabel-wide .tabel-bleed {
   border-radius: 50%;
   margin-right: 6px;
 }
+.land-cover {
+  white-space: nowrap;
+}
 .spark {
   display: inline-block;
   vertical-align: middle;

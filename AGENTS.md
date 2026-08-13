@@ -206,6 +206,15 @@ node scripts/extract_kopdes.mjs
 python scripts/build_analysis_mart.py
 ```
 
+**The committed mart is built from the 08-13 snapshot, not `data/raw`.**
+`data/raw` is the 08-05 baseline (83,342 cooperatives); the production parquet
+holds 83,379 from `data/snapshots/2026-08-13`. Rebuild with
+`$env:KOPDES_RAW='data/snapshots/2026-08-13'` and re-run any affected reports
+against the same snapshot first. The manifest's `source_snapshot` string is
+hardcoded and says "data/raw" even when the build used a snapshot, so trust the
+row count (83,379), not the string. Rebuilding from the default `data/raw`
+silently regresses every count on the site.
+
 The extraction scripts discover AES-256-CBC encryption keys at runtime by scraping the SIMKOPDES JS bundle. They make concurrent API calls (concurrency=12) and walk the full admin hierarchy.
 
 ## Geo boundary pipeline
@@ -466,6 +475,12 @@ trip.
   the same `imagery_url` format the mart and the explorer use) in a new tab; the
   raw coordinates live in the link's tooltip. "Perlu dicek" rows keep the
   warning badge above the link.
+- **Penutup Lahan column** shows the ESA WorldCover 10 m (2021) class at the
+  recorded coordinate (`land_cover` / `land_cover_code` in the mart, from
+  `reports/19-land-cover`), with two OSM overrides from report 07: a mapped
+  cemetery shows "Pemakaman", a point ≥100 m inside a non-coarse farmland
+  polygon shows "Lahan pertanian". The tooltip states the source; the class is
+  a satellite pixel, not the building footprint.
 - **"Lebar penuh" toggle** (toolbar button, sets `body.tabel-wide`) breaks the
   table out of the 1080 px measure: `.tabel-bleed` spans `100vw` and `#grid`
   stretches to fill it (`width: 100%`, so it fills wide monitors; content and

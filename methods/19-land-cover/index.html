@@ -3,23 +3,23 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Pemeriksaan silang: apakah dashboard adalah angka resmi? · Metode</title>
+  <title>Penutup lahan: apa yang ada di bawah setiap koperasi? · Metode</title>
   <link rel="stylesheet" href="../../app/site.css" />
 </head>
 <body data-root="../../">
   <nav id="site-nav"></nav>
   <main class="wrap">
-    <p class="kicker">Metode · 09-external-corroboration</p>
-    <h1>Pemeriksaan silang: apakah dashboard adalah angka resmi?</h1>
-    <p class="lede">Angka resmi pemerintah cocok dengan dashboardnya, sampai selisih 0,04%. Bantahan “websitenya belum diperbarui” runtuh.</p>
+    <p class="kicker">Metode · 19-land-cover</p>
+    <h1>Penutup lahan: apa yang ada di bawah setiap koperasi?</h1>
+    <p class="lede">Setiap koperasi punya koordinat, dan setiap koordinat punya satu kelas tutupan lahan. Kini seluruh 83.379 koperasi terklasifikasi, sehingga tabel bisa menunjukkan penutup lahannya satu per satu.</p>
     <div class="callout"><span class="callout-label">Ringkasan</span>
-      <p>Apakah angka pemerintah cocok dengan angka kami? Nyaris persis: media melaporkan Rp 179,72 miliar, kami Rp 179,79 miliar. Dashboard itulah angka resmi pemerintah.</p>
+      <p>Dari peta citra satelit ESA WorldCover 10 meter (2021), koordinat setiap koperasi diklasifikasikan: sekitar 61% pada piksel hutan, 17,5% pada pemukiman, 12,6% pada lahan pertanian. Nilai ini piksel di titik koordinat, bukan jejak bangunan, dan berasal dari tahun 2021.</p>
     </div>
     <div id="md"></div>
     <hr />
     <p class="md-note">Laporan teknis lengkap dari analisis ini (bahasa Inggris,
       dengan data mentah dan cara menjalankan ulang) tersedia di
-      <a href="../../reports/09-external-corroboration/README.md">reports/09-external-corroboration/README.md</a>.
+      <a href="../../reports/19-land-cover/README.md">reports/19-land-cover/README.md</a>.
       Daftar kandidat yang <strong>belum diverifikasi</strong> (jika ada) hanya
       ada di sana; lihat <a href="../../about/">kebijakan verifikasi &amp;
       koreksi</a>.</p>
@@ -30,7 +30,7 @@
     import { fetchMarkdown, renderMarkdownInto } from "../../app/site.js";
     const md = document.getElementById("md");
     try {
-      const text = await fetchMarkdown("../../methods/_content/09-external-corroboration.md");
+      const text = await fetchMarkdown("../../methods/_content/19-land-cover.md");
       await renderMarkdownInto(md, text);
     } catch (e) {
       md.innerHTML = `<p style="color:#a00">Gagal memuat metode: ${e.message}</p>`;
