@@ -49,13 +49,21 @@ const POINTS_SOURCE = "kopdes-points-src";
  * encodings of the same data and the larger polygons win on area alone — which
  * is exactly the distortion anchor glyphs avoid.
  */
-export function setBoundaries(map, geojson, { selectedId = null, dark = false } = {}) {
+export function setBoundaries(
+  map,
+  geojson,
+  { selectedId = null, dark = false } = {},
+) {
   // Over imagery a charcoal hairline disappears; over paper a white one does.
   const line = dark ? "#ffffff" : "#8f8674";
   const fill = dark ? "#ffffff" : "#6b6255";
 
   if (!map.getSource(BOUNDARY_SOURCE)) {
-    map.addSource(BOUNDARY_SOURCE, { type: "geojson", data: geojson, promoteId: "id" });
+    map.addSource(BOUNDARY_SOURCE, {
+      type: "geojson",
+      data: geojson,
+      promoteId: "id",
+    });
     map.addLayer({
       id: BOUNDARY_FILL,
       type: "fill",
@@ -181,12 +189,42 @@ export function setPoints(map, rows, { dark = false } = {}) {
       paint: {
         // At national zoom 83.000 dots are a smear, so they stay small and
         // translucent and only resolve into individual marks as you go in.
-        "circle-radius": ["interpolate", ["linear"], ["zoom"], 4, 1.1, 8, 2.4, 12, 4.5, 16, 7],
+        "circle-radius": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          4,
+          1.1,
+          8,
+          2.4,
+          12,
+          4.5,
+          16,
+          7,
+        ],
         // Over imagery the dot inverts: a hot dot with a dark halo, which is
         // what stays visible over both bright roofs and dark canopy.
         "circle-color": dark ? "#ffd24a" : "#1a1a1a",
-        "circle-opacity": ["interpolate", ["linear"], ["zoom"], 4, 0.28, 9, 0.55, 13, 0.85],
-        "circle-stroke-width": ["interpolate", ["linear"], ["zoom"], 9, 0, 12, 1],
+        "circle-opacity": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          4,
+          0.28,
+          9,
+          0.55,
+          13,
+          0.85,
+        ],
+        "circle-stroke-width": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          9,
+          0,
+          12,
+          1,
+        ],
         "circle-stroke-color": dark ? "#1a1a1a" : "#fff",
       },
     });
@@ -213,7 +251,14 @@ export function removePoints(map) {
  * inside one `render()` call, so the value a glyph sizes against is always the
  * one from its own frame.
  */
-export function createGridLayer({ rows, spec, cellSizePixels, onStats, onHover, onClick }) {
+export function createGridLayer({
+  rows,
+  spec,
+  cellSizePixels,
+  onStats,
+  onHover,
+  onClick,
+}) {
   let reference = 1;
   let domain = FULL_SCALE;
   const counts = [];
@@ -241,7 +286,8 @@ export function createGridLayer({ rows, spec, cellSizePixels, onStats, onHover, 
         counts.push(n);
         total += n;
         if (n > max) max = n;
-        if (measureId) values.push(gridData.customData?.[i]?.values?.[measureId]);
+        if (measureId)
+          values.push(gridData.customData?.[i]?.values?.[measureId]);
       }
       reference = sizeReference(counts);
       domain = measureDomain(spec, values);
@@ -283,7 +329,14 @@ export function createGridLayer({ rows, spec, cellSizePixels, onStats, onHover, 
  *   feature-anchors redraws each frame anyway; the only thing that must be told
  *   separately is `anchorSizePixels`, because hit-testing derives from it.
  */
-export function createAnchorLayer({ collection, spec, sizing, onStats, onHover, onClick }) {
+export function createAnchorLayer({
+  collection,
+  spec,
+  sizing,
+  onStats,
+  onHover,
+  onClick,
+}) {
   const counts = collection.features.map((f) => f.properties.cooperatives || 0);
   const reference = sizeReference(counts);
   const measure = spec.measures[0];
@@ -314,7 +367,13 @@ export function createAnchorLayer({ collection, spec, sizing, onStats, onHover, 
       drawGlyph(ctx, x, y, summarizeAnchor(props, spec), {
         spec,
         domain,
-        size: sizeFor(spec, props.cooperatives, reference, sizing.maxPx, sizing.uniformPx),
+        size: sizeFor(
+          spec,
+          props.cooperatives,
+          reference,
+          sizing.maxPx,
+          sizing.uniformPx,
+        ),
         hovered: cell.isHovered === true,
       });
     },

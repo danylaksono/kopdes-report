@@ -7,7 +7,14 @@
  * at construction, so most changes are a layer rebuild anyway.
  */
 
-import { LEVELS, LEVEL_BY_ID, FILTERS, FILTER_DEFAULTS, MEASURES, PROFILE } from "./measures.js";
+import {
+  LEVELS,
+  LEVEL_BY_ID,
+  FILTERS,
+  FILTER_DEFAULTS,
+  MEASURES,
+  PROFILE,
+} from "./measures.js";
 import { BASEMAPS, BASEMAP_BY_ID, tintBasemap } from "./basemaps.js";
 import { loadBoundaries, loadLevel, loadManifest, loadPoints } from "./data.js";
 import { identity, makeSpec, summarizeCell } from "./glyph.js";
@@ -91,8 +98,14 @@ const map = new maplibregl.Map({
 // Both bottom: the top-right corner belongs to the inspector, which is the one
 // panel that appears without being asked for and must not land on the zoom
 // buttons when it does.
-map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "bottom-right");
-map.addControl(new maplibregl.ScaleControl({ maxWidth: 110, unit: "metric" }), "bottom-left");
+map.addControl(
+  new maplibregl.NavigationControl({ showCompass: false }),
+  "bottom-right",
+);
+map.addControl(
+  new maplibregl.ScaleControl({ maxWidth: 110, unit: "metric" }),
+  "bottom-left",
+);
 
 /**
  * Swap the backdrop.
@@ -127,7 +140,8 @@ async function setBasemap(id) {
 
 /** Which measures and families the current glyph mode needs computed. */
 function currentSpec() {
-  if (state.mode === "composition") return makeSpec("composition", [], state.family);
+  if (state.mode === "composition")
+    return makeSpec("composition", [], state.family);
   if (state.mode === "measure")
     return makeSpec("measure", [state.measure], null, state.stretch);
   return makeSpec("profile", PROFILE, null);
@@ -231,7 +245,12 @@ async function syncBoundaries(token = generation) {
     // The level or the basemap can change while an 8 MB fetch is in flight;
     // dropping a stale response is cheaper than cancelling and keeps the map
     // consistent.
-    if (token !== generation || state.level !== level.id || !state.showBoundaries) return;
+    if (
+      token !== generation ||
+      state.level !== level.id ||
+      !state.showBoundaries
+    )
+      return;
     setBoundaries(map, geo, { selectedId: state.selection, dark: isDark() });
     restack();
     const missing = (state.counts[level.id] ?? 0) - geo.features.length;
@@ -392,7 +411,11 @@ function drillInto(props) {
   const i = order.indexOf(state.level);
   const next = i > 0 ? order[i - 1] : "grid";
   const zoom = next === "kabupaten" ? 7.2 : next === "kecamatan" ? 9 : 10.5;
-  map.easeTo({ center: [props.anchor_lon, props.anchor_lat], zoom, duration: 700 });
+  map.easeTo({
+    center: [props.anchor_lon, props.anchor_lat],
+    zoom,
+    duration: 700,
+  });
   closeInspector();
   setLevel(next);
 }
@@ -435,13 +458,16 @@ async function gotoResult(entry) {
   if (wasLevel !== entry.kind) await render();
 
   const collection = await ensureLevel(entry.kind);
-  const feature = collection.features.find((f) => f.properties.admin_id === entry.id);
+  const feature = collection.features.find(
+    (f) => f.properties.admin_id === entry.id,
+  );
   const target = feature
     ? feature.geometry.coordinates
     : [entry.lon, entry.lat];
   map.easeTo({
     center: target,
-    zoom: entry.kind === "provinsi" ? 6.4 : entry.kind === "kabupaten" ? 8.4 : 10.4,
+    zoom:
+      entry.kind === "provinsi" ? 6.4 : entry.kind === "kabupaten" ? 8.4 : 10.4,
     duration: 900,
   });
   if (feature) {
@@ -575,7 +601,8 @@ async function boot() {
     for (const level of LEVELS) {
       if (level.kind === "grid") continue;
       const schema = manifest.schema?.[level.table];
-      state.counts[level.id] = (schema?.rows ?? 0) - (schema?.rows_without_anchor ?? 0);
+      state.counts[level.id] =
+        (schema?.rows ?? 0) - (schema?.rows_without_anchor ?? 0);
     }
 
     applyFilters();
@@ -584,11 +611,19 @@ async function boot() {
     // and through the same summariser the glyphs use.
     state.national = summarizeCell(
       state.rows,
-      makeSpec("profile", MEASURES.map((m) => m.id), null),
+      makeSpec(
+        "profile",
+        MEASURES.map((m) => m.id),
+        null,
+      ),
       identity,
     );
     for (const fam of ["road", "pop", "nn"]) {
-      const s = summarizeCell(state.rows, makeSpec("composition", [], fam), identity);
+      const s = summarizeCell(
+        state.rows,
+        makeSpec("composition", [], fam),
+        identity,
+      );
       Object.assign(state.national.shares, s.shares);
     }
 

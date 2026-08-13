@@ -21,17 +21,38 @@ import { measureRampCss } from "./glyph.js";
 import { icon } from "./icons.js";
 
 export const MODES = [
-  { id: "profile", label: "Profil", icon: "bars", hint: "Empat batang: sepi · jalan · dempet · rumah" },
-  { id: "composition", label: "Komposisi", icon: "pie", hint: "Satu kolom bertumpuk per kelas" },
-  { id: "measure", label: "Ukuran", icon: "halfCircle", hint: "Warna sesuai satu persentase" },
+  {
+    id: "profile",
+    label: "Profil",
+    icon: "bars",
+    hint: "Empat batang: sepi · jalan · dempet · rumah",
+  },
+  {
+    id: "composition",
+    label: "Komposisi",
+    icon: "pie",
+    hint: "Satu kolom bertumpuk per kelas",
+  },
+  {
+    id: "measure",
+    label: "Ukuran",
+    icon: "halfCircle",
+    hint: "Warna sesuai satu persentase",
+  },
 ];
 
-const pctText = (v) => (v == null ? "—" : `${v.toLocaleString("id-ID", { maximumFractionDigits: 1 })}%`);
+const pctText = (v) =>
+  v == null
+    ? "—"
+    : `${v.toLocaleString("id-ID", { maximumFractionDigits: 1 })}%`;
 
 export function escapeHtml(s) {
   return String(s ?? "").replace(
     /[&<>"']/g,
-    (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c],
+    (c) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[
+        c
+      ],
   );
 }
 
@@ -98,7 +119,9 @@ export function renderSearch(root, { onQuery, onPick }) {
           <span class="res-kind res-${r.kind}">${escapeHtml(KIND_LABEL[r.kind])}</span>
           <span class="res-name">${escapeHtml(r.name)}</span>
           <span class="res-parent">${escapeHtml(
-            r.kind === "koperasi" ? r.parent : `${fmtId(r.count)} koperasi · ${r.parent}`,
+            r.kind === "koperasi"
+              ? r.parent
+              : `${fmtId(r.count)} koperasi · ${r.parent}`,
           )}</span>
         </li>`,
       )
@@ -127,7 +150,9 @@ export function renderSearch(root, { onQuery, onPick }) {
     if (e.key === "ArrowDown" || e.key === "ArrowUp") {
       if (list.hidden || !results.length) return;
       e.preventDefault();
-      active = (active + (e.key === "ArrowDown" ? 1 : -1) + results.length) % results.length;
+      active =
+        (active + (e.key === "ArrowDown" ? 1 : -1) + results.length) %
+        results.length;
       paint();
       list.querySelector(".is-active")?.scrollIntoView({ block: "nearest" });
     } else if (e.key === "Enter") {
@@ -278,7 +303,10 @@ export function renderRail(root, on) {
             <span>${escapeHtml(f.label)}</span>
             <select id="f-${f.id}">
               ${f.options
-                .map((o) => `<option value="${o.value}">${escapeHtml(o.label)}</option>`)
+                .map(
+                  (o) =>
+                    `<option value="${o.value}">${escapeHtml(o.label)}</option>`,
+                )
                 .join("")}
             </select>
           </label>`,
@@ -312,12 +340,20 @@ export function renderRail(root, on) {
     on.size(Number(size.value));
   });
 
-  el("#toggle-glyphs").addEventListener("change", (e) => on.glyphs(e.target.checked));
-  el("#toggle-points").addEventListener("change", (e) => on.points(e.target.checked));
-  el("#toggle-boundaries").addEventListener("change", (e) => on.boundaries(e.target.checked));
+  el("#toggle-glyphs").addEventListener("change", (e) =>
+    on.glyphs(e.target.checked),
+  );
+  el("#toggle-points").addEventListener("change", (e) =>
+    on.points(e.target.checked),
+  );
+  el("#toggle-boundaries").addEventListener("change", (e) =>
+    on.boundaries(e.target.checked),
+  );
 
   for (const f of FILTERS) {
-    el(`#f-${f.id}`).addEventListener("change", () => on.filters(readFilters(root)));
+    el(`#f-${f.id}`).addEventListener("change", () =>
+      on.filters(readFilters(root)),
+    );
   }
   el("#filter-reset").addEventListener("click", () => {
     for (const f of FILTERS) el(`#f-${f.id}`).value = f.options[0].value;
@@ -375,7 +411,9 @@ export function renderModeDetail(root, state, on) {
           ).join("")}
         </select>
       </label>`;
-    slot.querySelector("#family-select").addEventListener("change", (e) => on.family(e.target.value));
+    slot
+      .querySelector("#family-select")
+      .addEventListener("change", (e) => on.family(e.target.value));
     return;
   }
   slot.innerHTML = `
@@ -398,8 +436,12 @@ export function renderModeDetail(root, state, on) {
         ? `<p class="switch-note">${escapeHtml(MEASURE_BY_ID[state.measure].denominatorNote)}</p>`
         : ""
     }`;
-  slot.querySelector("#measure-select").addEventListener("change", (e) => on.measure(e.target.value));
-  slot.querySelector("#stretch-scale").addEventListener("change", (e) => on.stretch(e.target.checked));
+  slot
+    .querySelector("#measure-select")
+    .addEventListener("change", (e) => on.measure(e.target.value));
+  slot
+    .querySelector("#stretch-scale")
+    .addEventListener("change", (e) => on.stretch(e.target.checked));
 }
 
 // ---------------------------------------------------------------------------
@@ -475,7 +517,8 @@ export function renderLegend(root, state, stats, national) {
     const [lo, hi] = stats?.domain ?? [0, 100];
     const stretched = lo > 0 || hi < 100;
     // Where the national figure falls on the ramp as drawn, not on 0–100.
-    const markAt = nat == null || hi <= lo ? null : ((nat - lo) / (hi - lo)) * 100;
+    const markAt =
+      nat == null || hi <= lo ? null : ((nat - lo) / (hi - lo)) * 100;
     body = `
       <p class="legend-measure">${escapeHtml(m.label)}</p>
       <div class="legend-ramp" style="background:${measureRampCss()}">
@@ -679,7 +722,14 @@ function barRow(label, value, color, note = "") {
  * the four profile shares against the national figure, the medians the glyph
  * deliberately does not encode, and the economics.
  */
-export function renderInspector(el, payload, state, national, onClose, onDrill) {
+export function renderInspector(
+  el,
+  payload,
+  state,
+  national,
+  onClose,
+  onDrill,
+) {
   if (!payload) return hideInspector(el);
 
   const isAdmin = payload.kind === "admin";
@@ -780,9 +830,7 @@ export function renderInspector(el, payload, state, national, onClose, onDrill) 
         const m = MEASURE_BY_ID[mid];
         const nat = national?.values?.[mid];
         const delta =
-          shares[mid] == null || nat == null
-            ? ""
-            : `nasional ${pctText(nat)}`;
+          shares[mid] == null || nat == null ? "" : `nasional ${pctText(nat)}`;
         return barRow(m.label, shares[mid], m.color, delta);
       }).join("")}
     </table>
