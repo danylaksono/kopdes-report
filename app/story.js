@@ -119,6 +119,18 @@ function fmtCount(v) {
   return v.toLocaleString("id-ID");
 }
 
+/** Measure a row label's rendered width so the left gutter fits it exactly. */
+function measureRowLabel(label) {
+  const probe = document.createElement("span");
+  probe.className = "axis row-label";
+  probe.textContent = label;
+  probe.style.cssText = "position:absolute;visibility:hidden;white-space:nowrap;";
+  document.body.appendChild(probe);
+  const w = probe.getBoundingClientRect().width;
+  probe.remove();
+  return w;
+}
+
 /**
  * Render one chart into a figure card's `.chart-slot`, then animate.
  *
@@ -132,11 +144,13 @@ function renderChart(name, slot, card) {
   if (!c) return;
   const max = Math.max(...c.bars.map((b) => b.v));
   const W = 720,
-    x0 = 356,
     x1 = W - 34,
-    rowH = 44,
-    barH = 24,
-    top = 34;
+    rowH = 58,
+    barH = 30,
+    top = 44;
+  // Left gutter sized to the widest row label, not a fixed slab.
+  const x0 =
+    Math.ceil(Math.max(...c.bars.map((b) => measureRowLabel(b.label)))) + 18;
   const H = top + c.bars.length * rowH + 8;
   const grad = `bar-grad-${name}`;
 
@@ -151,13 +165,14 @@ function renderChart(name, slot, card) {
     const y = top + i * rowH;
     const w = barW(b.v);
     const val = c.pct ? fmtPct(b.v) + "%" : fmtCount(b.v);
-    svg += `<line x1="${x0}" y1="${y + barH + 6}" x2="${x1}" y2="${y + barH + 6}" class="grid-line"/>`;
-    svg += `<text x="${x0 - 14}" y="${y + barH / 2 + 4}" text-anchor="end" class="axis row-label${b.hl ? " hl" : ""}">${b.label}</text>`;
+    svg += `<line x1="${x0}" y1="${y + barH + 4}" x2="${x1}" y2="${y + barH + 4}" class="grid-line"/>`;
+    svg += `<text x="${x0 - 14}" y="${y + barH / 2 + 5}" text-anchor="end" class="axis row-label${b.hl ? " hl" : ""}">${b.label}</text>`;
+    const barFill = b.hl ? ` style="fill:url(#${grad})"` : "";
     svg += `<rect x="${x0}" y="${y}" width="0" height="${barH}" rx="5"
-            class="bar${b.hl ? " hl" : " muted"}"/>`;
+            class="bar${b.hl ? " hl" : " muted"}"${barFill}/>`;
     // Value sits above the bar, centred — on the card, not on the bar fill, so
     // it stays legible even when the bar is full-width.
-    svg += `<text x="${x0 + w / 2}" y="${y - 7}" text-anchor="middle" class="axis val${b.hl ? " hl" : ""}">${val}</text>`;
+    svg += `<text x="${x0 + w / 2}" y="${y - 10}" text-anchor="middle" class="axis val${b.hl ? " hl" : ""}">${val}</text>`;
   });
   svg += "</svg>";
 

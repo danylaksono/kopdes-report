@@ -7,6 +7,7 @@
 
 :root {
   --story-accent-bright: #ffd9d9; /* accent read on dark imagery */
+  --story-accent-ink: #7a0000; /* dark red for highlighted chart text on white */
   --story-ink-soft: #3a3a3a;
   --story-photo-ratio: 16 / 9;
 }
@@ -392,7 +393,7 @@
   transform: none;
 }
 .figure-card figcaption {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--muted);
   margin-top: 10px;
   padding-top: 12px;
@@ -411,11 +412,9 @@
 .bar.muted {
   fill: #d8d3c7;
 }
-.bar.hl {
-  fill: url(#bar-grad);
-}
+/* .bar.hl gets its fill inline from story.js (per-chart gradient id). */
 .axis {
-  font: 14px var(--sans);
+  font: 16px var(--sans);
   fill: var(--muted);
 }
 .axis.row-label {
@@ -423,7 +422,7 @@
   font-weight: 650;
 }
 .axis.row-label.hl {
-  fill: var(--accent);
+  fill: var(--story-accent-ink);
 }
 .axis.val {
   fill: var(--ink);
@@ -431,7 +430,7 @@
   font-variant-numeric: tabular-nums;
 }
 .axis.val.hl {
-  fill: var(--accent);
+  fill: var(--story-accent-ink);
 }
 .grid-line {
   stroke: #efe9dd;
@@ -704,8 +703,8 @@
     order: -1;
     position: sticky;
     top: 60px;
-    height: 28vh;
-    min-height: 210px;
+    height: 34vh;
+    min-height: 285px;
     z-index: 2;
     margin-bottom: 8px;
   }
@@ -719,7 +718,7 @@
     font-size: 16px;
   }
   .scrolly-sticky .figure-card figcaption {
-    font-size: 11.5px;
+    font-size: 12.5px;
     margin-top: 6px;
     padding-top: 8px;
     line-height: 1.45;
