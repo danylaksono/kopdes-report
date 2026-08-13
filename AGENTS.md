@@ -46,7 +46,12 @@ All sourced from SIMKOPDES public API (no auth required). Snapshot date: **2026-
   cooperatives, 50,174 on 08-05 → 50,200 live 08-13). See `reports/16-rat-compliance`.
   The `rat_count` field is only populated at **province level** — district/
   subdistrict/village walks return 0.
-- **All provinces "unhealthy"**: health scores clustered 51–57, likely driven by zero RAT
+- **All provinces "unhealthy" is an artifact — do not quote it.** `health_score`
+  is a constant 30 across all 38 provinces (zero variance); `health_status` is
+  "unhealthy" ×38. The real `average_health_index` runs 50–57 but is computed on
+  only 37.6% of cooperatives (62.4% never scored), and even among the scored
+  91.1% rate "unhealthy". The index tracks data completeness first (ρ=0.85 with
+  scored share), RAT/compliance second (ρ=0.80). See `reports/18-health-scoring`.
 - **Name-only geo-linking**: stats joined to boundary polygons via fuzzy name matching (difflib, cutoff 0.82), not ID codes. Match rates: provinsi 100%, kabupaten ~97.9%
 
 ### External data (not committed, regenerable via scripts)

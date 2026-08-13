@@ -174,6 +174,14 @@ ID_SUMMARY = {
         "batas bawah: peta bangunan belum lengkap di pedesaan, jadi tuliskan \u201ctidak "
         "ada rumah terpetakan\u201d, bukan \u201ctidak ada rumah\u201d."
     ),
+    "18-health-scoring": (
+        "Apa arti \u201cindeks kesehatan\u201d koperasi? Label \u201ctidak sehat di semua "
+        "provinsi\u201d adalah artefak: kolomnya konstan (30) di 38 provinsi, jadi tidak "
+        "boleh dikutip. Indeks sungguhan (50\u201357) hanya dihitung untuk 38% "
+        "koperasi \u2014 62% tidak pernah dinilai \u2014 dan di antara yang dinilai, 91% "
+        "tetap \u201ctidak sehat\u201d. Indeks ini lebih mencerminkan kelengkapan data "
+        "dan kepatuhan administrasi daripada kesehatan yang independen."
+    ),
 }
 
 INDEX_HEAD = """<!doctype html>

@@ -34,6 +34,7 @@ Run any of them with `python reports/NN-slug/run.py`. Dependencies:
 | 15  | [construction-output](15-construction-output/)       | Does construction track output?                                | no                         | run 2026-08-13                 |
 | 16  | [rat-compliance](16-rat-compliance/)                 | Are cooperatives holding their annual member meetings (RAT)?   | no                         | run 2026-08-13                 |
 | 17  | [building-proximity](17-building-proximity/)         | How far is each KDMP from the nearest building?                | no                         | run 2026-08-13                 |
+| 18  | [health-scoring](18-health-scoring/)                 | What does the ministry's health index actually say?            | no                         | run 2026-08-13                 |
 
 ## What we can and cannot say right now
 
@@ -133,6 +134,17 @@ Read this before quoting any number out of these reports.
   (17). The defensible claim is the concordance: **145 of 03's 146 isolated
   cooperatives also have no mapped building within 1 km** (140 roadless), and
   1,221 no-house KDMP sit inside farmland (17).
+- **The health index is a coverage artefact, not a verdict.** "Unhealthy ×38"
+  is a constant field (`health_score` = 30 for every province) and should never
+  be quoted. The real `average_health_index` runs 50–57, is computed on only
+  **37.6% of cooperatives (31,354 of 83,379)** — 62.4% were never scored, from
+  79.1% scored in DKI Jakarta to 0.7% in Papua Pegunungan — and among the
+  scored, 91.1% rate "unhealthy". The index tracks _who got scored_ first
+  (ρ = 0.85) and the compliance/savings gradient second (RAT ρ = 0.80, both
+  survive an island control). RAT being 60% (16) does not "rescue" the
+  provinces to healthy — the index is dominated by data completeness, so write
+  "the index is computed on 38% of cooperatives", never "all provinces are
+  unhealthy" (18).
 - **The "the website isn't up to date" rebuttal is closed.** On 2026-08-09 the
   press reported the national total as **Rp 179.72 miliar**; our own API pull the
   same day gives **Rp 179.79 miliar** — a **0.042%** difference (09). The
@@ -205,6 +217,11 @@ Read this before quoting any number out of these reports.
   partial and urban-biased (13.8% of Indomaret outlets, 10.9% of Alfamart).
   Presence is evidence; absence is not. Write "no road _mapped in OSM_ within
   5 km", and treat retail proximity figures as lower bounds.
+- **What the health index is actually made of.** The API exposes the province
+  index and the healthy/fairly/unhealthy counts but **not the rubric**. We can
+  say what tracks it (who got scored, compliance, savings) and what it does not
+  say; we cannot say how it is scored, nor whether the 52,025 never-scored
+  cooperatives were excluded for being too new or for having no data (18).
 
 ## Backlog — cleared
 
@@ -216,7 +233,7 @@ The plan-review's _do_ list is now fully built: [08](08-exact-geometry/),
 What is left is not analysis but operations and one upstream fix:
 
 - **The report site itself** — the scrollytelling investigative report decided
-  2026-08-09 (see AGENTS.md). All 15 reports are now its methodology appendix.
+  2026-08-09 (see AGENTS.md). All 18 reports are now its methodology appendix.
 - **Start the monthly snapshot series** — the one irrecoverable item; see
   Conventions.
 - **Fix `download_osm.py` upstream** (below), so the retail picture includes

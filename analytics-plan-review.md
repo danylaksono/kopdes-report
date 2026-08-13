@@ -13,7 +13,7 @@ analyses are reproducible under [`reports/`](reports/).
 >    a zero may be non-reporting on a system still being rolled out. See
 >    §2 and [`reports/01-snapshot-drift/`](reports/01-snapshot-drift/).
 > 2. **A3's terrain half should not be dropped.** I called nationwide DEM/land
->    cover infeasible. It is cheap if you *point-sample* cloud COGs instead of
+>    cover infeasible. It is cheap if you _point-sample_ cloud COGs instead of
 >    processing rasters — verified working. See §5.5.
 > 3. **The remoteness critique was mis-scoped**, by me and by the plan. It is an
 >    existence claim about a tail, not a distributional one. See §4.4.
@@ -52,19 +52,19 @@ The plan says **"IDR 179.5T total transaction volume"** (§Data Inventory, and
 landing_total_transaction = 179,554,188,112 IDR
 ```
 
-That is **IDR 179.55 billion** (~179.6 *miliar*), not 179.5 *triliun*. Combined
+That is **IDR 179.55 billion** (~179.6 _miliar_), not 179.5 _triliun_. Combined
 with `landing_total_transaction_count = 70,633`:
 
-| Metric | Value |
-|---|---|
-| Total transaction value, nationwide | IDR 179.55 billion (~USD 11M) |
-| Total transactions, nationwide | 70,633 |
-| Cooperatives | 83,382 |
-| **Transactions per cooperative** | **0.85** |
-| **Transaction value per cooperative** | **IDR 2.15M (~USD 130)** |
+| Metric                                | Value                         |
+| ------------------------------------- | ----------------------------- |
+| Total transaction value, nationwide   | IDR 179.55 billion (~USD 11M) |
+| Total transactions, nationwide        | 70,633                        |
+| Cooperatives                          | 83,382                        |
+| **Transactions per cooperative**      | **0.85**                      |
+| **Transaction value per cooperative** | **IDR 2.15M (~USD 130)**      |
 
 Fix this before it reaches a policy brief — but note it makes the critique
-*stronger*, not weaker. Fewer than one transaction per cooperative, ever, is the
+_stronger_, not weaker. Fewer than one transaction per cooperative, ever, is the
 single most damning number in the dataset.
 
 ### 1.2 RAT: the two source files contradict each other
@@ -72,37 +72,48 @@ single most damning number in the dataset.
 The plan (C3, H4) states "all 38 provinces show `total_rat = 0`". Only one file
 says that:
 
-| Source | Field | Value |
-|---|---|---|
-| `kopdes_province_rat_and_construction.csv` | `total_rat` | 0 in all 38 provinces |
-| `kopdes_province_rat_and_construction.csv` | `total_no_rat` | 83,382 (i.e. all of them) |
-| `kopdes_stats_province.csv` | `rat_count` | **nonzero in all 38 provinces, sums to 50,174** |
+| Source                                     | Field          | Value                                           |
+| ------------------------------------------ | -------------- | ----------------------------------------------- |
+| `kopdes_province_rat_and_construction.csv` | `total_rat`    | 0 in all 38 provinces                           |
+| `kopdes_province_rat_and_construction.csv` | `total_no_rat` | 83,382 (i.e. all of them)                       |
+| `kopdes_stats_province.csv`                | `rat_count`    | **nonzero in all 38 provinces, sums to 50,174** |
 
 So one export says zero cooperatives have held an RAT and another says 50,174
 have. C3 cannot be written up until this is resolved — most likely `rat_count`
-means "cooperatives *due* an RAT" or "RAT records created", but that's a guess.
+means "cooperatives _due_ an RAT" or "RAT records created", but that's a guess.
 **Resolve it against the raw API responses first**; C3's deliverable is currently
 a coin flip between "total governance failure" and "field misread".
 
 ### 1.3 Health score has zero variance — D1 is undefined as written
 
-| Field | Reality |
-|---|---|
-| `health_score` | **constant 30** across all 38 provinces |
-| `health_status` | `unhealthy` × 38 |
-| `average_health_index` | varies 50–57 (a 7-point spread over 38 rows) |
+| Field                      | Reality                                                                              |
+| -------------------------- | ------------------------------------------------------------------------------------ |
+| `health_score`             | **constant 30** across all 38 provinces                                              |
+| `health_status`            | `unhealthy` × 38                                                                     |
+| `average_health_index`     | varies 50–57 (a 7-point spread over 38 rows)                                         |
 | `health_total_cooperative` | sums to **31,322**, i.e. only **37.6%** of the 83,382 cooperatives are scored at all |
-| per-coop breakdown | 693 healthy / 2,086 fairly healthy / 28,543 unhealthy |
+| per-coop breakdown         | 693 healthy / 2,086 fairly healthy / 28,543 unhealthy                                |
 
 D1 proposes correlating the health index against other stats and running PCA.
 You cannot correlate against a constant, and PCA on 38 rows × ~10 collinear
 financial columns will not produce a stable factor structure — it will produce
 one component that is "province size" and noise after that.
 
-There *is* a real finding hiding here, but it's a different one: **62% of
+There _is_ a real finding hiding here, but it's a different one: **62% of
 cooperatives were never scored**, and the province-level "unhealthy" label is
 computed on the 38% that were. Whether the unscored ones are excluded because
 they're too new or because they have no data at all is worth chasing.
+
+**Resolved 2026-08-13 — `reports/18-health-scoring`.** The re-check (triggered
+by report 16's corrected RAT channel) confirms §1.3 and adds the driver
+analysis: the index's strongest correlate is _who got scored_ (ρ=0.85 with
+scored share), then savings/NIB/RAT (~0.80), all surviving an island control
+(RAT ρ=0.56 within-island). RAT is 60%, not zero (16), yet 91.1% of scored
+cooperatives are still "unhealthy" — so the index is a data-completeness and
+administrative-formality measure, not an independent health verdict, and the
+old "driven by zero RAT" hypothesis (H4, §2) is rejected. The unscored-why
+question (new vs no data) remains open — the API exposes no per-coop health
+record at all.
 
 ### 1.4 The population grid is H3 **resolution 8**, not 10, and has 874,919 cells, not 1.8M
 
@@ -112,7 +123,7 @@ means). Total population 277,542,182, which matches Indonesia. Resolution 8 is
 also what your joyplot app already uses, so the two projects agree.
 
 This matters for A1/A2: the plan's "index into H3 resolution 9" step is a
-*downsample-then-upsample* round trip that adds error for nothing. Just work at
+_downsample-then-upsample_ round trip that adds error for nothing. Just work at
 res 8 natively and use k-rings for distance bands.
 
 ### 1.5 `kopdes_locations.csv` has no `village` column — the key join is capped at 79%
@@ -131,9 +142,9 @@ share no key.** The only bridge is `land_assets`, which has both the cooperative
 name and the village. So any "does remoteness predict performance" analysis
 needs a two-hop join:
 
-| Hop | Match rate |
-|---|---|
-| `locations.name` → `land_assets.cooperative` (gives village) | 65,910 / 83,342 = **79.1%** |
+| Hop                                                             | Match rate                  |
+| --------------------------------------------------------------- | --------------------------- |
+| `locations.name` → `land_assets.cooperative` (gives village)    | 65,910 / 83,342 = **79.1%** |
 | → `stats_village` on (province, district, subdistrict, village) | 65,905 / 83,342 = **79.1%** |
 
 The 17,432 cooperatives that drop out are exactly the ones with **no land-asset
@@ -158,22 +169,22 @@ maxspeed, surface, ref, lanes, bridge, tunnel`. The plan's "✅ Acquired (4.5M
 segments)" was accurate. **A3's road half is ready to run today** — no PBF
 extraction needed, only a conversion to the H3/parquet shape (§5.5).
 
-### 1.7 Coordinate quality is *better* than H5 assumes
+### 1.7 Coordinate quality is _better_ than H5 assumes
 
 H5 predicts ">5% of KDMP coordinates do not fall within their claimed province".
 Without boundary polygons I used distance from the claimed province's own
 centroid (from `kopdes_stats_province.csv`) as a cheap proxy:
 
-| Threshold | Cooperatives | Share |
-|---|---|---|
-| > 300 km from claimed province centroid | 4,284 | 5.14% |
-| > 500 km | 1,018 | 1.22% |
-| > 800 km | 219 | **0.26%** |
-| > 1,500 km | 23 | 0.03% |
+| Threshold                               | Cooperatives | Share     |
+| --------------------------------------- | ------------ | --------- |
+| > 300 km from claimed province centroid | 4,284        | 5.14%     |
+| > 500 km                                | 1,018        | 1.22%     |
+| > 800 km                                | 219          | **0.26%** |
+| > 1,500 km                              | 23           | 0.03%     |
 
 Provinces are large (the >300 km bucket is mostly legitimately big provinces),
 and the >800 km tail is dominated by the new Papua provinces, where the
-*centroid in the stats file* is the more likely error. Duplicate coordinates are
+_centroid in the stats file_ is the more likely error. Duplicate coordinates are
 also rare: 82,928 unique pairs for 83,342 rows, and only 802 rows (1.0%) share a
 coordinate with anything else. 79% of coordinates carry 8 decimal places.
 
@@ -189,20 +200,20 @@ risk.
 have exactly 1 cooperative — so village-level ≈ cooperative-level, which is the
 good news):
 
-| Column | Share that are exactly zero |
-|---|---|
-| `transaction_value` | **97.0%** |
-| `savings_total_amount` | 87.7% |
-| `accounts_count` | 4.9% |
+| Column                 | Share that are exactly zero |
+| ---------------------- | --------------------------- |
+| `transaction_value`    | **97.0%**                   |
+| `savings_total_amount` | 87.7%                       |
+| `accounts_count`       | 4.9%                        |
 
 **97% of the outcome variable is zero.** Every hypothesis phrased as "remote /
-clustered KDMP have *lower transaction volumes*" (H1, H2, and the analytic core
+clustered KDMP have _lower transaction volumes_" (H1, H2, and the analytic core
 of A4, B1, B2, D3, F1) is comparing one near-empty distribution against another
 near-empty distribution. Kruskal-Wallis across accessibility bands (A4's stated
 test) on a 97%-zero variable will either return a meaningless p-value driven by
 tie structure, or nothing.
 
-### 2a. What a zero means is *not yet identifiable* — and that changes the write-up, not the method
+### 2a. What a zero means is _not yet identifiable_ — and that changes the write-up, not the method
 
 SIMKOPDES is a live system under active rollout, so a zero has two readings with
 opposite implications: genuine inactivity, or activity that hasn't been entered
@@ -224,7 +235,7 @@ established:
 
 That last number is suggestive and **not sufficient**. By the rule of three,
 0/332 bounds the conversion rate at ~0.9% per 4 days (95%), which is not
-negligible if sustained. It rules out a *fast* backlog release, not a slow or
+negligible if sustained. It rules out a _fast_ backlog release, not a slow or
 quarterly-batched one.
 
 **Consequences:**
@@ -235,7 +246,7 @@ quarterly-batched one.
 2. **Never regenerate `data/raw/` in place.** `scripts/extract_kopdes.py`
    overwrites the snapshot, which destroys the baseline the diff depends on.
    Snapshots should be written to `data/snapshots/YYYY-MM-DD/`.
-3. **Phrase every finding accordingly.** "Only 3% of cooperatives have *reported*
+3. **Phrase every finding accordingly.** "Only 3% of cooperatives have _reported_
    any transaction" is defensible today. "97% of cooperatives are inactive" is
    not.
 4. The extractor will currently **fail** on a re-run: `/statistics/land-mapping`
@@ -250,38 +261,38 @@ transact" with a binary and model it properly:
 - Secondary outcome: `accounts_count > 0` (95% positive — use this as the
   "exists administratively" control).
 - Then: `logit(any_activity) ~ remoteness_band + population_in_catchment +
-  minimarket_nearby + province` with province fixed effects.
+minimarket_nearby + province` with province fixed effects.
 
-Reporting "cooperatives >5 km from population are X% less likely to have *ever*
+Reporting "cooperatives >5 km from population are X% less likely to have _ever_
 transacted" is both defensible and more striking than a mean comparison.
 
 ---
 
 ## 3. Module-by-module triage
 
-| Module | Verdict | Why |
-|---|---|---|
-| **A1** Distance to settlement | ✅ **Do — cheap** | Runs in seconds (§5). Use res 8 natively, not res 9. |
-| **A2** Population catchment | ⚠️ **Rescope** | Already answered, and it's a null result — see §4. Reframe as redundancy, not coverage. |
-| **A3** Terrain & road access | ✅ **Do — cheaper than it looks** (revised) | DEM/slope **and** land cover are point-sampled from cloud COGs in minutes, no download (§5.5). Road-distance: viable, but extract highways from the 1.7 GB PBF to parquet first. Island isolation and true isochrones: still **drop nationally** — do them only for the shortlist from 04. |
-| **A4** Remoteness vs. performance | ⚠️ **Rescope** | Blocked by §2 (97% zeros) and §1.5 (79% join). Recast as rare-event logistic on `any_activity`. |
-| **B1** KDMP-to-KDMP proximity | ✅ **Do — cheap** | Measured below; no pairwise distance matrix needed, H3 co-location does it in 0.3 s. |
-| **B2** Overlap with existing coops | ❌ **Drop for now** | Depends entirely on a pre-KDMP cooperative registry from Kemenkop/PODES that you do not have and have no acquisition path for. Everything downstream of it is speculative. Park it in the wishlist, don't roadmap it. |
-| **B3** Minimarket proximity | ❌ **Drop as stated** | Fatal coverage bias — see §4.2. |
-| **C1** Construction vs. output | ⚠️ **Weak — do, but downgrade** | n = 38 provinces. A correlation on 38 points with no confounder control is a scatter plot, not evidence. Present it as descriptive. |
-| **C2** Land verification | ✅ **Do** | Clean, self-contained, 66k rows with status + surveyor. The strongest "ready to write" module in the plan. |
-| **C3** RAT compliance | 🛑 **Blocked pending §1.2** | Resolve the file contradiction before touching this. |
-| **C4** Per-unit efficiency | ⚠️ **Partial** | Per-unit normalisation is fine and cheap. The ROI half needs APBN/DIPA per-cooperative allocation, which is not in hand — don't roadmap the ROI deliverable. |
-| **D1** Health decomposition | ❌ **Drop as written** | Zero-variance dependent variable (§1.3). Replace with "who got scored at all" (37.6%). |
-| **D2** Product mix | ✅ **Do — cheap** | 262 rows. Shannon diversity on top-N-truncated lists is biased, so just report category composition; skip the diversity index. |
-| **D3** NPWP/NIB compliance | ✅ **Do** | Present at all four admin levels, no join needed. The "zombie" test inherits §2's reframing. |
-| **E1** Coordinate validation | ✅ **Do — but descope** | Cheap, and likely to clear the data (§1.7). |
-| **E2** Name-matching audit | ✅ **Do** | Necessary given §1.5 — the two-hop join *is* the name-matching risk. |
-| **E3** Temporal consistency | ✅ **Do** | Just re-run the extractor and diff. Highest value-per-hour item in the whole plan; do it now so the clock starts. |
-| **F1** Transaction anomaly detection | ❌ **Drop** | Outlier detection on a 97%-zero variable finds only the nonzero ones. That's not anomaly detection, that's a filter. |
-| **F2** Savings behaviour | ✅ **Do** | 87.7% zeros is less degenerate than transactions, and the pokok-vs-wajib ratio is a genuine dormancy signal. |
-| **F3** Island group comparison | ✅ **Do — cheap** | Descriptive, no new data. |
-| **F4** Product overlap (Jaccard) | ⚠️ **Low value** | Jaccard on truncated top-10 lists mostly measures list length. Cheap, but don't expect a finding. |
+| Module                               | Verdict                                     | Why                                                                                                                                                                                                                                                                                        |
+| ------------------------------------ | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **A1** Distance to settlement        | ✅ **Do — cheap**                           | Runs in seconds (§5). Use res 8 natively, not res 9.                                                                                                                                                                                                                                       |
+| **A2** Population catchment          | ⚠️ **Rescope**                              | Already answered, and it's a null result — see §4. Reframe as redundancy, not coverage.                                                                                                                                                                                                    |
+| **A3** Terrain & road access         | ✅ **Do — cheaper than it looks** (revised) | DEM/slope **and** land cover are point-sampled from cloud COGs in minutes, no download (§5.5). Road-distance: viable, but extract highways from the 1.7 GB PBF to parquet first. Island isolation and true isochrones: still **drop nationally** — do them only for the shortlist from 04. |
+| **A4** Remoteness vs. performance    | ⚠️ **Rescope**                              | Blocked by §2 (97% zeros) and §1.5 (79% join). Recast as rare-event logistic on `any_activity`.                                                                                                                                                                                            |
+| **B1** KDMP-to-KDMP proximity        | ✅ **Do — cheap**                           | Measured below; no pairwise distance matrix needed, H3 co-location does it in 0.3 s.                                                                                                                                                                                                       |
+| **B2** Overlap with existing coops   | ❌ **Drop for now**                         | Depends entirely on a pre-KDMP cooperative registry from Kemenkop/PODES that you do not have and have no acquisition path for. Everything downstream of it is speculative. Park it in the wishlist, don't roadmap it.                                                                      |
+| **B3** Minimarket proximity          | ❌ **Drop as stated**                       | Fatal coverage bias — see §4.2.                                                                                                                                                                                                                                                            |
+| **C1** Construction vs. output       | ⚠️ **Weak — do, but downgrade**             | n = 38 provinces. A correlation on 38 points with no confounder control is a scatter plot, not evidence. Present it as descriptive.                                                                                                                                                        |
+| **C2** Land verification             | ✅ **Do**                                   | Clean, self-contained, 66k rows with status + surveyor. The strongest "ready to write" module in the plan.                                                                                                                                                                                 |
+| **C3** RAT compliance                | 🛑 **Blocked pending §1.2**                 | Resolve the file contradiction before touching this.                                                                                                                                                                                                                                       |
+| **C4** Per-unit efficiency           | ⚠️ **Partial**                              | Per-unit normalisation is fine and cheap. The ROI half needs APBN/DIPA per-cooperative allocation, which is not in hand — don't roadmap the ROI deliverable.                                                                                                                               |
+| **D1** Health decomposition          | ❌ **Drop as written**                      | Zero-variance dependent variable (§1.3). Replace with "who got scored at all" (37.6%).                                                                                                                                                                                                     |
+| **D2** Product mix                   | ✅ **Do — cheap**                           | 262 rows. Shannon diversity on top-N-truncated lists is biased, so just report category composition; skip the diversity index.                                                                                                                                                             |
+| **D3** NPWP/NIB compliance           | ✅ **Do**                                   | Present at all four admin levels, no join needed. The "zombie" test inherits §2's reframing.                                                                                                                                                                                               |
+| **E1** Coordinate validation         | ✅ **Do — but descope**                     | Cheap, and likely to clear the data (§1.7).                                                                                                                                                                                                                                                |
+| **E2** Name-matching audit           | ✅ **Do**                                   | Necessary given §1.5 — the two-hop join _is_ the name-matching risk.                                                                                                                                                                                                                       |
+| **E3** Temporal consistency          | ✅ **Do**                                   | Just re-run the extractor and diff. Highest value-per-hour item in the whole plan; do it now so the clock starts.                                                                                                                                                                          |
+| **F1** Transaction anomaly detection | ❌ **Drop**                                 | Outlier detection on a 97%-zero variable finds only the nonzero ones. That's not anomaly detection, that's a filter.                                                                                                                                                                       |
+| **F2** Savings behaviour             | ✅ **Do**                                   | 87.7% zeros is less degenerate than transactions, and the pokok-vs-wajib ratio is a genuine dormancy signal.                                                                                                                                                                               |
+| **F3** Island group comparison       | ✅ **Do — cheap**                           | Descriptive, no new data.                                                                                                                                                                                                                                                                  |
+| **F4** Product overlap (Jaccard)     | ⚠️ **Low value**                            | Jaccard on truncated top-10 lists mostly measures list length. Cheap, but don't expect a finding.                                                                                                                                                                                          |
 
 **Count**: 11 do · 5 rescope · 6 drop · 1 blocked.
 
@@ -296,13 +307,13 @@ I ran these while assessing feasibility; they're real results, not estimates.
 Union of H3 catchments (deduplicated — see the trap in §5.3), against Kontur's
 277,542,182 total:
 
-| Catchment radius | Population covered | Share of national |
-|---|---|---|
-| own cell only (~0.2 km) | 64,927,494 | 23.4% |
-| ~1.4 km (k=3) | 263,687,843 | **95.0%** |
-| ~2.8 km (k=6) | 274,452,461 | 98.9% |
-| ~5.1 km (k=11) | 276,989,563 | 99.8% |
-| ~10.2 km (k=22) | 277,492,598 | 100.0% |
+| Catchment radius        | Population covered | Share of national |
+| ----------------------- | ------------------ | ----------------- |
+| own cell only (~0.2 km) | 64,927,494         | 23.4%             |
+| ~1.4 km (k=3)           | 263,687,843        | **95.0%**         |
+| ~2.8 km (k=6)           | 274,452,461        | 98.9%             |
+| ~5.1 km (k=11)          | 276,989,563        | 99.8%             |
+| ~10.2 km (k=22)         | 277,492,598        | 100.0%            |
 
 A2 asks "what % of the population lives within reasonable reach of a KDMP" and
 proposes a deliverable listing "coverage deserts" and "top-100 most underserved
@@ -312,7 +323,7 @@ of Indonesians live within 1.4 km of one of these things.
 Don't bury this — it's a finding. It reframes the whole investigation: the
 program's failure is not that it missed people. It's that it reached essentially
 everyone and still produced 0.85 transactions per cooperative. Invert A2 from
-*coverage* to *saturation*.
+_coverage_ to _saturation_.
 
 The mirror statistic is the one worth keeping from A1: **21.4% of KDMP (17,804)
 sit in an H3 cell with zero recorded population**, and the median own-cell
@@ -323,19 +334,19 @@ it costs 30 ms to compute.
 
 `data/osm/indonesia_minimarkets.gpkg` holds 10,580 POIs:
 
-| Brand | Count in OSM |
-|---|---|
-| other | 4,539 |
-| Indomaret | 3,030 |
-| Alfamart | 2,181 |
-| Circle K | 242 |
-| Alfamidi | 219 |
-| FamilyMart | 68 |
+| Brand      | Count in OSM |
+| ---------- | ------------ |
+| other      | 4,539        |
+| Indomaret  | 3,030        |
+| Alfamart   | 2,181        |
+| Circle K   | 242          |
+| Alfamidi   | 219          |
+| FamilyMart | 68           |
 
 Alfamart and Indomaret each operate on the order of **20,000 outlets**
 nationally. OSM has 5,211 of the two combined — roughly **12% coverage**. Worse,
 OSM POI density tracks mapper density, which tracks urbanisation — so coverage is
-*best* in cities and *worst* in exactly the villages where KDMP sit.
+_best_ in cities and _worst_ in exactly the villages where KDMP sit.
 
 Measured against this dataset, 2.8% of KDMP have a minimarket within ~0.4 km and
 16.4% within ~1.8 km. Those numbers are floors of unknown tightness, and the
@@ -353,10 +364,10 @@ plan), or drop B3. Don't run it on OSM.
 Co-location at three H3 resolutions, 0.3 s total, no distance matrix:
 
 | Resolution | ~cell width | KDMP sharing a cell with ≥1 other | Max in one cell |
-|---|---|---|---|
-| r9 | ~0.7 km | 1,254 (1.5%) | 12 |
-| r8 | ~1.4 km | 6,381 (7.7%) | 17 |
-| r7 | ~3.6 km | 35,832 (43.0%) | 23 |
+| ---------- | ----------- | --------------------------------- | --------------- |
+| r9         | ~0.7 km     | 1,254 (1.5%)                      | 12              |
+| r8         | ~1.4 km     | 6,381 (7.7%)                      | 17              |
+| r7         | ~3.6 km     | 35,832 (43.0%)                    | 23              |
 
 The plan's proposed method — "pairwise distance matrix for all ~83k points" —
 is 3.5 billion pairs. Don't. H3 co-location plus k-ring neighbours gives the same
@@ -366,12 +377,12 @@ answer in under a second, and DBSCAN, if you still want it, should run on the
 ### 4.4 The remoteness critique is an existence claim, and both the plan and my first pass mis-scoped it
 
 The public criticism is not "the average KDMP is far from people". It is
-"*this* one was built on burial ground, *that* one in the middle of a paddy
-field, *this* one on a hilltop with no road" — the argument being that a program
+"_this_ one was built on burial ground, _that_ one in the middle of a paddy
+field, _this_ one on a hilltop with no road" — the argument being that a program
 producing such sites was pushed through on a quota rather than on need.
 
 That is an **existence claim**. It is established by a handful of
-well-evidenced, nameable cases, and it is *not* weakened by those cases being
+well-evidenced, nameable cases, and it is _not_ weakened by those cases being
 0.2% of the program — a quota-driven rollout is exactly what a small tail of
 absurd sites indicates. Conversely, no distributional statistic can establish
 it, which is why §4.1's finding (95% coverage) neither confirms nor refutes it.
@@ -385,8 +396,8 @@ empty own cell.
 
 **The one thing that must be built into the write-up**: an implausible
 surrounding has two causes — bad siting and a bad coordinate — and no automated
-screen can separate them. Both are publishable, and they are *different
-stories* ("they built it in a swamp" vs. "they don't know where it is"). Every
+screen can separate them. Both are publishable, and they are _different
+stories_ ("they built it in a swamp" vs. "they don't know where it is"). Every
 cited case needs imagery review first.
 
 ---
@@ -401,10 +412,10 @@ tiers.
 The point of this tier is to **never ship a GPKG to the browser**. Converting
 Kontur costs one line and pays enormously:
 
-| Format | Size |
-|---|---|
-| `kontur_population_ID.gpkg` | 172.4 MB |
-| same data → parquet + zstd | **3.0 MB** |
+| Format                      | Size       |
+| --------------------------- | ---------- |
+| `kontur_population_ID.gpkg` | 172.4 MB   |
+| same data → parquet + zstd  | **3.0 MB** |
 
 That's 57× smaller, and it's smaller than joyplot's current 7.2 MB copy (zstd
 over the default snappy, and dropping the empty geometry column). 3 MB is
@@ -413,13 +424,13 @@ app directly.
 
 Proposed tables, all parquet, all in `data/web/`:
 
-| Table | Grain | Est. size | Built from |
-|---|---|---|---|
-| `population_h3.parquet` | H3 r8 cell | 3 MB | Kontur GPKG |
-| `kopdes.parquet` | cooperative | ~4 MB | `locations.csv` + `h3_8` + `h3_7` + joined verification status |
-| `kopdes_metrics.parquet` | cooperative | ~2 MB | remoteness band, catchment pop, neighbour count, minimarket flag |
-| `village_stats.parquet` | village | ~3 MB | `stats_village.csv`, joined via the §1.5 two-hop key |
-| `admin_stats.parquet` | province/district/subdistrict | <1 MB | the three stats CSVs, stacked with a `level` column |
+| Table                    | Grain                         | Est. size | Built from                                                       |
+| ------------------------ | ----------------------------- | --------- | ---------------------------------------------------------------- |
+| `population_h3.parquet`  | H3 r8 cell                    | 3 MB      | Kontur GPKG                                                      |
+| `kopdes.parquet`         | cooperative                   | ~4 MB     | `locations.csv` + `h3_8` + `h3_7` + joined verification status   |
+| `kopdes_metrics.parquet` | cooperative                   | ~2 MB     | remoteness band, catchment pop, neighbour count, minimarket flag |
+| `village_stats.parquet`  | village                       | ~3 MB     | `stats_village.csv`, joined via the §1.5 two-hop key             |
+| `admin_stats.parquet`    | province/district/subdistrict | <1 MB     | the three stats CSVs, stacked with a `level` column              |
 
 Everything the app needs then totals ~13 MB, versus the current single 25 MB
 `points.geojson`. Net win even before the analytics.
@@ -454,20 +465,20 @@ the joins.
 **One trap, and it is easy to fall into.** Catchments overlap. Summing population
 over per-cooperative k-rings double-counts massively:
 
-| Approach at k=11 (~5 km) | Result |
-|---|---|
-| `SUM(population)` over all ring rows | **17,220,119,767** ← 62× the population of Indonesia |
-| `SUM` over the **DISTINCT union** of cells | 276,989,563 ✓ |
+| Approach at k=11 (~5 km)                   | Result                                               |
+| ------------------------------------------ | ---------------------------------------------------- |
+| `SUM(population)` over all ring rows       | **17,220,119,767** ← 62× the population of Indonesia |
+| `SUM` over the **DISTINCT union** of cells | 276,989,563 ✓                                        |
 
 Any "total population served" figure must be a union. Per-cooperative catchment
-population (for the regression in §2) is the *other* query and legitimately does
+population (for the regression in §2) is the _other_ query and legitimately does
 double-count — just never sum that column.
 
 Also watch materialisation cost: naive ring expansion at k=11 is 33 M rows and
 ~30 s. Do the union with a `DISTINCT` in SQL rather than building the row set in
 pandas, or cap catchments at k≤6 where it's 10 M rows / 10 s.
 
-### 5.5 Terrain and land cover are cheap — *sample* rasters, don't process them
+### 5.5 Terrain and land cover are cheap — _sample_ rasters, don't process them
 
 This corrects the first pass, which called A3's DEM/slope work infeasible and
 recommended dropping it. That was wrong, and the mistake was assuming a raster
@@ -477,10 +488,10 @@ You need elevation and land cover **at 83,000 points**, not over 1.9M km². Both
 datasets are published as cloud-optimised GeoTIFFs on open S3 buckets, so GDAL
 fetches a few KB around each point over HTTP range requests:
 
-| Dataset | Resolution | Answers | Verified |
-|---|---|---|---|
-| Copernicus GLO-30 DEM | 30 m | elevation, local relief → "on a hilltop" | ✅ 1.5–4.6 s per tile open, then free |
-| ESA WorldCover 2021 v200 | 10 m | cropland / forest / water / built-up → "in a paddy field" | ✅ same |
+| Dataset                  | Resolution | Answers                                                   | Verified                              |
+| ------------------------ | ---------- | --------------------------------------------------------- | ------------------------------------- |
+| Copernicus GLO-30 DEM    | 30 m       | elevation, local relief → "on a hilltop"                  | ✅ 1.5–4.6 s per tile open, then free |
+| ESA WorldCover 2021 v200 | 10 m       | cropland / forest / water / built-up → "in a paddy field" | ✅ same                               |
 
 No download, no storage, no GDAL install beyond `rasterio`. Group the points by
 tile so each tile opens once. **This makes "localise the analysis to one area"
@@ -490,12 +501,12 @@ local work (isochrones, imagery review) for the shortlist the screen produces.
 The one thing that stays expensive is **routing**. Isochrones need a routable
 network and a routing engine; that is worth standing up for a handful of case
 studies, not for 83k points. The cheap national proxy is straight-line distance
-to the nearest road *vertex*, which fits the H3 pattern exactly: extract
+to the nearest road _vertex_, which fits the H3 pattern exactly: extract
 highways from the PBF once → vertices → H3 r10 → k-ring outward search. That
 gives a national "no road within X" flag; true accessibility modelling then runs
 only on the flagged cases.
 
-### 5.4 What DuckDB does *not* solve
+### 5.4 What DuckDB does _not_ solve
 
 - **The 1.7 GB PBF.** DuckDB won't read PBF. You still need osmium/pyosmium to
   extract roads once; then write parquet and never touch the PBF again.
@@ -513,6 +524,7 @@ findings. Given §1.7 (coordinates are fine) and §4.1 (coverage is solved), I'd
 reorder so that the two cheapest, highest-signal results land in week 1.
 
 ### Week 1 — establish the spine
+
 - [x] Convert Kontur → `population_h3.parquet` (3.0 MB) — `reports/03-population-coverage/`
 - [ ] Store `h3` as UBIGINT rather than the hex string
 - [ ] **Move snapshots to `data/snapshots/YYYY-MM-DD/` and stop overwriting `data/raw/`** — the drift baseline depends on it (§2a)
@@ -522,17 +534,20 @@ reorder so that the two cheapest, highest-signal results land in week 1.
 - [ ] Correct the IDR 179.5T figure everywhere it appears
 
 ### Week 2 — the two cheap findings
+
 - [ ] A1 remoteness bands + the 21.4%-in-unpopulated-cells statistic
 - [ ] A2 **reframed as saturation**, leading with 95% @ 1.4 km
 - [ ] B1 co-location at r7/r8/r9
 - [ ] C2 land verification (already ready to write)
 
 ### Week 3–4 — the modelling
+
 - [ ] Rare-event logistic: `any_activity ~ remoteness + catchment_pop + province`
 - [ ] D3 NPWP/NIB, F2 savings dormancy, F3 island groups, D2 product mix
 - [ ] E1 point-in-polygon once `geo/output/` exists
 
 ### Week 5+ — only if the data arrives
+
 - [ ] B3, **conditional on scraping real Alfamart/Indomaret locations**
 - [ ] A3 road access, conditional on extracting roads from the PBF
 - [ ] C4 ROI, conditional on APBN/DIPA data
@@ -545,14 +560,14 @@ sub-parts.
 
 ## 7. Hypotheses, restated
 
-| # | Original | Verdict |
-|---|---|---|
-| H1 | Remote KDMP have lower transaction volumes | **Restate**: remote KDMP are less likely to have *ever* transacted. Volume is 97% zero. |
-| H2 | Clustered KDMP have lower per-unit volume | **Restate** the same way, on the 6,381 r8-clustered cooperatives. |
-| H3 | Construction ≠ transaction activity | Keep, but n=38 — descriptive only. |
-| H4 | "Unhealthy" is driven by zero RAT | **Suspend** pending §1.2. And `health_score` is constant, so the original test is undefined. |
-| H5 | >5% of coords outside claimed province | **Likely false** (§1.7). Verify and clear it. |
-| H6 | KDMP near minimarkets sell a different mix | **Untestable** on OSM data (§4.2). Also note product data is province-level, so it cannot be joined to a per-KDMP proximity flag at all — this hypothesis has a grain mismatch independent of the coverage problem. |
+| #   | Original                                   | Verdict                                                                                                                                                                                                             |
+| --- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| H1  | Remote KDMP have lower transaction volumes | **Restate**: remote KDMP are less likely to have _ever_ transacted. Volume is 97% zero.                                                                                                                             |
+| H2  | Clustered KDMP have lower per-unit volume  | **Restate** the same way, on the 6,381 r8-clustered cooperatives.                                                                                                                                                   |
+| H3  | Construction ≠ transaction activity        | Keep, but n=38 — descriptive only.                                                                                                                                                                                  |
+| H4  | "Unhealthy" is driven by zero RAT          | **Suspend** pending §1.2. And `health_score` is constant, so the original test is undefined.                                                                                                                        |
+| H5  | >5% of coords outside claimed province     | **Likely false** (§1.7). Verify and clear it.                                                                                                                                                                       |
+| H6  | KDMP near minimarkets sell a different mix | **Untestable** on OSM data (§4.2). Also note product data is province-level, so it cannot be joined to a per-KDMP proximity flag at all — this hypothesis has a grain mismatch independent of the coverage problem. |
 
 A hypothesis worth adding — since first drafting this I measured it, and it is
 the strongest result in the dataset ([`reports/02-zero-inflation/`](reports/02-zero-inflation/)):
