@@ -126,6 +126,43 @@
   align-items: center;
 }
 
+/* ---- catatan data (disclaimer band) --------------------------------------- */
+
+.story-disclaimer {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: #f5efe3;
+  padding: 60px 0 68px;
+}
+.story-disclaimer-inner {
+  max-width: 780px;
+}
+.story-disclaimer-inner .chapter-num {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 12px;
+}
+.story-disclaimer-inner h2 {
+  font-size: clamp(26px, 3vw, 34px);
+  line-height: 1.2;
+  margin: 0 0 20px;
+}
+.story-disclaimer-inner p {
+  font-size: 17px;
+  line-height: 1.62;
+  color: var(--story-ink-soft);
+  margin: 0 0 1.05em;
+}
+.story-disclaimer-inner p:last-child {
+  margin-bottom: 0;
+}
+.story-disclaimer-inner strong {
+  color: var(--ink);
+}
+
 /* hero entrance (staggered) */
 .story-hero .reveal-on-load {
   opacity: 0;
