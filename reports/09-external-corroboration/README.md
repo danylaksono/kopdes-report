@@ -157,6 +157,14 @@ figure that now lives in `nested_data`.
   [`external_figures.csv`](external_figures.csv) with a URL and a verbatim quote
   precisely so the transcription can be audited. Nothing is scraped at run time —
   a scraper would silently change the evidence base between runs.
+- **Attribution corrected 2026-08-14.** The four 2026-07-31 rows were recorded
+  as attributed to Zulkifli Hasan and Andi Amran Sulaiman. Re-reading the
+  article, both ministers are quoted in it but on what the programme is _for_
+  ("kopdes ini bukan toko, bukan supermarket"; cutting the supply chain), not on
+  these figures, which Liputan6 attributes to SIMKOPDES itself. The rows now say
+  so. No finding rested on the ministerial attribution — Finding 1 uses the
+  08-09 dashboard figure and Finding 2 uses Bakom — but an evidence file whose
+  whole purpose is auditable transcription has to be right about who said what.
 - **The snapshot series is still the irreplaceable thing.** This report makes the
   monthly pull _more_ valuable, not less: it is now demonstrable that our
   snapshots reproduce the official figure, so a series of them is a record of the

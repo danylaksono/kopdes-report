@@ -731,9 +731,22 @@ in `reports/*/`. Nothing regenerates the prose, so a re-run report leaves a
 stale sentence behind and no test fails. That is exactly how report 17's
 band bug put 62.6% on a page when the data said 1.19%.
 
-63 checks as of 2026-08-14. It proves **arithmetic provenance** only: that a
-number on a page is still what the committed data produces. Wording, causal
-framing and whether a caveat is honest all stay human review.
+81 checks as of 2026-08-14, covering all three chapters plus the externally
+sourced and snapshot-series figures. It proves **arithmetic provenance** only:
+that a number on a page is still what the committed data produces. Wording,
+causal framing and whether a caveat is honest all stay human review.
+
+Two things that looked unverifiable and were not:
+
+- **The snapshot series** (2.516 → 2.517 → 2.726, +209 villages, +13,8%,
+  +12,7%) compares dated pulls whose CSVs are gitignored, but reports 01 and 09
+  both commit the derived tables, so the sentences check against those with no
+  snapshot machinery at all. Same for report 01's 80.553 zeros and the 1.555
+  duplicate rows in the 08-05 export.
+- **The press figures** cannot be recomputed by anything, so they were re-read
+  against the live articles instead (see the script's docstring for the three
+  URLs and what each supports). Re-verifying them means re-reading those URLs;
+  the checks below only confirm the pages still match the transcription.
 
 Four traps it exists to catch, all found the day it was written:
 

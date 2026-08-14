@@ -26,6 +26,28 @@ figure has gone stale, not that the report is true.
 - A check whose source data is missing is reported as SKIP, never as a pass:
   several inputs are gitignored and rebuilt by their own report.
 
+## The externally sourced figures
+
+Four numbers come from press reporting rather than from our data, so no amount
+of recomputation can confirm them. They were instead re-read against the live
+articles on 2026-08-14 and every transcription in
+`reports/09-external-corroboration/external_figures.csv` matched:
+
+  Rp 157,90 miliar / 67.664 transactions / 83.382 cooperatives / 79.708 accounts
+    Liputan6, 31 Jul 2026 - liputan6.com/bisnis/read/8258962
+  Rp 179,72 miliar / 71.454 transactions / beras SPHP Rp 71,85 miliar
+    Liputan6, 9 Aug 2026 - liputan6.com/bisnis/read/8265525
+  1.061 operating (530 Jawa Timur, 531 Jawa Tengah) / 12.232 gerai complete
+    CNN Indonesia, 11 Jun 2026, quoting Muhammad Qodari (Bakom)
+    cnnindonesia.com/ekonomi/20260611123103-92-1367861
+
+That pass also corrected an attribution: the 31 July rows had been recorded as
+statements by Zulkifli Hasan and Andi Amran Sulaiman. Both are quoted in that
+article, but on what the programme is for, not on these figures, which Liputan6
+attributes to SIMKOPDES itself. The checks below therefore verify that the pages
+still match the transcription; the transcription's fidelity to the source is a
+human step, and re-doing it means re-reading the three URLs above.
+
 Usage:
   python scripts/verify_published_figures.py
   python scripts/verify_published_figures.py --verbose
@@ -556,6 +578,168 @@ def _():
 def _():
     t = csv("11-savings-behaviour", "savings_zero_inflation.csv")
     return one(f"select pct_nonzero from {t} where field = 'simpanan_wajib_amount'")
+
+
+# ---------------------------------------------------------------------------
+# Externally sourced figures  (findings/money, methods/09)
+#
+# These come from press reporting, not from our data, so the check is that the
+# page still matches what `external_figures.csv` transcribed. The transcriptions
+# themselves were re-read against the live articles on 2026-08-14 and all match;
+# that pass also found that the 07-31 rows had been attributed to two ministers
+# who are quoted in the article but not on these numbers. Sources:
+#   CNN Indonesia  2026-06-11  cnnindonesia.com/ekonomi/20260611123103-92-1367861
+#   Liputan6       2026-07-31  liputan6.com/bisnis/read/8258962
+#   Liputan6       2026-08-09  liputan6.com/bisnis/read/8265525
+# ---------------------------------------------------------------------------
+
+EXT = "09-external-corroboration", "external_figures.csv"
+
+
+@check("findings/money · methods/09", "press total, 31 Jul (Rp miliar)", 157.9, tol=0.05)
+def _():
+    return one(
+        f"select value / 1e9 from {csv(*EXT)} "
+        "where as_of = '2026-07-31' and metric = 'transaction_value_idr'"
+    )
+
+
+@check("findings/money · methods/09", "press total, 9 Aug (Rp miliar)", 179.72, tol=0.005)
+def _():
+    return one(
+        f"select value / 1e9 from {csv(*EXT)} "
+        "where as_of = '2026-08-09' and metric = 'transaction_value_idr'"
+    )
+
+
+@check("findings/money", "government count of operating cooperatives", 1_061)
+def _():
+    return one(f"select value from {csv(*EXT)} where metric = 'cooperatives_operating'")
+
+
+@check("findings/money", "operating cooperatives as % of the registry", 1.3, tol=0.05)
+def _():
+    n = one(f"select value from {csv(*EXT)} where metric = 'cooperatives_operating'")
+    return round(100 * n / 83_379, 1)
+
+
+# ---------------------------------------------------------------------------
+# Product mix  (methods/12)
+# ---------------------------------------------------------------------------
+
+CAT = "12-product-mix", "product_categories.csv"
+
+
+@check("methods/12", "rice share of reported sales value (%)", 51.2, tol=0.05)
+def _():
+    return one(f"select share_of_value from {csv(*CAT)} where category = 'rice'")
+
+
+@check("methods/12", "cooking oil share of reported sales value (%)", 25.6, tol=0.05)
+def _():
+    return one(f"select share_of_value from {csv(*CAT)} where category = 'cooking_oil'")
+
+
+@check("methods/12", "fertiliser share of reported sales value (%)", 14.3, tol=0.05)
+def _():
+    return one(f"select share_of_value from {csv(*CAT)} where category = 'fertilizer'")
+
+
+@check("methods/12", "provinces where fertiliser is a top product", 24)
+def _():
+    return one(f"select n_provinces from {csv(*CAT)} where category = 'fertilizer'")
+
+
+# ---------------------------------------------------------------------------
+# The snapshot series  (findings/money, methods/01, methods/09)
+#
+# These looked unverifiable at first because they compare dated pulls, and the
+# snapshot CSVs themselves are gitignored. They are not: reports 01 and 09 both
+# commit the derived tables, so the published sentences can be checked against
+# those without any snapshot machinery at all.
+# ---------------------------------------------------------------------------
+
+SNAP = "09-external-corroboration", "our_snapshot_totals.csv"
+DIFF = "01-snapshot-drift", "snapshot_diff_summary.csv"
+
+
+@check("methods/01", "villages reporting zero transactions on 5 Aug", 80_553)
+def _():
+    return one(
+        f"select was_zero from {csv(*DIFF)} where measure = 'transaction_value'"
+    )
+
+
+@check("methods/01", "villages that started reporting in those four days", 1)
+def _():
+    return one(
+        f"select zero_to_positive from {csv(*DIFF)} where measure = 'transaction_value'"
+    )
+
+
+@check("methods/01", "years to clear the backlog at that rate", 883, tol=1)
+def _():
+    z = one(f"select was_zero from {csv(*DIFF)} where measure = 'transaction_value'")
+    moved = one(
+        f"select zero_to_positive from {csv(*DIFF)} where measure = 'transaction_value'"
+    )
+    return round(z / moved * 4 / 365.0, 0)
+
+
+@check("findings/money", "villages reporting, 5 Aug", 2_516)
+def _():
+    return one(f"select villages_reporting from {csv(*SNAP)} where as_of = '2026-08-05'")
+
+
+@check("findings/money", "villages reporting, 9 Aug", 2_517)
+def _():
+    return one(f"select villages_reporting from {csv(*SNAP)} where as_of = '2026-08-09'")
+
+
+@check("findings/money", "new reporting villages, 9 Aug to 13 Aug", 209)
+def _():
+    t = csv(*SNAP)
+    return one(
+        f"select (select villages_reporting from {t} where as_of = '2026-08-13') "
+        f"- (select villages_reporting from {t} where as_of = '2026-08-09')"
+    )
+
+
+@check("findings/money", "press value growth, 31 Jul to 9 Aug (%)", 13.8, tol=0.05)
+def _():
+    t = csv("09-external-corroboration", "published_series.csv")
+    a = one(f"select miliar from {t} where as_of = '2026-07-31'")
+    b = one(f"select miliar from {t} where as_of = '2026-08-09'")
+    return round(100 * (b - a) / a, 1)
+
+
+@check("findings/money", "our value growth, 9 Aug to 13 Aug (%)", 12.7, tol=0.05)
+def _():
+    t = csv(*SNAP)
+    a = one(f"select transaction_value_idr from {t} where as_of = '2026-08-09'")
+    b = one(f"select transaction_value_idr from {t} where as_of = '2026-08-13'")
+    return round(100 * (b - a) / a, 1)
+
+
+@check("methods/09", "gap between press and our own pull, 9 Aug (%)", 0.042, tol=0.0005)
+def _():
+    t = csv("09-external-corroboration", "reconciliation.csv")
+    return one(f"select pct_difference from {t} where as_of = '2026-08-09'")
+
+
+@check("methods/01", "duplicate village rows in the 5 Aug export", 1_555)
+def _():
+    # `strict_mode=false` is required: one row carries an unescaped comma inside
+    # a village name ("Lambang Sari I, II, III"), which is itself part of why
+    # this export needed a duplicate check.
+    v = (
+        f"read_csv('{(ROOT / 'data' / 'raw' / 'kopdes_stats_village.csv').as_posix()}', "
+        "strict_mode=false, ignore_errors=true)"
+    )
+    r = con.execute(
+        f"select count(*), count(distinct village_id) from {v}"
+    ).fetchone()
+    return r[0] - r[1]
 
 
 # ---------------------------------------------------------------------------
