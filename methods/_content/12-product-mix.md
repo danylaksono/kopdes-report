@@ -8,13 +8,13 @@ Nama produknya tidak konsisten (misalnya "BERAS SPHP" versus "BERAS MEDIUM SPHP 
 
 ## Yang kami temukan
 
-**Lebih dari tiga perempat nilai penjualan yang dilaporkan adalah beras (51,2%) dan minyak goreng (25,6%).** Pupuk adalah barang utama ketiga (14,3%, hadir di 24 provinsi). Produk terlaris per provinsi hampir selalu salah satu dari tiga ini: beras bersubsidi, minyak goreng, atau pupuk NPK.
+**Lebih dari tiga perempat nilai penjualan yang dilaporkan adalah beras (<span data-fig="rice_value_share_pct">51,2%</span>) dan minyak goreng (<span data-fig="cooking_oil_value_share_pct">25,6%</span>).** Pupuk adalah barang utama ketiga (<span data-fig="fertiliser_value_share_pct">14,3%</span>, hadir di 24 provinsi). Produk terlaris per provinsi hampir selalu salah satu dari tiga ini: beras bersubsidi, minyak goreng, atau pupuk NPK.
 
 | Kategori      | Bagian nilai | Provinsi |
 | ------------- | ------------ | -------- |
-| Beras         | **51,2%**    | 33       |
-| Minyak goreng | **25,6%**    | 31       |
-| Pupuk         | 14,3%        | 24       |
+| Beras         | **<span data-fig="rice_value_share_pct">51,2%</span>**    | 33       |
+| Minyak goreng | **<span data-fig="cooking_oil_value_share_pct">25,6%</span>**    | 31       |
+| Pupuk         | <span data-fig="fertiliser_value_share_pct">14,3%</span>        | 24       |
 | Lainnya       | 7,4%         | 29       |
 | Gula          | 0,8%         | 25       |
 | Susu          | 0,5%         | 2        |

@@ -26,7 +26,7 @@
                 <div class="label">penduduk Indonesia dalam ±1,4 km dari koperasi</div>
             </div>
             <div class="stat">
-                <div class="value">146</div>
+                <div class="value"><span data-fig="no_pop_within_5_1km">146</span></div>
                 <div class="label">koperasi tanpa penduduk dalam radius 5 km</div>
             </div>
             <div class="stat">
@@ -34,11 +34,11 @@
                 <div class="label">koperasi di sel 400 m tanpa populasi tercatat</div>
             </div>
             <div class="stat">
-                <div class="value">5.106</div>
+                <div class="value"><span data-fig="no_made_road_coops">5.106</span></div>
                 <div class="label">koperasi tanpa jalan beraspal dalam ±5 km</div>
             </div>
             <div class="stat">
-                <div class="value">9,7<small>km</small></div>
+                <div class="value"><span data-fig="roadless_median_km">9,7</span><small>km</small></div>
                 <div class="label">median jarak ke jalan terdekat bagi yang terpencil</div>
             </div>
             <div class="stat">
@@ -52,8 +52,8 @@
         <h2>Lapis pertama: jangkauan program justru sangat baik</h2>
         <p>Kami mengukur jangkauan program dengan peta kepadatan penduduk
             berpetak 400 meter. Hasilnya: hampir semua orang Indonesia tinggal
-            dekat dengan sebuah koperasi. <strong>95% penduduk berada tak lebih
-                dari 1,4 km dari koperasi</strong>, dan 99,8% dalam 5,1 km. Program
+            dekat dengan sebuah koperasi. <strong><span data-fig="pop_within_1_4km_pct">95%</span> penduduk berada tak lebih
+                dari 1,4 km dari koperasi</strong>, dan <span data-fig="pop_within_5_1km_pct">99,8%</span> dalam 5,1 km. Program
             ini tidak meleset dari penduduk. Program ini menyentuh hampir semua
             orang.</p>
         <p>Hasil ini harus dikatakan apa adanya: tuduhan “dibangun di tempat tak
@@ -66,7 +66,7 @@
 
         <h2>Lapis kedua: ada kasus keterpencilan yang nyata dan bisa diperiksa</h2>
         <p>Tidak terbukti massal bukan berarti tidak ada yang perlu diperiksa.
-            146 koperasi tanpa penduduk dalam 5 km adalah 146 kasus nyata, dengan
+            <span data-fig="no_pop_within_5_1km">146</span> koperasi tanpa penduduk dalam 5 km adalah <span data-fig="no_pop_within_5_1km">146</span> kasus nyata, dengan
             nama dan titik koordinat, yang bisa dicek satu per satu. Angka-angka
             ekor ini, setelah koordinat yang mustahil dikoreksi pemerintah (lihat
             lampiran metode 08):</p>
@@ -83,17 +83,17 @@
                 <tbody>
                     <tr>
                         <td>Tanpa penduduk dalam 5 km</td>
-                        <td class="num">146</td>
+                        <td class="num"><span data-fig="no_pop_within_5_1km">146</span></td>
                         <td class="num">0,18%</td>
                     </tr>
                     <tr>
                         <td>Sel 400 m tanpa populasi</td>
-                        <td class="num">17.774</td>
-                        <td class="num">21,3%</td>
+                        <td class="num"><span data-fig="empty_cell_coops">17.774</span></td>
+                        <td class="num"><span data-fig="empty_cell_pct">21,3%</span></td>
                     </tr>
                     <tr>
                         <td>Tanpa jalan beraspal dalam ±5 km (OSM)</td>
-                        <td class="num">5.106</td>
+                        <td class="num"><span data-fig="no_made_road_coops">5.106</span></td>
                         <td class="num">6,1%</td>
                     </tr>
                     <tr>
@@ -124,7 +124,7 @@
         </figure>
 
         <h2>Berapa jauh sebenarnya “jauh”?</h2>
-        <p>Untuk 5.106 koperasi tanpa jalan beraspal dalam 5 km, kami mengukur
+        <p>Untuk <span data-fig="no_made_road_coops">5.106</span> koperasi tanpa jalan beraspal dalam 5 km, kami mengukur
             ulang jaraknya satu per satu dengan perhitungan yang tepat:</p>
         <figure class="figure">
             <table>
@@ -137,7 +137,7 @@
                 <tbody>
                     <tr>
                         <td>5–10 km</td>
-                        <td class="num">2.467</td>
+                        <td class="num"><span data-fig="roadless_5_10km">2.467</span></td>
                     </tr>
                     <tr>
                         <td>10–25 km</td>
@@ -158,7 +158,7 @@
                 </tbody>
             </table>
             <figcaption>Sumber: lampiran metode 08. Separuh koperasi ini berjarak
-                lebih dari 9,7 km; 587 di antaranya lebih dari 25 km.</figcaption>
+                lebih dari <span data-fig="roadless_median_km">9,7</span> km; <span data-fig="roadless_over_25km">587</span> di antaranya lebih dari 25 km.</figcaption>
         </figure>
 
         <h2>Lahan: sawah, hutan, dan kuburan</h2>
@@ -167,8 +167,8 @@
         <ul>
             <li><strong>Tuduhan “di sawah” terbukti.</strong> Koperasi yang berada di
                 dalam bidang lahan pertanian (menurut peta OpenStreetMap) mencapai
-                2,65%, 2,4 kali lebih sering dibanding pusat desa pada umumnya
-                (1,10%). Sebanyak 448 koperasi tercatat di lahan pertanian menurut dua
+                <span data-fig="in_farmland_pct">2,65%</span>, 2,4 kali lebih sering dibanding pusat desa pada umumnya
+                (1,10%). Sebanyak <span data-fig="farmland_confirmed">448</span> koperasi tercatat di lahan pertanian menurut dua
                 sumber peta yang berbeda secara independen, berjarak lebih dari 100
                 meter dari tepi sawah, dengan penduduk yang tinggal di sekitarnya.</li>
             <li><strong>Tuduhan “di kuburan” tidak terbukti.</strong> Hanya 22 kasus,
@@ -185,7 +185,7 @@
 
         <h2>Sebagian besar cerita ini ada di Indonesia timur</h2>
         <p>Ketika dipetakan per pulau, ekor keterpencilan hampir seluruhnya milik
-            Indonesia timur: 70,7% koperasi Papua berada di petak tanpa populasi,
+            Indonesia timur: <span data-fig="papua_empty_cell_pct">70,7%</span> koperasi Papua berada di petak tanpa populasi,
             jarak ke minimarket terdekat rata-rata 74,6 km (bandingkan 6,7 km di
             Jawa), dan hanya 3,2% lahannya yang terverifikasi. Jawa justru
             kebalikannya. Cerita “terpencil” adalah cerita Papua–Maluku–Kalimantan,
@@ -195,7 +195,7 @@
             <h3>Vonis bab ini</h3>
             <p><strong>Tuduhan “dibangun di tempat tak terjangkau” tidak berlaku
                     sebagai fenomena massal, jangkauannya nyaris sempurna. Tetapi
-                    ekornya nyata, bisa dihitung, dan bisa diperiksa:</strong> 146
+                    ekornya nyata, bisa dihitung, dan bisa diperiksa:</strong> <span data-fig="no_pop_within_5_1km">146</span>
                 koperasi tanpa penduduk dalam 5 km, ribuan tanpa jalan, puluhan di
                 lahan pertanian yang terkonfirmasi, dan semula 19 berkoordinat
                 mustahil, yang pemerintah telah koreksi. Yang belum bisa kami pisahkan
@@ -207,12 +207,12 @@
         </div>
 
         <p><em>Lampiran metode:</em>
-            <a href="../methods/03-population-coverage/">03</a> ·
-            <a href="../methods/04-siting-screen/">04</a> ·
-            <a href="../methods/05-road-access/">05</a> ·
-            <a href="../methods/07-landuse-polygons/">07</a> ·
-            <a href="../methods/08-exact-geometry/">08</a> ·
-            <a href="../methods/14-island-comparison/">14</a>
+            <a href="../../methods/03-population-coverage/">03</a> ·
+            <a href="../../methods/04-siting-screen/">04</a> ·
+            <a href="../../methods/05-road-access/">05</a> ·
+            <a href="../../methods/07-landuse-polygons/">07</a> ·
+            <a href="../../methods/08-exact-geometry/">08</a> ·
+            <a href="../../methods/14-island-comparison/">14</a>
         </p>
     </main>
     <footer id="site-footer"></footer>

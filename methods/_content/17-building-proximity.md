@@ -4,23 +4,23 @@ Seberapa jauh koperasi dari rumah terdekat? Peta populasi (lampiran 03) mengukur
 
 ## Yang kami temukan
 
-**44,4% koperasi berdiri tepat di atas petak yang berisi bangunan terpetakan, dan tiga perempatnya (75,2%) punya bangunan terpetakan dalam jarak sekitar 260 meter.** Hanya 1,19% yang tidak punya satu pun bangunan terpetakan dalam sekitar 5 km.
+**44,4% koperasi berdiri tepat di atas petak yang berisi bangunan terpetakan, dan tiga perempatnya (<span data-fig="building_within_260m_pct">75,2%</span>) punya bangunan terpetakan dalam jarak sekitar 260 meter.** Hanya <span data-fig="no_building_5km_pct">1,19%</span> yang tidak punya satu pun bangunan terpetakan dalam sekitar 5 km.
 
 Artinya jelas dan harus dikatakan terus terang: **tuduhan bahwa koperasi dibangun jauh dari permukiman tidak terbukti secara nasional dalam ukuran ini.** Sebagian besar koperasi berdiri di tengah bangunan.
 
 | Jarak ke bangunan terdekat        | Koperasi | Bagian    |
 | --------------------------------- | -------- | --------- |
-| Di atas petak bangunan (&lt;70 m) | 36.985   | 44,36%    |
+| Di atas petak bangunan (&lt;70 m) | 36.985   | <span data-fig="on_building_cell_pct">44,36%</span>    |
 | &lt; ±260 m                       | 25.699   | 30,82%    |
 | &lt; ±530 m                       | 7.555    | 9,06%     |
 | &lt; ±1 km                        | 5.745    | 6,89%     |
 | &lt; ±2 km                        | 3.587    | 4,30%     |
 | &lt; ±5 km                        | 2.817    | 3,38%     |
-| **&gt; ±5 km / tak ditemukan**    | **991**  | **1,19%** |
+| **&gt; ±5 km / tak ditemukan**    | **991**  | **<span data-fig="no_building_5km_pct">1,19%</span>** |
 
 ## Yang tersisa, dan justru lebih kuat
 
-Yang tersisa adalah ekor kecil, dan di situlah temuan sesungguhnya berada. **128 koperasi sekaligus: tidak punya rumah terpetakan dalam 1 km, tidak punya penduduk dalam 5 km menurut peta satelit, dan tidak punya jalan yang bisa dilalui kendaraan dalam 5 km.** Tiga sumber yang sama sekali berbeda menunjuk kelompok yang sama.
+Yang tersisa adalah ekor kecil, dan di situlah temuan sesungguhnya berada. **<span data-fig="triple_isolated_coops">128</span> koperasi sekaligus: tidak punya rumah terpetakan dalam 1 km, tidak punya penduduk dalam 5 km menurut peta satelit, dan tidak punya jalan yang bisa dilalui kendaraan dalam 5 km.** Tiga sumber yang sama sekali berbeda menunjuk kelompok yang sama.
 
 Seratus dua puluh delapan koperasi adalah angka kecil dari 83.379. Tapi angka itu bertahan diperiksa dari tiga arah sekaligus, dan itulah sebabnya angka inilah yang kami pakai, bukan angka yang lebih besar tapi hanya bersandar pada satu sumber.
 

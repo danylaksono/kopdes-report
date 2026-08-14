@@ -13,7 +13,7 @@
     <main class="wrap">
         <p class="kicker">Temuan · Bab 3</p>
         <h1>“Boros: uang dikeluarkan, tidak ada yang terjadi.” Inilah bab yang paling kuat.</h1>
-        <p class="lede">Angka nasionalnya <strong>Rp 202,6 miliar</strong>, sekitar
+        <p class="lede">Angka nasionalnya <strong>Rp <span data-fig="transaction_value_miliar">202,6</span> miliar</strong>, sekitar
             USD 12 juta, untuk seluruh program sejauh ini (per 13 Agustus 2026; pada 5
             Agustus angkanya Rp 179,5 miliar), dan cocok dengan angka yang ditampilkan
             dashboard kementerian sendiri.
@@ -22,7 +22,7 @@
 
         <div class="stat-strip">
             <div class="stat">
-                <div class="value">202,6<small>miliar</small></div>
+                <div class="value"><span data-fig="transaction_value_miliar">202,6</span><small>miliar</small></div>
                 <div class="label">total transaksi nasional yang dilaporkan (~USD 12 juta)</div>
             </div>
             <div class="stat">
@@ -48,21 +48,21 @@
         </div>
 
         <h2>Angka dasarnya sendiri</h2>
-        <p>Pada 9 Agustus 2026, media melaporkan total nasional Rp 179,72 miliar;
+        <p>Pada 9 Agustus 2026, media melaporkan total nasional Rp <span data-fig="press_value_aug09_miliar">179,72</span> miliar;
             pengambilan data kami di hari yang sama menghasilkan Rp 179,79 miliar,
             selisih 0,042%. Kementerian mengutip sistem yang sama, jadi apa pun yang
             dikatakan sistem itu tentang aktivitas adalah catatan publik pemerintah
-            sendiri. Secara terpisah, kepala Bakom menyebut <strong>1.061 koperasi
-                beroperasi</strong> (1,3% dari daftar koperasi) pada 8 Juni 2026,
-            sejalan dengan 3,3% desa yang melaporkan transaksi di dua provinsi yang
+            sendiri. Secara terpisah, kepala Bakom menyebut <strong><span data-fig="operating_coops">1.061</span> koperasi
+                beroperasi</strong> (<span data-fig="operating_coops_pct">1,3%</span> dari daftar koperasi) pada 8 Juni 2026,
+            sejalan dengan <span data-fig="villages_reporting_pct">3,3%</span> desa yang melaporkan transaksi di dua provinsi yang
             sama. Angka di atas terus berjalan: per 13 Agustus 2026 dashboard
-            menampilkan <strong>Rp 202,6 miliar</strong> (dari Rp 179,5 miliar pada
-            5 Agustus), dengan 2.726 desa pelapor.</p>
+            menampilkan <strong>Rp <span data-fig="transaction_value_miliar">202,6</span> miliar</strong> (dari Rp 179,5 miliar pada
+            5 Agustus), dengan <span data-fig="villages_reporting">2.726</span> desa pelapor.</p>
 
         <h2>Mesin pendaftaran bekerja; mesin operasi tidak</h2>
         <p>Data berjalan berjenjang dari administrasi ke operasi. Sistem yang sama
-            mencatat rekening untuk ±96% desa dan NPWP untuk 97,1% koperasi, tetapi
-            transaksi hanya untuk 3,3%, dan iuran wajib bulanan hanya 9,2%. Ini
+            mencatat rekening untuk ±<span data-fig="account_pct">96%</span> desa dan NPWP untuk <span data-fig="npwp_pct">97,1%</span> koperasi, tetapi
+            transaksi hanya untuk <span data-fig="villages_reporting_pct">3,3%</span>, dan iuran wajib bulanan hanya <span data-fig="wajib_paying_pct">9,2%</span>. Ini
             bentuk corong <em>aktivitas nyata</em>:
         </p>
         <figure class="figure">
@@ -77,17 +77,17 @@
                 <tbody>
                     <tr>
                         <td>Akun (terdaftar di sistem)</td>
-                        <td class="num">±96%</td>
+                        <td class="num">±<span data-fig="account_pct">96%</span></td>
                         <td>lampiran 02</td>
                     </tr>
                     <tr>
                         <td>NPWP (nomor pajak)</td>
-                        <td class="num">97,1%</td>
+                        <td class="num"><span data-fig="npwp_pct">97,1%</span></td>
                         <td>lampiran 13</td>
                     </tr>
                     <tr>
                         <td>NIB (izin usaha)</td>
-                        <td class="num">72,9%</td>
+                        <td class="num"><span data-fig="nib_pct">72,9%</span></td>
                         <td>lampiran 13</td>
                     </tr>
                     <tr>
@@ -97,12 +97,12 @@
                     </tr>
                     <tr>
                         <td>Iuran wajib (dues bulanan)</td>
-                        <td class="num">9,2%</td>
+                        <td class="num"><span data-fig="wajib_paying_pct">9,2%</span></td>
                         <td>lampiran 11</td>
                     </tr>
                     <tr>
                         <td><strong>Transaksi</strong></td>
-                        <td class="num"><strong>3,3%</strong></td>
+                        <td class="num"><strong><span data-fig="villages_reporting_pct">3,3%</span></strong></td>
                         <td>lampiran 02</td>
                     </tr>
                 </tbody>
@@ -114,16 +114,16 @@
         <h2>Simpanan: uangnya modal awal, bukan tabungan berjalan</h2>
         <p>Karena transaksi 96,7% kosong, kami mencari sinyal aktivitas kedua:
             simpanan. Simpanan dilaporkan 4 kali lebih sering daripada transaksi:
-            12,5% desa punya simpanan apa pun, tetapi tetap saja <strong>87,5% desa
+            <span data-fig="any_savings_pct">12,5%</span> desa punya simpanan apa pun, tetapi tetap saja <strong><span data-fig="no_savings_pct">87,5%</span> desa
                 tidak melaporkan simpanan sama sekali</strong>. Dan di antara yang
             melaporkan, polanya justru menandakan koperasi yang tidur:</p>
         <ul>
-            <li>Rasio <strong>iuran wajib terhadap modal pokok</strong> mediannya 0,28;
+            <li>Rasio <strong>iuran wajib terhadap modal pokok</strong> mediannya <span data-fig="wajib_pokok_ratio">0,28</span>;
                 hanya 15,8% desa yang iuran wajibnya lebih besar dari modal pokoknya.
                 Uangnya adalah <strong>modal sekali setor saat didirikan</strong>, bukan
                 tabungan yang mengalir bulan ke bulan.
             </li>
-            <li>Simpanan total Rp 40,3 miliar (~USD 2,4 juta), sekitar seperlima dari
+            <li>Simpanan total Rp <span data-fig="savings_total_miliar">40,3</span> miliar (~USD 2,4 juta), sekitar seperlima dari
                 nilai transaksi.</li>
             <li>Di mana dilaporkan, jumlahnya masuk akal (pokok sekitar Rp 50 ribu,
                 wajib sekitar Rp 20 ribu per anggota), jadi ini uang sungguhan, bukan
@@ -131,36 +131,36 @@
         </ul>
 
         <h2>Izin usaha ada; operasinya tidak, dan konsentrasi yang ekstrem</h2>
-        <p>Uji yang kami sebut “zombie”: 72,9% koperasi mengantongi NIB (izin usaha).
+        <p>Uji yang kami sebut “zombie”: <span data-fig="nib_pct">72,9%</span> koperasi mengantongi NIB (izin usaha).
             Hanya 23 desa (0,03%) yang melaporkan transaksi <em>tanpa</em> izin,
-            nyaris tidak ada yang beroperasi di luar sistem. Tetapi <strong>69,9% desa
+            nyaris tidak ada yang beroperasi di luar sistem. Tetapi <strong><span data-fig="nib_no_transaction_pct">69,9%</span> desa
                 memegang izin dan tidak melaporkan transaksi apa pun</strong>. Negara telah
             memberi mereka izin berusaha; bisnisnya tidak ada.</p>
         <p>Aktivitas yang ada pun sangat terkonsentrasi: <strong>100 desa menyumbang
-                34,8% nilai transaksi nasional</strong>, dan 1.000 desa menyumbang 90,6%.
-            Antara 31 Juli dan 9 Agustus 2026 nilainya naik 13,8% di dalam kumpulan
-            desa pelapor yang hampir tidak berubah (2.516 → 2.517). Tetapi pada 13
-            Agustus 2026 jumlah desa pelapor naik menjadi <strong>2.726</strong>
-            (+209 desa) sementara nilainya naik lagi 12,7%. Apakah ini awal dari
+                34,8% nilai transaksi nasional</strong>, dan 1.000 desa menyumbang <span data-fig="top1000_value_share_pct">90,6%</span>.
+            Antara 31 Juli dan 9 Agustus 2026 nilainya naik <span data-fig="press_growth_pct">13,8%</span> di dalam kumpulan
+            desa pelapor yang hampir tidak berubah (<span data-fig="villages_reporting_aug05">2.516</span> → <span data-fig="villages_reporting_aug09">2.517</span>). Tetapi pada 13
+            Agustus 2026 jumlah desa pelapor naik menjadi <strong><span data-fig="villages_reporting">2.726</span></strong>
+            (+<span data-fig="new_reporting_aug09_13">209</span> desa) sementara nilainya naik lagi <span data-fig="our_growth_pct">12,7%</span>. Apakah ini awal dari
             tunggakan yang terbayar masih harus dibuktikan oleh seri data bulanan
             yang sedang kami kumpulkan.</p>
 
         <h2>Konstruksi dan tata kelola</h2>
         <ul>
-            <li><strong>Konstruksi</strong>: 24,3% koperasi berada di 100% konstruksi;
-                45,6% punya catatan konstruksi sama sekali, lebih dari separuh tanpa
+            <li><strong>Konstruksi</strong>: <span data-fig="build_100_pct">24,3%</span> koperasi berada di 100% konstruksi;
+                <span data-fig="build_any_stage_pct">45,6%</span> punya catatan konstruksi sama sekali, lebih dari separuh tanpa
                 catatan apa pun.</li>
             <li><strong>RAT</strong> (rapat anggota tahunan, kanal tata kelola):
-                tercatat untuk 60,2% koperasi (50.200 dari 83.379 per 13 Agustus 2026),
-                tetapi hanya 6,1% di Papua Pegunungan dan 16,0% di Papua Selatan.
+                tercatat untuk <span data-fig="rat_pct">60,2%</span> koperasi (<span data-fig="rat_recorded_coops">50.200</span> dari 83.379 per 13 Agustus 2026),
+                tetapi hanya <span data-fig="rat_papua_pegunungan_pct">6,1%</span> di Papua Pegunungan dan <span data-fig="rat_papua_selatan_pct">16,0%</span> di Papua Selatan.
             </li>
         </ul>
 
         <div class="callout"><span class="callout-label">Catatan jujur</span>
             “Nol” di sini berarti <strong>belum melaporkan</strong>, bukan “tidak
             aktif”. Secara formal keduanya tidak bisa dipisahkan. Tetapi corong di
-            atas menggeser beban pembuktian: sistem yang mencatat rekening untuk 96%
-            dan NPWP untuk 97% desa, tetapi transaksi untuk 3,3%, bukanlah sistem yang
+            atas menggeser beban pembuktian: sistem yang mencatat rekening untuk <span data-fig="account_pct">96%</span>
+            dan NPWP untuk 97% desa, tetapi transaksi untuk <span data-fig="villages_reporting_pct">3,3%</span>, bukanlah sistem yang
             “belum sempat mencatat”. Itu sistem yang mencatat pendaftaran dan tidak
             mencatat operasi. Cuplikan data bulanan (sedang kami kumpulkan) akan
             menutup celah ini.</div>
@@ -168,9 +168,9 @@
         <div class="verdict">
             <h3>Vonis bab ini</h3>
             <p><strong>Tuduhan “boros, tidak ada hasil” adalah yang paling didukung
-                    data.</strong> Total nasional yang benar (±Rp 202,6 miliar / USD 12
-                juta) cocok dengan angka resmi; hanya 3,3% desa melaporkan transaksi;
-                69,9% berizin usaha tanpa operasi; simpanan sebagian besar modal awal;
+                    data.</strong> Total nasional yang benar (±Rp <span data-fig="transaction_value_miliar">202,6</span> miliar / USD 12
+                juta) cocok dengan angka resmi; hanya <span data-fig="villages_reporting_pct">3,3%</span> desa melaporkan transaksi;
+                <span data-fig="nib_no_transaction_pct">69,9%</span> berizin usaha tanpa operasi; simpanan sebagian besar modal awal;
                 konstruksi baru seperempat selesai; RAT tercatat 60% tetapi nyaris nol
                 di Papua Pegunungan. Peringatan tetap berlaku:
                 “tidak melaporkan” bukan berarti “tidak aktif”, dan kami tidak bisa
@@ -179,13 +179,13 @@
         </div>
 
         <p><em>Lampiran metode:</em>
-            <a href="../methods/09-external-corroboration/">09</a> ·
-            <a href="../methods/02-zero-inflation/">02</a> ·
-            <a href="../methods/11-savings-behaviour/">11</a> ·
-            <a href="../methods/13-compliance-npwp-nib/">13</a> ·
-            <a href="../methods/15-construction-output/">15</a> ·
-            <a href="../methods/16-rat-compliance/">16</a> ·
-            <a href="../methods/01-snapshot-drift/">01</a>
+            <a href="../../methods/09-external-corroboration/">09</a> ·
+            <a href="../../methods/02-zero-inflation/">02</a> ·
+            <a href="../../methods/11-savings-behaviour/">11</a> ·
+            <a href="../../methods/13-compliance-npwp-nib/">13</a> ·
+            <a href="../../methods/15-construction-output/">15</a> ·
+            <a href="../../methods/16-rat-compliance/">16</a> ·
+            <a href="../../methods/01-snapshot-drift/">01</a>
         </p>
     </main>
     <footer id="site-footer"></footer>

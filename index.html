@@ -21,7 +21,7 @@
     <div class="story-hero-scrim"></div>
     <div class="wrap story-hero-inner">
       <p class="kicker reveal-on-load">Sebuah investigasi data · 2026</p>
-      <h1 class="reveal-on-load">83.379 koperasi dibangun atas nama “desa merah putih”. Apa yang sebenarnya terjadi?
+      <h1 class="reveal-on-load"><span data-fig="coops_total">83.379</span> koperasi dibangun atas nama “desa merah putih”. Apa yang sebenarnya terjadi?
       </h1>
       <p class="lede reveal-on-load">Program Koperasi Desa Merah Putih menempatkan koperasi di hampir
         setiap desa di Indonesia, lebih dari 83 ribu titik, dari Aceh sampai Papua melalui Instruksi Presiden No. 9
@@ -39,9 +39,9 @@
       </div>
       <p class="story-byline reveal-on-load">Oleh <strong>Dany Laksono</strong> · investigasi independen, 2026</p>
       <div class="story-hero-meta reveal-on-load">
-        <span><strong>83.379</strong> titik koperasi</span>
+        <span><strong><span data-fig="coops_total">83.379</span></strong> titik koperasi</span>
         <span><strong>38</strong> provinsi</span>
-        <span><strong>Rp 202,6 miliar</strong> nilai transaksi tercatat</span>
+        <span><strong>Rp <span data-fig="transaction_value_miliar">202,6</span> miliar</strong> nilai transaksi tercatat</span>
         <span>sumber: SIMKOPDES · 13-08-2026</span>
       </div>
     </div>
@@ -64,13 +64,13 @@
         pakai adalah perkiraan lokasi, bukan titik gedung yang pasti, dan seluruh analisis
         kedekatan di laporan ini, misalnya jarak ke penduduk, jalan, atau minimarket, ikut
         mewarisi ketidakpastian itu.</p>
-      <p>Faktanya, sebagian besar titik bahkan belum tentu memiliki bangunan. Dari 83.379
-        koperasi yang terdaftar per 13 Agustus 2026, baru <strong>20.221 (24,3%)</strong> yang
+      <p>Faktanya, sebagian besar titik bahkan belum tentu memiliki bangunan. Dari <span data-fig="coops_total">83.379</span>
+        koperasi yang terdaftar per 13 Agustus 2026, baru <strong><span data-fig="build_100_coops">20.221</span> (<span data-fig="build_100_pct">24,3%</span>)</strong> yang
         mencatat pembangunan fisik selesai 100%, sementara lebih dari separuh koperasi
         (54,4%) tidak memiliki catatan tahap pembangunan sama sekali. Sebuah titik pada peta
         bisa jadi koperasi yang masih berupa rencana, bukan gedung yang sudah berdiri.</p>
       <p>Karena itulah lokasi sebenarnya tiap koperasi masih menjadi pertanyaan terbuka. Ke
-        depan kami berencana memperbaiki fitur <a href="../periksa/" target="_blank" rel="noopener">verifikasi gotong
+        depan kami berencana memperbaiki fitur <a href="periksa/" target="_blank" rel="noopener">verifikasi gotong
           royong</a> agar publik dapat ikut
         memastikan lokasi nyata tiap koperasi, dan situs ini kemudian dapat memakai hasil
         verifikasi itu sebagai sumber utama analisis.</p>
@@ -100,7 +100,7 @@
             <div class="step-inner">
               <p class="step-num">Bab 1 · Akses</p>
               <h2>Jangkauannya nyaris sempurna.</h2>
-              <p><strong>95% penduduk Indonesia tinggal tak lebih dari 1,4 km dari
+              <p><strong><span data-fig="pop_within_1_4km_pct">95%</span> penduduk Indonesia tinggal tak lebih dari 1,4 km dari
                   sebuah kopdes.</strong> Jangkauan ini bukan kebetulan: program ini memang
                 menempatkan satu koperasi di hampir setiap desa, sehingga jarak ke
                 koperasi terdekat cukup pendek hampir di setiap tempat (dengan asumsi koordinat yang dilaporkan
@@ -119,9 +119,9 @@
               <h2>Tetapi ada pencilan yang nyata.</h2>
               <p>Tidak terbukti massal bukan berarti tidak ada masalah. Secara
                 keseluruhan, 17.774 koperasi berada di petak 400 meter tanpa penduduk
-                tercatat; di antaranya, <strong>146 koperasi bahkan tanpa satu pun
+                tercatat; di antaranya, <strong><span data-fig="no_pop_within_5_1km">146</span> koperasi bahkan tanpa satu pun
                   penduduk dalam radius 5 kilometer</strong>.</p>
-              <p>146 dari 83.379 hanyalah 0,2% dari program, tetapi itu 146 kasus
+              <p><span data-fig="no_pop_within_5_1km">146</span> dari <span data-fig="coops_total">83.379</span> hanyalah 0,2% dari program, tetapi itu <span data-fig="no_pop_within_5_1km">146</span> kasus
                 nyata, dengan nama dan titik koordinat, yang bisa diperiksa satu per satu.</p>
               <a class="step-link" href="findings/remoteness/">Kasus-kasus pencilan →</a>
             </div>
@@ -131,7 +131,7 @@
             <div class="step-inner">
               <p class="step-num">Bab 1 · Akses</p>
               <h2>Ada yang memang benar-benar 'jauh'.</h2>
-              <p>5.106 koperasi tidak punya jalan beraspal dalam radius 5 km. Saat
+              <p><span data-fig="no_made_road_coops">5.106</span> koperasi tidak punya jalan beraspal dalam radius 5 km. Saat
                 diukur ulang dengan teliti, separuhnya berjarak <strong>lebih dari
                   9,7 km</strong> dari jalan terdekat; 7 di antaranya lebih dari 100 km
                 dari jalan terdekat mana pun.</p>
@@ -155,8 +155,8 @@
 
     <figure class="wrap story-photo reveal">
       <img src="assets/story/akses.jpg" alt="Perkampungan di atas bukit, Papua" loading="lazy" decoding="async" />
-      <figcaption>Banyak koperasi yang paling terpencil berada di Indonesia timur. Papua memegang 8,5%
-        koperasi tetapi hanya 0,6% dari nilai transaksi yang dilaporkan.
+      <figcaption>Banyak koperasi yang paling terpencil berada di Indonesia timur. Papua memegang <span data-fig="papua_coops_share_pct">8,5%</span>
+        koperasi tetapi hanya <span data-fig="papua_value_share_pct">0,6%</span> dari nilai transaksi yang dilaporkan.
         <span class="photo-credit">Foto: “Papua Village on hill”, Irfantraveller, CC BY-SA 4.0.</span>
       </figcaption>
     </figure>
@@ -242,15 +242,15 @@
           <div class="step" data-chart="funnel">
             <div class="step-inner">
               <p class="step-num">Bab 3 · Anggaran &amp; output</p>
-              <h2>Angka nasionalnya: Rp 202,6 miliar.</h2>
-              <p>Program ini mencatat <strong>Rp 202,6 miliar</strong> nilai
+              <h2>Angka nasionalnya: Rp <span data-fig="transaction_value_miliar">202,6</span> miliar.</h2>
+              <p>Program ini mencatat <strong>Rp <span data-fig="transaction_value_miliar">202,6</span> miliar</strong> nilai
                 transaksi per 13 Agustus 2026, naik dari Rp 179,5 miliar pada 5
                 Agustus. Rata-rata, setiap koperasi baru “menghasilkan”
-                sekitar <strong>Rp 2,43 juta seumur hidupnya</strong>, tak lebih dari
+                sekitar <strong>Rp <span data-fig="value_per_coop_juta">2,43</span> juta seumur hidupnya</strong>, tak lebih dari
                 sebulan belanja dapur.
               </p>
               <p>Lihat grafik di samping: sistem mencatat 96% desa punya rekening dan
-                97% punya NPWP, tetapi hanya 3,3% yang melaporkan transaksi. Mesin
+                97% punya NPWP, tetapi hanya <span data-fig="villages_reporting_pct">3,3%</span> yang melaporkan transaksi. Mesin
                 pendaftaran bekerja; mesin operasinya senyap.</p>
               <a class="step-link" href="findings/money/">Soal anggaran, selengkapnya →</a>
             </div>
@@ -276,7 +276,7 @@
               <p class="step-num">Bab 3 · Anggaran &amp; output</p>
               <h2>Dan aktivitas yang ada pun menumpuk di segelintir desa.</h2>
               <p>100 desa menyumbang 34,8% dari seluruh nilai transaksi nasional; 1.000
-                desa menyumbang 90,6%. Antara 5 dan 9 Agustus nilainya naik di dalam
+                desa menyumbang <span data-fig="top1000_value_share_pct">90,6%</span>. Antara 5 dan 9 Agustus nilainya naik di dalam
                 kumpulan desa pelapor yang hampir tidak berubah, tetapi sejak 13
                 Agustus jumlah desa pelapor ikut naik (+209 desa). Pertanyaannya
                 bukan lagi “apakah ada yang melaporkan”, melainkan apakah tunggakan
@@ -301,7 +301,7 @@
 
     <figure class="wrap story-photo reveal">
       <img src="assets/story/anggaran.jpg" alt="Tumpukan uang rupiah" loading="lazy" decoding="async" />
-      <figcaption>Rp 202,6 miliar terdengar besar, tetapi itu sekitar <strong>Rp 2,43 juta per
+      <figcaption>Rp <span data-fig="transaction_value_miliar">202,6</span> miliar terdengar besar, tetapi itu sekitar <strong>Rp <span data-fig="value_per_coop_juta">2,43</span> juta per
           koperasi seumur hidupnya</strong>, dan angka itu adalah catatan pemerintah sendiri.
         <span class="photo-credit">Foto: “Rupiah swath”, Jonny-mt, CC BY 3.0.</span>
       </figcaption>
@@ -315,7 +315,7 @@
     <div class="wrap">
       <header class="chapter-head reveal">
         <p class="chapter-num">Momen peta</p>
-        <h2>83.379 titik, satu peta.</h2>
+        <h2><span data-fig="coops_total">83.379</span> titik, satu peta.</h2>
         <p>Setiap titik adalah satu koperasi terdaftar. Geser dan perbesar untuk melihat
           bagaimana program ini ditebar, lalu gunakan filter untuk melihat pencilan yang
           nyata: koperasi yang tak tersentuh penduduk, yang jauh dari jalan, dan yang
@@ -325,7 +325,7 @@
       <div class="story-map-frame reveal">
         <div class="map-loading" id="story-map-loading">
           <div class="spinner"></div>
-          <div>Memuat 83.379 titik…</div>
+          <div>Memuat <span data-fig="coops_total">83.379</span> titik…</div>
         </div>
         <div class="story-map-tools" id="story-map-tools"></div>
         <div id="story-map"></div>
@@ -358,8 +358,8 @@
         <article class="verdict-card reveal">
           <span class="verdict-stamp ok">Tidak terbukti massal</span>
           <h3>“Terpencil”</h3>
-          <p>Jangkauan terhadap populasi penduduk cukup baik: 95% penduduk dalam ±1,4 km. Tetapi kasus pencilannya
-            nyata: 146 koperasi tanpa penduduk dalam 5 km, semuanya bisa diperiksa satu per satu.</p>
+          <p>Jangkauan terhadap populasi penduduk cukup baik: <span data-fig="pop_within_1_4km_pct">95%</span> penduduk dalam ±1,4 km. Tetapi kasus pencilannya
+            nyata: <span data-fig="no_pop_within_5_1km">146</span> koperasi tanpa penduduk dalam 5 km, semuanya bisa diperiksa satu per satu.</p>
           <a class="verdict-link" href="findings/remoteness/">Baca bab Akses →</a>
         </article>
 
@@ -373,8 +373,8 @@
         <article class="verdict-card reveal">
           <span class="verdict-stamp strong">Paling didukung data</span>
           <h3>“Boros”</h3>
-          <p>Rp 202,6 miliar, tetapi mesin operasi nyaris senyap:
-            hanya 3,3% desa melaporkan transaksi. Ini catatan resmi di website SIMKOPDES, setelah program berjalan
+          <p>Rp <span data-fig="transaction_value_miliar">202,6</span> miliar, tetapi mesin operasi nyaris senyap:
+            hanya <span data-fig="villages_reporting_pct">3,3%</span> desa melaporkan transaksi. Ini catatan resmi di website SIMKOPDES, setelah program berjalan
             lebih dari satu tahun sejak Instruksi Presiden No. 9 Tahun 2025.</p>
           <a class="verdict-link" href="findings/money/">Baca bab Anggaran →</a>
         </article>

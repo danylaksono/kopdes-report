@@ -43,6 +43,13 @@ data/web/*
 !data/web/cells/
 !data/web/cells/*.parquet
 !data/web/cells/cells_manifest.json
+# The published-figures registry: every headline number the prose states, as
+# recomputed from the mart and the report tables. Committed for the same reason
+# as the mart, and for one more: app/site.js fetches it on every page to bind
+# the <span data-fig> figures, so a deploy without it silently falls back to
+# whatever text was last typed into the HTML. A few KB of JSON.
+# Rebuild: python scripts/verify_published_figures.py --emit
+!data/web/figures.json
 
 # --- report outputs that are per-record tables, not findings ---
 # Everything else under reports/ IS committed - the small CSVs are the findings

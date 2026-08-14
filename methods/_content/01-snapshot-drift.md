@@ -10,7 +10,7 @@ Kami juga memeriksa apakah sistem menyimpan catatan waktu untuk setiap data. Ter
 
 ## Yang kami temukan
 
-Dari 80.553 desa yang melaporkan nol transaksi pada 5 Agustus, hanya **satu** desa yang mulai melaporkan kegiatan empat hari kemudian. Pada laju itu, butuh sekitar 883 tahun untuk "menghabiskan" antrean yang ada. Sekali lagi: itu bukan ramalan, itu cara mengungkapkan laju yang kami amati.
+Dari <span data-fig="zero_villages_aug05">80.553</span> desa yang melaporkan nol transaksi pada 5 Agustus, hanya **satu** desa yang mulai melaporkan kegiatan empat hari kemudian. Pada laju itu, butuh sekitar <span data-fig="backlog_years">883</span> tahun untuk "menghabiskan" antrean yang ada. Sekali lagi: itu bukan ramalan, itu cara mengungkapkan laju yang kami amati.
 
 | Kolom           | Berubah dalam 4 hari | Nol → mulai melapor |
 | --------------- | -------------------- | ------------------- |
@@ -22,7 +22,7 @@ Dari 80.553 desa yang melaporkan nol transaksi pada 5 Agustus, hanya **satu** de
 
 Pada periode yang sama, sistem justru menambah 40 koperasi dan 23 aset lahan baru. Daftarnya tumbuh; kegiatannya tidak dilaporkan.
 
-Kami juga menemukan bahwa ekspor data 5 Agustus memuat 1.555 baris desa ganda. Itu membuat penjumlahan menjadi dua kali lipat, jadi sebelum menghitung apa pun, data harus dibersihkan dulu dari baris duplikat.
+Kami juga menemukan bahwa ekspor data 5 Agustus memuat <span data-fig="duplicate_village_rows">1.555</span> baris desa ganda. Itu membuat penjumlahan menjadi dua kali lipat, jadi sebelum menghitung apa pun, data harus dibersihkan dulu dari baris duplikat.
 
 ## Catatan penting (13 Agustus)
 

@@ -773,6 +773,7 @@ table is of the same order, which is small enough to commit outright.
 ```bash
 python scripts/verify_published_figures.py            # exits non-zero on drift
 python scripts/verify_published_figures.py --verbose  # also lists SKIPs
+python scripts/verify_published_figures.py --emit     # also rewrites the registry
 ```
 
 **Run this before publishing, and after re-running any report.** The site states
@@ -780,6 +781,79 @@ figures in hand-written Indonesian prose while the numbers live in the mart and
 in `reports/*/`. Nothing regenerates the prose, so a re-run report leaves a
 stale sentence behind and no test fails. That is exactly how report 17's
 band bug put 62.6% on a page when the data said 1.19%.
+
+### The figures registry: numbers the pages read rather than restate
+
+`--emit` writes **`data/web/figures.json`**, one entry per keyed check, holding
+the value and the _rendered Indonesian string_ the prose should print. A page
+marks a figure and keeps the literal inside it:
+
+```html
+<strong>Rp <span data-fig="transaction_value_miliar">202,6</span> miliar</strong>
+```
+
+`app/site.js` fetches the registry on every page and swaps the text in. It runs
+after `marked.parse()` too, so the same span works in `methods/_content/*.md`.
+
+Three rules make this safe rather than magic:
+
+- **The literal stays in the file.** It is what a reader without JavaScript
+  sees, what shows up in a diff, and what the verifier compares against. The
+  committed page has to be true on its own; the registry is the safety net for
+  the window between re-running a report and re-reading the prose, not a
+  licence to leave prose stale. A mismatch fails the run.
+- **Formatting lives only in Python.** The registry ships the rendered string,
+  so there is no second formatter in JavaScript to drift out of step. Note
+  `round_half_up()`: Python's built-in rounds halves to even, which would print
+  69,8% where every page here correctly says 69,9%.
+- **Units stay in the prose.** "Rp", "miliar" and "km" are wording, and a
+  figure that changes magnitude needs a human to re-read the sentence anyway.
+
+Keying a new figure means adding `key=` and `fmt=` to its `@check` (`int`,
+`decN`, `pctN`), re-emitting, and wrapping the number on the page. 81 of 81
+checks are keyed; 132 elements are bound across the story, the three findings
+pages and four method files.
+
+**Not everything is bound, on purpose.** Bare one and two digit figures (`38`
+provinces, `17` in one cell) are too ambiguous to bind by text and stay plain
+prose. `top100_value_share_pct` is deliberately unbound: its source CSV carries
+34.85 at two decimals, so neither 34,8% nor 34,9% is justified at one decimal
+and the registry holds it at the precision report 02 actually published. The
+generated `methods/*/index.html` summaries are also unbound, because their text
+lives in `scripts/build_methods_pages.py` and a rebuild would overwrite any
+binding added to the output.
+
+## Checking the links
+
+```bash
+python scripts/check_links.py            # exits non-zero on any dead link
+python scripts/check_links.py --verbose  # also lists what resolves
+```
+
+Resolves every `href` and `src` on every committed page, plus the relative
+links inside the per-page `app/<name>/*.js` module trees, the way a browser
+would. Directory links must have an `index.html`; fragments must exist as an
+`id` on the target page (ids that `site.js` injects are allowlisted in
+`RUNTIME_IDS`). External URLs are not fetched: that needs a network, is not
+deterministic, and turns someone else's outage into a red build.
+
+This exists because all eighteen "Lampiran metode" citations on the three
+findings pages pointed at `../methods/NN-slug/`, which from `/findings/money/`
+resolves to `/findings/methods/NN-slug/` and 404s. The pages had the right
+depth in their `<script src>` two lines away. A broken link does not make a
+page look broken, so nothing surfaced it.
+
+## CI
+
+`.github/workflows/verify.yml` runs on every push and pull request to `main`:
+links, then the figures (with `--emit`), then a check that the committed
+`data/web/figures.json` matches what the data just produced, so a re-run report
+that nobody re-emitted fails the build. Everything it reads is committed, so it
+needs no data build, no secrets and no network.
+
+`check_emdashes.py` runs there in `--report` mode only. It still counts the
+deliberate `<td class="num">—</td>` placeholders, so it cannot gate until it
+can tell those from prose.
 
 81 checks as of 2026-08-14, covering all three chapters plus the externally
 sourced and snapshot-series figures. It proves **arithmetic provenance** only:

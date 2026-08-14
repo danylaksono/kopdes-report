@@ -2,9 +2,11 @@
  * site.js — shared shell for the kopdes investigative report.
  *
  * Injects the top navigation and footer (so the markup is not repeated across
- * a dozen static pages), and exposes a client-side markdown renderer used by
+ * a dozen static pages), exposes a client-side markdown renderer used by
  * the /methods/ appendix — the single-source-of-truth rule: method pages are
- * rendered from reports/NN-slug/README.md, never written twice.
+ * rendered from reports/NN-slug/README.md, never written twice — and binds
+ * published figures to data/web/figures.json so a re-run report cannot leave a
+ * stale number on a page (see applyFigures below).
  *
  * No build step: dependencies are CDN ES modules, everything runs on GitHub
  * Pages as-is.
@@ -83,6 +85,61 @@ export function renderFooter(container) {
   return f;
 }
 
+/**
+ * The published-figures registry.
+ *
+ * `data/web/figures.json` is written by scripts/verify_published_figures.py
+ * from the committed mart and the report tables, so every number in it is what
+ * the data currently says. A page marks a figure with
+ * `<span data-fig="key">83.379</span>` and this swaps in the registry's text.
+ *
+ * The literal stays in the HTML on purpose. It is what a reader sees with no
+ * JavaScript, what shows up in a diff, and what the verifier compares against,
+ * so the committed page has to be true on its own. This is a safety net for
+ * the window between re-running a report and re-reading the prose, not a
+ * licence to leave the prose stale: a mismatch is a CI failure.
+ *
+ * Formatting is not repeated here. The registry ships the rendered Indonesian
+ * string and this injects it verbatim, so there is no second formatter to
+ * drift out of step with the first.
+ */
+let figuresPromise = null;
+
+function figures() {
+  if (!figuresPromise) {
+    // no-cache, not no-store: revalidate against the server every load, but
+    // still take a 304 and the cached body when nothing changed. This is the
+    // one file on the site whose entire job is to be current, and a reader
+    // holding yesterday's copy behind a CDN would reintroduce exactly the
+    // stale number it exists to prevent.
+    figuresPromise = fetch(`${ROOT}data/web/figures.json`, { cache: "no-cache" })
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(r.status))))
+      .catch((e) => {
+        // Not fatal: every bound element already contains the right number.
+        console.warn("figures.json unavailable, keeping the committed text", e);
+        return {};
+      });
+  }
+  return figuresPromise;
+}
+
+/** Swap every `[data-fig]` inside `root` for the registry's current text. */
+export async function applyFigures(root = document) {
+  const reg = await figures();
+  for (const el of root.querySelectorAll("[data-fig]")) {
+    const fig = reg[el.dataset.fig];
+    if (!fig) continue;
+    if (el.textContent.trim() !== fig.text) {
+      console.warn(
+        `stale figure in the page source: ${el.dataset.fig} reads ` +
+          `"${el.textContent.trim()}", the data says "${fig.text}". ` +
+          "Run scripts/verify_published_figures.py --emit and update the prose.",
+      );
+    }
+    el.textContent = fig.text;
+  }
+}
+
 /** Render a report README (GitHub-flavoured-ish markdown) into a container. */
 export async function renderMarkdownInto(container, markdown) {
   container.innerHTML = marked.parse(markdown, { gfm: true, breaks: false });
@@ -91,6 +148,9 @@ export async function renderMarkdownInto(container, markdown) {
   for (const t of container.querySelectorAll("table")) {
     t.classList.add("data-table");
   }
+  // The method prose carries data-fig spans too, and marked passes inline HTML
+  // through, so the registry has to be applied after the parse.
+  await applyFigures(container);
 }
 
 export async function fetchMarkdown(url) {
@@ -124,4 +184,5 @@ document.addEventListener("DOMContentLoaded", () => {
   const footSlot = document.getElementById("site-footer");
   if (navSlot) renderNav(navSlot);
   if (footSlot) renderFooter(footSlot);
+  applyFigures();
 });

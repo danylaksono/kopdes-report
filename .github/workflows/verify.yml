@@ -1,0 +1,68 @@
+# Gate on the two things that go stale silently: a number the data no longer
+# supports, and a link that resolves to nothing.
+#
+# Both failures had already happened in this repo before this workflow existed.
+# Report 17's band bug put 62.6% on a page where the data said 1.19%, and every
+# "Lampiran metode" citation on the three findings pages pointed one directory
+# too high and 404'd. Neither breaks a page visibly, so neither gets noticed by
+# looking at the site, which is why they are checked here instead.
+#
+# Everything the checks read is committed (the parquet mart and the report
+# CSVs), so this needs no data build, no secrets and no network.
+
+name: verify
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      # duckdb is the only third-party import in any of the checks.
+      - run: pip install "duckdb>=1.0"
+
+      - name: Internal links resolve
+        run: python scripts/check_links.py
+
+      # Recomputes all 81 published figures, rewrites data/web/figures.json and
+      # compares every <span data-fig> on the site against it. Non-zero on a
+      # figure that drifted or a page whose committed text is out of date.
+      - name: Published figures match the data
+        run: python scripts/verify_published_figures.py --emit --verbose
+
+      # The registry is committed because app/site.js fetches it at runtime, so
+      # a re-run report that nobody re-emitted would ship a stale one. The step
+      # above has just regenerated it; if that changed the file, the commit is
+      # behind its own data.
+      - name: Committed registry is current
+        run: |
+          # --porcelain, not `git diff`: it reports an untracked file too, and
+          # a registry that was never committed fails exactly the same way as
+          # one that is behind. `git diff` alone is silent on both.
+          status=$(git status --porcelain -- data/web/figures.json)
+          if [ -n "$status" ]; then
+            echo "::error::data/web/figures.json is missing or out of date."
+            echo "Run: python scripts/verify_published_figures.py --emit"
+            git status --short -- data/web/figures.json
+            git diff -- data/web/figures.json
+            exit 1
+          fi
+
+      # Reporting only, deliberately. The detector counts the "no data" table
+      # placeholders (<td class="num">-</td>) that AGENTS.md documents as
+      # intentional, so it cannot gate until it can tell those from prose.
+      - name: Em-dashes in public prose (informational)
+        run: python scripts/check_emdashes.py --report

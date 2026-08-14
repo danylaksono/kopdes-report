@@ -1,0 +1,488 @@
+{
+  "account_pct": {
+    "value": 96.0,
+    "text": "96%",
+    "label": "% of villages with an account",
+    "page": "findings/money"
+  },
+  "any_savings_pct": {
+    "value": 12.5,
+    "text": "12,5%",
+    "label": "% of villages with any savings",
+    "page": "findings/money"
+  },
+  "backlog_years": {
+    "value": 883.0,
+    "text": "883",
+    "label": "years to clear the backlog at that rate",
+    "page": "methods/01"
+  },
+  "build_100_coops": {
+    "value": 20221,
+    "text": "20.221",
+    "label": "cooperatives at 100% construction (count)",
+    "page": "/"
+  },
+  "build_100_pct": {
+    "value": 24.3,
+    "text": "24,3%",
+    "label": "% of cooperatives at 100% construction",
+    "page": "/ · findings/money"
+  },
+  "build_any_stage_pct": {
+    "value": 45.6,
+    "text": "45,6%",
+    "label": "% of cooperatives with any construction record",
+    "page": "findings/money"
+  },
+  "building_within_260m_pct": {
+    "value": 75.2,
+    "text": "75,2%",
+    "label": "% with a mapped building within ~260 m",
+    "page": "methods/17"
+  },
+  "cells_with_2plus": {
+    "value": 2513,
+    "text": "2.513",
+    "label": "~1 km cells holding two or more KDMP",
+    "page": "findings/competition"
+  },
+  "clustered_reporting_pct": {
+    "value": 4.5,
+    "text": "4,5%",
+    "label": "clustered vs isolated reporting rate (%)",
+    "page": "findings/competition"
+  },
+  "cooking_oil_value_share_pct": {
+    "value": 25.58,
+    "text": "25,6%",
+    "label": "cooking oil share of reported sales value (%)",
+    "page": "methods/12"
+  },
+  "coops_total": {
+    "value": 83379,
+    "text": "83.379",
+    "label": "cooperatives in the mart",
+    "page": "/ · findings · tabel · explore"
+  },
+  "duplicate_coord_coops": {
+    "value": 798,
+    "text": "798",
+    "label": "duplicate-coordinate KDMP excluded",
+    "page": "findings/competition"
+  },
+  "duplicate_village_rows": {
+    "value": 1555,
+    "text": "1.555",
+    "label": "duplicate village rows in the 5 Aug export",
+    "page": "methods/01"
+  },
+  "empty_cell_coops": {
+    "value": 17774,
+    "text": "17.774",
+    "label": "cooperatives in an empty 400 m cell",
+    "page": "findings/remoteness"
+  },
+  "empty_cell_pct": {
+    "value": 21.3,
+    "text": "21,3%",
+    "label": "% in an empty 400 m cell",
+    "page": "findings/remoteness"
+  },
+  "farmland_confirmed": {
+    "value": 448,
+    "text": "448",
+    "label": "KDMP in farmland, confirmed by two maps",
+    "page": "findings/remoteness"
+  },
+  "fertiliser_top_provinces": {
+    "value": 24,
+    "text": "24",
+    "label": "provinces where fertiliser is a top product",
+    "page": "methods/12"
+  },
+  "fertiliser_value_share_pct": {
+    "value": 14.25,
+    "text": "14,3%",
+    "label": "fertiliser share of reported sales value (%)",
+    "page": "methods/12"
+  },
+  "in_cemetery_coops": {
+    "value": 22,
+    "text": "22",
+    "label": "cooperatives recorded in a burial ground",
+    "page": "findings/remoteness"
+  },
+  "in_farmland_pct": {
+    "value": 2.65,
+    "text": "2,65%",
+    "label": "% recorded inside a farmland polygon",
+    "page": "findings/remoteness"
+  },
+  "isolated_reporting_pct": {
+    "value": 3.7,
+    "text": "3,7%",
+    "label": "isolated reporting rate (%)",
+    "page": "findings/competition"
+  },
+  "java_coops_share_pct": {
+    "value": 30.0,
+    "text": "30%",
+    "label": "Java share of cooperatives (%)",
+    "page": "findings"
+  },
+  "java_value_share_pct": {
+    "value": 60.0,
+    "text": "60%",
+    "label": "Java share of transaction value (%)",
+    "page": "findings"
+  },
+  "max_in_one_cell": {
+    "value": 17,
+    "text": "17",
+    "label": "most KDMP in a single ~1 km cell",
+    "page": "findings/competition"
+  },
+  "minimarket_excess_pp": {
+    "value": 9.4,
+    "text": "9,4",
+    "label": "minimarket excess within 500 m (pp, road null)",
+    "page": "findings/competition"
+  },
+  "new_reporting_aug09_13": {
+    "value": 209,
+    "text": "209",
+    "label": "new reporting villages, 9 Aug to 13 Aug",
+    "page": "findings/money"
+  },
+  "nib_no_transaction_pct": {
+    "value": 69.85,
+    "text": "69,9%",
+    "label": "% with NIB and no transaction",
+    "page": "/ · findings/money"
+  },
+  "nib_pct": {
+    "value": 72.9,
+    "text": "72,9%",
+    "label": "% of cooperatives with NIB",
+    "page": "findings/money"
+  },
+  "no_building_5km_pct": {
+    "value": 1.19,
+    "text": "1,19%",
+    "label": "% with no mapped building within ~5 km",
+    "page": "methods/17"
+  },
+  "no_made_road_coops": {
+    "value": 5106,
+    "text": "5.106",
+    "label": "cooperatives with no made road within 5 km",
+    "page": "/ · findings/remoteness"
+  },
+  "no_pop_within_5_1km": {
+    "value": 146,
+    "text": "146",
+    "label": "cooperatives with nobody within 5,1 km",
+    "page": "/ · findings/remoteness"
+  },
+  "no_savings_pct": {
+    "value": 87.5,
+    "text": "87,5%",
+    "label": "% of villages with no savings at all",
+    "page": "findings/money"
+  },
+  "npwp_pct": {
+    "value": 97.1,
+    "text": "97,1%",
+    "label": "% of villages with NPWP",
+    "page": "findings/money"
+  },
+  "on_building_cell_pct": {
+    "value": 44.36,
+    "text": "44,36%",
+    "label": "% on a mapped building cell",
+    "page": "methods/17"
+  },
+  "operating_coops": {
+    "value": 1061,
+    "text": "1.061",
+    "label": "government count of operating cooperatives",
+    "page": "findings/money"
+  },
+  "operating_coops_pct": {
+    "value": 1.3,
+    "text": "1,3%",
+    "label": "operating cooperatives as % of the registry",
+    "page": "findings/money"
+  },
+  "osm_share_alfamart_pct": {
+    "value": 10.9,
+    "text": "10,9%",
+    "label": "OSM share of Alfamart outlets (%)",
+    "page": "findings/competition"
+  },
+  "osm_share_indomaret_pct": {
+    "value": 13.8,
+    "text": "13,8%",
+    "label": "OSM share of Indomaret outlets (%)",
+    "page": "findings/competition"
+  },
+  "other_within_1km_pct": {
+    "value": 22.2,
+    "text": "22,2%",
+    "label": "% with another KDMP within 1 km",
+    "page": "/ · findings/competition"
+  },
+  "other_within_2km_pct": {
+    "value": 58.9,
+    "text": "58,9%",
+    "label": "% with another KDMP within 2 km",
+    "page": "findings/competition"
+  },
+  "other_within_500m_pct": {
+    "value": 4.6,
+    "text": "4,6%",
+    "label": "% with another KDMP within 500 m",
+    "page": "findings/competition"
+  },
+  "other_within_5km_pct": {
+    "value": 91.3,
+    "text": "91,3%",
+    "label": "% with another KDMP within 5 km",
+    "page": "/ · findings/competition"
+  },
+  "our_growth_pct": {
+    "value": 12.7,
+    "text": "12,7%",
+    "label": "our value growth, 9 Aug to 13 Aug (%)",
+    "page": "findings/money"
+  },
+  "overlap_artefact_pct": {
+    "value": 64.0,
+    "text": "64%",
+    "label": "% of ~350 m overlap that is a data artefact",
+    "page": "findings/competition"
+  },
+  "papua_coops_share_pct": {
+    "value": 8.5,
+    "text": "8,5%",
+    "label": "Papua share of cooperatives (%)",
+    "page": "/ · findings"
+  },
+  "papua_empty_cell_pct": {
+    "value": 70.7,
+    "text": "70,7%",
+    "label": "% of Papua KDMP in an empty 400 m cell",
+    "page": "findings/remoteness"
+  },
+  "papua_value_share_pct": {
+    "value": 0.6,
+    "text": "0,6%",
+    "label": "Papua share of transaction value (%)",
+    "page": "/ · findings"
+  },
+  "pop_within_1_4km_pct": {
+    "value": 95.0,
+    "text": "95%",
+    "label": "population within 1,4 km of a KDMP (%)",
+    "page": "/ · findings/remoteness"
+  },
+  "pop_within_5_1km_pct": {
+    "value": 99.8,
+    "text": "99,8%",
+    "label": "population within 5,1 km of a KDMP (%)",
+    "page": "findings/remoteness"
+  },
+  "press_growth_pct": {
+    "value": 13.8,
+    "text": "13,8%",
+    "label": "press value growth, 31 Jul to 9 Aug (%)",
+    "page": "findings/money"
+  },
+  "press_reconcile_gap_pct": {
+    "value": 0.042,
+    "text": "0,042%",
+    "label": "gap between press and our own pull, 9 Aug (%)",
+    "page": "methods/09"
+  },
+  "press_value_aug09_miliar": {
+    "value": 179.72,
+    "text": "179,72",
+    "label": "press total, 9 Aug (Rp miliar)",
+    "page": "findings/money · methods/09"
+  },
+  "press_value_jul31_miliar": {
+    "value": 157.9,
+    "text": "157,90",
+    "label": "press total, 31 Jul (Rp miliar)",
+    "page": "findings/money · methods/09"
+  },
+  "provinces": {
+    "value": 38,
+    "text": "38",
+    "label": "provinces",
+    "page": "/ · findings"
+  },
+  "rat_papua_pegunungan_pct": {
+    "value": 6.1,
+    "text": "6,1%",
+    "label": "% of cooperatives with RAT, Papua Pegunungan",
+    "page": "findings/money"
+  },
+  "rat_papua_selatan_pct": {
+    "value": 16.0,
+    "text": "16,0%",
+    "label": "% of cooperatives with RAT, Papua Selatan",
+    "page": "findings/money"
+  },
+  "rat_pct": {
+    "value": 60.2,
+    "text": "60,2%",
+    "label": "% of cooperatives with RAT recorded",
+    "page": "/ · findings/money"
+  },
+  "rat_recorded_coops": {
+    "value": 50200,
+    "text": "50.200",
+    "label": "RAT recorded for N cooperatives",
+    "page": "findings/money"
+  },
+  "reporting_without_nib": {
+    "value": 23,
+    "text": "23",
+    "label": "villages reporting a transaction without NIB",
+    "page": "/ · findings/money"
+  },
+  "rice_value_share_pct": {
+    "value": 51.18,
+    "text": "51,2%",
+    "label": "rice share of reported sales value (%)",
+    "page": "methods/12"
+  },
+  "roadless_5_10km": {
+    "value": 2467,
+    "text": "2.467",
+    "label": "roadless KDMP 5-10 km from a road",
+    "page": "findings/remoteness"
+  },
+  "roadless_median_km": {
+    "value": 9.7,
+    "text": "9,7",
+    "label": "exact road distance, median (km)",
+    "page": "findings/remoteness"
+  },
+  "roadless_over_100km": {
+    "value": 7,
+    "text": "7",
+    "label": "roadless KDMP further than 100 km",
+    "page": "/ · findings/remoteness"
+  },
+  "roadless_over_25km": {
+    "value": 587,
+    "text": "587",
+    "label": "roadless KDMP further than 25 km from a road",
+    "page": "findings/remoteness"
+  },
+  "savings_total_miliar": {
+    "value": 40.3,
+    "text": "40,3",
+    "label": "total savings (Rp miliar)",
+    "page": "findings/money"
+  },
+  "sharing_1km_cell_pct": {
+    "value": 6.75,
+    "text": "6,8%",
+    "label": "% sharing a ~1 km cell with another KDMP",
+    "page": "findings/competition"
+  },
+  "sharing_350m_all": {
+    "value": 1250,
+    "text": "1.250",
+    "label": "KDMP sharing a ~350 m cell, all coordinates",
+    "page": "findings/competition"
+  },
+  "sharing_350m_clean": {
+    "value": 450,
+    "text": "450",
+    "label": "KDMP sharing a ~350 m cell, artefacts removed",
+    "page": "findings/competition"
+  },
+  "started_reporting_4d": {
+    "value": 1,
+    "text": "1",
+    "label": "villages that started reporting in those four days",
+    "page": "methods/01"
+  },
+  "top1000_value_share_pct": {
+    "value": 90.61,
+    "text": "90,6%",
+    "label": "share of national value from top 1.000 villages (%)",
+    "page": "/ · findings/money"
+  },
+  "top100_value_share_pct": {
+    "value": 34.85,
+    "text": "34,85%",
+    "label": "share of national value from top 100 villages (%)",
+    "page": "/ · findings/money"
+  },
+  "transaction_value_miliar": {
+    "value": 202.6,
+    "text": "202,6",
+    "label": "national transaction value (Rp miliar)",
+    "page": "/ · findings/money"
+  },
+  "triple_isolated_coops": {
+    "value": 128,
+    "text": "128",
+    "label": "no house 1 km + isolated + roadless",
+    "page": "methods/17 · about"
+  },
+  "value_per_coop_juta": {
+    "value": 2.43,
+    "text": "2,43",
+    "label": "transaction value per cooperative (Rp juta)",
+    "page": "/ · findings/money"
+  },
+  "villages_reporting": {
+    "value": 2726,
+    "text": "2.726",
+    "label": "villages reporting a transaction",
+    "page": "findings/money"
+  },
+  "villages_reporting_aug05": {
+    "value": 2516,
+    "text": "2.516",
+    "label": "villages reporting, 5 Aug",
+    "page": "findings/money"
+  },
+  "villages_reporting_aug09": {
+    "value": 2517,
+    "text": "2.517",
+    "label": "villages reporting, 9 Aug",
+    "page": "findings/money"
+  },
+  "villages_reporting_pct": {
+    "value": 3.3,
+    "text": "3,3%",
+    "label": "% of villages reporting a transaction",
+    "page": "/ · findings/money"
+  },
+  "wajib_paying_pct": {
+    "value": 9.24,
+    "text": "9,2%",
+    "label": "% of villages paying monthly dues (wajib)",
+    "page": "findings/money"
+  },
+  "wajib_pokok_ratio": {
+    "value": 0.28,
+    "text": "0,28",
+    "label": "median wajib/pokok ratio",
+    "page": "findings/money"
+  },
+  "zero_villages_aug05": {
+    "value": 80553,
+    "text": "80.553",
+    "label": "villages reporting zero transactions on 5 Aug",
+    "page": "methods/01"
+  }
+}
