@@ -19,6 +19,7 @@ import {
 import { BASEMAPS, BASEMAP_BY_ID, tintBasemap } from "./basemaps.js";
 import { loadBoundaries, loadLevel, loadManifest, loadPoints } from "./data.js";
 import { identity, makeSpec, summarizeCell } from "./glyph.js";
+import * as morphLib from "./morph.js";
 import { buildIndex, search } from "./search.js";
 import {
   BOUNDARY_FILL,
@@ -74,6 +75,11 @@ const state = {
   national: null,
   stats: null,
   glyphLayer: null,
+  morph: null, // built only while the Kisi Provinsi scale is active
+  // The instance that is morphing back to the map after the scale was left. It
+  // outlives `state.morph` by the length of that animation, and has to be
+  // reachable so a fast re-entry can drop it instead of racing it.
+  morphExiting: null,
   selection: null,
 };
 
@@ -124,6 +130,13 @@ async function setBasemap(id) {
   const token = ++generation;
 
   state.glyphLayer = null;
+  // setStyle destroys every source and layer, the geo-morpher stack included,
+  // so the morph has to be torn down here rather than left pointing at objects
+  // that no longer exist.
+  state.morph?.remove?.();
+  state.morph = null;
+  state.morphExiting?.remove?.();
+  state.morphExiting = null;
   clearBoundaryState();
   closePointPopup();
   ui.updateBasemaps(els.basemaps, id);
@@ -185,14 +198,89 @@ function restack() {
 }
 
 async function rebuildGlyphs(token) {
-  removeGlyphs(map, state.glyphLayer);
-  state.glyphLayer = null;
-
-  if (!state.showGlyphs) return;
-
   const level = LEVEL_BY_ID[state.level];
+
+  // Leaving the morph scale.
+  //
+  // The morph is a statement about one pair of scales — the provinces and the
+  // grid built out of them — so only the return to Provinsi is animated. The
+  // glyphs ride the polygons back and the destination is held until they land;
+  // building it straight away leaves the destination chart sitting still on the
+  // administrative anchors while the morph plays out behind it, which reads as
+  // the chart having come loose from the map it belongs to. Every other scale
+  // is an ordinary change of scale, and waiting out a morph it has nothing to
+  // do with would just be a delay.
+  if (state.morph && level.id !== "kisi-provinsi") {
+    const m = state.morph;
+    state.morph = null;
+    if (level.id === "provinsi") {
+      state.morphExiting = m;
+      await new Promise((resolve) => m.exit(resolve));
+      if (state.morphExiting === m) state.morphExiting = null;
+      if (token !== generation) return;
+    } else {
+      m.remove();
+    }
+  }
+
   const spec = currentSpec();
   const px = syncSizing();
+
+  // The morph scale draws its glyphs on geo-morpher's own canvas, not on a
+  // screengrid layer, so it gets its own path. Once built it is only updated
+  // in place: mode and size changes redraw the glyphs, they do not rebuild
+  // the morpher.
+  if (level.kind === "morph") {
+    if (state.morph) {
+      if (state.showGlyphs) state.morph.setSpec(spec);
+      else state.morph.glyphs.clear();
+      return;
+    }
+    if (!state.showGlyphs) {
+      removeGlyphs(map, state.glyphLayer);
+      state.glyphLayer = null;
+      return;
+    }
+    // Re-entered while the previous instance was still morphing back. Drop it
+    // now: two morphs on screen would fight, and its teardown lands mid-way
+    // through the new one's entry.
+    if (state.morphExiting) {
+      state.morphExiting.remove();
+      state.morphExiting = null;
+    }
+    const [collection, boundary] = await Promise.all([
+      ensureLevel("provinsi"),
+      loadBoundaries("provinsi"),
+    ]);
+    if (token !== generation) return;
+    const morph = await morphLib.createMorphLevel({
+      map,
+      boundary,
+      rows: collection,
+      spec,
+      sizing: state.sizing,
+      onStats: onStats,
+      onHover: onHover,
+      onClick: onClick,
+    });
+    // Building the morpher costs a CDN import and 38 flubber interpolators. If
+    // the previous scale's glyphs came down first, that cost shows as a blank
+    // beat before the morph appears — the other half of the snap. They come
+    // down here instead, once the morph is on screen holding the same anchors.
+    if (token !== generation) {
+      morph.remove();
+      return;
+    }
+    removeGlyphs(map, state.glyphLayer);
+    state.glyphLayer = null;
+    state.morph = morph;
+    morph.enter();
+    return;
+  }
+
+  removeGlyphs(map, state.glyphLayer);
+  state.glyphLayer = null;
+  if (!state.showGlyphs) return;
 
   if (level.kind === "grid") {
     state.glyphLayer = createGridLayer({
@@ -236,7 +324,9 @@ async function syncBoundaries(token = generation) {
       els.rail,
       level.kind === "grid"
         ? "Batas wilayah muncul saat skala kecamatan ke atas dipilih."
-        : "",
+        : level.kind === "morph"
+          ? "Batas wilayah menyatu dengan morf peta ke kisi ini."
+          : "",
     );
     return;
   }
@@ -409,7 +499,10 @@ function onPointClick(e) {
  */
 function drillInto(props) {
   const order = LEVELS.filter((l) => l.kind === "admin").map((l) => l.id);
-  const i = order.indexOf(state.level);
+  // The morph scale shows the same province aggregates, so drilling from it
+  // behaves as if it were the plain Provinsi scale.
+  const from = state.level === "kisi-provinsi" ? "provinsi" : state.level;
+  const i = order.indexOf(from);
   const next = i > 0 ? order[i - 1] : "grid";
   const zoom = next === "kabupaten" ? 7.2 : next === "kecamatan" ? 9 : 10.5;
   map.easeTo({
@@ -560,7 +653,16 @@ async function boot() {
       // A slider drag is the one interaction that has to stay in-place rather
       // than rebuild. On the grid that means the cell size; on an anchor layer
       // the draw already reads `state.sizing` every frame, and only the hit
-      // radius — which derives from anchorSizePixels — needs telling.
+      // radius — which derives from anchorSizePixels — needs telling. The
+      // morph glyph layer reads `state.sizing` at draw time too, so a drag
+      // only needs the glyphs redrawn at the new size.
+      if (level.kind === "morph") {
+        state.morph?.glyphs.updateGlyphs({
+          morphFactor: state.morph.factor(),
+        });
+        map.triggerRepaint();
+        return;
+      }
       state.glyphLayer?.setConfig?.(
         level.kind === "grid"
           ? { cellSizePixels: px }

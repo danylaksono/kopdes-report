@@ -31,6 +31,10 @@ data/web/*
 # Rebuild: python scripts/build_boundaries.py
 !data/web/boundaries/
 !data/web/boundaries/*.geojson
+# Kisi Provinsi cartogram grid, re-keyed from the geo-morpher example layout to
+# SIMKOPDES province ids. Rebuild: python scripts/build_province_cartogram.py
+!data/web/cartogram/
+!data/web/cartogram/*.csv
 
 # --- report outputs that are per-record tables, not findings ---
 # Everything else under reports/ IS committed - the small CSVs are the findings
@@ -67,6 +71,9 @@ npm-debug.log*
 # --- OS / editor cruft ---
 .DS_Store
 Thumbs.db
+
+# --- prototypes (scratch; not part of the published site) ---
+_proto/
 
 # --- local tool config ---
 .claude/settings.local.json

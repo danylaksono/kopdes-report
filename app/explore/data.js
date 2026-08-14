@@ -256,3 +256,16 @@ export async function loadManifest() {
   if (!res.ok) throw new Error(`mart_manifest.json -> ${res.status}`);
   return res.json();
 }
+
+/**
+ * The Kisi Provinsi cartogram grid, keyed by SIMKOPDES province_id.
+ *
+ * Built by scripts/build_province_cartogram.py from the geo-morpher example
+ * layout; the regular side of the morph is the same provinsi boundary the
+ * plain Provinsi scale already draws.
+ */
+export async function loadProvinceCartogram() {
+  const res = await fetch(url("cartogram/provinsi_grid.csv"));
+  if (!res.ok) throw new Error(`cartogram/provinsi_grid.csv -> ${res.status}`);
+  return res.text();
+}

@@ -134,6 +134,27 @@ export const LEVELS = [
       ratio: 0.74,
     },
   },
+  {
+    id: "kisi-provinsi",
+    label: "Kisi Provinsi",
+    note: "Kartogram kisi: peta provinsi dibentuk ulang jadi kisi (morf)",
+    kind: "morph",
+    table: "kopdes_provinsi",
+    key: "province_id",
+    nameCol: "province",
+    parentCols: [],
+    boundaries: "provinsi",
+    // The grid spreads the provinces evenly, so the overlap that forces a
+    // minzoom on the plain provinsi scale does not happen here.
+    sizing: {
+      label: "Ukuran grafik",
+      min: 24,
+      max: 140,
+      step: 4,
+      default: 70,
+      ratio: 0.74,
+    },
+  },
 ];
 
 export const LEVEL_BY_ID = Object.fromEntries(LEVELS.map((l) => [l.id, l]));
