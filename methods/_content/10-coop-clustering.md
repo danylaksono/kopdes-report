@@ -10,7 +10,7 @@ Ada satu hal yang harus diakui lebih dulu: **798 koperasi berbagi koordinat yang
 
 ## Yang kami temukan
 
-Koperasi hampir menyambung, tidak menumpuk. 91,3% koperasi punya koperasi lain dalam 5 km; 22,2% dalam 1 km; 4,7% dalam 500 m. Satu dari lima koperasi punya koperasi lain dalam satu kilometer. Itulah jejak nyata dari tuduhan "terlalu berdekatan".
+Koperasi hampir menyambung, tidak menumpuk. 91,3% koperasi punya koperasi lain dalam 5 km; 22,2% dalam 1 km; 4,6% dalam 500 m. Satu dari lima koperasi punya koperasi lain dalam satu kilometer. Itulah jejak nyata dari tuduhan "terlalu berdekatan".
 
 | Koperasi lain dalam | Koperasi | Bagian |
 | ------------------- | -------- | ------ |

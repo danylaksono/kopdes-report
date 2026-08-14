@@ -54,7 +54,7 @@ cooperatives "on top of each other" must be written against the clean set.
 Read both ends. 91% having a sibling within 5 km is the program's
 1-per-desa saturation in populated Indonesia — the same geometry that produced
 03's "95% of people within 1.4 km of a KDMP". But it is not nothing: **one in
-five cooperatives has another one within a kilometre**, and 4.7% within 500 m —
+five cooperatives has another one within a kilometre**, and 4.6% within 500 m —
 which is the real footprint of the "they built them too close together" claim.
 
 ## Finding 2 — true co-location is 6.7% of cooperatives, and most of it is pairs

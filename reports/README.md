@@ -113,7 +113,7 @@ Read this before quoting any number out of these reports.
   boundary is drawn.
 - **KDMP are near-continuous, not clustered.** 91.3% of cooperatives have
   another KDMP within 5 km (exact geodesic), 58.9% within 2 km, 22.2% within
-  1 km, 4.7% within 500 m; 6.8% share the same ~1 km H3 cell — but most of that
+  1 km, 4.6% within 500 m; 6.8% share the same ~1 km H3 cell — but most of that
   is pairs (2,110 of 2,513 cells hold exactly two), maximum 17 in one cell near
   Wamena (Papua Pegunungan) (10).
 - **About two-thirds of apparent fine-scale co-location is a coordinate

@@ -192,7 +192,7 @@ export async function initStoryMap() {
     attributionControl: {
       compact: true,
       customAttribution:
-        "Data: SIMKOPDES 2026-08-05 · Koperasi Desa Merah Putih",
+        "Data: SIMKOPDES 13-08-2026 · Koperasi Desa Merah Putih",
     },
   });
   map.addControl(
@@ -202,7 +202,7 @@ export async function initStoryMap() {
 
   if (attrib) {
     attrib.textContent =
-      "Basemap: © OpenFreeMap · OpenStreetMap contributors. Titik: SIMKOPDES 2026-08-05.";
+      "Basemap: © OpenFreeMap · OpenStreetMap contributors. Titik: SIMKOPDES 13-08-2026.";
   }
 
   // The compact layer is tiny; start fetching it in parallel with the basemap.

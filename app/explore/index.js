@@ -588,8 +588,8 @@ function showFoundPoint(entry) {
          <b>${ui.escapeHtml(entry.name)}</b>
          <span>${ui.escapeHtml([r.subdistrict, r.district, r.province].filter(Boolean).join(", "))}</span>
          ${
-           r.imagery_url
-             ? `<a href="${ui.escapeHtml(r.imagery_url)}" target="_blank" rel="noopener">Lihat citra satelit ↗</a>`
+           r.cooperative_id != null
+             ? `<a href="../periksa/#k=${r.cooperative_id}" target="_blank" rel="noopener">Periksa lokasi ini ↗</a>`
              : ""
          }
        </div>`,

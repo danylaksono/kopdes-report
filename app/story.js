@@ -44,8 +44,9 @@ const CHART = {
     title: "Jarak ke jalan, bagi yang “tanpa jalan”",
     pct: false,
     caption:
-      "5.106 koperasi tanpa jalan beraspal dalam ±5 km; jarak median 9,7 km (laporan 05, 08).",
+      "5.106 koperasi tanpa jalan beraspal dalam ±5 km; 180 di antaranya terukur ulang dalam ≤5 km. Jarak median 9,7 km (laporan 05, 08).",
     bars: [
+      { label: "≤ 5 km", v: 180 },
       { label: "5–10 km", v: 2467 },
       { label: "10–25 km", v: 1872 },
       { label: "25–50 km", v: 523 },
@@ -58,7 +59,7 @@ const CHART = {
     pct: true,
     caption: "1 dari 5 koperasi punya koperasi lain dalam 1 km (laporan 10).",
     bars: [
-      { label: "dalam 500 m", v: 4.7 },
+      { label: "dalam 500 m", v: 4.6 },
       { label: "dalam 1 km", v: 22.2, hl: true },
       { label: "dalam 2 km", v: 58.9 },
       { label: "dalam 5 km", v: 91.3 },

@@ -640,8 +640,8 @@ export function pointPopupHtml(r) {
         : ""
     }
     ${
-      r.imagery_url
-        ? `<a href="${escapeHtml(r.imagery_url)}" target="_blank" rel="noopener">Lihat citra satelit ↗</a>`
+      r.cooperative_id != null
+        ? `<a href="../periksa/#k=${r.cooperative_id}" target="_blank" rel="noopener">Periksa lokasi ini ↗</a>`
         : ""
     }
   </div>`;
