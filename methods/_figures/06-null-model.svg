@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="530" viewBox="0 0 720 530" font-family="Inter, system-ui, sans-serif">
+  <text x="20" y="30" font-size="16" font-weight="700" fill="#1a1a1a">Dari mana angka “9,4 poin” itu?</text>
+
+  <!-- ============ Scene 1: real minimarket ============ -->
+  <text x="24" y="54" font-size="13" font-weight="700" fill="#1a1a1a">Titik minimarket sungguhan</text>
+  <text x="24" y="70" font-size="11.5" fill="#6b6b6b">lokasi nyata dari peta OSM</text>
+  <rect x="20" y="80" width="320" height="170" rx="6" fill="#faf8f2" stroke="#e2ddcd"/>
+  <rect x="36" y="172" width="288" height="13" fill="#e9e4d8"/>
+  <line x1="36" y1="178.5" x2="324" y2="178.5" stroke="#cfc9b6" stroke-dasharray="3 3"/>
+  <rect x="60" y="150" width="20" height="14" fill="#d9d4c6"/>
+  <rect x="96" y="144" width="16" height="12" fill="#d9d4c6"/>
+  <rect x="150" y="140" width="22" height="16" fill="#d9d4c6"/>
+  <rect x="250" y="148" width="18" height="12" fill="#d9d4c6"/>
+  <rect x="286" y="142" width="14" height="12" fill="#d9d4c6"/>
+  <rect x="172" y="170.5" width="16" height="16" rx="3" fill="#a00"/>
+  <text x="180" y="182" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">M</text>
+  <circle cx="180" cy="178.5" r="64" fill="none" stroke="#9a958a" stroke-width="1.5" stroke-dasharray="4 4"/>
+  <text x="250" y="132" font-size="11" fill="#6b6b6b">±500 m</text>
+  <!-- KDMP dots, 4 inside / 5 outside -->
+  <circle cx="130" cy="160" r="3.5" fill="#1a1a1a"/>
+  <circle cx="205" cy="150" r="3.5" fill="#1a1a1a"/>
+  <circle cx="165" cy="205" r="3.5" fill="#1a1a1a"/>
+  <circle cx="235" cy="200" r="3.5" fill="#1a1a1a"/>
+  <circle cx="95" cy="135" r="3.5" fill="#1a1a1a"/>
+  <circle cx="70" cy="205" r="3.5" fill="#1a1a1a"/>
+  <circle cx="300" cy="150" r="3.5" fill="#1a1a1a"/>
+  <circle cx="270" cy="215" r="3.5" fill="#1a1a1a"/>
+  <circle cx="120" cy="110" r="3.5" fill="#1a1a1a"/>
+  <text x="180" y="268" text-anchor="middle" font-size="14" font-weight="700" fill="#1a1a1a">43,8% punya koperasi dalam 500 m</text>
+
+  <!-- ============ Scene 2: random "comparable" spot ============ -->
+  <text x="384" y="54" font-size="13" font-weight="700" fill="#1a1a1a">Titik acak “setara”</text>
+  <text x="384" y="70" font-size="11.5" fill="#6b6b6b">diletakkan acak: di jalan, di daerah berpenduduk</text>
+  <rect x="380" y="80" width="320" height="170" rx="6" fill="#faf8f2" stroke="#e2ddcd"/>
+  <rect x="396" y="172" width="288" height="13" fill="#e9e4d8"/>
+  <line x1="396" y1="178.5" x2="684" y2="178.5" stroke="#cfc9b6" stroke-dasharray="3 3"/>
+  <rect x="420" y="150" width="20" height="14" fill="#d9d4c6"/>
+  <rect x="456" y="144" width="16" height="12" fill="#d9d4c6"/>
+  <rect x="510" y="140" width="22" height="16" fill="#d9d4c6"/>
+  <rect x="610" y="148" width="18" height="12" fill="#d9d4c6"/>
+  <rect x="646" y="142" width="14" height="12" fill="#d9d4c6"/>
+  <circle cx="540" cy="178.5" r="8" fill="#9a958a"/>
+  <text x="540" y="182" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">?</text>
+  <circle cx="540" cy="178.5" r="64" fill="none" stroke="#9a958a" stroke-width="1.5" stroke-dasharray="4 4"/>
+  <text x="610" y="132" font-size="11" fill="#6b6b6b">±500 m</text>
+  <!-- KDMP dots, 3 inside / 6 outside -->
+  <circle cx="490" cy="160" r="3.5" fill="#1a1a1a"/>
+  <circle cx="565" cy="150" r="3.5" fill="#1a1a1a"/>
+  <circle cx="525" cy="205" r="3.5" fill="#1a1a1a"/>
+  <circle cx="455" cy="135" r="3.5" fill="#1a1a1a"/>
+  <circle cx="430" cy="205" r="3.5" fill="#1a1a1a"/>
+  <circle cx="660" cy="150" r="3.5" fill="#1a1a1a"/>
+  <circle cx="630" cy="215" r="3.5" fill="#1a1a1a"/>
+  <circle cx="480" cy="110" r="3.5" fill="#1a1a1a"/>
+  <circle cx="650" cy="185" r="3.5" fill="#1a1a1a"/>
+  <text x="540" y="268" text-anchor="middle" font-size="14" font-weight="700" fill="#1a1a1a">34,4% punya koperasi dalam 500 m</text>
+
+  <!-- ============ The subtraction ============ -->
+  <text x="20" y="296" font-size="12.5" fill="#1a1a1a">Keduanya diukur dengan lingkaran 500 m yang sama. Bagian yang juga terjadi di titik acak hanyalah kebetulan lokasi:</text>
+
+  <text x="244" y="331" text-anchor="end" font-size="12.5" fill="#1a1a1a">Minimarket sungguhan</text>
+  <rect x="250" y="316" width="298" height="22" fill="#9a958a"/>
+  <text x="399" y="331" text-anchor="middle" font-size="11" fill="#2f2f2f">34,4% kebetulan</text>
+  <rect x="548" y="316" width="82" height="22" fill="#a00"/>
+  <text x="589" y="331" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">9,4 poin</text>
+  <text x="646" y="331" font-size="12.5" font-weight="700" fill="#1a1a1a">43,8%</text>
+
+  <line x1="548" y1="338" x2="548" y2="352" stroke="#9a958a" stroke-dasharray="3 3"/>
+
+  <text x="244" y="367" text-anchor="end" font-size="12.5" fill="#1a1a1a">Lokasi acak “setara”</text>
+  <rect x="250" y="352" width="298" height="22" fill="#9a958a"/>
+  <text x="399" y="367" text-anchor="middle" font-size="11" fill="#2f2f2f">34,4%</text>
+  <text x="646" y="367" font-size="12.5" font-weight="700" fill="#1a1a1a">34,4%</text>
+
+  <rect x="20" y="384" width="14" height="14" fill="#a00"/>
+  <text x="42" y="396" font-size="12.5" font-weight="700" fill="#a00">Kelebihan 9,4 poin = 43,8% - 34,4%: kedekatan di luar kebetulan.</text>
+
+  <!-- ============ Decay with distance ============ -->
+  <text x="20" y="434" font-size="12.5" font-weight="700" fill="#1a1a1a">Kelebihan mengecil mengikuti jarak</text>
+  <line x1="20" y1="474" x2="640" y2="474" stroke="#d8d2c2"/>
+  <text x="20" y="452" font-size="11.5" fill="#1a1a1a">500 m</text>
+  <rect x="20" y="460" width="110" height="14" fill="#a00"/>
+  <text x="20" y="492" font-size="11.5" font-weight="700" fill="#1a1a1a">9,4</text>
+  <text x="180" y="452" font-size="11.5" fill="#1a1a1a">1 km</text>
+  <rect x="180" y="460" width="88" height="14" fill="#a00"/>
+  <text x="180" y="492" font-size="11.5" font-weight="700" fill="#1a1a1a">7,5</text>
+  <text x="340" y="452" font-size="11.5" fill="#1a1a1a">2 km</text>
+  <rect x="340" y="460" width="32" height="14" fill="#a00"/>
+  <text x="340" y="492" font-size="11.5" font-weight="700" fill="#1a1a1a">2,7</text>
+  <text x="500" y="452" font-size="11.5" fill="#1a1a1a">5 km</text>
+  <rect x="500" y="460" width="2" height="14" fill="#a00"/>
+  <text x="500" y="492" font-size="11.5" font-weight="700" fill="#1a1a1a">0,2</text>
+  <text x="20" y="516" font-size="11.5" fill="#6b6b6b">Di 5 km kelebihannya nyaris nol. Ini tanda kedekatan yang efeknya lokal (jarak dekat), bukan penumpukan di mana-mana.</text>
+</svg>
