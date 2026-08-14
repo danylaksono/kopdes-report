@@ -718,6 +718,42 @@ table is of the same order, which is small enough to commit outright.
   (imagery + boundary check, ideally local confirmation) before any name is
   published.
 
+## Verifying the published figures (standing requirement)
+
+```bash
+python scripts/verify_published_figures.py            # exits non-zero on drift
+python scripts/verify_published_figures.py --verbose  # also lists SKIPs
+```
+
+**Run this before publishing, and after re-running any report.** The site states
+figures in hand-written Indonesian prose while the numbers live in the mart and
+in `reports/*/`. Nothing regenerates the prose, so a re-run report leaves a
+stale sentence behind and no test fails. That is exactly how report 17's
+band bug put 62.6% on a page when the data said 1.19%.
+
+63 checks as of 2026-08-14. It proves **arithmetic provenance** only: that a
+number on a page is still what the committed data produces. Wording, causal
+framing and whether a caveat is honest all stay human review.
+
+Four traps it exists to catch, all found the day it was written:
+
+- **Double rounding.** The competition page printed 4,7% by rounding report
+  10's already-rounded 4.65 a second time; the true value is 4.645, which is
+  4,6%. Never round a figure that a report CSV has already rounded — compare at
+  the CSV's precision and let the tolerance absorb the page's rendering.
+- **A stale report CSV.** `reports/16` had never been re-run against the 08-13
+  snapshot, so its committed CSV said 50.174 while the page correctly said
+  50.200. The page was right and the evidence was wrong, which is the harder
+  direction to notice. Papua Selatan's RAT rate really had drifted, 16,2 → 16,0.
+- **A category error across pages.** The home page said Papua holds "0,2% of
+  transaction value"; 0,2% is its share of villages _reporting_ a transaction,
+  and its share of value is 0,56%. Two pages stating the same quantity
+  differently is a smell worth a check of its own.
+- **Band conventions.** `reports/08` bands on km rounded to 2 dp with an
+  exclusive lower bound, so recomputing "5-10 km" in metres gives 2.471 against
+  its published 2.467. When a page cites a report's table, check the table, not
+  your own re-derivation of it.
+
 ## Reports (standing requirement)
 
 **Any analysis must land in `reports/` — no exceptions, no throwaway scripts.**

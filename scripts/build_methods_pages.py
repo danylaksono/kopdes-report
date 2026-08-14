@@ -293,9 +293,8 @@ ID_SUMMARY = {
         "Seberapa jauh koperasi dari rumah terdekat? Dengan peta gabungan Google, "
         "Microsoft dan OpenStreetMap (137 juta bangunan), 44,4% koperasi berdiri "
         "tepat di atas petak bangunan dan hanya 1,19% yang tidak punya bangunan "
-        "terpetakan dalam 5 km. Angka 62,6% yang terbit 13 Agustus 2026 keliru dan "
-        "sudah ditarik. Yang tersisa: 128 koperasi tanpa rumah, tanpa penduduk, "
-        "dan tanpa jalan sekaligus."
+        "terpetakan dalam 5 km. Yang tersisa justru lebih kuat: 128 koperasi "
+        "tanpa rumah, tanpa penduduk, dan tanpa jalan sekaligus."
     ),
     "18-health-scoring": (
         "Apa arti \u201cindeks kesehatan\u201d koperasi? Label \u201ctidak sehat di semua "

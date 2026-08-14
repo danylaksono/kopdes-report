@@ -326,6 +326,14 @@
   filter: grayscale(0.6);
   pointer-events: none;
 }
+/* `display: flex` outranks the UA's `[hidden] { display: none }`, so the veil
+   would sit over the page from first load announcing "Menghitung…" before a
+   cooperative had even been chosen. Same trap as `.field` in explore.css:
+   restate `[hidden]` at matching specificity whenever an author display rule
+   lands on an element that gets toggled. */
+.busy[hidden] {
+  display: none;
+}
 .busy {
   position: absolute;
   inset: 0;
