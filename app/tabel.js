@@ -152,7 +152,11 @@ const LAND_STATUS = {
     order: 2,
     cls: "badge-warn",
   },
-  "Tidak Ada Lahan": { label: "Tidak ada lahan", order: 1, cls: "badge-neutral" },
+  "Tidak Ada Lahan": {
+    label: "Tidak ada lahan",
+    order: 1,
+    cls: "badge-neutral",
+  },
   Dipertimbangkan: { label: "Dipertimbangkan", order: 1, cls: "badge-warn" },
   "Perlu Verifikasi Lanjutan": {
     label: "Perlu verifikasi lanjutan",
