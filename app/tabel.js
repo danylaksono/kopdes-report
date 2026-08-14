@@ -20,7 +20,7 @@
  */
 
 import { rows } from "./explore/data.js";
-import { FAMILIES } from "./explore/measures.js";
+import { FAMILIES, VERIFIED_LAND_STATUSES } from "./explore/measures.js";
 import { id } from "./site.js";
 
 const PARQUET = new URL("../data/web/kopdes_points.parquet", import.meta.url)
@@ -61,7 +61,7 @@ const COLS = [
   { key: "catchment", label: "Populasi di sekitar", sort: false },
   { key: "maps", label: "Peta", sort: false },
   { key: "land_cover", label: "Penutup Lahan", sort: "text" },
-  { key: "land", label: "Tanah", sort: "number" },
+  { key: "land", label: "Status Lahan", sort: "number" },
 ];
 const COLS_BY_KEY = Object.fromEntries(COLS.map((c) => [c.key, c]));
 
@@ -139,6 +139,59 @@ function landCoverInfo(r) {
     : { label: "Tidak terklasifikasi", color: "#9a9a9a", title: LAND_TITLE };
 }
 
+// Status aset lahan per koperasi, dari kopdes_land_assets.csv (name join).
+// Ini status VERIFIKASI LAHAN, bukan status pembangunan gedung: data
+// pembangunan fisik (build_*) hanya ada di tingkat provinsi (reports/15).
+// Kelas hijau mengikuti VERIFIED_LAND_STATUSES dari peta, jadi tabel dan peta
+// sepakat tentang status yang dianggap tervalidasi.
+const LAND_STATUS = {
+  Terverifikasi: { label: "Terverifikasi", order: 3 },
+  Selesai: { label: "Selesai", order: 3 },
+  "Sedang Diverifikasi": {
+    label: "Sedang diverifikasi",
+    order: 2,
+    cls: "badge-warn",
+  },
+  "Tidak Ada Lahan": { label: "Tidak ada lahan", order: 1, cls: "badge-neutral" },
+  Dipertimbangkan: { label: "Dipertimbangkan", order: 1, cls: "badge-warn" },
+  "Perlu Verifikasi Lanjutan": {
+    label: "Perlu verifikasi lanjutan",
+    order: 1,
+    cls: "badge-warn",
+  },
+  Ditolak: { label: "Ditolak", order: 1, cls: "badge-danger" },
+};
+const LAND_VERIFIED = new Set(VERIFIED_LAND_STATUSES);
+const LAND_STATUS_TITLE =
+  "Status aset lahan dari SIMKOPDES: verifikasi lahan per koperasi, bukan status " +
+  "pembangunan gedung. Data pembangunan fisik hanya tersedia di tingkat provinsi (laporan 15).";
+
+function landStatusInfo(r) {
+  const s = r.land_status;
+  if (s == null || s === "")
+    return {
+      label: "Tidak ada catatan",
+      cls: "badge-neutral",
+      order: 0,
+      title:
+        LAND_STATUS_TITLE +
+        " Tidak ada catatan aset lahan yang tertaut untuk koperasi ini.",
+    };
+  const known = LAND_STATUS[s];
+  const cls =
+    known && known.cls
+      ? known.cls
+      : LAND_VERIFIED.has(s)
+        ? "badge-ok"
+        : "badge-neutral";
+  const label = known ? known.label : "Status lain";
+  const order = known ? known.order : 1;
+  const tail = known
+    ? ` Status: ${known.label}.`
+    : ` Nilai mentah dari SIMKOPDES: ${s}.`;
+  return { label, cls, order, title: LAND_STATUS_TITLE + tail };
+}
+
 // ---------------------------------------------------------------------------
 // State
 // ---------------------------------------------------------------------------
@@ -169,7 +222,7 @@ async function loadRows() {
       transaction_value::DOUBLE AS transaction_value,
       km_non_track, km_to_minimarket, m_to_nearest_other,
       pop_within_1_4km, pop_within_5_1km, own_cell_pop,
-      coordinate_suspect, land_verified,
+      coordinate_suspect, land_verified, land_status,
       in_cemetery, in_farmland, farmland_depth_m, farmland_polygon_coarse,
       land_cover, land_cover_code,
       road_class, nn_class
@@ -211,7 +264,7 @@ function sortValue(col, r) {
     case "land_cover":
       return landCoverInfo(r).label;
     case "land":
-      return r.land_verified ? 1 : 0;
+      return landStatusInfo(r).order;
     case "catchment":
       return r.pop_within_5_1km ?? 0;
     default:
@@ -301,10 +354,10 @@ function cell(col, r) {
       const lu = landCoverInfo(r);
       return `<span class="land-cover" title="${esc(lu.title)}"><span class="dot" style="background:${lu.color}"></span>${lu.label}</span>`;
     }
-    case "land":
-      return r.land_verified
-        ? `<span class="badge badge-ok">Tanah terverifikasi</span>`
-        : "";
+    case "land": {
+      const s = landStatusInfo(r);
+      return `<span class="badge ${s.cls}" title="${esc(s.title)}">${s.label}</span>`;
+    }
     default:
       return esc(r[col.key] ?? "");
   }
