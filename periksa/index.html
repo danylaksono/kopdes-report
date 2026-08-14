@@ -43,15 +43,17 @@
       koordinat yang benar.</p>
 
     <div class="callout callout-quiet">
-      <p><strong>Tidak ada yang dikirim atau disimpan.</strong> Seluruh
-        perhitungan berjalan di peramban Anda. Kami tidak menerima, mencatat,
-        atau memoderasi laporan apa pun dari halaman ini, dan angka nasional
-        dalam laporan tidak berubah karenanya. Bila Anda ingin meneruskan sebuah
-        koreksi, salin tautan halaman ini setelah menandai titik: koordinatnya
-        ikut tersimpan di dalam tautan.</p>
-      <p>Fitur pelaporan koreksi yang sesungguhnya, lengkap dengan verifikasi,
-        masih dalam rencana. Sampai itu ada, halaman ini adalah versi jujurnya:
-        alat yang sama yang kami pakai, diarahkan ke titik yang Anda pilih.</p>
+      <p><strong>Tidak ada yang dikirim otomatis.</strong> Seluruh perhitungan
+        berjalan di peramban Anda dan tidak ada satu pun koordinat yang terkirim
+        ke mana-mana tanpa Anda menekan tombol. Angka nasional dalam laporan juga
+        tidak berubah karena halaman ini.</p>
+      <p>Kalau Anda ingin meneruskan sebuah koreksi, tersedia tautan formulir isu
+        di bawah tabel hasil, terisi otomatis dengan koordinat dan perhitungannya.
+        Anda yang memutuskan mengirimkannya. Koreksi yang terverifikasi masuk ke
+        <a href="../about/">catatan koreksi publik</a>. Sistem pelaporan yang
+        lebih rapi, lengkap dengan verifikasi, masih dalam rencana; sampai itu
+        ada, halaman ini adalah versi jujurnya: alat yang sama yang kami pakai,
+        diarahkan ke titik yang Anda pilih.</p>
     </div>
 
     <p id="status" role="status">Memuat data koperasi…</p>
@@ -67,13 +69,35 @@
   </main>
 
   <div class="periksa-map-bleed">
-    <div id="map"></div>
+    <div class="map-shell">
+      <div id="map"></div>
+      <!-- View-level controls sit over the canvas, matching /explore/: the
+           overlays are about how you look at the point, not what the data says. -->
+      <div id="map-tools" class="map-tools" hidden>
+        <fieldset class="tool-group">
+          <legend>Tampilkan data yang dipakai</legend>
+          <div id="overlay-toggles"></div>
+        </fieldset>
+        <fieldset class="tool-group">
+          <legend>Alat ukur</legend>
+          <button type="button" id="ruler-btn" aria-pressed="false">Ukur jarak</button>
+          <p id="ruler-readout" class="tool-readout">Klik pada peta untuk menambah titik. Esc untuk selesai.</p>
+        </fieldset>
+      </div>
+    </div>
   </div>
 
   <main class="wrap">
+    <div id="comparison-panel" class="periksa-panel">
+      <section id="comparison" hidden></section>
+      <div id="busy" class="busy" hidden role="status" aria-live="polite">
+        <span class="spinner" aria-hidden="true"></span>
+        <span id="busy-text">Menghitung…</span>
+      </div>
+    </div>
     <p id="analysis-status" role="status" hidden></p>
-    <section id="comparison" hidden></section>
     <section id="verdict" hidden></section>
+    <section id="report" hidden></section>
     <section id="provenance" class="provenance"></section>
   </main>
 

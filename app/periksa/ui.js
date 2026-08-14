@@ -258,23 +258,144 @@ export function renderVerdict(el, { official, reported, moved }) {
       dalam laporan, dan tidak mengirim atau menyimpan apa pun.</p>`;
 }
 
-/** Provenance line: what the numbers were measured against, and when. */
+/**
+ * Provenance: what each number was measured against, at what resolution, and
+ * which method page derives it.
+ *
+ * Resolution is stated per row because it is the thing that decides how much a
+ * figure can be trusted, and it differs by an order of magnitude across these
+ * five: a 400 m population cell and a 132 m road cell are not the same kind of
+ * evidence, and a reader comparing them deserves to know that without opening
+ * the appendix.
+ */
+const SOURCE_ROWS = [
+  {
+    key: "population",
+    label: "Penduduk",
+    method: "03-population-coverage",
+    res: "Petak H3 r8, sekitar 400 m antar pusat petak",
+    detail:
+      "Kontur Population Density, disusun dari citra satelit. Kami menjumlahkan petak dalam cincin 0, 3 dan 11 (kira-kira 0,2 / 1,4 / 5,1 km).",
+  },
+  {
+    key: "road",
+    label: "Jalan",
+    method: "05-road-access",
+    res: "Petak H3 r10, sekitar 132 m antar pusat petak",
+    detail:
+      "Jalan OpenStreetMap dirasterkan menjadi petak: tiap garis jalan dipadatkan hingga 55 m lalu diindeks. Jarak dihitung sebagai jumlah cincin dikali 132 m, jadi ini rentang, bukan ukuran pasti.",
+  },
+  {
+    key: "building",
+    label: "Bangunan",
+    method: "17-building-proximity",
+    res: "Petak H3 r10, sekitar 132 m antar pusat petak",
+    detail:
+      "Gabungan Google Open Buildings, Microsoft Building Footprints dan OpenStreetMap yang dirilis VIDA: 137,1 juta bangunan di Indonesia. Titik tiap bangunan diambil dari pusat kotak batasnya.",
+  },
+  {
+    key: "minimarket",
+    label: "Minimarket",
+    method: "06-minimarket-proximity",
+    res: "Titik koordinat, jarak lingkaran besar (bukan rentang petak)",
+    detail:
+      "Hanya gerai kelas 1 (minimarket dan toko kelontong modern setara Indomaret atau Alfamart). Supermarket dan department store sengaja dikeluarkan karena bukan pesaing koperasi desa.",
+  },
+  {
+    key: "nearest",
+    label: "Koperasi terdekat",
+    method: "10-coop-clustering",
+    res: "Titik koordinat, jarak lingkaran besar",
+    detail:
+      "Dihitung terhadap 83.379 koperasi lain dalam data yang sama, tidak termasuk koperasi ini sendiri.",
+  },
+];
+
 export function renderProvenance(el, manifest) {
-  if (!manifest) return;
-  const s = manifest.sources ?? {};
+  const built = manifest?.built ?? DASH;
+  const rows = SOURCE_ROWS.map(
+    (s) => `
+      <tr>
+        <th scope="row"><a href="../methods/${s.method}/">${s.label}</a></th>
+        <td>${s.res}</td>
+        <td>${s.detail}</td>
+      </tr>`,
+  ).join("");
+
   el.innerHTML = `
-    <h2>Sumber data</h2>
-    <dl class="periksa-sources">
-      <dt>Penduduk</dt><dd>${s.population ?? DASH}</dd>
-      <dt>Jalan</dt><dd>${s.road ?? DASH}</dd>
-      <dt>Bangunan</dt><dd>${s.building ?? DASH}</dd>
-      <dt>Minimarket</dt><dd>${s.minimarket ?? DASH}</dd>
-    </dl>
+    <h2>Sumber data dan resolusinya</h2>
+    <p>Tiap angka di tabel atas berasal dari satu lampiran metode yang bisa
+      ditelusuri sampai ke kodenya. Klik nama ukurannya untuk membaca cara
+      penurunannya.</p>
+    <div class="periksa-sources-wrap">
+      <table class="data-table periksa-sources">
+        <thead>
+          <tr>
+            <th scope="col">Ukuran</th>
+            <th scope="col">Resolusi data masukan</th>
+            <th scope="col">Keterangan</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
     <p class="periksa-caveat">Peta bangunan, jalan dan minimarket tidak pernah
       lengkap, terutama di pedesaan. Karena itu setiap hasil di halaman ini
       berbunyi <em>terpetakan</em>: "tidak ada bangunan terpetakan dalam 1 km"
       berarti tidak ada yang tercatat di peta, bukan tidak ada rumah di sana.
-      Indeks sel dibangun ${manifest.built ?? DASH}.</p>`;
+      Indeks sel yang dipakai halaman ini dibangun ${built}.</p>`;
+}
+
+/**
+ * A prefilled GitHub issue for one marked point.
+ *
+ * The page still submits nothing by itself: this hands the reader a filled-in
+ * form on a site they control, and they decide whether to send it. That keeps
+ * the "nothing leaves your browser automatically" promise intact while giving a
+ * correction somewhere to go, which is what the corrections log in /about/
+ * already promises.
+ */
+const REPO_ISSUES = "https://github.com/danylaksono/kopdes-vis/issues";
+
+export function renderReportLink(el, { coop, official, reported, moved }) {
+  if (!reported) {
+    el.hidden = true;
+    return;
+  }
+  const lines = [
+    `**Koperasi**: ${coop.cooperative}`,
+    `**ID SIMKOPDES**: ${coop.cooperative_id}`,
+    `**Wilayah**: ${coop.village ?? DASH}, Kec. ${coop.subdistrict ?? DASH}, ${coop.district ?? DASH}, ${coop.province ?? DASH}`,
+    "",
+    `**Koordinat SIMKOPDES**: ${official.lat.toFixed(6)}, ${official.lon.toFixed(6)}`,
+    `**Koordinat yang saya laporkan**: ${reported.lat.toFixed(6)}, ${reported.lon.toFixed(6)}`,
+    `**Selisih**: ${metres(moved)}`,
+    "",
+    `**Tautan hasil**: ${location.href}`,
+    "",
+    "**Dasar koreksi** (mohon isi: citra satelit, kunjungan lapangan, dokumen, dll):",
+    "",
+  ].join("\n");
+
+  const href =
+    `${REPO_ISSUES}/new` +
+    `?title=${encodeURIComponent(`Koreksi koordinat: ${coop.cooperative}`)}` +
+    `&body=${encodeURIComponent(lines)}`;
+
+  el.hidden = false;
+  el.innerHTML = `
+    <h2>Melaporkan koreksi ini</h2>
+    <p>Halaman ini tidak mengirim apa pun dengan sendirinya. Bila Anda yakin
+      titik yang Anda tandai benar, tombol di bawah membuka formulir isu di
+      repositori proyek dengan koordinat dan hasil perhitungan sudah terisi.
+      Anda yang memutuskan mengirimkannya, dan koreksi yang terverifikasi masuk
+      ke <a href="../about/">catatan koreksi publik</a>.</p>
+    <p><a class="periksa-report-btn" href="${href}" target="_blank"
+      rel="noopener noreferrer">Buka formulir koreksi di GitHub</a></p>
+    <p class="periksa-caveat">Butuh akun GitHub. Tidak punya? Kirimkan tautan
+      halaman ini lewat kanal mana pun yang tercantum di
+      <a href="../about/">Tentang</a>; koordinatnya sudah tersimpan di dalam
+      tautan.</p>`;
 }
 
 /** Fill the picker's result list. */

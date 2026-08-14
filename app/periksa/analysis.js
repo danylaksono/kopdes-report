@@ -125,6 +125,11 @@ function diskWithRings(origin, maxK) {
   return ringOf;
 }
 
+/** The r10 search disk around a coordinate: cell id -> ring index. */
+export function fineDisk(lat, lon) {
+  return diskWithRings(latLngToCell(lat, lon, RES_FINE), MAX_K);
+}
+
 /** Distinct coarse parents covering a cell collection, as SQL string literals. */
 function parentList(cells, parentRes) {
   const out = new Set();
@@ -133,54 +138,76 @@ function parentList(cells, parentRes) {
 }
 
 /**
- * Fetch the cells of `file` whose coarse parent covers the disk, and return the
- * smallest ring index among them.
+ * Fetch every cell of `file` whose coarse parent covers the disk.
  *
  * One query, not 39. Expanding rings with a query per ring would be the direct
  * translation of the reports' loop and would put up to 38 network round trips
  * inside a single click; instead the whole 5 km neighbourhood arrives in one
  * request and the minimum is taken here.
  */
-async function ringSearch(ringOf, file, extraWhere = "") {
-  const parents = parentList(ringOf.keys(), PARENT_FINE);
-  const hits = await rows(`
-    SELECT lower(to_hex(h3)) AS cell
+async function fetchCells(ringOf, file, extraCols = "", parentRes = PARENT_FINE) {
+  const parents = parentList(ringOf.keys(), parentRes);
+  return rows(`
+    SELECT lower(to_hex(h3)) AS cell${extraCols}
     FROM read_parquet('${url(file)}')
-    WHERE lower(to_hex(p)) IN (${parents.join(",")}) ${extraWhere}
+    WHERE lower(to_hex(p)) IN (${parents.join(",")})
   `);
+}
+
+/**
+ * Smallest ring index among the fetched cells, plus the cells themselves.
+ *
+ * The parent filter returns a slightly ragged neighbourhood (whole r7 cells),
+ * so rows outside the disk come back too and are dropped here. Only what is
+ * inside the disk informed the answer, and only that is handed to the map:
+ * drawing the surplus would show the reader a search area we did not use.
+ */
+function minRing(ringOf, hits, pred) {
   let best = null;
+  const cells = [];
   for (const row of hits) {
     const k = ringOf.get(row.cell);
-    if (k != null && (best == null || k < best)) best = k;
+    if (k == null) continue;
+    if (pred && !pred(row)) continue;
+    cells.push(row.cell);
+    if (best === null || k < best) best = k;
   }
-  return best;
+  return { k: best, cells };
 }
 
 // ---------------------------------------------------------------------------
 // The measures
 // ---------------------------------------------------------------------------
 
-/** reports/05: distance to the nearest mapped road, and to a non-track road. */
-export async function roadDistance(lat, lon) {
-  const ringOf = diskWithRings(latLngToCell(lat, lon, RES_FINE), MAX_K);
-  const [anyK, nonTrackK] = await Promise.all([
-    ringSearch(ringOf, "road_r10.parquet"),
-    ringSearch(ringOf, "road_r10.parquet", "AND non_track"),
-  ]);
+/**
+ * reports/05: distance to the nearest mapped road, and to a non-track road.
+ *
+ * One query for both, not two. `non_track` rides along as a column and the two
+ * minima are taken from the same rows, which halves the range requests: the
+ * earlier version asked the same file for the same parents twice.
+ */
+export async function roadDistance(lat, lon, disk) {
+  const ringOf = disk ?? fineDisk(lat, lon);
+  const hits = await fetchCells(ringOf, "road_r10.parquet", ", non_track");
+  const any = minRing(ringOf, hits);
+  const nonTrack = minRing(ringOf, hits, (r) => r.non_track === true);
   return {
-    k_any: anyK,
-    k_non_track: nonTrackK,
-    km_any: anyK == null ? null : anyK * KM_PER_RING,
-    km_non_track: nonTrackK == null ? null : nonTrackK * KM_PER_RING,
-    band: bandFor(nonTrackK),
+    k_any: any.k,
+    k_non_track: nonTrack.k,
+    km_any: any.k == null ? null : any.k * KM_PER_RING,
+    km_non_track: nonTrack.k == null ? null : nonTrack.k * KM_PER_RING,
+    band: bandFor(nonTrack.k),
+    cells: any.cells,
+    cellsNonTrack: nonTrack.cells,
   };
 }
 
 /** reports/17: distance to the nearest mapped building. */
-export async function buildingDistance(lat, lon) {
-  const ringOf = diskWithRings(latLngToCell(lat, lon, RES_FINE), MAX_K);
-  const k = await ringSearch(ringOf, "building_r10.parquet");
-  return { k, km: k == null ? null : k * KM_PER_RING, band: bandFor(k) };
+export async function buildingDistance(lat, lon, disk) {
+  const ringOf = disk ?? fineDisk(lat, lon);
+  const hits = await fetchCells(ringOf, "building_r10.parquet");
+  const { k, cells } = minRing(ringOf, hits);
+  return { k, km: k == null ? null : k * KM_PER_RING, band: bandFor(k), cells };
 }
 
 /**
@@ -193,25 +220,26 @@ export async function buildingDistance(lat, lon) {
 export async function population(lat, lon) {
   const maxK = Math.max(...POP_RINGS.map((r) => r.k));
   const ringOf = diskWithRings(latLngToCell(lat, lon, RES_POP), maxK);
-  const parents = parentList(ringOf.keys(), PARENT_POP);
-
-  const hits = await rows(`
-    SELECT lower(to_hex(h3)) AS cell, population
-    FROM read_parquet('${url("pop_r8.parquet")}')
-    WHERE lower(to_hex(p)) IN (${parents.join(",")})
-  `);
+  const hits = await fetchCells(
+    ringOf,
+    "pop_r8.parquet",
+    ", population",
+    PARENT_POP,
+  );
 
   const out = {};
   for (const ring of POP_RINGS) out[ring.key] = 0;
+  const cells = [];
   for (const row of hits) {
     const k = ringOf.get(row.cell);
     if (k == null) continue;
+    cells.push({ cell: row.cell, population: row.population ?? 0, k });
     for (const ring of POP_RINGS) {
       if (k <= ring.k) out[ring.key] += row.population ?? 0;
     }
   }
   for (const key in out) out[key] = Math.round(out[key]);
-  return out;
+  return { ...out, cells };
 }
 
 // ---------------------------------------------------------------------------
@@ -282,10 +310,14 @@ export function nearestCooperative(lat, lon, points, excludeId) {
  * roughly the slowest one rather than the sum.
  */
 export async function analysePoint(lat, lon, { points, excludeId } = {}) {
+  // The r10 disk is ~4.400 cells and both fine-grained measures need the same
+  // one; building it twice was pure duplicated work. It is also what the map
+  // draws as the search area, so it is returned rather than thrown away.
+  const disk = fineDisk(lat, lon);
   const [pop, road, building, minimarket] = await Promise.all([
     population(lat, lon),
-    roadDistance(lat, lon),
-    buildingDistance(lat, lon),
+    roadDistance(lat, lon, disk),
+    buildingDistance(lat, lon, disk),
     minimarketDistance(lat, lon),
   ]);
   return {
@@ -296,7 +328,24 @@ export async function analysePoint(lat, lon, { points, excludeId } = {}) {
     building,
     minimarket,
     nearest: points ? nearestCooperative(lat, lon, points, excludeId) : null,
+    disk,
   };
+}
+
+/**
+ * Cooperatives other than `excludeId` within `km` of a point.
+ *
+ * Used for the map overlay rather than any published measure: the nearest one
+ * is what reports/10 counts, and this is the context around it.
+ */
+export function cooperativesWithin(lat, lon, points, excludeId, km = 5) {
+  const out = [];
+  for (const p of points) {
+    if (p.cooperative_id === excludeId) continue;
+    const m = greatCircleDistance([lat, lon], [p.lat, p.lon], "m");
+    if (m <= km * 1000) out.push({ ...p, m });
+  }
+  return out.sort((a, b) => a.m - b.m);
 }
 
 /** Metres between two coordinates — how far the correction moved the point. */

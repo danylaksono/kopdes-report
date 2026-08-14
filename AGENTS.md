@@ -512,12 +512,14 @@ picks a cooperative, drops a pin where the building actually stands, and the
 same five analyses are re-run at that point **in the browser**. The output is
 the delta between the two readings.
 
-| Module                    | Role                                                     |
-| ------------------------- | -------------------------------------------------------- |
-| `app/periksa/index.js`    | state, map, picker, orchestration                        |
-| `app/periksa/analysis.js` | the five measures at one coordinate (the engine)         |
-| `app/periksa/ui.js`       | two-column comparison, verdict, provenance               |
-| `app/periksa.css`         | page styles (a reading page with one instrument in it)   |
+| Module                    | Role                                                         |
+| ------------------------- | ------------------------------------------------------------ |
+| `app/periksa/index.js`    | state, map, picker, map tools, orchestration                 |
+| `app/periksa/analysis.js` | the five measures at one coordinate (the engine)             |
+| `app/periksa/layers.js`   | overlays: search disk, road/building cells, population, KDMP |
+| `app/periksa/ruler.js`    | click-to-measure                                             |
+| `app/periksa/ui.js`       | two-column comparison, verdict, sources, report link         |
+| `app/periksa.css`         | page styles (a reading page with one instrument in it)       |
 
 **This is why the H3 layout was worth keeping.** H3 ids sort hierarchically, so
 every r10 descendant of an r7 parent is one contiguous range of the uint64 id
@@ -558,10 +560,40 @@ Things that will bite you:
   that "membaik", which asserted that a cooperative further from a minimarket is
   a better cooperative: an argument the report makes with evidence elsewhere and
   that this page has not earned.
-- Nothing is submitted or stored. The coordinate round-trips through the URL
-  hash so a reader can pass a correction on by copying the link, and the page
-  says so in as many words. Do not add a submit button without a backend and a
-  moderation policy behind it.
+- Nothing is submitted automatically. The coordinate round-trips through the URL
+  hash, and the report link opens a **prefilled GitHub issue** the reader
+  chooses to send. Keep that distinction in the copy: the callout says nothing
+  leaves the browser without a button press, which is only true while no code
+  posts anything on its own.
+
+**The overlays and the ruler** (added 2026-08-14):
+
+- **The overlays cost no extra request.** `analysis.js` used to discard the
+  cells after taking the minimum ring; it now returns them, and `layers.js`
+  turns ids into boundaries with `cellToBoundary`. Only cells **inside the
+  disk** are drawn: the query fetches whole r7 parents and returns a ragged
+  surplus, and drawing it would show a search area we did not use.
+- **The basemap is a raster style, so there are no glyphs and no sprite.** A
+  `symbol` layer renders nothing at all. Fills, lines and circles only; the
+  ruler's running total is a DOM marker.
+- Fill opacities are low and deliberately unequal (road 0.10, building 0.20,
+  population data-driven 0.10–0.42). Road cells blanket a village almost
+  completely, so a fill heavy enough to see one cell makes a solid sheet of the
+  whole neighbourhood. The outlines do the work.
+- **The tool panel is anchored bottom-left.** The site nav is sticky at a higher
+  z-index, so anything in the top ~56 px of the map is covered by it once the
+  map's top edge scrolls past; the other corners hold the zoom control and the
+  attribution.
+- **The ruler and the pin share the map's click event.** `index.js` returns
+  early from its click handler while `ruler.isActive()`, or every measurement
+  would silently rewrite the analysis. Escape and double-click end a
+  measurement and **keep** the line; the button reflects state via `onChange`
+  rather than setting it, because the ruler can also end itself.
+- `redraw()` must notify through `notify()`, not its own listener loop. It had
+  one, it omitted `active`, and the button label lied for the whole measurement.
+- The busy veil covers the comparison table and has a real background. Dimming
+  alone was tried and is not enough: a reader can still pick numbers off the
+  previous point, which is the entire failure it exists to prevent.
 
 - every `*.html` in `/`, `/explore/`, `/findings/`, `/methods/`, `/data/`, `/about/`
 - `methods/_content/**/*.md` (the runtime-rendered method prose) and

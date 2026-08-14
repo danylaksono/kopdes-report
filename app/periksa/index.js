@@ -35,10 +35,13 @@
 
 import { BASEMAP_BY_ID, tintBasemap } from "../explore/basemaps.js";
 import { rows } from "../explore/data.js";
-import { analysePoint, moveDistance } from "./analysis.js";
+import { analysePoint, cooperativesWithin, moveDistance } from "./analysis.js";
+import { createOverlays, OVERLAYS } from "./layers.js";
+import { createRuler } from "./ruler.js";
 import {
   renderComparison,
   renderProvenance,
+  renderReportLink,
   renderResults,
   renderVerdict,
 } from "./ui.js";
@@ -59,6 +62,10 @@ const state = {
   reported: null,
   marker: null,
   map: null,
+  overlays: null,
+  ruler: null,
+  /** Which overlays the reader has switched on, kept across re-analyses. */
+  overlayOn: new Set(),
   /** Guards against a slow analysis landing after the reader has moved on. */
   generation: 0,
 };
@@ -130,8 +137,78 @@ function initMap() {
   });
   // Clicking the imagery is the primary way to place a correction; dragging the
   // marker is the refinement. Both funnel through the same setter.
-  map.on("click", (e) => setReported(e.lngLat.lat, e.lngLat.lng));
+  map.on("click", (e) => {
+    // While the ruler is on, a click measures. Letting both handlers fire would
+    // silently rewrite the analysis every time someone measured something.
+    if (state.ruler?.isActive()) return;
+    setReported(e.lngLat.lat, e.lngLat.lng);
+  });
   return map;
+}
+
+/** Overlay checkboxes and the ruler button, once the map can take layers. */
+function initMapTools() {
+  state.overlays = createOverlays(state.map);
+  state.ruler = createRuler(state.map);
+
+  const box = el("overlay-toggles");
+  for (const o of OVERLAYS) {
+    const row = document.createElement("label");
+    row.className = "tool-toggle";
+    row.innerHTML = `
+      <input type="checkbox" value="${o.id}" />
+      <span class="swatch" style="--sw:${o.color}"></span>
+      <span class="tool-label">${o.label}<span class="tool-hint">${o.hint}</span></span>`;
+    const input = row.querySelector("input");
+    input.addEventListener("change", () => {
+      if (input.checked) state.overlayOn.add(o.id);
+      else state.overlayOn.delete(o.id);
+      state.overlays.setVisible(o.id, input.checked);
+    });
+    box.append(row);
+  }
+
+  const btn = el("ruler-btn");
+  const readout = el("ruler-readout");
+  btn.addEventListener("click", () => state.ruler.toggle());
+  // The button reflects state rather than setting it, because the ruler can
+  // also end itself on a double-click or Escape and a button that only updated
+  // on its own click would then be lying.
+  state.ruler.onChange(({ metres, vertices, active }) => {
+    btn.setAttribute("aria-pressed", String(active));
+    btn.textContent = active ? "Selesai mengukur" : "Ukur jarak";
+    el("map-tools").classList.toggle("ruler-on", active);
+    const km = (metres / 1000).toLocaleString("id-ID", {
+      maximumFractionDigits: 2,
+    });
+    const shown =
+      metres < 1000 ? `${Math.round(metres).toLocaleString("id-ID")} m` : `${km} km`;
+    readout.textContent =
+      vertices >= 2
+        ? `${vertices} titik · ${shown}`
+        : active
+          ? "Klik pada peta untuk menambah titik. Klik ganda atau Esc untuk selesai."
+          : "Ukur jarak bebas di atas citra.";
+  });
+
+  el("map-tools").hidden = false;
+}
+
+/** Redraw the overlays for whichever point the reader is currently looking at. */
+function refreshOverlays(result) {
+  if (!state.overlays || !result) return;
+  const coops = state.selected
+    ? cooperativesWithin(
+        result.lat,
+        result.lon,
+        state.points,
+        state.selected.cooperative_id,
+      )
+    : [];
+  state.overlays.update(result, coops);
+  for (const o of OVERLAYS) {
+    state.overlays.setVisible(o.id, state.overlayOn.has(o.id));
+  }
 }
 
 /** The official coordinate: a fixed reference dot, never draggable. */
@@ -212,14 +289,34 @@ function selectCooperative(p, { fly = true } = {}) {
  * browser has already cached by the second run, and it keeps a single code path
  * for both columns.
  */
+/**
+ * Show or hide the busy veil over the comparison.
+ *
+ * The veil covers the table rather than sitting beside it, and dims what is
+ * underneath, because the failure mode it exists to prevent is a reader taking
+ * the previous point's numbers for the current point's. A status line below the
+ * table would not stop that; an obscured table does.
+ */
+function setBusy(on, text) {
+  const panel = el("comparison-panel");
+  const busy = el("busy");
+  panel.classList.toggle("is-busy", on);
+  el("comparison").classList.toggle("is-stale", on);
+  busy.hidden = !on;
+  if (text) el("busy-text").textContent = text;
+}
+
 async function runAnalysis() {
   if (!state.selected) return;
   const token = ++state.generation;
   const status = el("analysis-status");
-  status.hidden = false;
-  status.textContent = state.reported
-    ? "Menghitung ulang di kedua titik…"
-    : "Menghitung pada koordinat resmi…";
+  status.hidden = true;
+  setBusy(
+    true,
+    state.reported
+      ? "Menghitung ulang di kedua titik…"
+      : "Menghitung pada koordinat resmi…",
+  );
 
   const opts = { points: state.points, excludeId: state.selected.cooperative_id };
   try {
@@ -234,21 +331,24 @@ async function runAnalysis() {
     if (token !== state.generation) return; // a newer run has taken over
 
     state.official = official;
+    const moved = reported ? moveDistance(official, reported) : null;
     el("comparison").hidden = false;
-    renderComparison(el("comparison"), {
+    renderComparison(el("comparison"), { official, reported, moved });
+    renderVerdict(el("verdict"), { official, reported, moved });
+    renderReportLink(el("report"), {
+      coop: state.selected,
       official,
-      reported,
-      moved: reported ? moveDistance(official, reported) : null,
+      reported: state.reported,
+      moved,
     });
-    renderVerdict(el("verdict"), {
-      official,
-      reported,
-      moved: reported ? moveDistance(official, reported) : null,
-    });
-    status.hidden = true;
+    // The overlays describe the point the reader is asking about, which is the
+    // marked one once there is one.
+    refreshOverlays(reported ?? official);
+    setBusy(false);
     writeHash();
   } catch (err) {
     if (token !== state.generation) return;
+    setBusy(false);
     status.hidden = false;
     status.textContent = `Analisis gagal: ${err.message}`;
     console.error(err);
@@ -303,6 +403,9 @@ function readHash() {
 async function boot() {
   const status = el("status");
   state.map = initMap();
+  // Sources and layers can only be added once the style is in place, and
+  // `load` is the event that guarantees both style and first render.
+  const mapReady = new Promise((resolve) => state.map.on("load", resolve));
 
   try {
     const [points, manifest] = await Promise.all([
@@ -315,6 +418,8 @@ async function boot() {
     renderProvenance(el("provenance"), manifest);
     status.hidden = true;
     el("picker").hidden = false;
+    await mapReady;
+    initMapTools();
   } catch (err) {
     status.textContent = `Gagal memuat data: ${err.message}`;
     console.error(err);

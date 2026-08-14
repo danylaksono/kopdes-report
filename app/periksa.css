@@ -154,13 +154,135 @@
   margin: 1.4em 0 2em;
   padding: 0 20px;
 }
-#map {
+.map-shell {
+  position: relative;
   max-width: 1080px;
   margin: 0 auto;
+}
+#map {
   height: min(62vh, 620px);
   border-radius: 12px;
   border: 1px solid var(--line);
   overflow: hidden;
+}
+
+/* ---- map tools ------------------------------------------------------------ */
+
+/* Over the canvas, not in the prose: these change how you look at the point,
+   not what the data says. Same split the explorer uses.
+
+   Anchored to the BOTTOM left, not the top. The site nav is sticky with a
+   higher z-index, so anything in the top 56px of the map is covered by it
+   whenever the map's top edge scrolls past the viewport. The bottom edge is
+   never covered, and the other three corners are taken (zoom top-right,
+   attribution bottom-right). */
+.map-tools {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  z-index: 2;
+  width: 232px;
+  max-height: calc(100% - 24px);
+  overflow-y: auto;
+  background: rgba(20, 20, 22, 0.82);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 10px;
+  padding: 10px 12px 12px;
+  color: #f2f2f0;
+  font-size: 12px;
+  line-height: 1.35;
+}
+.map-tools .tool-group {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+.map-tools .tool-group + .tool-group {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+.map-tools legend {
+  padding: 0;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.62);
+  margin-bottom: 6px;
+}
+.tool-toggle {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: start;
+  gap: 7px;
+  padding: 4px 0;
+  cursor: pointer;
+}
+.tool-toggle input {
+  margin: 2px 0 0;
+  accent-color: var(--pin-reported);
+}
+.tool-toggle .swatch {
+  width: 11px;
+  height: 11px;
+  margin-top: 3px;
+  border-radius: 2px;
+  background: var(--sw);
+  border: 1px solid rgba(0, 0, 0, 0.45);
+}
+.tool-label {
+  display: block;
+  font-weight: 600;
+}
+.tool-hint {
+  display: block;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 11px;
+}
+#ruler-btn {
+  width: 100%;
+  font: inherit;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.1);
+  color: inherit;
+  cursor: pointer;
+}
+#ruler-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+#ruler-btn[aria-pressed="true"] {
+  background: var(--pin-reported);
+  border-color: var(--pin-reported);
+}
+.tool-readout {
+  margin: 6px 0 0;
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.map-tools.ruler-on .tool-readout {
+  color: #fff;
+}
+
+/* The running total, pinned to the last vertex. A symbol layer cannot do this:
+   the satellite style is raster and carries no glyphs. */
+.ruler-label {
+  background: rgba(20, 20, 22, 0.88);
+  color: #fff;
+  font: 600 12px/1.2 var(--sans);
+  font-variant-numeric: tabular-nums;
+  padding: 3px 7px;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  white-space: nowrap;
+  pointer-events: none;
 }
 
 /* Markers are DOM nodes so the two states can differ in shape as well as
@@ -186,6 +308,59 @@
 }
 .pin-reported:active {
   cursor: grabbing;
+}
+
+/* ---- busy state ----------------------------------------------------------- */
+
+/* The veil covers the table rather than sitting beside it. The failure it
+   exists to prevent is a reader taking the previous point's numbers for the
+   current point's, and a status line below the table does not prevent that. */
+.periksa-panel {
+  position: relative;
+}
+.periksa-panel.is-busy {
+  min-height: 160px;
+}
+#comparison.is-stale {
+  opacity: 0.3;
+  filter: grayscale(0.6);
+  pointer-events: none;
+}
+.busy {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  /* An actual veil. Without a background the spinner just floats over a faded
+     table, which still lets a reader pick numbers off the previous point: the
+     exact thing this state exists to prevent. */
+  background: rgba(251, 250, 247, 0.72);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+  border-radius: 8px;
+}
+.spinner {
+  width: 17px;
+  height: 17px;
+  border: 2.5px solid var(--line);
+  border-top-color: var(--pin-reported);
+  border-radius: 50%;
+  animation: periksa-spin 0.75s linear infinite;
+}
+@keyframes periksa-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation-duration: 2.4s;
+  }
 }
 
 /* ---- comparison table ----------------------------------------------------- */
@@ -262,19 +437,60 @@
 .provenance h2 {
   font-size: 18px;
 }
-.periksa-sources {
-  display: grid;
-  grid-template-columns: minmax(110px, max-content) 1fr;
-  gap: 4px 16px;
-  font-size: 14px;
-  margin: 0.8em 0;
+/* Wide enough that it needs its own scroller on a phone rather than crushing
+   the third column into one word per line. */
+.periksa-sources-wrap {
+  overflow-x: auto;
 }
-.periksa-sources dt {
+.periksa-sources {
+  font-size: 14px;
+  min-width: 620px;
+}
+.periksa-sources th[scope="row"] {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 14px;
   font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+  vertical-align: top;
+}
+.periksa-sources td {
+  vertical-align: top;
   color: var(--muted);
 }
-.periksa-sources dd {
-  margin: 0;
+.periksa-sources td:first-of-type {
+  white-space: nowrap;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- report link ----------------------------------------------------------- */
+
+#report {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin: 2em 0;
+}
+#report h2 {
+  margin-top: 0;
+  font-size: 20px;
+}
+.periksa-report-btn {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 650;
+  font-size: 15px;
+  padding: 9px 16px;
+  border-radius: 7px;
+  text-decoration: none;
+}
+.periksa-report-btn:hover {
+  background: #7d0000;
+  text-decoration: none;
 }
 
 /* ---- narrow --------------------------------------------------------------- */
@@ -285,6 +501,16 @@
   }
   .periksa-map-bleed {
     padding: 0 12px;
+  }
+  /* The tool panel would cover most of a phone-width map, so it spans the full
+     width at the bottom and caps its height instead. */
+  .map-tools {
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
+    width: auto;
+    max-height: 44%;
+    font-size: 11.5px;
   }
   /* The four-column comparison cannot stay a table at this width: the delta
      column is the payload and would be the first thing squeezed out. Each row
