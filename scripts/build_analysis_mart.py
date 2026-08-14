@@ -310,8 +310,12 @@ def build_points(con, missing):
             -- 05 road access
             rd.km_any_road, rd.km_non_track, rd.road_band, rd.track_only,
 
-            -- 17 building proximity (nearest OSM building footprint, H3 r10)
-            bd.building_band,
+            -- 17 building proximity (nearest mapped building footprint, H3 r10).
+            -- Since 2026-08-14 the layer is VIDA's Google+Microsoft+OSM union,
+            -- not OSM alone: 10.5M r10 cells against 3.59M. `km_to_building` is
+            -- the ring distance k*0.132 and is null when nothing was found
+            -- inside the ~5 km cap, which is not a zero.
+            bd.building_band, bd.km_to_building,
 
             -- 06 modern retail (ring bands) and 08 (exact geodesic, all points).
             -- Prefer the exact column: 08 showed the ring version overstates
@@ -610,9 +614,11 @@ def main():
                                 "caps at k=38). 66,846 cooperatives. NOT unknown.",
             "km_any_road": "no mapped road of any kind within ~5 km (4,294). NOT unknown.",
             "km_non_track": "no made road within ~5 km (5,106). NOT unknown.",
-            "building_band": "no *mapped* building within ~5 km (ring caps at k=38). "
-                             "NOT unknown, but a LOWER BOUND: OSM building coverage is "
-                             "incomplete in rural Indonesia (reports/17).",
+            "building_band, km_to_building": "no *mapped* building within ~5 km (ring caps "
+                             "at k=38). NOT unknown, and still a LOWER BOUND: since "
+                             "2026-08-14 the layer is VIDA's Google+Microsoft+OSM union "
+                             "rather than OSM alone, which narrows the rural undercount "
+                             "but does not close it (reports/17).",
             "pop_within_1_4km": "no populated Kontur cell within the ring - read as 0.",
             "transaction_value": "the village link failed (21% of cooperatives). "
                                  "Genuinely unknown. 0 means linked and nothing reported.",

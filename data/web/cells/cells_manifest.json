@@ -1,0 +1,37 @@
+{
+  "road": {
+    "rows": 9051169,
+    "bytes": 13267111
+  },
+  "building": {
+    "rows": 10477049,
+    "bytes": 15292464
+  },
+  "population": {
+    "rows": 874919,
+    "bytes": 2185865
+  },
+  "minimarket": {
+    "rows": 7617,
+    "bytes": 109311
+  },
+  "built": "2026-08-14",
+  "resolutions": {
+    "road": 10,
+    "building": 10,
+    "population": 8
+  },
+  "parent_res": {
+    "road": 7,
+    "building": 7,
+    "population": 5
+  },
+  "km_per_ring_r10": 0.132,
+  "row_group_size": 20000,
+  "sources": {
+    "road": "OpenStreetMap via Geofabrik (reports/05-road-access)",
+    "building": "VIDA Google+Microsoft+OSM Open Buildings (source.coop)",
+    "population": "Kontur Population Density 400m (H3 r8)",
+    "minimarket": "OpenStreetMap Overpass, tier-1 only (reports/06)"
+  }
+}

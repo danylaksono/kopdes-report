@@ -269,6 +269,7 @@ linkable):
 | `/` (`index.html`)                                       | The story — image hero + three two-column scrolly chapters + a MapLibre map interlude + verdicts                                                               |
 | `/explore/`                                              | The interactive map (`app/explore.js`)                                                                                                                         |
 | `/tabel/`                                                | The directory: every cooperative in one searchable, sortable table (`app/tabel.js`)                                                                            |
+| `/periksa/`                                              | Self-check: re-run the proximity analyses at a reader-supplied coordinate, in the browser (`app/periksa/`)                                                     |
 | `/findings/`, `findings/{remoteness,competition,money}/` | The three acts, in Bahasa Indonesia, **anonymous until verified**                                                                                              |
 | `/methods/`, `methods/<nn-slug>/`                        | Methodology appendix — plain-language Indonesian write-ups in `methods/_content/`, rendered client-side; the technical English report is linked from each page |
 | `/data/`                                                 | Downloads, provenance, null semantics, snapshot log                                                                                                            |
@@ -501,6 +502,66 @@ trip.
   `reports/05`, which is the cheap correctness check.
 - The page pays the duckdb-wasm download like the explorer; the story page
   deliberately does not.
+
+### The self-check (`/periksa/`, added 2026-08-14)
+
+"Periksa mandiri". Answers the objection the whole report inherits: every
+coordinate comes from SIMKOPDES, which says its own map positions are
+representative visualisations per area rather than precise locations. A reader
+picks a cooperative, drops a pin where the building actually stands, and the
+same five analyses are re-run at that point **in the browser**. The output is
+the delta between the two readings.
+
+| Module                    | Role                                                     |
+| ------------------------- | -------------------------------------------------------- |
+| `app/periksa/index.js`    | state, map, picker, orchestration                        |
+| `app/periksa/analysis.js` | the five measures at one coordinate (the engine)         |
+| `app/periksa/ui.js`       | two-column comparison, verdict, provenance               |
+| `app/periksa.css`         | page styles (a reading page with one instrument in it)   |
+
+**This is why the H3 layout was worth keeping.** H3 ids sort hierarchically, so
+every r10 descendant of an r7 parent is one contiguous range of the uint64 id
+space. `scripts/build_cell_indexes.py` sorts each index by `h3`, writes 20k-row
+row groups, and adds a coarse parent column `p` (r7 for the r10 indexes, r5 for
+the r8 population grid). A 5 km k-ring query then asks for the ~21 parents that
+cover the disk, and Parquet row-group statistics prune it to a couple of groups.
+**Measured: 59 KB median, 220 KB p90, 1 MB worst case out of a 13 MB file.** A
+full five-measure analysis costs roughly 150 KB of range requests. Sorting also
+shrinks the files (delta encoding on near-consecutive uint64s): the road index
+went 34 MB → 13.3 MB with the parent column included.
+
+Committed to `data/web/cells/` (30.9 MB total, gitignore has the negations):
+`road_r10.parquet`, `building_r10.parquet`, `pop_r8.parquet`,
+`minimarket.parquet`, `cells_manifest.json`.
+
+Things that will bite you:
+
+- **`rows()` casts wide integers to plain JS numbers**, which is lossy above
+  2^53, and every H3 id is far above it. The queries select
+  `lower(to_hex(h3))` and join on the hex string, which is h3-js's own native
+  representation. Never let a cell id become a Number.
+- **One query per measure, not one per ring.** The reports expand rings in a
+  loop; translating that directly would put up to 38 network round trips inside
+  a single click. The whole 5 km disk is fetched once and the minimum ring index
+  is taken in JS via `gridDiskDistances`.
+- **Both coordinates are recomputed by the same function.** The page could read
+  the official-coordinate figures out of `kopdes_points.parquet`, but then any
+  difference in method would surface as a difference in the answer and the
+  delta would be measuring our own inconsistency.
+- **`python -m http.server` does not serve Range requests**, so duckdb-wasm logs
+  "fall back to full HTTP read" and downloads each index whole. Local timings
+  are meaningless; GitHub Pages serves ranges. Budget ~30 s per analysis locally
+  and do not "fix" it.
+- The verdict deliberately does not say a correction is an improvement. It
+  reports **band crossings**, because the report publishes bands and only a band
+  change alters a published classification. An earlier draft counted measures
+  that "membaik", which asserted that a cooperative further from a minimarket is
+  a better cooperative: an argument the report makes with evidence elsewhere and
+  that this page has not earned.
+- Nothing is submitted or stored. The coordinate round-trips through the URL
+  hash so a reader can pass a correction on by copying the link, and the page
+  says so in as many words. Do not add a submit button without a backend and a
+  moderation policy behind it.
 
 - every `*.html` in `/`, `/explore/`, `/findings/`, `/methods/`, `/data/`, `/about/`
 - `methods/_content/**/*.md` (the runtime-rendered method prose) and

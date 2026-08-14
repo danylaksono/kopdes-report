@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="id">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Periksa mandiri · Koperasi Desa Merah Putih</title>
+  <meta name="description"
+    content="Tandai lokasi sebenarnya sebuah Koperasi Desa Merah Putih, lalu lihat seberapa besar kesimpulan laporan ini berubah. Analisis dihitung ulang langsung di peramban Anda." />
+  <link href="https://unpkg.com/maplibre-gl@4/dist/maplibre-gl.css" rel="stylesheet" />
+  <link href="../app/site.css" rel="stylesheet" />
+  <link href="../app/periksa.css" rel="stylesheet" />
+  <!-- duckdb-wasm imports apache-arrow as a bare specifier; the import map
+       resolves it so no bundler is needed (no-build-step site). -->
+  <script type="importmap">
+    {
+      "imports": {
+        "@duckdb/duckdb-wasm": "https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@1.29.0/dist/duckdb-browser.mjs",
+        "apache-arrow": "https://cdn.jsdelivr.net/npm/apache-arrow@17.0.0/+esm"
+      }
+    }
+  </script>
+</head>
+
+<body data-root="../">
+  <nav id="site-nav"></nav>
+
+  <main class="wrap">
+    <p class="kicker">Periksa mandiri</p>
+    <h1>Kalau koordinatnya salah, apakah kesimpulannya ikut berubah?</h1>
+
+    <p class="lede">Setiap titik dalam laporan ini memakai koordinat resmi
+      SIMKOPDES, dan platform itu sendiri menyatakan bahwa posisi pada petanya
+      adalah visualisasi representatif per wilayah, bukan koordinat presisi tiap
+      koperasi. Artinya seluruh analisis kedekatan di sini (jarak ke penduduk,
+      jalan, rumah, atau minimarket) mewarisi ketidakpastian itu.</p>
+
+    <p>Halaman ini tidak menghilangkan ketidakpastian tersebut. Halaman ini
+      <strong>mengukurnya</strong>. Pilih satu koperasi, tandai di citra satelit
+      di mana gedungnya benar-benar berdiri, dan kelima analisis yang sama akan
+      dijalankan ulang di titik itu, di peramban Anda, dengan data yang sama.
+      Yang keluar adalah selisihnya: seberapa besar kesimpulan bergantung pada
+      koordinat yang benar.</p>
+
+    <div class="callout callout-quiet">
+      <p><strong>Tidak ada yang dikirim atau disimpan.</strong> Seluruh
+        perhitungan berjalan di peramban Anda. Kami tidak menerima, mencatat,
+        atau memoderasi laporan apa pun dari halaman ini, dan angka nasional
+        dalam laporan tidak berubah karenanya. Bila Anda ingin meneruskan sebuah
+        koreksi, salin tautan halaman ini setelah menandai titik: koordinatnya
+        ikut tersimpan di dalam tautan.</p>
+      <p>Fitur pelaporan koreksi yang sesungguhnya, lengkap dengan verifikasi,
+        masih dalam rencana. Sampai itu ada, halaman ini adalah versi jujurnya:
+        alat yang sama yang kami pakai, diarahkan ke titik yang Anda pilih.</p>
+    </div>
+
+    <p id="status" role="status">Memuat data koperasi…</p>
+
+    <section id="picker" hidden>
+      <label class="field" for="search">Cari koperasi, desa, atau kecamatan</label>
+      <input id="search" type="search" autocomplete="off" spellcheck="false"
+        placeholder="Misalnya: Sumberkolak, atau Panarukan…" aria-label="Cari koperasi" />
+      <ul id="results" class="periksa-results"></ul>
+    </section>
+
+    <section id="chosen" class="chosen" hidden></section>
+  </main>
+
+  <div class="periksa-map-bleed">
+    <div id="map"></div>
+  </div>
+
+  <main class="wrap">
+    <p id="analysis-status" role="status" hidden></p>
+    <section id="comparison" hidden></section>
+    <section id="verdict" hidden></section>
+    <section id="provenance" class="provenance"></section>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="https://unpkg.com/maplibre-gl@4/dist/maplibre-gl.js"></script>
+  <script type="module" src="../app/site.js"></script>
+  <script type="module" src="../app/periksa/index.js"></script>
+</body>
+
+</html>

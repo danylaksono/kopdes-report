@@ -9,8 +9,8 @@ occurrence with file, line and the containing sentence, and exits non-zero if
 any are found so it can gate a pre-commit hook or CI check.
 
 What it scans by default — the published pages:
-  * every *.html in the site tree (/, /explore/, /findings/, /methods/,
-    /data/, /about/)
+  * every *.html in the site tree (/, /explore/, /tabel/, /periksa/,
+    /findings/, /methods/, /data/, /about/)
   * methods/_content/**/*.md     — the runtime-rendered method prose
   * methods/_figures/**/*.svg    — hand-authored diagrams
 
@@ -42,6 +42,8 @@ ENTITIES = ("&mdash;", "&#8212;", "&#x2014;")
 PAGE_GLOBS = [
     "*.html",
     "explore/**/*.html",
+    "tabel/**/*.html",
+    "periksa/**/*.html",
     "findings/**/*.html",
     "methods/**/*.html",
     "data/**/*.html",

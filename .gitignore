@@ -35,6 +35,14 @@ data/web/*
 # SIMKOPDES province ids. Rebuild: python scripts/build_province_cartogram.py
 !data/web/cartogram/
 !data/web/cartogram/*.csv
+# Spatial cell indexes for /periksa/, which recomputes the proximity analyses at
+# one reader-supplied coordinate. Committed for the same reason as the mart: the
+# page is static and 404s on its data otherwise. Sorted by H3 id so a 5 km query
+# reads ~59 KB of a 13 MB file over range requests, never the whole thing.
+# Rebuild: python scripts/build_cell_indexes.py
+!data/web/cells/
+!data/web/cells/*.parquet
+!data/web/cells/cells_manifest.json
 
 # --- report outputs that are per-record tables, not findings ---
 # Everything else under reports/ IS committed - the small CSVs are the findings
@@ -50,6 +58,10 @@ reports/10-coop-clustering/nn_distances.csv
 # --- cached spatial indexes (rebuilt by the reports that use them) ---
 data/osm/road_cells_h3r10.parquet
 data/osm/indonesia_landuse.parquet
+# VIDA Google+Microsoft+OSM buildings, reduced to r10 cells. Rebuild:
+# python scripts/extract_buildings_vida.py (pulls ~5.7 GB from source.coop)
+data/osm/building_cells_vida_h3r10.parquet
+data/osm/_duckdb_tmp/
 
 # --- dated SIMKOPDES snapshots: kept locally, not published as raw files ---
 # The CSVs stay out of git (28 MB per pull). The manifests DO NOT - they are

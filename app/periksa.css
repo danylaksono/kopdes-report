@@ -1,0 +1,322 @@
+/* ===========================================================================
+   periksa.css — /periksa/, the self-check instrument.
+
+   A reading page with one instrument embedded in it, not a full-bleed
+   application like /explore/. The prose stays on site.css's measure and
+   typography; only the map breaks out, because judging a rooftop needs width.
+
+   The one deliberate colour decision: the official coordinate is drawn in the
+   report's investigative red and the reader's marked point in a cool teal. They
+   must not read as "wrong" and "right" — the page's whole argument is that
+   neither is verified — so the pair is contrasting rather than a good/bad ramp.
+
+   Nothing here colours a change as good or bad. The delta column has exactly
+   two emphases: a band crossing, which is the only kind of change that alters a
+   classification the report publishes, and "no change", which is muted. A
+   green/red pair was tried and removed: it asserted a direction of virtue the
+   page has no standing to assert.
+   =========================================================================== */
+
+:root {
+  --pin-official: #a00;
+  --pin-reported: #0d6f6a;
+  --delta-crossed: #0d6f6a;
+}
+
+/* ---- the quiet callout ---------------------------------------------------- */
+
+/* site.css's .callout is the report's loud pull-quote. The disclaimer here is
+   the opposite: it must be read, but it is housekeeping, not a finding. */
+.callout-quiet {
+  border-left-color: #b9b2a4;
+  background: #f6f4ef;
+  font-size: 16px;
+}
+.callout-quiet p {
+  margin: 0.6em 0;
+}
+.callout-quiet p:first-child {
+  margin-top: 0;
+}
+.callout-quiet p:last-child {
+  margin-bottom: 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+/* ---- picker --------------------------------------------------------------- */
+
+.field {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+#picker {
+  margin: 2em 0 1em;
+  max-width: 640px;
+}
+
+#search {
+  width: 100%;
+  font: inherit;
+  font-size: 17px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+}
+#search:focus {
+  outline: 2px solid var(--pin-reported);
+  outline-offset: 1px;
+}
+
+.periksa-results {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+}
+.periksa-results li + li {
+  border-top: 1px solid var(--line);
+}
+.periksa-results button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 0;
+  font: inherit;
+  padding: 9px 10px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+.periksa-results button:hover,
+.periksa-results button:focus-visible {
+  background: #f1efe9;
+}
+.periksa-results .r-name {
+  display: block;
+  font-weight: 600;
+  font-size: 15px;
+}
+.periksa-results .r-where {
+  display: block;
+  font-size: 13px;
+  color: var(--muted);
+}
+.periksa-results .empty {
+  padding: 9px 10px;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+/* ---- chosen cooperative --------------------------------------------------- */
+
+.chosen {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: 10px;
+  padding: 18px 22px;
+  margin: 1.6em 0;
+}
+.chosen h2 {
+  margin: 0;
+  font-size: 21px;
+}
+.chosen-where {
+  margin: 4px 0 10px;
+  color: var(--muted);
+  font-size: 15px;
+}
+.chosen-coord {
+  margin: 0 0 8px;
+  font-size: 15px;
+}
+.chosen-hint {
+  margin: 0;
+  font-size: 15px;
+  color: var(--muted);
+}
+.chosen .flag {
+  display: block;
+  margin-top: 6px;
+  font-size: 14px;
+  color: var(--accent);
+}
+
+/* ---- map ------------------------------------------------------------------ */
+
+.periksa-map-bleed {
+  margin: 1.4em 0 2em;
+  padding: 0 20px;
+}
+#map {
+  max-width: 1080px;
+  margin: 0 auto;
+  height: min(62vh, 620px);
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+
+/* Markers are DOM nodes so the two states can differ in shape as well as
+   colour: the official point is a fixed ring, the reader's is a solid pin with
+   a shadow that reads as "liftable". Shape carries the difference for anyone
+   who cannot separate the hues. */
+.pin {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+.pin-official {
+  border: 3px solid var(--pin-official);
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.9);
+}
+.pin-reported {
+  background: var(--pin-reported);
+  border: 2.5px solid #fff;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+  cursor: grab;
+}
+.pin-reported:active {
+  cursor: grabbing;
+}
+
+/* ---- comparison table ----------------------------------------------------- */
+
+.periksa-table {
+  font-size: 15px;
+}
+.periksa-table th[scope="row"] {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  width: 34%;
+}
+.periksa-table .measure-note {
+  display: block;
+  font-weight: 400;
+  font-size: 13px;
+  color: var(--muted);
+  text-transform: none;
+  letter-spacing: 0;
+}
+.periksa-table td.num {
+  width: 20%;
+  font-variant-numeric: tabular-nums;
+}
+.periksa-table .delta {
+  font-weight: 500;
+  color: var(--ink);
+}
+/* A band crossing is the page's payload: it is the only change that moves a
+   cooperative between the classes the report publishes. */
+.periksa-table .delta.crossed {
+  color: var(--delta-crossed);
+  font-weight: 700;
+}
+.periksa-table .delta.same {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.periksa-move {
+  font-size: 15px;
+  color: var(--muted);
+  margin-top: -0.6em;
+}
+
+/* ---- verdict + provenance -------------------------------------------------- */
+
+#verdict {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin: 2em 0;
+}
+#verdict h2 {
+  margin-top: 0;
+  font-size: 22px;
+}
+
+.periksa-caveat {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.provenance {
+  border-top: 1px solid var(--line);
+  margin-top: 2.5em;
+  padding-bottom: 2em;
+}
+.provenance h2 {
+  font-size: 18px;
+}
+.periksa-sources {
+  display: grid;
+  grid-template-columns: minmax(110px, max-content) 1fr;
+  gap: 4px 16px;
+  font-size: 14px;
+  margin: 0.8em 0;
+}
+.periksa-sources dt {
+  font-weight: 600;
+  color: var(--muted);
+}
+.periksa-sources dd {
+  margin: 0;
+}
+
+/* ---- narrow --------------------------------------------------------------- */
+
+@media (max-width: 720px) {
+  #map {
+    height: 56vh;
+  }
+  .periksa-map-bleed {
+    padding: 0 12px;
+  }
+  /* The four-column comparison cannot stay a table at this width: the delta
+     column is the payload and would be the first thing squeezed out. Each row
+     becomes its own small block instead. */
+  .periksa-table,
+  .periksa-table tbody,
+  .periksa-table tr,
+  .periksa-table th,
+  .periksa-table td {
+    display: block;
+    width: auto;
+  }
+  .periksa-table thead {
+    display: none;
+  }
+  .periksa-table tr {
+    border-bottom: 1px solid var(--line);
+    padding: 10px 0;
+  }
+  .periksa-table th[scope="row"] {
+    width: auto;
+    padding-bottom: 2px;
+  }
+  .periksa-table td.num {
+    text-align: left;
+    width: auto;
+    border: 0;
+    padding: 2px 10px;
+  }
+  .periksa-table td.num::before {
+    content: attr(data-label) ": ";
+    color: var(--muted);
+    font-size: 13px;
+  }
+}

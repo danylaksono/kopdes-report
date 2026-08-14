@@ -10,24 +10,37 @@ stronger, more visual claim than "in a low-population cell".
 
 Method - same as 05, points instead of lines
 --------------------------------------------
-  1. scripts/extract_buildings.py has already reduced the Indonesia PBF to the
-     DISTINCT H3 r10 cells that contain >=1 building centroid
-     (data/osm/building_cells_h3r10.parquet, ~44M buildings).
+  1. A building layer has already been reduced to the DISTINCT H3 r10 cells
+     that contain >=1 building centroid (see --buildings below).
   2. For each cooperative, expand H3 rings outward until one hits a building
      cell. Ring k converts to distance the same way as roads: adjacent r10 cell
      centres are ~132 m apart, so distance ~= k * 132 m. A band, not a metric.
   3. Because the bands are the same k's as 05, "far from a road" and "no house
      nearby" are directly comparable at the same cell scale.
 
-Honest caveat (same as roads): OSM building coverage is incomplete in rural
-Indonesia. "No building within X" is a LOWER BOUND - write "no *mapped* house",
-never "no house". The cross-tab with the Kontur population grid (03) and the
-confirmed farmland set (07) is what keeps this honest.
+Which building layer (2026-08-14)
+---------------------------------
+This report originally ran on OSM buildings alone (~44M footprints -> 3.59M r10
+cells), and every sentence in it had to hedge: OSM's rural coverage in Indonesia
+is thin, so "no mapped building within 5 km" was a lower bound of unknown
+looseness, biased toward flattering the programme.
+
+It now defaults to VIDA's combined Google + Microsoft + OSM layer
+(137,070,577 Indonesian footprints -> 10,477,049 r10 cells, 2.9x the coverage),
+built by scripts/extract_buildings_vida.py. `--buildings osm` still runs the old
+layer, which is how the two are compared in the README.
+
+The caveat is narrowed, not removed: ML-derived footprints miss buildings too,
+and "no mapped building within X" remains a LOWER BOUND. Write "no *mapped*
+house", never "no house". The cross-tab with the Kontur population grid (03) and
+the confirmed farmland set (07) is what keeps this honest.
 
 Usage:
   python reports/17-building-proximity/run.py
+  python reports/17-building-proximity/run.py --buildings osm
 """
 
+import argparse
 import sys
 import time
 from pathlib import Path
@@ -39,9 +52,12 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from _lib.common import RAW, ROOT, out_dir, write_csv  # noqa: E402
 
 OUT = out_dir(__file__)
-CELLS = ROOT / "data" / "osm" / "building_cells_h3r10.parquet"
+CELLS_OSM = ROOT / "data" / "osm" / "building_cells_h3r10.parquet"
+CELLS_VIDA = ROOT / "data" / "osm" / "building_cells_vida_h3r10.parquet"
 RES = 10
 KM_PER_RING = 0.132  # adjacent r10 cell centres, approx - same as 05
+
+NONE_BAND = "> ~5 km / none found"
 
 # Same k's as 05 so road and building distances compose.
 BANDS = [
@@ -84,15 +100,24 @@ def nearest_ring(con, table, label):
 
 
 def main():
-    if not CELLS.exists():
-        sys.exit(f"missing {CELLS}\n  run: python scripts/extract_buildings.py")
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--buildings", choices=["vida", "osm"], default="vida",
+                    help="which building layer to measure against (default: vida)")
+    args = ap.parse_args()
+
+    cells = CELLS_VIDA if args.buildings == "vida" else CELLS_OSM
+    if not cells.exists():
+        hint = ("python scripts/extract_buildings_vida.py" if args.buildings == "vida"
+                else "python scripts/extract_buildings.py")
+        sys.exit(f"missing {cells}\n  run: {hint}")
 
     loc = pd.read_csv(RAW / "kopdes_locations.csv")
-    print(f"loaded {len(loc):,} cooperatives\n")
+    print(f"loaded {len(loc):,} cooperatives")
+    print(f"building layer: {args.buildings} ({cells.name})\n")
 
     con = duckdb.connect()
     con.execute("install h3 from community; load h3;")
-    con.execute(f"create table bld as select h3 from read_parquet('{CELLS.as_posix()}')")
+    con.execute(f"create table bld as select h3 from read_parquet('{cells.as_posix()}')")
     n_bld = con.execute("select count(*) from bld").fetchone()[0]
     print(f"building cells: {n_bld:,} distinct H3 r10 cells\n")
 
@@ -105,12 +130,30 @@ def main():
     print("nearest building, staged outward rings:")
     hits = nearest_ring(con, "kop", "building")
 
-    # band assignment + unresolved (> ~5 km) as its own class
-    kmap = {k: label for k, label in BANDS}
-    bands = hits.copy()
-    bands["building_band"] = hits.k.map(kmap).fillna("> ~5 km / none found")
-    per = loc.merge(bands[["cooperative_id", "building_band"]], on="cooperative_id", how="left")
-    per["building_band"] = per.building_band.fillna("> ~5 km / none found")
+    # --- band assignment ----------------------------------------------------
+    # A THRESHOLD WALK, not a lookup keyed on the band's own k. The ring search
+    # returns whatever k it stopped at - any integer 0..38 - while BANDS names
+    # only six of them. `hits.k.map(dict(BANDS))` therefore returned NaN for
+    # every cooperative whose nearest building sat on an off-key ring (1, 3, 5,
+    # 6, 7, 9-14, 16-37), and the .fillna() below it swept all of them into
+    # "none found". That is how a true 13.7% was published as 62.6% between
+    # 2026-08-13 and 2026-08-14. Report 05 always did this correctly; only this
+    # report used the dict. Do not reintroduce it.
+    def band(k):
+        if k is None or pd.isna(k):
+            return NONE_BAND
+        for kk, label in BANDS:
+            if k <= kk:
+                return label
+        return NONE_BAND
+
+    per = loc.merge(hits[["cooperative_id", "k"]], on="cooperative_id", how="left")
+    per["building_k"] = per.k
+    # Continuous distance alongside the band, the same way 05 reports both. A
+    # null here means "not found within the ring cap", never "zero".
+    per["km_to_building"] = (per.k * KM_PER_RING).round(3)
+    per["building_band"] = per.k.map(band)
+    per = per.drop(columns=["k"])
 
     # --- outputs ------------------------------------------------------------
     band_counts = per.building_band.value_counts().rename_axis("building_band").reset_index(name="cooperatives")
@@ -120,15 +163,15 @@ def main():
     print(band_counts.to_string(index=False))
 
     by_prov = (per.groupby("province").size().rename("cooperatives").to_frame()
-               .join(per[per.building_band.isin(["> ~5 km / none found"])].groupby("province").size()
+               .join(per[per.building_band.isin([NONE_BAND])].groupby("province").size()
                      .rename("no_building_5km").fillna(0).astype(int)))
     by_prov["pct_no_building_5km"] = (100 * by_prov.no_building_5km / by_prov.cooperatives).round(2)
     write_csv(by_prov.reset_index(), OUT / "building_access_by_province.csv")
     write_csv(per, OUT / "kopdes_building_access.csv", "per-cooperative; joins on cooperative_id")
 
     # --- cross-tabs ---------------------------------------------------------
-    no1 = int(per.building_band.isin(["> ~5 km / none found", "< ~2 km", "< ~5 km"]).sum())
-    no5 = int((per.building_band == "> ~5 km / none found").sum())
+    no1 = int(per.building_band.isin([NONE_BAND, "< ~2 km", "< ~5 km"]).sum())
+    no5 = int((per.building_band == NONE_BAND).sum())
     print(f"\nno building within ~1 km: {no1:,} ({100*no1/len(per):.2f}%)")
     print(f"no building within ~5 km: {no5:,} ({100*no5/len(per):.2f}%)")
 
@@ -143,8 +186,8 @@ def main():
 
     m["roadless"] = m.km_non_track.isna()
     m["isolated"] = m.remoteness_band == "nobody within 5km"
-    m["no_bld_1km"] = m.building_band.isin(["> ~5 km / none found", "< ~2 km", "< ~5 km"])
-    m["no_bld_5km"] = m.building_band == "> ~5 km / none found"
+    m["no_bld_1km"] = m.building_band.isin([NONE_BAND, "< ~2 km", "< ~5 km"])
+    m["no_bld_5km"] = m.building_band == NONE_BAND
 
     cross = {
         "on a building cell (<70 m)": int((m.building_band == "on a building cell (<70 m)").sum()),

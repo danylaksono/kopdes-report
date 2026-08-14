@@ -217,8 +217,10 @@ export const FAMILIES = [
     col: "building_class",
     // Same band structure as road (reports/17 uses 05's k's), so the two
     // compose at the same cell scale. Mauve so it does not read as the road
-    // ramp. OSM coverage is incomplete: "no house" means "no *mapped* house".
-    source: "reports/17 (OSM buildings)",
+    // ramp. Since 2026-08-14 the layer is VIDA's Google+Microsoft+OSM union,
+    // not OSM alone. Coverage is still incomplete: "no house" means "no
+    // *mapped* house".
+    source: "reports/17 (bangunan Google+Microsoft+OSM)",
     classes: [
       { key: "over_5km", label: "> ±5 km / tidak ada", color: "#3f2b56" },
       { key: "under_5km", label: "±500 m – 5 km", color: "#6b4d8a" },
@@ -340,7 +342,7 @@ export const MEASURES = [
       point: ["building_k"],
       agg: ["building_share_over_5km", "building_share_under_5km"],
     },
-    source: "reports/17 (OSM)",
+    source: "reports/17 (bangunan gabungan)",
   },
   {
     id: "farmland",

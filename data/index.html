@@ -66,6 +66,57 @@
                 dimuat penuh di halaman, pengganti berkas peta 24 MB yang lama.</figcaption>
         </figure>
 
+        <h3>Indeks sel spasial</h3>
+        <p>Berkas berikut dipakai halaman <a href="../periksa/">Periksa mandiri</a> untuk
+            menghitung ulang analisis kedekatan di satu titik mana pun, langsung di
+            peramban. Isinya bukan koperasi, melainkan petak H3: petak yang berisi jalan,
+            petak yang berisi bangunan, dan penduduk per petak. Semuanya diurutkan menurut
+            nomor petak, sehingga peramban hanya perlu mengunduh bagian kecil yang relevan
+            (sekitar 59 KB untuk satu titik), bukan seluruh berkas.</p>
+
+        <figure class="figure">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Berkas</th>
+                        <th class="num">Ukuran</th>
+                        <th>Isi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><a href="../data/web/cells/road_r10.parquet" download>road_r10.parquet</a></td>
+                        <td class="num">13,3 MB</td>
+                        <td>9,05 juta petak berisi jalan (OpenStreetMap)</td>
+                    </tr>
+                    <tr>
+                        <td><a href="../data/web/cells/building_r10.parquet" download>building_r10.parquet</a></td>
+                        <td class="num">15,3 MB</td>
+                        <td>10,48 juta petak berisi bangunan (Google, Microsoft, OpenStreetMap)</td>
+                    </tr>
+                    <tr>
+                        <td><a href="../data/web/cells/pop_r8.parquet" download>pop_r8.parquet</a></td>
+                        <td class="num">2,2 MB</td>
+                        <td>874.919 petak penduduk 400 m (Kontur)</td>
+                    </tr>
+                    <tr>
+                        <td><a href="../data/web/cells/minimarket.parquet" download>minimarket.parquet</a></td>
+                        <td class="num">0,11 MB</td>
+                        <td>7.617 gerai minimarket (OpenStreetMap, hanya kelas 1)</td>
+                    </tr>
+                    <tr>
+                        <td><a href="../data/web/cells/cells_manifest.json" download>cells_manifest.json</a></td>
+                        <td class="num">0,01 MB</td>
+                        <td>sumber, resolusi, dan tanggal pembuatan tiap indeks</td>
+                    </tr>
+                </tbody>
+            </table>
+            <figcaption>Data bangunan berasal dari gabungan Google Open Buildings,
+                Microsoft Building Footprints dan OpenStreetMap yang dirilis VIDA
+                (lisensi CC-BY-4.0, dengan bagian OpenStreetMap tunduk pada ODbL).
+            </figcaption>
+        </figure>
+
         <h2>Asal data</h2>
         <ul>
             <li><strong>Sumber utama</strong>: sistem SIMKOPDES milik Kementerian

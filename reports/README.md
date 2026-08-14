@@ -133,13 +133,18 @@ Read this before quoting any number out of these reports.
   (55–82% of cooperatives merge), so KDMP form a saturated field in populated
   Indonesia rather than discrete over-concentrated pockets. The honest
   short-range footprint is 22% within 1 km (10).
-- **Buildings confirm the isolated tail but not much else.** 23.2% of KDMP sit
-  on a mapped OSM building cell; 62.6% have no mapped building within ~5 km —
-  but OSM rural coverage is too sparse to call that "no house": 99.7% of the
-  "no building within 1 km" set still has people nearby per the Kontur grid
-  (17). The defensible claim is the concordance: **145 of 03's 146 isolated
-  cooperatives also have no mapped building within 1 km** (140 roadless), and
-  1,221 no-house KDMP sit inside farmland (17).
+- **Buildings do NOT support a "no houses around" claim; they confirm a small
+  isolated tail.** _Corrected 2026-08-14; the previous entry here said 62.6% of
+  KDMP had no mapped building within ~5 km and it was wrong._ On VIDA's combined
+  Google + Microsoft + OSM layer (137.1M Indonesian footprints, against 43.9M for
+  OSM alone), **44.4% of KDMP sit on a mapped building cell and 75.2% have one
+  within ~260 m; only 1.19% have none within ~5 km** (17). Two causes produced
+  the old figure: a band-assignment bug in `reports/17`'s own script, and the
+  OSM layer's rural undercount, which 17 had already flagged as a lower bound of
+  unknown looseness. The defensible claim is now the concordance: **128
+  cooperatives have no mapped building within 1 km, nobody within 5 km per
+  Kontur, and no made road within 5 km** — three independent sources on the same
+  ~130 points. The "no-house KDMP inside farmland" set is now **0** (17).
 - **The health index is a coverage artefact, not a verdict.** "Unhealthy ×38"
   is a constant field (`health_score` = 30 for every province) and should never
   be quoted. The real `average_health_index` runs 50–57, is computed on only

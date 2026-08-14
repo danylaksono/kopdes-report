@@ -1,5 +1,5 @@
 {
-  "built": "2026-08-13",
+  "built": "2026-08-14",
   "source_snapshot": "data/raw (SIMKOPDES export 2026-08-05)",
   "h3_resolutions": [
     5,
@@ -34,7 +34,7 @@
     "km_to_minimarket": "no mapped minimarket within ~5 km (the ring search caps at k=38). 66,846 cooperatives. NOT unknown.",
     "km_any_road": "no mapped road of any kind within ~5 km (4,294). NOT unknown.",
     "km_non_track": "no made road within ~5 km (5,106). NOT unknown.",
-    "building_band": "no *mapped* building within ~5 km (ring caps at k=38). NOT unknown, but a LOWER BOUND: OSM building coverage is incomplete in rural Indonesia (reports/17).",
+    "building_band, km_to_building": "no *mapped* building within ~5 km (ring caps at k=38). NOT unknown, and still a LOWER BOUND: since 2026-08-14 the layer is VIDA's Google+Microsoft+OSM union rather than OSM alone, which narrows the rural undercount but does not close it (reports/17).",
     "pop_within_1_4km": "no populated Kontur cell within the ring - read as 0.",
     "transaction_value": "the village link failed (21% of cooperatives). Genuinely unknown. 0 means linked and nothing reported.",
     "elevation_m, relief_200m_m, siting_landcover, flag_*": "not in 04's top-2,500 shortlist; never sampled.",
@@ -222,6 +222,10 @@
         {
           "name": "building_band",
           "type": "VARCHAR"
+        },
+        {
+          "name": "km_to_building",
+          "type": "DOUBLE"
         },
         {
           "name": "km_to_minimarket",
