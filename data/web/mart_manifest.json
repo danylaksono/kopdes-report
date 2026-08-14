@@ -28,7 +28,8 @@
     "OSM-derived distances are upper bounds; absence is not evidence (reports/05, 07).",
     "Siting and farmland flags are candidates requiring imagery verification (reports/04, 07).",
     "Aggregate economics come from the complete village file; point-level economics reach 79% of cooperatives and carry 88% of national value, so never sum point economics to get a regional total - read the aggregate.",
-    "Filter aggregates on anchor_lat is not null before mapping."
+    "Filter aggregates on anchor_lat is not null before mapping.",
+    "A user-contributed coordinate (coordinate_source='user') overrides latitude/longitude, the imagery link and the aggregate anchors only; H3 and the derived proximity measures still reflect the SIMKOPDES coordinate until the v2 recompute (AGENTS.md)."
   ],
   "null_semantics": {
     "km_to_minimarket": "no mapped minimarket within ~5 km (the ring search caps at k=38). 66,846 cooperatives. NOT unknown.",
@@ -43,6 +44,7 @@
     "land_status": "no land-asset record exists for this cooperative.",
     "m_to_made_road_exact": "not in 05's roadless set - the ring distance in km_non_track is accurate to ~34 m, use that (08).",
     "coordinate_diagnosis": "the coordinate is inside Indonesia and was never suspect.",
+    "coordinate_source_issue, coordinate_corrected_at": "null: no applied user correction; the SIMKOPDES coordinate is in force.",
     "land_cover": "no WorldCover tile or nodata pixel at the coordinate. The 08-13 snapshot resolves all 83,379; only the older 08-05 baseline had unresolvable points."
   },
   "missing_sources": [],
@@ -97,6 +99,26 @@
         },
         {
           "name": "longitude",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "coordinate_source",
+          "type": "VARCHAR"
+        },
+        {
+          "name": "coordinate_source_issue",
+          "type": "VARCHAR"
+        },
+        {
+          "name": "coordinate_corrected_at",
+          "type": "VARCHAR"
+        },
+        {
+          "name": "official_lat",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "official_lon",
           "type": "DOUBLE"
         },
         {

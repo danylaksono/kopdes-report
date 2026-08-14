@@ -111,6 +111,56 @@ Things that will bite you:
 - Adding a report? Add it to `SOURCES` in the script and to `AGG_MEASURES` if it
   should aggregate. That is the whole extension path.
 
+## User coordinate corrections (v1 implemented 2026-08-14)
+
+When a reader submits a correction from `/periksa/` (a prefilled GitHub issue,
+nothing is submitted automatically), the pipeline is: **issue → registry →
+mart**, and it never edits `data/raw/` or the snapshots.
+
+- **Registry**: `data/corrections/user_coordinates.csv` (committed). Columns:
+  `cooperative_id, user_latitude, user_longitude, source_issue, submitted_at,
+basis, status, note`. Only `status = applied` rows override; `pending` /
+  `rejected` rows are the review queue. It is the app's data layer, so it is
+  committed like the mart.
+- **Harvest**: `python scripts/import_coordinate_corrections.py` (requires `gh`
+  authenticated to `danylaksono/kopdes-vis`, the repo `/periksa/` links to).
+  Pulls issues with the `koreksi koordinat` label (or `--issue <n>`), parses
+  `**ID SIMKOPDES**` and `**Koordinat yang saya laporkan**` out of the body,
+  validates (cooperative exists, point inside Indonesia, within a sane distance
+  of the official one), and appends `pending` rows. Idempotent by
+  `source_issue`; `--dry-run` validates without writing. A human reviews the
+  issue and flips `status` to `applied`.
+- **Mart**: `build_analysis_mart.py` reads the registry and, for `applied`
+  rows, overrides `latitude`/`longitude`. New columns on `kopdes_points.parquet`:
+  `coordinate_source` (`'user'`/`'simkopdes'`), `coordinate_source_issue`,
+  `coordinate_corrected_at`, and `official_lat`/`official_lon` (the SIMKOPDES
+  point is always preserved; the `/periksa/` delta logic needs it). The
+  `imagery_url` is built from the live point, and an applied correction clears
+  `coordinate_suspect` for that row.
+- **v1 scope (important)**: the override is **display-level only** — the point,
+  the imagery link and the aggregate anchors. H3 and the derived proximity
+  measures (road band, population, building, minimarket) still reflect the
+  SIMKOPDES coordinate until v2 recomputes them. The mart manifest says so.
+- **Workflow**: after flipping rows to `applied`, rebuild the mart from the
+  correct snapshot (`$env:KOPDES_RAW='data/snapshots/2026-08-13'; python
+scripts/build_analysis_mart.py`) and run `verify_published_figures.py` — a
+  corrected coordinate can move a dot between bands and shift a published
+  figure.
+
+### v2 (planned, not built)
+
+- Recompute H3 and the derived proximity measures **at each corrected point**
+  with a Python mirror of the Periksa engine (`app/periksa/analysis.js`), so a
+  correction genuinely relocates the cooperative in every measure, not just on
+  the dot. This is a batch job over `applied` rows; the cell indexes in
+  `data/web/cells/` are the queryable geometry.
+- Wire `/periksa/` to read `coordinate_source` from the mart: show a "sudah
+  pernah dikoreksi" state and use the corrected point as the new official
+  baseline for future deltas (closing the loop).
+- Decide admin reassignment: a corrected point can cross a kecamatan boundary.
+  In v1 the admin assignment (by name join) is untouched; v2 should decide per
+  case, and `/periksa/` is the right place to surface the boundary crossing.
+
 ## Environment & dependencies
 
 - **Python venv**: `d:\personal\github\kopdes\.venv\` (Python 3.13, Windows)

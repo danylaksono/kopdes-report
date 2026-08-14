@@ -9,6 +9,15 @@ needs them side by side, on one row, with a stable schema. That is all this
 script does - it computes nothing new and it must not. If a number here
 disagrees with a report, the report is right and this is broken.
 
+One deliberate exception: user-contributed coordinate corrections. Rows in
+`data/corrections/user_coordinates.csv` with `status = 'applied'` override the
+SIMKOPDES latitude/longitude on the points table. That is not a computed
+number; it is a decision to trust a verified correction over the export, and
+provenance is preserved (`official_lat`/`official_lon` keep the SIMKOPDES
+point, `coordinate_source` says which one is live). In v1 the override is
+display-level only; H3 and the derived proximity measures still reflect the
+SIMKOPDES coordinate (see AGENTS.md for the v2 recompute plan).
+
 Four levels, for gradual aggregation in the app:
 
   data/web/kopdes_points.parquet      83,342 rows - one cooperative (~= one desa)
@@ -75,6 +84,11 @@ ROOT = Path(__file__).resolve().parent.parent
 #   $env:KOPDES_RAW='data/snapshots/2026-08-13'; python scripts/build_analysis_mart.py
 RAW = Path(os.environ["KOPDES_RAW"]) if os.environ.get("KOPDES_RAW") else ROOT / "data" / "raw"
 REPORTS = ROOT / "reports"
+
+# User-contributed coordinate corrections (see import_coordinate_corrections.py).
+# Only `status = applied` rows override the SIMKOPDES point. Committed: it is
+# part of the app's data layer, like the mart itself.
+CORRECTIONS = ROOT / "data" / "corrections" / "user_coordinates.csv"
 
 # H3 resolutions written onto every point. r8 is Kontur's native 400 m grid (03);
 # the coarser ones let the app pre-aggregate without recomputing from lat/lon.
@@ -273,6 +287,35 @@ def build_points(con, missing):
                on la.p = vs.p and la.d = vs.d and la.s = vs.s and la.v = vs.v
     """)
 
+    # User-contributed coordinate corrections. Only `applied` rows override;
+    # deduplicated by cooperative_id (latest submitted_at wins) so the join
+    # below cannot fan out. v1 note: this overrides the display coordinates
+    # (latitude/longitude, imagery link, aggregate anchors) only; H3 and the
+    # derived proximity measures still come from the SIMKOPDES point.
+    if CORRECTIONS.exists():
+        con.execute(f"""
+            create or replace table usr_corr as
+            select * exclude (rn) from (
+                select
+                    cooperative_id::int   as cooperative_id,
+                    user_latitude::double as user_latitude,
+                    user_longitude::double as user_longitude,
+                    source_issue,
+                    submitted_at,
+                    row_number() over (partition by cooperative_id
+                                       order by submitted_at desc) as rn
+                from {csv(CORRECTIONS)}
+                where lower(status) = 'applied'
+            ) where rn = 1
+        """)
+    else:
+        con.execute("""create or replace table usr_corr as
+                       select null::int as cooperative_id,
+                              null::double as user_latitude,
+                              null::double as user_longitude,
+                              null::varchar as source_issue,
+                              null::varchar as submitted_at where false""")
+
     con.execute(f"""
         create or replace table points as
         select
@@ -281,7 +324,14 @@ def build_points(con, missing):
             a.province_id, a.district_id, a.subdistrict_id,
             l.province, l.district, l.subdistrict,
             vl.village_id, vl.village,
-            l.latitude, l.longitude,
+            coalesce(uc.user_latitude, l.latitude)        as latitude,
+            coalesce(uc.user_longitude, l.longitude)      as longitude,
+            case when uc.cooperative_id is not null then 'user'
+                 else 'simkopdes' end                     as coordinate_source,
+            uc.source_issue                               as coordinate_source_issue,
+            uc.submitted_at                               as coordinate_corrected_at,
+            l.latitude                                    as official_lat,
+            l.longitude                                   as official_lon,
             {h3_cols},
 
             -- 02 zero-inflation / the outcome variable, where the two-hop join
@@ -342,7 +392,8 @@ def build_points(con, missing):
             -- entirely; `coordinate_diagnosis` says whether flipping the
             -- latitude sign explains it. FILTER THESE OUT of any map or
             -- distance statistic.
-            (sc.cooperative_id is not null)         as coordinate_suspect,
+            (sc.cooperative_id is not null
+             and uc.cooperative_id is null)         as coordinate_suspect,
             sc.diagnosis                            as coordinate_diagnosis,
 
             -- 07 land use
@@ -362,7 +413,8 @@ def build_points(con, missing):
 
             {CLASS_COLUMNS},
 
-            'https://www.google.com/maps/@' || l.latitude || ',' || l.longitude
+            'https://www.google.com/maps/@' || coalesce(uc.user_latitude, l.latitude)
+                || ',' || coalesce(uc.user_longitude, l.longitude)
                 || ',250m/data=!3m1!1e3'            as imagery_url
         from {csv(RAW / 'kopdes_locations.csv')} l
         left join admin a
@@ -381,6 +433,7 @@ def build_points(con, missing):
         left join src_suspect      sc using (cooperative_id)
         left join src_clustering   cl using (cooperative_id)
         left join src_building     bd using (cooperative_id)
+        left join usr_corr         uc on uc.cooperative_id = l.cooperative_id
     """)
 
     n, = con.execute("select count(*) from points").fetchone()
@@ -520,6 +573,10 @@ def main():
     print(f"  {n_points:,} cooperatives")
     print(f"  admin ids resolved:      {matched:,}  ({100*matched/n_points:.2f}%)")
     print(f"  village stats linked:    {linked:,}  ({100*linked/n_points:.1f}%)")
+    n_corr, = con.execute(
+        "select count(*) from points where coordinate_source = 'user'").fetchone()
+    if n_corr:
+        print(f"  user-coordinate corrections applied: {n_corr}")
 
     levels = {
         "kecamatan": ("subdistrict_id", ["province_id", "district_id",
@@ -604,6 +661,10 @@ def main():
             "economics reach 79% of cooperatives and carry 88% of national value, so "
             "never sum point economics to get a regional total - read the aggregate.",
             "Filter aggregates on anchor_lat is not null before mapping.",
+            "A user-contributed coordinate (coordinate_source='user') overrides "
+            "latitude/longitude, the imagery link and the aggregate anchors only; "
+            "H3 and the derived proximity measures still reflect the SIMKOPDES "
+            "coordinate until the v2 recompute (AGENTS.md).",
         ],
         # What a null MEANS, per column. This is not pedantry: several of these
         # nulls carry the finding. A glyph that renders a null
@@ -631,6 +692,8 @@ def main():
                                     "km_non_track is accurate to ~34 m, use that (08).",
             "coordinate_diagnosis": "the coordinate is inside Indonesia and was never "
                                     "suspect.",
+            "coordinate_source_issue, coordinate_corrected_at": "null: no applied user "
+                                    "correction; the SIMKOPDES coordinate is in force.",
             "land_cover": "no WorldCover tile or nodata pixel at the coordinate. "
                            "The 08-13 snapshot resolves all 83,379; only the older "
                            "08-05 baseline had unresolvable points.",
