@@ -500,10 +500,14 @@ AGG_MEASURES = f"""
     median(pop_within_1_4km)                                as median_pop_within_1_4km,
     round(avg(isolation_score), 2)                          as mean_isolation_score,
 
+    -- Denominator is every cooperative, not the non-null ones. 05's ring search
+    -- stops at k=38 (~5 km), so a null km_non_track *is* the finding "no road
+    -- within 5 km" and belongs in the numerator - which means it has to be in
+    -- the denominator too. Excluding it there gave 240 kecamatan above 100%
+    -- (Welarek: 2,950%) and silently inflated 1,359 more that still looked
+    -- plausible.
     round(100.0 * count(*) filter (where km_non_track is null or km_non_track > 5)
-          / nullif(count(*) filter (where km_any_road is not null
-                                       or km_non_track is not null), 0), 2)
-                                                            as pct_no_road_within_5km,
+          / nullif(count(*), 0), 2)                         as pct_no_road_within_5km,
     median(km_non_track)                                    as median_km_to_road,
     -- Exact (08), not the capped ring version, so this is defined everywhere.
     round(median(m_to_minimarket_exact) / 1000.0, 3)        as median_km_to_minimarket,
