@@ -287,7 +287,7 @@ ID_SUMMARY = {
     ),
     "16-rat-compliance": (
         "Apakah koperasi benar-benar menggelar rapat anggota tahunan (RAT)? Ya, "
-        "60% koperasi tercatat telah melaksanakan RAT per 5 Agustus 2026, tetapi hanya "
+        "60% koperasi tercatat telah melaksanakan RAT per 13 Agustus 2026, tetapi hanya "
         "6% di Papua Pegunungan."
     ),
     "17-building-proximity": (

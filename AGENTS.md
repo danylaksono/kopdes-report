@@ -71,7 +71,7 @@ with a report, the report is right and the mart is broken.
 
 | File                       | Rows   | Unit                           |
 | -------------------------- | ------ | ------------------------------ |
-| `kopdes_points.parquet`    | 83,342 | cooperative ≈ desa, 70 columns |
+| `kopdes_points.parquet`    | 83,379 | cooperative ≈ desa, 81 columns |
 | `kopdes_kecamatan.parquet` | 7,277  | subdistrict                    |
 | `kopdes_kabupaten.parquet` | 514    | district                       |
 | `kopdes_provinsi.parquet`  | 38     | province (+ health scores)     |

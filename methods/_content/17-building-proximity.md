@@ -20,7 +20,7 @@ Artinya jelas dan harus dikatakan terus terang: **tuduhan bahwa koperasi dibangu
 
 ## Yang tersisa, dan justru lebih kuat
 
-Yang tersisa adalah ekor kecil, dan di situlah temuan sesungguhnya berada. **<span data-fig="triple_isolated_coops">128</span> koperasi sekaligus: tidak punya rumah terpetakan dalam 1 km, tidak punya penduduk dalam 5 km menurut peta satelit, dan tidak punya jalan yang bisa dilalui kendaraan dalam 5 km.** Tiga sumber yang sama sekali berbeda menunjuk kelompok yang sama.
+Yang tersisa adalah ekor kecil, dan di situlah temuan sesungguhnya berada. **<span data-fig="triple_isolated_coops">128</span> koperasi sekaligus: tidak ada rumah terpetakan dalam jarak 1 km, tidak punya penduduk dalam 5 km menurut peta satelit, dan tidak punya jalan yang bisa dilalui kendaraan dalam 5 km.** Tiga sumber yang sama sekali berbeda menunjuk kelompok yang sama.
 
 Seratus dua puluh delapan koperasi adalah angka kecil dari 83.379. Tapi angka itu bertahan diperiksa dari tiga arah sekaligus, dan itulah sebabnya angka inilah yang kami pakai, bukan angka yang lebih besar tapi hanya bersandar pada satu sumber.
 

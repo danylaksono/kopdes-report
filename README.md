@@ -1,208 +1,357 @@
 # kopdes
 
-Data pipeline and map viewer for **Koperasi Desa/Kelurahan Merah Putih**
-(village/urban cooperatives), sourced from [SIMKOPDES](https://simkopdes.go.id).
+Investigasi data atas **Koperasi Desa/Kelurahan Merah Putih**, beserta seluruh
+alur data dan peta interaktifnya. Sumber datanya
+[SIMKOPDES](https://simkopdes.go.id) dengan API publik dari kementerian sendiri.
 
-## Getting the data
+Repositori ini memuat tiga hal sekaligus: **laporannya** (situs statis di akar
+repo), **bukti di baliknya** (`reports/`, satu direktori per analisis, bisa
+dijalankan ulang), dan **data mentahnya** (`data/raw/`, ikut di-commit).
 
-Just here for the data, not the pipeline? `data/raw/*.csv` is committed to
-this repo - clone it and you have everything:
+> Catatan bahasa: laporan publik dan berkas ini berbahasa Indonesia. Laporan
+> teknis di `reports/` sengaja tetap berbahasa Inggris, karena itu berkas kerja
+> yang harus bisa dibaca dan diuji siapa pun yang mengulang analisisnya.
+
+## Laporannya
+
+Situs disajikan langsung dari tiap laporan, dan sengaja dibuat statis tanpa framework.
+
+| Halaman                    | Isi                                                                      |
+| -------------------------- | ------------------------------------------------------------------------ |
+| [`index.html`](index.html) | Cerita utama, _storytelling_, ringkasan seluruh temuan                   |
+| [`findings/`](findings/)   | Tiga bab temuan, lebih dalam, dengan tabel dan gambarnya                 |
+| [`explore/`](explore/)     | Peta interaktif: 83.379 koperasi, empat skala, tiga cara pewarnaan       |
+| [`periksa/`](periksa/)     | Hitung ulang analisisnya di satu koordinat yang pembaca tentukan sendiri |
+| [`tabel/`](tabel/)         | Tabel lengkap, bisa dicari dan diurutkan                                 |
+| [`methods/`](methods/)     | Lampiran metode, bahasa Indonesia, satu halaman per analisis             |
+| [`data/`](data/)           | Unduhan, asal-usul data, dan catatan potret harian                       |
+| [`about/`](about/)         | Siapa, kenapa, dan **log koreksi** publik                                |
+
+### Tiga tuduhan yang diuji
+
+Setiap bab menjawab satu tuduhan publik, dan menyebut vonisnya apa adanya,
+termasuk ketika tuduhannya tidak terbukti.
+
+| Bab                                                   | Tuduhan                                      | Vonis singkat                                                                      |
+| ----------------------------------------------------- | -------------------------------------------- | ---------------------------------------------------------------------------------- |
+| [1 · Akses & penempatan](findings/remoteness/)        | "Dibangun di tempat yang tak terjangkau"     | Tidak terbukti massal (95% penduduk dalam 1,4 km), tetapi ekornya nyata            |
+| [2 · Kompetisi & kanibalisasi](findings/competition/) | "Dibangun menimpa minimarket yang sudah ada" | Kedekatannya nyata tapi sedang (6,7 poin); kompetisi dagang tidak terbukti         |
+| [3 · Anggaran & output](findings/money/)              | "Boros, uang keluar tanpa hasil"             | "Tidak ada hasil" terbukti; "boros" tidak bisa diuji, sisi biaya tidak ada di data |
+
+## Buktinya: 19 analisis di `reports/`
+
+Setiap direktori berisi `run.py` (bisa dijalankan ulang), `README.md` (tulisan
+lengkapnya, bahasa Inggris) dan CSV hasilnya yang ikut di-commit, sehingga
+temuannya tetap ada tanpa perlu menjalankan ulang apa pun. Indeks lengkap
+beserta status tiap laporan ada di **[`reports/README.md`](reports/README.md)**,
+termasuk daftar "apa yang bisa dan tidak bisa kami katakan".
+
+#### Dasar seluruh investigasi
+
+| #                                                               | Pertanyaan                                                   |
+| --------------------------------------------------------------- | ------------------------------------------------------------ |
+| [01 snapshot-drift](reports/01-snapshot-drift/)                 | Apakah angka nol itu nyata, atau datanya memang belum diisi? |
+| [02 zero-inflation](reports/02-zero-inflation/)                 | Berapa banyak data kinerja yang sebenarnya nol?              |
+| [09 external-corroboration](reports/09-external-corroboration/) | Apakah angka publik kementerian cocok dengan dashboardnya?   |
+
+#### Bab 1 · akses dan penempatan
+
+| #                                                         | Pertanyaan                                                           |
+| --------------------------------------------------------- | -------------------------------------------------------------------- |
+| [03 population-coverage](reports/03-population-coverage/) | Siapa yang terjangkau, dan koperasi mana yang tidak dekat siapa pun? |
+| [04 siting-screen](reports/04-siting-screen/)             | Koperasi mana yang lingkungannya mustahil?                           |
+| [05 road-access](reports/05-road-access/)                 | Seberapa jauh tiap koperasi dari jalan?                              |
+| [07 landuse-polygons](reports/07-landuse-polygons/)       | Di atas kuburan? Di tengah sawah?                                    |
+| [08 exact-geometry](reports/08-exact-geometry/)           | Berapa jauh sebenarnya, dan apakah koordinatnya mungkin?             |
+| [17 building-proximity](reports/17-building-proximity/)   | Seberapa jauh koperasi dari bangunan terdekat?                       |
+| [19 land-cover](reports/19-land-cover/)                   | Tiap koperasi berdiri di atas penutup lahan apa?                     |
+
+#### Bab 2 · kompetisi dan kanibalisasi
+
+| #                                                           | Pertanyaan                                                    |
+| ----------------------------------------------------------- | ------------------------------------------------------------- |
+| [06 minimarket-proximity](reports/06-minimarket-proximity/) | Apakah koperasi dibangun menimpa ritel modern yang sudah ada? |
+| [10 coop-clustering](reports/10-coop-clustering/)           | Apakah koperasi menumpuk satu sama lain, dan merugikan?       |
+| [12 product-mix](reports/12-product-mix/)                   | Program ini sebenarnya menjual apa?                           |
+
+#### Bab 3 · anggaran dan output
+
+| #                                                         | Pertanyaan                                                                  |
+| --------------------------------------------------------- | --------------------------------------------------------------------------- |
+| [11 savings-behaviour](reports/11-savings-behaviour/)     | Anggota benar-benar menabung, atau rekeningnya tidur?                       |
+| [13 compliance-npwp-nib](reports/13-compliance-npwp-nib/) | Suratnya nyata, dan adakah yang beroperasi dengan surat itu?                |
+| [14 island-comparison](reports/14-island-comparison/)     | Program ini milik Jawa atau milik Indonesia?                                |
+| [15 construction-output](reports/15-construction-output/) | Apakah konstruksi sejalan dengan hasil?                                     |
+| [16 rat-compliance](reports/16-rat-compliance/)           | Apakah koperasi menggelar rapat anggota tahunan?                            |
+| [18 health-scoring](reports/18-health-scoring/)           | Indeks kesehatan kementerian itu sebenarnya bilang apa? (tidak diterbitkan) |
+
+### Setiap angka yang terbit bisa dicek
+
+`scripts/verify_published_figures.py` menghitung ulang **setiap angka utama yang
+muncul di situs** dari data yang di-commit, lalu membandingkannya dengan teks
+yang tertulis di halaman. Ini bukan formalitas: sebuah kekeliruan pemberian pita
+jarak pernah menerbitkan 62,6% ketika angka sebenarnya 1,19%, dan lolos karena
+tidak ada yang membandingkan kalimatnya dengan datanya.
 
 ```bash
-git clone <this-repo-url>
+python scripts/verify_published_figures.py           # periksa saja
+python scripts/verify_published_figures.py --emit    # sekaligus tulis data/web/figures.json
 ```
 
-Or grab a single file without cloning: open it on GitHub and use the "Raw"
-button (or `raw.githubusercontent.com/<owner>/<repo>/main/data/raw/<file>.csv`).
+Halaman menuliskan angkanya lewat `<span data-fig="kunci">6,7</span>`, dan
+`app/site.js` mengganti isinya dari `figures.json` saat halaman dimuat. Teks yang
+tertulis di berkas HTML tetap harus benar, karena itulah yang dilihat pembaca
+tanpa JavaScript dan yang terlihat di `git diff`; skrip di atas gagal kalau
+keduanya tidak cocok. Pemeriksa lain:
 
-| File                                                                                | What's in it                                                             |
-| ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| `kopdes_locations.csv`                                                              | every cooperative: id, name, province/district/subdistrict, lat/lon      |
-| `kopdes_land_assets.csv`                                                            | surveyed land/building per cooperative, incl. verification `status`      |
-| `kopdes_stats_province.csv` / `_district.csv` / `_subdistrict.csv` / `_village.csv` | roll-up stats (accounts, transactions, savings, ...) at each admin level |
-| `kopdes_national_summary.csv`                                                       | headline national metrics                                                |
-| `kopdes_province_rat_and_construction.csv`                                          | annual-meeting (RAT) and building-progress status by province            |
-| `kopdes_province_top_products.csv`                                                  | top traded products by province                                          |
+```bash
+python scripts/check_links.py       # tautan internal
+python scripts/check_emdashes.py    # tanda pisah panjang di teks publik
+```
 
-The CSVs in the repo are a snapshot from whenever they were last regenerated
-(check `git log -- data/raw` for the date). If you want a fresh pull straight
-from SIMKOPDES instead of that snapshot:
+## Mengambil datanya
+
+Cuma butuh datanya, bukan alur kerjanya? `data/raw/*.csv` ikut di-commit di repo
+ini, jadi cukup klon dan semuanya sudah ada:
+
+```bash
+git clone <url-repo-ini>
+```
+
+Atau ambil satu berkas tanpa mengklon: buka di GitHub lalu pakai tombol "Raw"
+(atau `raw.githubusercontent.com/<pemilik>/<repo>/main/data/raw/<berkas>.csv`).
+
+| Berkas                                                                              | Isinya                                                                       |
+| ----------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| `kopdes_locations.csv`                                                              | setiap koperasi: id, nama, provinsi/kabupaten/kecamatan, lintang/bujur       |
+| `kopdes_land_assets.csv`                                                            | lahan/bangunan hasil survei per koperasi, termasuk `status` verifikasinya    |
+| `kopdes_stats_province.csv` / `_district.csv` / `_subdistrict.csv` / `_village.csv` | statistik agregat (rekening, transaksi, simpanan, dll) di tiap tingkat admin |
+| `kopdes_national_summary.csv`                                                       | angka utama nasional                                                         |
+| `kopdes_province_rat_and_construction.csv`                                          | status rapat anggota tahunan (RAT) dan kemajuan bangunan per provinsi        |
+| `kopdes_province_top_products.csv`                                                  | produk terlaris per provinsi                                                 |
+
+CSV di repo ini adalah potret dari kapan pun terakhir dibuat ulang (cek
+`git log -- data/raw` untuk tanggalnya). Kalau ingin tarikan segar langsung dari
+SIMKOPDES:
 
 ```bash
 python scripts/extract_kopdes.py data/raw
 ```
 
-It hits the live public API (no auth) and overwrites the files in place.
+Skrip itu memanggil API publik (tanpa autentikasi) dan menimpa berkasnya.
 
-## Layout
+### Potret bertanggal
+
+`data/snapshots/<tanggal>/` menyimpan tarikan bertanggal. **CSV-nya tidak
+di-commit** (28 MB sekali tarik), tetapi `_manifest.json`-nya di-commit: berisi
+hash SHA-256 tiap berkas, dan itulah satu-satunya catatan asal-usul untuk potret
+yang tidak bisa ditarik ulang, karena API hanya melayani keadaan terkini.
+
+Beberapa laporan dijalankan terhadap potret 13 Agustus, bukan terhadap
+`data/raw` yang bertanggal 5 Agustus. Tiap direktori laporan mencatatnya sendiri
+di `_source.json`, dan README-nya menyebut perintah untuk mengulangnya:
+
+```bash
+KOPDES_RAW=data/snapshots/2026-08-13 python reports/02-zero-inflation/run.py
+```
+
+Menjalankan tanpa `KOPDES_RAW` membaca ekspor 5 Agustus, dan angkanya akan
+berbeda. Itu bukan kerusakan, itu memang potret yang berbeda.
+
+## Susunan direktori
 
 ```
-index.html         the story (scrollytelling), served from the repo root
-explore/           the interactive map
-app/               shared shell (site.css, site.js) + story.js
-app/explore/       the map's modules; app/explore.css is its chrome
-data/raw/          kopdes_*.csv  -  raw SIMKOPDES export (committed; source of truth)
-data/web/          the parquet mart + simplified boundaries (committed)
-scripts/           extractor, mart builder, boundary builder
-geo/               boundary-shapefile download/convert/join pipeline (see geo/README.md)
+index.html         cerita utama (bergulir), disajikan dari akar repo
+findings/          tiga bab temuan
+methods/           lampiran metode; isinya di methods/_content/*.md
+explore/           peta interaktif
+periksa/           pemeriksa satu koordinat
+app/               kerangka bersama (site.css, site.js) + story.js
+app/explore/       modul peta; app/explore.css chrome-nya
+reports/           19 analisis: run.py + README.md + CSV hasilnya
+data/raw/          kopdes_*.csv, ekspor mentah SIMKOPDES (di-commit)
+data/web/          mart parquet + batas wilayah sederhana + figures.json (di-commit)
+scripts/           ekstraktor, pembangun mart, pembangun batas, pemeriksa angka
+geo/               alur unduh/konversi/gabung batas wilayah (lihat geo/README.md)
 ```
 
-`geo/raw/`, `geo/geojson/` and `geo/output/` are gitignored - they're
-regenerated from `data/raw/` by the scripts below and run into the hundreds of
-MB. `data/web/` is gitignored _except_ for the files the deployed app fetches:
-the four parquet tables, `mart_manifest.json`, and `boundaries/*.geojson`.
+`geo/raw/`, `geo/geojson/` dan `geo/output/` diabaikan git, karena dibuat ulang
+dari `data/raw/` dan ukurannya ratusan MB. `data/web/` juga diabaikan _kecuali_
+berkas yang memang diambil aplikasi saat dibuka: empat tabel parquet,
+`mart_manifest.json`, `figures.json`, dan `boundaries/*.geojson`.
 
-## Regenerating the data
+## Membuat ulang datanya
 
-**1. Refresh the SIMKOPDES export** (hits the live API; safe to re-run anytime):
+**1. Segarkan ekspor SIMKOPDES** (memanggil API langsung, aman diulang):
 
 ```bash
 python scripts/extract_kopdes.py data/raw
 ```
 
-**2. Rebuild administrative boundary polygons joined to the stats** (one-time
-~675MB download, cached after that - see [geo/README.md](geo/README.md) for
-how the name-matching join works and its known gaps):
+**2. Bangun ulang poligon batas wilayah yang tergabung dengan statistik**
+(sekali unduh ~675 MB, setelah itu tersimpan; lihat [geo/README.md](geo/README.md)
+untuk cara kerja penggabungan berbasis nama dan celah yang diketahui):
 
 ```bash
 pip install -r geo/requirements.txt
 python geo/run_pipeline.py
 ```
 
-**3. Rebuild the map's boundary layer** from what step 2 produced (fast, no
-download - it simplifies `geo/output/` down to something a browser can fetch):
+**3. Bangun ulang lapisan batas untuk peta** dari hasil langkah 2 (cepat, tanpa
+unduhan; hanya menyederhanakan `geo/output/` sampai cukup ringan untuk peramban):
 
 ```bash
 python scripts/build_boundaries.py
 ```
 
-## The analysis mart (what the app reads)
+## Mart analisis (yang dibaca aplikasi)
 
-Every analysis in `reports/` produces its own per-cooperative table. The app
-needs them on one row, so `scripts/build_analysis_mart.py` joins all of them and
-writes four parquet files — the same measures at four levels of aggregation, so
-one visualisation spec works at every zoom:
+Setiap analisis di `reports/` menghasilkan tabelnya sendiri per koperasi.
+Aplikasi butuh semuanya dalam satu baris, jadi
+`scripts/build_analysis_mart.py` menggabungkan semuanya dan menulis empat berkas
+parquet: ukuran yang sama pada empat tingkat agregasi, sehingga satu spesifikasi
+visualisasi bekerja di semua tingkat zoom.
 
 ```bash
 python scripts/build_analysis_mart.py
 ```
 
-| File                                | Rows   | Unit                                        |
-| ----------------------------------- | ------ | ------------------------------------------- |
-| `data/web/kopdes_points.parquet`    | 83,342 | one cooperative ≈ one desa — **70 columns** |
-| `data/web/kopdes_kecamatan.parquet` | 7,277  | subdistrict                                 |
-| `data/web/kopdes_kabupaten.parquet` | 514    | district                                    |
-| `data/web/kopdes_provinsi.parquet`  | 38     | province                                    |
+| Berkas                              | Baris  | Satuan                                  |
+| ----------------------------------- | ------ | --------------------------------------- |
+| `data/web/kopdes_points.parquet`    | 83.379 | satu koperasi ≈ satu desa, **81 kolom** |
+| `data/web/kopdes_kecamatan.parquet` | 7.277  | kecamatan                               |
+| `data/web/kopdes_kabupaten.parquet` | 514    | kabupaten/kota                          |
+| `data/web/kopdes_provinsi.parquet`  | 38     | provinsi                                |
 
-These four (and `mart_manifest.json`) are **committed** — ~7 MB total, small
-enough to serve from GitHub Pages, unlike the 25 MB `points.geojson` they
-replace. Everything else in `data/web/` stays gitignored.
+Keempatnya (plus `mart_manifest.json`) **ikut di-commit**, sekitar 7 MB, cukup
+kecil untuk disajikan GitHub Pages, tidak seperti `points.geojson` 25 MB yang
+digantikannya. Sisa isi `data/web/` tetap diabaikan git.
 
-Each point carries H3 cell ids at r5–r9 as `UBIGINT`, so the app can re-bin at
-any resolution without recomputing from lat/lon (`h3_h3_to_string()` for the hex
-form). Each aggregate row carries `anchor_lat`/`anchor_lon` — the median position
-of its members — which is what a renderer binds a feature to when it is not
-drawing points. Filter on `anchor_lat is not null`: 4 kecamatan have villages in
-the statistics but no name-matched cooperative.
+**Mart ini tidak menghitung apa pun.** Kalau angka di sini berbeda dengan angka
+di laporannya, yang benar laporannya dan mart-nya rusak.
 
-**Read `mart_manifest.json` before encoding anything.** It records the schema,
-join coverage, and — most importantly — what a null _means_ per column. Several
-nulls carry the finding rather than marking absence: a null `km_to_minimarket`
-means "no minimarket within 5 km" (66,846 cooperatives), not "unknown", and
-rendering it as missing data inverts the result of
-[report 06](reports/06-minimarket-proximity/).
+Tiap titik membawa id sel H3 pada r5 sampai r9 sebagai `UBIGINT`, sehingga
+aplikasi bisa membin ulang di resolusi mana pun tanpa menghitung lagi dari
+lintang/bujur (pakai `h3_h3_to_string()` untuk bentuk heksadesimalnya). Tiap
+baris agregat membawa `anchor_lat`/`anchor_lon`, yaitu posisi median
+anggotanya, dan itulah yang dipakai penggambar ketika yang digambar bukan titik.
+Tetap saring `anchor_lat is not null` sebelum memetakan, sebagai pengaman.
 
-Two joins are lossy and the manifest publishes both rates: admin ids resolve for
-**99.95%** of cooperatives by subdistrict name, while village-level economics
-need a two-hop join through the land-asset file and reach **79.1%**. Aggregate
-economics therefore do _not_ come from the points — they are grouped straight off
-the complete village file and reconcile exactly with the raw export. **Never sum
-point economics for a regional total; read the aggregate table.**
+**Baca `mart_manifest.json` sebelum memetakan kolom apa pun.** Berkas itu
+mencatat skema, cakupan penggabungan, dan yang terpenting, **arti null di tiap
+kolom**. Beberapa null justru membawa temuannya, bukan menandai data hilang:
+`km_to_minimarket` yang null berarti "tidak ada minimarket dalam 5 km" (66.874
+koperasi), bukan "tidak diketahui", dan menggambarnya sebagai data hilang
+membalik hasil [laporan 06](reports/06-minimarket-proximity/).
 
-## The app
+Satu penggabungan bersifat lossy dan manifest menerbitkan angkanya: id
+administratif terselesaikan untuk **seluruh** 83.379 koperasi, sedangkan
+ekonomi tingkat desa perlu dua lompatan lewat berkas aset lahan dan hanya
+mencapai **79,1%**. Karena itu ekonomi agregat _tidak_ berasal dari titik, tetapi
+dikelompokkan langsung dari berkas desa yang lengkap dan cocok persis dengan
+ekspor mentahnya. **Jangan pernah menjumlahkan ekonomi tingkat titik untuk
+mendapat total wilayah; baca tabel agregatnya.**
 
-Static site served from the repo root, no build step - MapLibre GL JS,
-[screengrid](https://github.com/danylaksono/screengrid) and DuckDB-wasm from a
-CDN, reading the committed parquet directly:
+## Aplikasinya
+
+Situs statis dari akar repo, tanpa build. MapLibre GL JS,
+[screengrid](https://github.com/danylaksono/screengrid) dan DuckDB-wasm dari CDN,
+membaca parquet yang di-commit secara langsung:
 
 ```bash
 python -m http.server 8000
-# open http://localhost:8000  (story)  or  /explore/  (map)
+# buka http://localhost:8000  (cerita)  atau  /explore/  (peta)
 ```
 
-### The map (`/explore/`)
+### Petanya (`/explore/`)
 
-**Four scales of the same 83,342 cooperatives**, picked from the ladder in the
-left rail, which shows what each one costs you: 83.379 points → 7.273 kecamatan
-→ 514 kabupaten → 38 provinsi.
+**Empat skala untuk 83.379 koperasi yang sama**, dipilih dari tangga di rel
+kiri, yang sekaligus menunjukkan ongkos tiap pilihan: 83.379 titik → 7.277
+kecamatan → 514 kabupaten → 38 provinsi.
 
-- **Kisi dinamis** - screen-space cells via screengrid, fixed pixel size
-  (slider), re-binned on every pan and zoom.
-- **Kecamatan / Kabupaten / Provinsi** - one glyph per area, drawn at the
-  _median position of its member cooperatives_, not the polygon centroid, which
-  can sit offshore. Simplified boundaries render underneath as context.
+- **Kisi dinamis**: sel dalam ruang layar lewat screengrid, ukuran piksel tetap
+  (penggeser), dibin ulang tiap kali digeser dan di-zoom.
+- **Kecamatan / Kabupaten / Provinsi**: satu glif per wilayah, digambar di
+  _posisi median koperasi anggotanya_, bukan centroid poligon, yang bisa jatuh
+  di laut. Batas wilayah sederhana digambar di bawahnya sebagai konteks.
 
-**Three ways to encode a cell**, all of them shares of cooperatives so the four
-scales stay comparable:
+**Tiga cara mewarnai sel**, semuanya berupa proporsi koperasi supaya keempat
+skala tetap sebanding:
 
-- **Profil** - four bars, one per question the report asks: sekitarnya sepi,
-  jauh dari jalan, berdempetan, tidak melaporkan transaksi. Taller is always
-  worse, so a tall glyph is an area in trouble on several fronts.
-- **Komposisi** - a stacked column showing how the area's cooperatives divide
-  across a class family (distance to road, population nearby, distance to the
-  nearest other cooperative).
-- **Ukuran** - one measure as a colour ramp, fixed at 0-100% so the colours do
-  not change meaning as you pan. Several measures sit in a narrow band near one
-  end, so there is an explicit "regangkan skala" toggle; the legend prints the
-  bounds whenever it is on.
+- **Profil**: empat batang, satu per pertanyaan yang diajukan laporan ini:
+  sekitarnya sepi, jauh dari jalan, berdempetan, tidak melaporkan transaksi.
+  Makin tinggi selalu berarti makin buruk, jadi glif yang tinggi adalah wilayah
+  yang bermasalah di beberapa sisi sekaligus.
+- **Komposisi**: kolom bertumpuk yang menunjukkan bagaimana koperasi di wilayah
+  itu terbagi dalam satu keluarga kelas (jarak ke jalan, penduduk di sekitar,
+  jarak ke koperasi terdekat).
+- **Ukuran**: satu ukuran sebagai gradasi warna, dipatok 0 sampai 100% supaya
+  arti warnanya tidak berubah saat peta digeser. Beberapa ukuran menumpuk di
+  pita sempit di salah satu ujung, jadi ada tombol "regangkan skala"; legendanya
+  mencetak batas nilainya setiap kali tombol itu aktif.
 
-**Profil draws every glyph at the same size**, on purpose. Sizing it by count
-would put the same share at different pixel heights in different cells, which is
-precisely the comparison the mode exists to support - and the smallest cells
-would fall below the size where four bars still read as four bars. The count is
-in the inspector instead. Komposisi and Ukuran do scale with count, where it
-costs nothing: proportions are scale-invariant, and colour leaves size free.
-There the area is scaled to a high percentile rather than the maximum, because
-scaling to Java's peak flattens everywhere else.
+**Profil menggambar setiap glif dengan ukuran yang sama**, dan itu disengaja.
+Mengukur glif berdasarkan jumlah koperasi akan membuat proporsi yang sama tampil
+setinggi berbeda di sel yang berbeda, padahal justru perbandingan itulah yang
+ingin didukung mode ini. Sel terkecil juga akan jatuh di bawah ukuran ketika
+empat batang masih terbaca sebagai empat batang. Jumlahnya ada di inspektur.
+Komposisi dan Ukuran memang ikut membesar mengikuti jumlah, karena di sana tidak
+ada ongkosnya: proporsi tidak bergantung skala, dan warna membebaskan ukuran.
+Di sana luas glif dipatok ke persentil tinggi, bukan ke nilai maksimum, karena
+memakai puncak Jawa akan memipihkan seluruh wilayah lain.
 
-**Titik koperasi** overlays the raw coordinates on any scale; filters apply to the grid
-and the points, never to the pre-computed admin aggregates (the rail says so
-when they are inert). Clicking any glyph opens an inspector with the full
-profile against the national figure, the medians the glyph deliberately does not
-encode, and a button to drop one rung down the ladder in that area.
+**Titik koperasi** menumpangkan koordinat mentah di atas skala mana pun. Filter
+berlaku untuk kisi dan titik, tidak pernah untuk agregat administratif yang
+sudah dihitung sebelumnya (rel kiri mengatakannya ketika filter itu tidak
+berlaku). Mengklik glif mana pun membuka inspektur berisi profil lengkap
+dibanding angka nasional, median yang sengaja tidak dikodekan glifnya, dan
+tombol untuk turun satu anak tangga di wilayah itu.
 
-**Search** (top-left, over the map) covers all 83,342 cooperative names and every
-kecamatan, kabupaten and provinsi. Picking an area switches the ladder to that
-scale and opens it; picking a cooperative flies to it, turns the point layer on
-and marks it - which paired with the satellite basemap is how you check whether
-a coordinate lands on anything.
+**Pencarian** (kiri atas, di atas peta) mencakup seluruh 83.379 nama koperasi
+serta semua kecamatan, kabupaten dan provinsi. Memilih wilayah akan memindahkan
+tangga ke skala itu dan membukanya; memilih koperasi akan terbang ke sana,
+menyalakan lapisan titik dan menandainya, yang bila dipasangkan dengan peta
+satelit adalah cara memeriksa apakah sebuah koordinat benar-benar jatuh di atas
+sesuatu.
 
-**Basemaps** (bottom-left, over the map): _Terang_ is
-[OpenFreeMap](https://openfreemap.org) Positron retinted to the report's
-palette, _Detail_ is OpenFreeMap Liberty, and _Satelit_ is
+**Peta dasar** (kiri bawah, di atas peta): _Terang_ adalah
+[OpenFreeMap](https://openfreemap.org) Positron yang diwarnai ulang mengikuti
+palet laporan, _Detail_ adalah OpenFreeMap Liberty, dan _Satelit_ adalah
 [Esri World Imagery](https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9).
 
-> Satellite imagery is Esri rather than Google on purpose: Google's `mt*.google.com`
-> tile endpoints are not licensed for embedding in another site. If you have a
-> Google Maps Platform key, their Map Tiles API is the licensed route and drops
-> into `app/explore/basemaps.js` as one more entry.
+> Citra satelitnya memakai Esri, bukan Google, dan itu disengaja: endpoint ubin
+> `mt*.google.com` milik Google tidak dilisensikan untuk ditanam di situs lain.
+> Kalau Anda punya kunci Google Maps Platform, Map Tiles API mereka adalah jalur
+> resminya dan tinggal ditambahkan sebagai satu entri lagi di
+> `app/explore/basemaps.js`.
 
-Icons are [Phosphor](https://phosphoricons.com) (MIT), inlined.
+Ikonnya [Phosphor](https://phosphoricons.com) (MIT), ditanam langsung.
 
-## Known data-quality caveats
+## Catatan mutu data yang perlu diketahui
 
-- `kopdes_stats_*.csv` uses SIMKOPDES's own internal ids
-  (`province_id`/`district_id`/`subdistrict_id`/`village_id`), not
-  BPS/Kemendagri codes - see [geo/README.md](geo/README.md) for why the
-  boundary join goes through name-matching instead.
-- A small number of source rows have wrong province/district pairings or
-  bogus coordinates baked into the SIMKOPDES export itself (e.g. a district
-  named "Fukuoka" filed under province "PAPUA").
-  [Report 08](reports/08-exact-geometry/) identifies the 19 coordinates that
-  fall outside Indonesia and flags them as `coordinate_suspect` in the mart;
-  the map filters them out by default but lets you show them. The geo pipeline
-  logs unmatched rows to `geo/output/<level>_unmatched.csv`.
-- `kopdes_land_assets.csv` has no cooperative id either - it's joined to
-  `kopdes_locations.csv` by exact cooperative name, which misses ~0.04% of
-  land-asset rows (26 of 65,921 unique names) and, for the 55 duplicate names
-  in that file, keeps whichever row appears last.
+- `kopdes_stats_*.csv` memakai id internal SIMKOPDES sendiri
+  (`province_id`/`district_id`/`subdistrict_id`/`village_id`), bukan kode
+  BPS/Kemendagri. Lihat [geo/README.md](geo/README.md) untuk alasan penggabungan
+  batas wilayah dilakukan lewat pencocokan nama.
+- Sejumlah kecil baris sumber punya pasangan provinsi/kabupaten yang keliru atau
+  koordinat yang mustahil, dan itu memang sudah begitu di ekspor SIMKOPDES-nya
+  (misalnya kabupaten bernama "Fukuoka" terdaftar di provinsi "PAPUA").
+  [Laporan 08](reports/08-exact-geometry/) mencatat **20 koordinat** yang jatuh
+  di luar Indonesia pada ekspor 5 Agustus dan menandainya `coordinate_suspect` di
+  mart; peta menyembunyikannya secara bawaan tetapi bisa dimunculkan. Kementerian
+  sudah mengoreksi kedua puluhnya pada potret 9 Agustus, dan catatan sebelum
+  sesudahnya ada di
+  [`corrected_coordinates_2026-08.csv`](reports/08-exact-geometry/corrected_coordinates_2026-08.csv).
+  Alur geo mencatat baris yang tidak cocok ke `geo/output/<tingkat>_unmatched.csv`.
+- `kopdes_land_assets.csv` juga tidak punya id koperasi, jadi digabungkan ke
+  `kopdes_locations.csv` lewat nama koperasi yang persis sama. Cara itu meleset
+  sekitar 0,04% baris aset lahan (26 dari 65.921 nama unik) dan, untuk 55 nama
+  ganda di berkas itu, mengambil baris yang muncul terakhir.
+- **Nol berarti "belum melaporkan", bukan "tidak aktif".** Ini pembatas
+  terpenting di seluruh investigasi, dan berlaku untuk setiap kolom kegiatan.
+  Lihat [laporan 01](reports/01-snapshot-drift/) dan
+  [laporan 02](reports/02-zero-inflation/).
+- **Tidak ada di OpenStreetMap bukan berarti tidak ada di dunia nyata.** Setiap
+  jarak yang diturunkan dari OSM adalah batas atas, dan setiap kedekatan adalah
+  batas bawah. Peta ritel yang kami pakai hanya memuat sekitar 14% gerai
+  Indomaret dan 11% Alfamart, dan di sebagian Papua tidak memuat satu pun.
