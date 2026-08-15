@@ -6,17 +6,17 @@ Lampiran 05 dan 06 mengukur jarak dalam rentang perkiraan. Untuk kalimat tentang
 
 Tiga hal keluar dari pengukuran ini.
 
-**Pertama, 19 koperasi tidak berada di Indonesia.** Ini ditemukan secara tidak sengaja: jarak maksimum ke minimarket keluar 9.349 km, angka yang mustahil untuk desa mana pun di Indonesia. Dari 19 itu, 18 adalah kesalahan tanda garis lintang: koordinat di selatan khatulistiwa ditulis sebagai utara, sehingga titiknya "terlempar" ke sisi lain planet. Antara 10 dan 13 Agustus, kementerian mengoreksi semuanya.
+**Pertama, <span data-fig="impossible_coords">20</span> koperasi tidak berada di Indonesia.** Ini ditemukan secara tidak sengaja: jarak maksimum ke minimarket keluar 9.349 km, angka yang mustahil untuk desa mana pun di Indonesia. Dari <span data-fig="impossible_coords">20</span> itu, <span data-fig="impossible_coords_signflip">19</span> adalah kesalahan tanda garis lintang: koordinat di selatan khatulistiwa ditulis sebagai utara, sehingga titiknya "terlempar" ke sisi lain planet. Pada potret 9 Agustus, kementerian sudah mengoreksi semuanya. Daftar lengkapnya, dengan koordinat sebelum dan sesudah, ada di `corrected_coordinates_2026-08.csv`.
 
-**Kedua, kelompok tanpa jalan diukur ulang.** Yang tadinya hanya bisa dikatakan "lebih dari 5 km" sekarang punya angka: **median 9,7 km** ke jalan beraspal terdekat, persentil ke-90 sejauh 26,5 km, dan yang terjauh 292 km. Lebih dari 600 koperasi berjarak lebih dari 25 km. "Tidak ada jalan dalam 5 km" ternyata pernyataan yang terlalu lunak; separuh kelompok ini lebih jauh dari itu.
+**Kedua, kelompok tanpa jalan diukur ulang.** Yang tadinya hanya bisa dikatakan "lebih dari 5 km" sekarang punya angka: **median 9,7 km** ke jalan beraspal terdekat, persentil ke-90 sejauh <span data-fig="roadless_p90_km">26,4</span> km, dan yang terjauh <span data-fig="roadless_max_km">185,9</span> km. Sebanyak <span data-fig="roadless_over_25km">587</span> koperasi berjarak lebih dari 25 km. "Tidak ada jalan dalam 5 km" ternyata pernyataan yang terlalu lunak; separuh kelompok ini lebih jauh dari itu.
 
 | Jarak tepat ke jalan beraspal | Koperasi |
 | ----------------------------- | -------- |
-| 5–10 km                       | 2.466    |
-| 10–25 km                      | 1.870    |
-| 25–50 km                      | 526      |
-| 50–100 km                     | 58       |
-| **Lebih dari 100 km**         | **16**   |
+| 5–10 km                       | <span data-fig="roadless_5_10km">2.467</span>    |
+| 10–25 km                      | <span data-fig="roadless_10_25km">1.872</span>    |
+| 25–50 km                      | <span data-fig="roadless_25_50km">523</span>      |
+| 50–100 km                     | <span data-fig="roadless_50_100km">57</span>       |
+| **Lebih dari 100 km**         | **<span data-fig="roadless_over_100km">7</span>**   |
 
 **Ketiga, setiap koperasi kini punya jarak ritel yang pasti.** Jarak median ke minimarket terdekat: 17,3 km.
 

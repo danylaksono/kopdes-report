@@ -40,12 +40,12 @@ in per-cooperative output.
 | SULAWESI      | 20.7%           | 4,792                    | 27.1                    | 1,935                    | 32.9%           |
 | KALIMANTAN    | 38.4%           | 1,565                    | 35.6                    | 3,605                    | 30.9%           |
 | MALUKU        | 54.7%           | 1,014                    | 128.7                   | 2,652                    | 22.0%           |
-| **PAPUA**     | **70.7%**       | 1,337                    | **74.6**                | 2,422                    | **3.2%**        |
+| **PAPUA**     | **70.7%**       | 1,342                    | **74.4**                | 2,415                    | **3.1%**        |
 
 Every "tail" finding in the investigation is disproportionately a
 Papua/Maluku/Kalimantan phenomenon: 70.7% of Papua cooperatives sit in a
-zero-population 400 m cell (national 21.3%, 03), 75 km to the nearest
-minimarket, and only 3.2% have their land verified. Java is the opposite:
+zero-population 400 m cell (national 21.3%, 03), 74 km to the nearest
+minimarket, and only 3.1% have their land verified. Java is the opposite:
 2.6% in zero-pop cells, 62.7% land verified.
 
 ## What this does to the three claims

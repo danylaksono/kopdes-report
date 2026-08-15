@@ -277,6 +277,151 @@ def _():
     return one(f"select count(*) from {P} where farmland_confirmed_cropland")
 
 
+# Chapter 1's remaining literals, bound 2026-08-15. Every one of these was
+# typed into the prose and never checked, and three of them had gone stale
+# against a re-run: methods/08 was still printing 16 cooperatives beyond 100 km
+# where the data says 7, and a 292 km maximum where the data says 186.
+@check("findings/remoteness", "% with nobody within 5,1 km", 0.18, tol=0.005, key="no_pop_within_5_1km_pct", fmt="pct2")
+def _():
+    return round(100 * one(f"select count(*) from {P} where pop_within_5_1km = 0") / 83_379, 2)
+
+
+@check("findings/remoteness", "% with no made road within 5 km", 6.1, tol=0.05, key="no_made_road_pct", fmt="pct1")
+def _():
+    return round(100 * one(f"select count(*) from {P} where km_non_track is null") / 83_379, 1)
+
+
+@check("findings/remoteness", "cooperatives with no road of any kind within 5 km", 4_294, key="no_any_road_coops", fmt="int")
+def _():
+    return one(f"select count(*) from {P} where km_any_road is null")
+
+
+# The page said 5,2%. 4.294 / 83.379 is 5,14997%, which is 5,1 at one decimal
+# however you round it. A hand-typed percentage that nobody recomputed.
+@check("findings/remoteness", "% with no road of any kind within 5 km", 5.1, tol=0.05, key="no_any_road_pct", fmt="pct1")
+def _():
+    return round(100 * one(f"select count(*) from {P} where km_any_road is null") / 83_379, 1)
+
+
+@check("findings/remoteness", "roadless KDMP 10-25 km from a road", 1_872, key="roadless_10_25km", fmt="int")
+def _():
+    t = csv("08-exact-geometry", "exact_road_distance_bands.csv")
+    return one(f'select cooperatives from {t} where "exact distance to nearest made road" = \'10-25 km\'')
+
+
+@check("findings/remoteness", "roadless KDMP 25-50 km from a road", 523, key="roadless_25_50km", fmt="int")
+def _():
+    t = csv("08-exact-geometry", "exact_road_distance_bands.csv")
+    return one(f'select cooperatives from {t} where "exact distance to nearest made road" = \'25-50 km\'')
+
+
+@check("findings/remoteness", "roadless KDMP 50-100 km from a road", 57, key="roadless_50_100km", fmt="int")
+def _():
+    t = csv("08-exact-geometry", "exact_road_distance_bands.csv")
+    return one(f'select cooperatives from {t} where "exact distance to nearest made road" = \'50-100 km\'')
+
+
+@check("findings/remoteness · methods/08", "furthest KDMP from a made road (km)", 185.9, tol=0.05, key="roadless_max_km", fmt="dec1")
+def _():
+    return round(one(f"select max(m_to_made_road_exact) from {P}") / 1000, 1)
+
+
+@check("methods/08", "90th percentile road distance, roadless set (km)", 26.4, tol=0.05, key="roadless_p90_km", fmt="dec1")
+def _():
+    return round(
+        one(
+            f"select quantile_cont(m_to_made_road_exact, 0.9) from {P} "
+            "where km_non_track is null"
+        )
+        / 1000,
+        1,
+    )
+
+
+@check("findings/remoteness · methods/07", "% of OSM village nodes inside farmland", 1.10, tol=0.005, key="village_node_farmland_pct", fmt="pct2")
+def _():
+    t = csv("07-landuse-polygons", "null_comparison.csv")
+    return one(f"select pct from {t} where class = 'farmland' and \"group\" = 'osm_village_node'")
+
+
+@check("findings/remoteness · methods/07", "% of OSM village nodes inside a cemetery", 0.022, tol=0.0005, key="village_node_cemetery_pct", fmt="pct3")
+def _():
+    t = csv("07-landuse-polygons", "null_comparison.csv")
+    return one(f"select pct from {t} where class = 'cemetery' and \"group\" = 'osm_village_node'")
+
+
+@check("findings/remoteness · methods/07", "% of KDMP inside a cemetery", 0.026, tol=0.0005, key="in_cemetery_pct", fmt="pct3")
+def _():
+    t = csv("07-landuse-polygons", "null_comparison.csv")
+    return one(f"select pct from {t} where class = 'cemetery' and \"group\" = 'kdmp'")
+
+
+@check("methods/07", "KDMP inside a mapped farmland polygon", 2_209, key="in_farmland_coops", fmt="int")
+def _():
+    t = csv("07-landuse-polygons", "farmland_funnel.csv")
+    return one(f"select cooperatives from {t} where step = 'inside a mapped farmland polygon'")
+
+
+@check("methods/07", "farmland candidates surviving the funnel", 538, key="farmland_candidates", fmt="int")
+def _():
+    t = csv("07-landuse-polygons", "farmland_funnel.csv")
+    return one(f"select cooperatives from {t} where step like '%< 2 villages%'")
+
+
+@check("findings/remoteness · methods/04", "most-remote 2.500: land officially verified", 384, key="remote_land_verified", fmt="int")
+def _():
+    t = csv("04-siting-screen", "candidates.csv")
+    return one(f"select count(*) from {t} where land_status = 'Terverifikasi'")
+
+
+@check("findings/remoteness · methods/04", "… and also on a steep slope", 175, key="remote_verified_steep", fmt="int")
+def _():
+    t = csv("04-siting-screen", "candidates.csv")
+    return one(f"select count(*) from {t} where land_status = 'Terverifikasi' and flag_steep")
+
+
+@check("findings/remoteness · methods/08", "impossible coordinates in the 5 Aug export", 20, key="impossible_coords", fmt="int")
+def _():
+    t = csv("08-exact-geometry", "corrected_coordinates_2026-08.csv")
+    return one(f"select count(*) from {t}")
+
+
+@check("findings/remoteness · methods/08", "… of those, latitude sign flips", 19, key="impossible_coords_signflip", fmt="int")
+def _():
+    t = csv("08-exact-geometry", "corrected_coordinates_2026-08.csv")
+    return one(f"select count(*) from {t} where diagnosis like 'latitude sign flipped%'")
+
+
+@check("findings/remoteness · methods/14", "Papua median distance to a mapped minimarket (km)", 74.4, tol=0.05, key="papua_median_km_minimarket", fmt="dec1")
+def _():
+    t = csv("14-island-comparison", "islands_spatial.csv")
+    return round(one(f"select median_km_to_minimarket from {t} where island = 'PAPUA'"), 1)
+
+
+@check("findings/remoteness · methods/14", "Java median distance to a mapped minimarket (km)", 6.7, tol=0.05, key="java_median_km_minimarket", fmt="dec1")
+def _():
+    t = csv("14-island-comparison", "islands_spatial.csv")
+    return round(one(f"select median_km_to_minimarket from {t} where island = 'JAVA'"), 1)
+
+
+@check("findings/remoteness · methods/14", "Papua share with land verified (%)", 3.1, tol=0.05, key="papua_land_verified_pct", fmt="pct1")
+def _():
+    t = csv("14-island-comparison", "islands_spatial.csv")
+    return round(one(f"select pct_land_verified from {t} where island = 'PAPUA'"), 1)
+
+
+@check("findings/remoteness · methods/14", "Java share with land verified (%)", 62.7, tol=0.05, key="java_land_verified_pct", fmt="pct1")
+def _():
+    t = csv("14-island-comparison", "islands_spatial.csv")
+    return round(one(f"select pct_land_verified from {t} where island = 'JAVA'"), 1)
+
+
+@check("findings/remoteness · methods/14", "% of Java KDMP in an empty 400 m cell", 2.6, tol=0.05, key="java_empty_cell_pct", fmt="pct1")
+def _():
+    t = csv("14-island-comparison", "islands_spatial.csv")
+    return round(one(f"select pct_zero_pop_cell from {t} where island = 'JAVA'"), 1)
+
+
 # ---------------------------------------------------------------------------
 # Chapter 2 — competition  (findings/competition, methods 06/10)
 # ---------------------------------------------------------------------------

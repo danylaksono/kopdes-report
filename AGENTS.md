@@ -706,6 +706,49 @@ the vein of Mongabay or bandungbergerak.id (reference the team gave:
 - Keep the rigour, move it. Methods, caveats and null models belong in a linked
   methodology section, not in the narrative flow.
 
+### Never narrate a draft the reader has not seen
+
+**Nothing on this site has been published yet.** So the pages have no "earlier
+version", and prose must never refer to one. Ban these shapes from every
+public-facing file (`/`, `/findings/`, `/methods/`, `/data/`, `/about/`,
+`methods/_content/**`, figure SVGs, JS UI strings):
+
+- "versi awal halaman ini menulis…", "versi pertama", "kami terjatuh ke
+  dalamnya", "kalimat itu sudah kami perbaiki", "sebelumnya kami menyebut…"
+- table columns or labels named for the history of the analysis rather than for
+  what they measure: "Pembanding lama" (old control), "cara lama", "sebelum
+  koreksi"
+
+A reader who never saw the draft cannot learn anything from being told it was
+wrong; it reads as either false modesty or an admission of unreliability, and
+it spends their attention on our process instead of the programme.
+
+**Keep the substance, drop the autobiography.** Every one of those sentences
+exists because some methodological trap is worth explaining. State the trap as
+a standing fact and say which side of it this page is on:
+
+> ✗ "Versi awal halaman ini memakai pembanding acak tanpa menyamakan kepadatan,
+> dan itu keliru."
+> ✓ "Pembanding yang lebih longgar jatuh di tempat yang jauh lebih sepi daripada
+> minimarketnya sendiri (median 2.374 orang berbanding 3.786), dan selisih itu
+> ikut terhitung sebagai kedekatan. Karena itu kepadatannya kami samakan."
+
+Name a rejected alternative for what it _is_ ("pembanding longgar", "hitungan
+per koperasi"), never for when we used it.
+
+**The two exceptions**, both outside the narrative:
+
+1. **The corrections log in `/about/`.** It is the designated venue and it
+   deliberately carries pre-publication corrections, with the reason stated in
+   the entry itself: we log a correction that _eases_ the programme under
+   examination so a reader can see that favourable numbers were tested as hard
+   as damning ones. That rationale is the entry ticket. A correction that
+   merely tidies our own wording does not belong there either.
+2. **`reports/**/README.md` and code comments.** These are the auditable
+   engineering record, not the report. "This used to be X and here is why it was
+   wrong" is exactly what belongs there, and it is where the reasoning behind a
+   removed sentence should live once the sentence is gone.
+
 ### What does and does not change
 
 - **`reports/` does not change.** It remains the evidence base and must stay

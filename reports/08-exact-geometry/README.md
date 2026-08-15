@@ -44,7 +44,28 @@ garbage.
 > statement about the 2026-08-05 snapshot, not the current registry. Re-running
 > 04/05/06 against `data/snapshots/2026-08-13/` is required before these
 > figures can be republished as current.
-> [`suspect_coordinates.csv`](suspect_coordinates.csv)
+
+> **Correction, 2026-08-15 — the count is 20, and the fix landed on 08-09.**
+> Two things were wrong with the paragraphs above, both found by testing the
+> committed 08-05 export against a plain Indonesia bounding box rather than
+> against an implausible retail distance:
+>
+> - **20 points, not 19.** The detection here started from a 9,349 km maximum
+>   distance to a minimarket, which finds a coordinate thrown to the far side of
+>   the planet but not one moved a few hundred kilometres into the South China
+>   Sea. KDMP CURUGKEMBAR (Banten) sits at 6.35°N, outside the country and well
+>   inside what a retail-distance test treats as ordinary. So this finding is
+>   19 of 20, and the sign-flip subtotal is 19, not 18.
+> - **They were corrected by 9 August, not "between 10 and 13 August".** All 20
+>   are already inside Indonesia in the 2026-08-09 snapshot.
+>
+> `suspect_coordinates.csv` now has **zero rows**, correctly: it lists what is
+> wrong in the snapshot `run.py` was pointed at, and nothing is. That is also
+> how the evidence for a published claim disappeared. The historical record now
+> lives in [`corrected_coordinates_2026-08.csv`](corrected_coordinates_2026-08.csv),
+> written by [`make_corrections_record.py`](make_corrections_record.py), which
+> `run.py` never touches: 20 rows, before and after coordinates, the diagnosis,
+> and the first snapshot in which each was fixed.
 
 ### This corrects two earlier reports
 
@@ -85,15 +106,15 @@ seconds**.
 | --------------------------------------- | ------------ |
 | 5–10 km                                 | 2,466        |
 | 10–25 km                                | 1,870        |
-| 25–50 km                                | 526          |
-| 50–100 km                               | 58           |
-| **over 100 km**                         | **16**       |
+| 25–50 km                                | 523          |
+| 50–100 km                               | 57           |
+| **over 100 km**                         | **7**        |
 
-**Median 9.7 km. 90th percentile 26.5 km. Maximum 292 km.**
+**Median 9.7 km. 90th percentile 26.4 km. Maximum 185.9 km.**
 
 "No road within 5 km" was an understatement produced by where the search
 stopped. Half of this group is more than 9.7 km from the nearest made road, and
-600 of them are more than 25 km away.
+587 of them are more than 25 km away.
 
 ## Finding 3 — every cooperative now has a real retail distance
 
@@ -151,7 +172,7 @@ band counts in 06 should be replaced by Finding 3; the +9.6 pt excess stands.
   rounded to 1 m and should be **quoted to the nearest 100 m**. Decimals of a
   metre are theatre.
 - **Straight-line, not travel distance.** A river or ridge between the point and
-  the road is still invisible. 292 km in a straight line across the Papuan
+  the road is still invisible. 186 km in a straight line across the Papuan
   interior is not a journey anyone makes.
 - **OSM absence is still not absence.** Every distance here is an upper bound on
   accessibility and a lower bound on retail proximity, exactly as in 05 and 06.
@@ -167,7 +188,8 @@ band counts in 06 should be replaced by Finding 3; the +9.6 pt excess stands.
 
 | File                                                                 | Contents                                        |
 | -------------------------------------------------------------------- | ----------------------------------------------- |
-| [`suspect_coordinates.csv`](suspect_coordinates.csv)                 | the 19, with the flip test and a diagnosis      |
+| [`suspect_coordinates.csv`](suspect_coordinates.csv)                 | live: points outside Indonesia in the snapshot `run.py` read (now 0) |
+| [`corrected_coordinates_2026-08.csv`](corrected_coordinates_2026-08.csv) | historical: the 20 bad 08-05 coordinates, before/after, never overwritten |
 | [`exact_road_distance_bands.csv`](exact_road_distance_bands.csv)     | the roadless set, resolved into real distances  |
 | [`exact_road_distance_far_set.csv`](exact_road_distance_far_set.csv) | per-cooperative, 5,133 rows                     |
 | [`exact_minimarket_bands.csv`](exact_minimarket_bands.csv)           | national distribution, exact                    |

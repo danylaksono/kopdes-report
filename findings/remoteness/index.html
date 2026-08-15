@@ -22,7 +22,7 @@
 
         <div class="stat-strip">
             <div class="stat">
-                <div class="value">95<small>%</small></div>
+                <div class="value"><span data-fig="pop_within_1_4km_pct">95%</span></div>
                 <div class="label">penduduk Indonesia dalam ±1,4 km dari koperasi</div>
             </div>
             <div class="stat">
@@ -30,7 +30,7 @@
                 <div class="label">koperasi tanpa penduduk dalam radius 5 km</div>
             </div>
             <div class="stat">
-                <div class="value">21,3<small>%</small></div>
+                <div class="value"><span data-fig="empty_cell_pct">21,3%</span></div>
                 <div class="label">koperasi di sel 400 m tanpa populasi tercatat</div>
             </div>
             <div class="stat">
@@ -44,7 +44,8 @@
             <div class="stat">
                 <div class="value">0</div>
                 <div class="label">koperasi berkoordinat mustahil, di luar Indonesia
-                    <em>(19 pada 5 Agustus; semuanya dikoreksi pemerintah 13 Agustus)</em>
+                    <em>(<span data-fig="impossible_coords">20</span> pada 5 Agustus; semuanya sudah dikoreksi pemerintah pada
+                        potret 9 Agustus)</em>
                 </div>
             </div>
         </div>
@@ -84,7 +85,7 @@
                     <tr>
                         <td>Tanpa penduduk dalam 5 km</td>
                         <td class="num"><span data-fig="no_pop_within_5_1km">146</span></td>
-                        <td class="num">0,18%</td>
+                        <td class="num"><span data-fig="no_pop_within_5_1km_pct">0,18%</span></td>
                     </tr>
                     <tr>
                         <td>Sel 400 m tanpa populasi</td>
@@ -94,21 +95,21 @@
                     <tr>
                         <td>Tanpa jalan beraspal dalam ±5 km (OSM)</td>
                         <td class="num"><span data-fig="no_made_road_coops">5.106</span></td>
-                        <td class="num">6,1%</td>
+                        <td class="num"><span data-fig="no_made_road_pct">6,1%</span></td>
                     </tr>
                     <tr>
                         <td>Tanpa jalan sama sekali dalam ±5 km</td>
-                        <td class="num">4.294</td>
-                        <td class="num">5,2%</td>
+                        <td class="num"><span data-fig="no_any_road_coops">4.294</span></td>
+                        <td class="num"><span data-fig="no_any_road_pct">5,1%</span></td>
                     </tr>
                     <tr>
                         <td>Di antara 2.500 paling terpencil: bersertifikat lahan “Terverifikasi”</td>
-                        <td class="num">384</td>
+                        <td class="num"><span data-fig="remote_land_verified">384</span></td>
                         <td class="num">—</td>
                     </tr>
                     <tr>
                         <td>… dan juga di lereng curam</td>
-                        <td class="num">175</td>
+                        <td class="num"><span data-fig="remote_verified_steep">175</span></td>
                         <td class="num">—</td>
                     </tr>
                     <tr>
@@ -122,6 +123,21 @@
                 batas bawah: peta yang kami pakai (OpenStreetMap) belum lengkap di
                 desa-desa Indonesia.</figcaption>
         </figure>
+
+        <h2>Uji kedua yang berdiri sendiri: ada rumah di sekitarnya atau tidak</h2>
+        <p>Peta populasi bisa salah, terutama di hutan dan pulau kecil, jadi angka
+            “petak tanpa populasi” di atas tidak boleh berdiri sendiri. Kami mengujinya
+            dengan sumber yang sama sekali lain: peta gabungan bangunan dari Google,
+            Microsoft dan OpenStreetMap, 137 juta bangunan. Pertanyaannya sederhana,
+            ada rumah di dekat koperasi itu atau tidak.</p>
+        <p>Hasilnya menguatkan kedua lapis sekaligus. Secara nasional
+            <strong><span data-fig="on_building_cell_pct">44,36%</span> koperasi berdiri tepat di petak yang berisi bangunan</strong>
+            dan <span data-fig="building_within_260m_pct">75,2%</span> punya bangunan dalam ±260 m, jadi sebagian besar program ini
+            memang berada di tengah permukiman. Tetapi <span data-fig="no_building_5km_pct">1,19%</span> tidak punya satu pun
+            bangunan terpetakan dalam ±5 km. Dan kedua pengukuran itu sepakat soal
+            siapa yang terpencil: dari <span data-fig="empty_cell_coops">17.774</span> koperasi di petak tanpa populasi, hanya
+            1,8% yang berdiri di petak berbangunan, dibanding 44,4% secara nasional.
+            Dua peta yang dibuat dengan cara berbeda menunjuk ekor yang sama.</p>
 
         <h2>Berapa jauh sebenarnya “jauh”?</h2>
         <p>Untuk <span data-fig="no_made_road_coops">5.106</span> koperasi tanpa jalan beraspal dalam 5 km, kami mengukur
@@ -141,19 +157,19 @@
                     </tr>
                     <tr>
                         <td>10–25 km</td>
-                        <td class="num">1.872</td>
+                        <td class="num"><span data-fig="roadless_10_25km">1.872</span></td>
                     </tr>
                     <tr>
                         <td>25–50 km</td>
-                        <td class="num">523</td>
+                        <td class="num"><span data-fig="roadless_25_50km">523</span></td>
                     </tr>
                     <tr>
                         <td>50–100 km</td>
-                        <td class="num">57</td>
+                        <td class="num"><span data-fig="roadless_50_100km">57</span></td>
                     </tr>
                     <tr>
                         <td><strong>lebih dari 100 km</strong></td>
-                        <td class="num"><strong>7</strong></td>
+                        <td class="num"><strong><span data-fig="roadless_over_100km">7</span></strong></td>
                     </tr>
                 </tbody>
             </table>
@@ -165,43 +181,70 @@
         <p>Dua tuduhan soal lahan diuji dengan citra satelit dan peta penggunaan
             lahan:</p>
         <ul>
-            <li><strong>Tuduhan “di sawah” terbukti.</strong> Koperasi yang berada di
+            <li><strong>Tuduhan “di sawah”: polanya nyata, sebabnya belum
+                    terjelaskan.</strong> Koperasi yang berada di
                 dalam bidang lahan pertanian (menurut peta OpenStreetMap) mencapai
                 <span data-fig="in_farmland_pct">2,65%</span>, 2,4 kali lebih sering dibanding pusat desa pada umumnya
-                (1,10%). Sebanyak <span data-fig="farmland_confirmed">448</span> koperasi tercatat di lahan pertanian menurut dua
+                (<span data-fig="village_node_farmland_pct">1,10%</span>). Sebanyak <span data-fig="farmland_confirmed">448</span> koperasi tercatat di lahan pertanian menurut dua
                 sumber peta yang berbeda secara independen, berjarak lebih dari 100
-                meter dari tepi sawah, dengan penduduk yang tinggal di sekitarnya.</li>
-            <li><strong>Tuduhan “di kuburan” tidak terbukti.</strong> Hanya 22 kasus,
-                tidak berbeda dari angka pusat desa pada umumnya (0,026% vs 0,022%).
+                meter dari tepi sawah, dengan penduduk yang tinggal di sekitarnya.
+                Tetapi selisih 2,4 kali itu belum membuktikan penempatannya, dan
+                alasannya ada di paragraf berikut.</li>
+            <li><strong>Tuduhan “di kuburan” tidak terbukti.</strong> Hanya
+                <span data-fig="in_cemetery_coops">22</span> kasus, tidak berbeda dari angka pusat desa pada umumnya
+                (<span data-fig="in_cemetery_pct">0,026%</span> vs <span data-fig="village_node_cemetery_pct">0,022%</span>).
                 Dua kasus tetap layak ditelusuri; polanya tidak ada.</li>
         </ul>
-        <p>Ada satu hal yang harus jujur kami katakan: yang kami ukur adalah
-            <em>di mana koordinatnya tercatat</em>, bukan di mana bangunannya berdiri.
-            Jika sistem mencatat koordinat di titik pusat desa, desa yang sebagian
-            besar sawah otomatis akan “masuk sawah”. Karena itu tulisan yang tepat
-            adalah <strong>“tercatat di dalam sawah”</strong>, bukan “dibangun di
-            sawah”, sampai citra satelit memutuskan.
+        <p>Yang kami ukur adalah <em>di mana koordinatnya tercatat</em>, bukan di mana
+            bangunannya berdiri, dan untuk sawah perbedaan itu menentukan. Kalau
+            sistem mencatat koordinat di titik pusat desa, maka desa yang sebagian
+            besar sawah otomatis akan “masuk sawah”, dan hasilnya akan berupa angka
+            yang beberapa kali lebih tinggi daripada titik pusat desa OpenStreetMap.
+            Itu persis bentuk yang kami temukan. Jadi angka 2,4 kali itu cocok dengan
+            dua cerita sekaligus: koperasi yang benar-benar berdiri di tengah sawah,
+            dan koordinat yang tidak pernah menunjuk bangunan mana pun.</p>
+        <p>Kami punya satu uji yang bisa memisahkan keduanya, karena bangunan berdiri
+            di dekat jalan sementara titik pusat desa tidak harus. Uji itu <em>tidak</em>
+            memihak tuduhan: kandidat sawah justru <strong>lebih jarang</strong> berada di
+            pinggir jalan (59,5% dalam ±140 m) dibanding koperasi lain di provinsi yang
+            sama (72,5%). Itu konsisten dengan penempatan sungguhan di tengah sawah,
+            dan sama konsistennya dengan koordinat yang memang bukan bangunan.</p>
+        <p>Karena itu tulisan yang tepat adalah <strong>“tercatat di dalam sawah”</strong>,
+            bukan “dibangun di sawah”, sampai citra satelit memutuskan. Dan kalau
+            jawabannya ternyata koordinatnya yang salah, itu bukan temuan yang lebih
+            kecil, melainkan temuan yang berbeda: berarti daftar resminya tidak tahu di
+            mana koperasinya sendiri berada.
         </p>
 
         <h2>Sebagian besar cerita ini ada di Indonesia timur</h2>
         <p>Ketika dipetakan per pulau, ekor keterpencilan hampir seluruhnya milik
-            Indonesia timur: <span data-fig="papua_empty_cell_pct">70,7%</span> koperasi Papua berada di petak tanpa populasi,
-            jarak ke minimarket terdekat rata-rata 74,6 km (bandingkan 6,7 km di
-            Jawa), dan hanya 3,2% lahannya yang terverifikasi. Jawa justru
-            kebalikannya. Cerita “terpencil” adalah cerita Papua–Maluku–Kalimantan,
-            bukan cerita nasional.</p>
+            Indonesia timur: <span data-fig="papua_empty_cell_pct">70,7%</span> koperasi Papua berada di petak tanpa populasi
+            (Jawa <span data-fig="java_empty_cell_pct">2,6%</span>), dan hanya <span data-fig="papua_land_verified_pct">3,1%</span> lahannya yang terverifikasi
+            (Jawa <span data-fig="java_land_verified_pct">62,7%</span>). Jawa justru kebalikannya. Cerita “terpencil” adalah
+            cerita Papua, Maluku dan Kalimantan, bukan cerita nasional.</p>
+        <p>Satu angka yang <em>tidak</em> kami pakai di sini: jarak ke minimarket
+            terdekat, yang di Papua bermedian <span data-fig="papua_median_km_minimarket">74,4</span> km melawan <span data-fig="java_median_km_minimarket">6,7</span> km di
+            Jawa. Selisih itu terlihat dramatis, tetapi peta ritel yang kami punya
+            hanya memuat sekitar seperdelapan gerai Indomaret dan sepersepuluh
+            Alfamart, dan di Papua Tengah tidak memuat satu pun. Jadi angka itu
+            sebagian besar mengukur di mana sukarelawan peta bekerja, bukan di mana
+            tokonya ada. Kami menyebutkannya supaya pembaca tahu angka itu ada dan
+            tahu kenapa kami tidak menyandarkan apa pun padanya.</p>
 
         <div class="verdict">
             <h3>Vonis bab ini</h3>
             <p><strong>Tuduhan “dibangun di tempat tak terjangkau” tidak berlaku
                     sebagai fenomena massal, jangkauannya nyaris sempurna. Tetapi
                     ekornya nyata, bisa dihitung, dan bisa diperiksa:</strong> <span data-fig="no_pop_within_5_1km">146</span>
-                koperasi tanpa penduduk dalam 5 km, ribuan tanpa jalan, puluhan di
-                lahan pertanian yang terkonfirmasi, dan semula 19 berkoordinat
-                mustahil, yang pemerintah telah koreksi. Yang belum bisa kami pisahkan
-                secara otomatis: mana
+                koperasi tanpa penduduk dalam 5 km, ribuan tanpa jalan, <span data-fig="farmland_confirmed">448</span> tercatat di
+                lahan pertanian menurut dua peta sekaligus, dan semula <span data-fig="impossible_coords">20</span>
+                berkoordinat mustahil, yang pemerintah telah koreksi. Dua peta yang
+                dibuat terpisah, peta penduduk dan peta bangunan, menunjuk ekor yang
+                sama, jadi ekor itu bukan cacat satu sumber.</p>
+            <p>Yang belum bisa kami pisahkan secara otomatis: mana
                 yang <em>dibangun</em> di tempat mustahil dan mana yang hanya
-                <em>tercatat</em> di sana karena koordinat salah. Keduanya adalah
+                <em>tercatat</em> di sana karena koordinat salah. Untuk kasus sawah
+                kami sudah mencoba memisahkannya dan gagal. Keduanya adalah
                 temuan, tetapi cerita yang berbeda.
             </p>
         </div>
@@ -212,7 +255,8 @@
             <a href="../../methods/05-road-access/">05</a> ·
             <a href="../../methods/07-landuse-polygons/">07</a> ·
             <a href="../../methods/08-exact-geometry/">08</a> ·
-            <a href="../../methods/14-island-comparison/">14</a>
+            <a href="../../methods/14-island-comparison/">14</a> ·
+            <a href="../../methods/17-building-proximity/">17</a>
         </p>
     </main>
     <footer id="site-footer"></footer>

@@ -4,7 +4,7 @@ Tuduhan publiknya spesifik: koperasi dibangun di tanah kuburan, di tengah sawah,
 
 ## Caranya
 
-Kami mengurutkan seluruh 83.342 koperasi dari yang paling "mustahil" lingkungannya. Tahap pertama gratis: skor keterpencilan dari peta populasi. Tahap kedua hanya untuk yang paling terpencil: ketinggian, kemiringan, dan jenis penutup lahan di titik itu, diambil langsung dari citra satelit global (Copernicus dan ESA WorldCover) tanpa mengunduh petanya, cukup membaca beberapa piksel di sekitar titik.
+Kami mengurutkan seluruh <span data-fig="coops_total">83.379</span> koperasi dari yang paling "mustahil" lingkungannya. Tahap pertama gratis: skor keterpencilan dari peta populasi. Tahap kedua hanya untuk yang paling terpencil: ketinggian, kemiringan, dan jenis penutup lahan di titik itu, diambil langsung dari citra satelit global (Copernicus dan ESA WorldCover) tanpa mengunduh petanya, cukup membaca beberapa piksel di sekitar titik.
 
 ## Yang kami temukan
 

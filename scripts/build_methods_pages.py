@@ -137,7 +137,7 @@ ID_LEDE = {
     ),
     "08-exact-geometry": (
         "Jarak yang diukur ulang satu per satu, dan sebuah temuan yang tidak "
-        "disengaja: 19 koperasi ternyata tidak berada di Indonesia."
+        "disengaja: 20 koperasi ternyata tidak berada di Indonesia."
     ),
     "09-external-corroboration": (
         "Angka resmi pemerintah cocok dengan dashboardnya, sampai selisih "
@@ -238,11 +238,11 @@ ID_SUMMARY = {
     ),
     "08-exact-geometry": (
         "Berapa jauh sebenarnya? Untuk koperasi yang paling terpencil, jarak ke "
-        "jalan diukur ulang dengan teliti: separuhnya lebih dari 9,7 km, dan 16 "
-        "koperasi lebih dari 100 km. Laporan ini juga menemukan 19 koperasi di "
+        "jalan diukur ulang dengan teliti: separuhnya lebih dari 9,7 km, dan 7 "
+        "koperasi lebih dari 100 km. Laporan ini juga menemukan 20 koperasi di "
         "luar Indonesia, dengan koordinat mustahil, dan mengoreksi angka "
-        "laporan 04 dan 05. Catatan 13-08-2026: pemerintah telah mengoreksi "
-        "ke-19 koordinat itu."
+        "laporan 04 dan 05. Pemerintah sudah mengoreksi kedua puluh koordinat "
+        "itu pada potret 9 Agustus 2026."
     ),
     "09-external-corroboration": (
         "Apakah angka pemerintah cocok dengan angka kami? Nyaris persis: media "

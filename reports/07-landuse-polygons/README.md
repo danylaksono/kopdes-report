@@ -35,7 +35,7 @@ Different machinery from 04. These are vector polygons, not raster pixels.
    `--rebuild-index`). Iterating tags in a Python callback instead is the 92-minute
    mistake recorded in `AGENTS.md`.
 2. **An STRtree per class.** `query(predicate="within")` answers "is this KDMP
-   inside a cemetery?" for all 83,342 points at once.
+   inside a cemetery?" for all 83,379 points at once.
 3. **Distance in two steps.** The tree ranks candidates in degree space — near
    the equator that is within ~2% of isotropic, fine for _which_ polygon is
    closest and useless as a published number. The winner is then re-measured
@@ -53,20 +53,20 @@ Different machinery from 04. These are vector polygons, not raster pixels.
 
 ## The comparator, without which none of this means anything
 
-"2,206 cooperatives are inside farmland" is not a finding on its own. If village
+"2,209 cooperatives are inside farmland" is not a finding on its own. If village
 institutions in general land inside mapped farmland at that rate, the number
 describes how OSM draws Indonesia, not where KDMP were built.
 
 **OSM's own `place=village` nodes** are the natural comparator: they are what
 "the right spot for a village institution" looks like, placed by mappers with no
-stake in this argument, at roughly the same national density (75,845 vs 83,342).
+stake in this argument, at roughly the same national density (75,845 vs 83,379).
 The identical screen runs over them.
 
 [`null_comparison.csv`](null_comparison.csv)
 
 | Inside a…           | KDMP               | OSM village nodes | Excess               |
 | ------------------- | ------------------ | ----------------- | -------------------- |
-| farmland polygon    | **2.647%** (2,206) | 1.097% (832)      | **+1.55 pts — 2.4×** |
+| farmland polygon    | **2.649%** (2,209) | 1.097% (832)      | **+1.55 pts — 2.4×** |
 | cemetery polygon    | 0.026% (22)        | 0.022% (17)       | +0.004 pts — **nil** |
 | marketplace polygon | 0.019% (16)        | 0.021% (16)       | −0.002 pts — nil     |
 
@@ -87,12 +87,12 @@ out everything that could be an artefact:
 
 | Step                                                        | Cooperatives |
 | ----------------------------------------------------------- | ------------ |
-| inside a mapped farmland polygon                            | 2,206        |
-| ≥ 100 m from the field edge (in it, not on the verge of it) | 1,023        |
-| … and ≥ 100 people within 1.4 km (the ones 04 discards)     | 1,023        |
-| … and the polygon is not a coarsely-drawn whole plain       | **536**      |
+| inside a mapped farmland polygon                            | 2,209        |
+| ≥ 100 m from the field edge (in it, not on the verge of it) | 1,027        |
+| … and ≥ 100 people within 1.4 km (the ones 04 discards)     | 1,027        |
+| … and the polygon is not a coarsely-drawn whole plain       | **538**      |
 
-That last step removed **487 of 1,023** — nearly half. Some contributors trace an
+That last step removed **489 of 1,027** — nearly half. Some contributors trace an
 entire agricultural landscape as a single `landuse=farmland` way, settlements
 included, and a point 3 km "deep" inside one of those is in a village, not a
 field. Any polygon containing 2 or more OSM village nodes is dropped for that
@@ -101,7 +101,7 @@ and wrong.
 
 **Independent confirmation.** The OSM polygon is one person's tracing. ESA
 WorldCover is a 10 m satellite classification produced with no knowledge of OSM.
-Sampling all 536 candidate points (reusing 04's COG range-request sampler):
+Sampling all 538 candidate points (reusing 04's COG range-request sampler):
 
 | Land cover at the point            | Candidates      |
 | ---------------------------------- | --------------- |
@@ -143,7 +143,7 @@ Every row in [`farmland_candidates.csv`](farmland_candidates.csv) carries an
 
 [`cemetery_candidates.csv`](cemetery_candidates.csv)
 
-**22 cooperatives out of 83,342 sit inside a mapped burial ground — a rate
+**22 cooperatives out of 83,379 sit inside a mapped burial ground — a rate
 statistically indistinguishable from where OSM puts its own village centres**
 (0.026% against 0.022%; 22 cases against 17). And the 22 do not survive
 inspection as a group:
@@ -192,7 +192,7 @@ building stands next to a road, a centroid need not. It does not clear them.
 |                                                   | Within ~140 m of a mapped road |
 | ------------------------------------------------- | ------------------------------ |
 | All KDMP, reweighted to the candidates' provinces | **72.5%**                      |
-| The 536 candidates                                | **59.5%**                      |
+| The 538 candidates                                | **59.5%**                      |
 
 **The candidates are _less_ roadside than comparable cooperatives, not more.**
 That is consistent with genuine placement out in the fields, and equally
@@ -232,9 +232,9 @@ the registry does not know where its own cooperatives are.
 
 | File                                                                           | Contents                                                                                                                                                                               |
 | ------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`farmland_candidates.csv`](farmland_candidates.csv)                           | **536 rows** — the shortlist, with depth, polygon quality, WorldCover class, road distance, land status, `imagery_url`                                                                 |
+| [`farmland_candidates.csv`](farmland_candidates.csv)                           | **538 rows** — the shortlist, with depth, polygon quality, WorldCover class, road distance, land status, `imagery_url`                                                                 |
 | [`cemetery_candidates.csv`](cemetery_candidates.csv)                           | all 22 burial-ground hits                                                                                                                                                              |
-| [`farmland_funnel.csv`](farmland_funnel.csv)                                   | the 2,206 → 536 filter chain                                                                                                                                                           |
+| [`farmland_funnel.csv`](farmland_funnel.csv)                                   | the 2,209 → 538 filter chain                                                                                                                                                           |
 | [`null_comparison.csv`](null_comparison.csv)                                   | KDMP vs village nodes vs minimarkets, per class                                                                                                                                        |
 | [`landuse_pip_summary.csv`](landuse_pip_summary.csv)                           | national counts and distance bands per class                                                                                                                                           |
 | [`osm_landuse_coverage_by_province.csv`](osm_landuse_coverage_by_province.csv) | **read before treating any absence as evidence**                                                                                                                                       |

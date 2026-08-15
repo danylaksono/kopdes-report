@@ -95,6 +95,12 @@
     "label": "% in an empty 400 m cell",
     "page": "findings/remoteness"
   },
+  "farmland_candidates": {
+    "value": 538,
+    "text": "538",
+    "label": "farmland candidates surviving the funnel",
+    "page": "methods/07"
+  },
   "farmland_confirmed": {
     "value": 448,
     "text": "448",
@@ -113,11 +119,35 @@
     "label": "fertiliser share of reported sales value (%)",
     "page": "methods/12"
   },
+  "impossible_coords": {
+    "value": 20,
+    "text": "20",
+    "label": "impossible coordinates in the 5 Aug export",
+    "page": "findings/remoteness · methods/08"
+  },
+  "impossible_coords_signflip": {
+    "value": 19,
+    "text": "19",
+    "label": "… of those, latitude sign flips",
+    "page": "findings/remoteness · methods/08"
+  },
   "in_cemetery_coops": {
     "value": 22,
     "text": "22",
     "label": "cooperatives recorded in a burial ground",
     "page": "findings/remoteness"
+  },
+  "in_cemetery_pct": {
+    "value": 0.026,
+    "text": "0,026%",
+    "label": "% of KDMP inside a cemetery",
+    "page": "findings/remoteness · methods/07"
+  },
+  "in_farmland_coops": {
+    "value": 2209,
+    "text": "2.209",
+    "label": "KDMP inside a mapped farmland polygon",
+    "page": "methods/07"
   },
   "in_farmland_pct": {
     "value": 2.65,
@@ -136,6 +166,24 @@
     "text": "30%",
     "label": "Java share of cooperatives (%)",
     "page": "findings"
+  },
+  "java_empty_cell_pct": {
+    "value": 2.6,
+    "text": "2,6%",
+    "label": "% of Java KDMP in an empty 400 m cell",
+    "page": "findings/remoteness · methods/14"
+  },
+  "java_land_verified_pct": {
+    "value": 62.7,
+    "text": "62,7%",
+    "label": "Java share with land verified (%)",
+    "page": "findings/remoteness · methods/14"
+  },
+  "java_median_km_minimarket": {
+    "value": 6.7,
+    "text": "6,7",
+    "label": "Java median distance to a mapped minimarket (km)",
+    "page": "findings/remoteness · methods/14"
   },
   "java_value_share_pct": {
     "value": 60.0,
@@ -257,6 +305,18 @@
     "label": "% of villages holding an NIB",
     "page": "findings/money · methods/02"
   },
+  "no_any_road_coops": {
+    "value": 4294,
+    "text": "4.294",
+    "label": "cooperatives with no road of any kind within 5 km",
+    "page": "findings/remoteness"
+  },
+  "no_any_road_pct": {
+    "value": 5.1,
+    "text": "5,1%",
+    "label": "% with no road of any kind within 5 km",
+    "page": "findings/remoteness"
+  },
   "no_building_5km_pct": {
     "value": 1.19,
     "text": "1,19%",
@@ -269,11 +329,23 @@
     "label": "cooperatives with no made road within 5 km",
     "page": "/ · findings/remoteness"
   },
+  "no_made_road_pct": {
+    "value": 6.1,
+    "text": "6,1%",
+    "label": "% with no made road within 5 km",
+    "page": "findings/remoteness"
+  },
   "no_pop_within_5_1km": {
     "value": 146,
     "text": "146",
     "label": "cooperatives with nobody within 5,1 km",
     "page": "/ · findings/remoteness"
+  },
+  "no_pop_within_5_1km_pct": {
+    "value": 0.18,
+    "text": "0,18%",
+    "label": "% with nobody within 5,1 km",
+    "page": "findings/remoteness"
   },
   "no_savings_pct": {
     "value": 87.5,
@@ -389,6 +461,18 @@
     "label": "% of Papua KDMP in an empty 400 m cell",
     "page": "findings/remoteness"
   },
+  "papua_land_verified_pct": {
+    "value": 3.1,
+    "text": "3,1%",
+    "label": "Papua share with land verified (%)",
+    "page": "findings/remoteness · methods/14"
+  },
+  "papua_median_km_minimarket": {
+    "value": 74.4,
+    "text": "74,4",
+    "label": "Papua median distance to a mapped minimarket (km)",
+    "page": "findings/remoteness · methods/14"
+  },
   "papua_value_share_pct": {
     "value": 0.6,
     "text": "0,6%",
@@ -467,6 +551,18 @@
     "label": "RAT recorded for N cooperatives",
     "page": "findings/money"
   },
+  "remote_land_verified": {
+    "value": 384,
+    "text": "384",
+    "label": "most-remote 2.500: land officially verified",
+    "page": "findings/remoteness · methods/04"
+  },
+  "remote_verified_steep": {
+    "value": 175,
+    "text": "175",
+    "label": "… and also on a steep slope",
+    "page": "findings/remoteness · methods/04"
+  },
   "reporting_without_nib": {
     "value": 23,
     "text": "23",
@@ -485,11 +581,35 @@
     "label": "median population, road+pop-weighted null cell",
     "page": "methods/06"
   },
+  "roadless_10_25km": {
+    "value": 1872,
+    "text": "1.872",
+    "label": "roadless KDMP 10-25 km from a road",
+    "page": "findings/remoteness"
+  },
+  "roadless_25_50km": {
+    "value": 523,
+    "text": "523",
+    "label": "roadless KDMP 25-50 km from a road",
+    "page": "findings/remoteness"
+  },
+  "roadless_50_100km": {
+    "value": 57,
+    "text": "57",
+    "label": "roadless KDMP 50-100 km from a road",
+    "page": "findings/remoteness"
+  },
   "roadless_5_10km": {
     "value": 2467,
     "text": "2.467",
     "label": "roadless KDMP 5-10 km from a road",
     "page": "findings/remoteness"
+  },
+  "roadless_max_km": {
+    "value": 185.9,
+    "text": "185,9",
+    "label": "furthest KDMP from a made road (km)",
+    "page": "findings/remoteness · methods/08"
   },
   "roadless_median_km": {
     "value": 9.7,
@@ -508,6 +628,12 @@
     "text": "587",
     "label": "roadless KDMP further than 25 km from a road",
     "page": "findings/remoteness"
+  },
+  "roadless_p90_km": {
+    "value": 26.4,
+    "text": "26,4",
+    "label": "90th percentile road distance, roadless set (km)",
+    "page": "methods/08"
   },
   "savings_total_miliar": {
     "value": 40.3,
@@ -574,6 +700,18 @@
     "text": "2,43",
     "label": "transaction value per cooperative (Rp juta)",
     "page": "/ · findings/money"
+  },
+  "village_node_cemetery_pct": {
+    "value": 0.022,
+    "text": "0,022%",
+    "label": "% of OSM village nodes inside a cemetery",
+    "page": "findings/remoteness · methods/07"
+  },
+  "village_node_farmland_pct": {
+    "value": 1.097,
+    "text": "1,10%",
+    "label": "% of OSM village nodes inside farmland",
+    "page": "findings/remoteness · methods/07"
   },
   "villages_reporting": {
     "value": 2726,

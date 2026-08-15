@@ -16,7 +16,7 @@ Di sisi ekonomi, jawabannya jelas: **Jawa punya 30% koperasi tetapi sekitar 60% 
 | Maluku        | 2.427    | 0,25%             | Rp 0,45 juta       |
 | **Papua**     | 7.062    | **0,21%**         | **Rp 0,16 juta**   |
 
-Di sisi penempatan, setiap "ekor" dalam investigasi ini adalah fenomena Indonesia timur. **70,7% koperasi Papua berada di petak tanpa penduduk tercatat** (nasional 21,3%), jarak ke minimarket terdekat median 75 km, dan hanya 3,2% yang lahannya terverifikasi. Jawa kebalikannya: 2,6% di petak kosong, 62,7% lahan terverifikasi.
+Di sisi penempatan, setiap "ekor" dalam investigasi ini adalah fenomena Indonesia timur. **70,7% koperasi Papua berada di petak tanpa penduduk tercatat** (nasional 21,3%), jarak ke minimarket terdekat median <span data-fig="papua_median_km_minimarket">74,4</span> km, dan hanya 3,2% yang lahannya terverifikasi. Jawa kebalikannya: 2,6% di petak kosong, 62,7% lahan terverifikasi.
 
 Tiga klaim utama investigasi ini mengikuti garis yang sama: keterpencilan yang nyata adalah ekor Indonesia timur; kedekatan ritel (kanibalisasi) adalah fenomena Jawa yang padat kota; dan soal anggaran-versus-hasil: uangnya di Jawa, registri kosongnya di Papua.
 
