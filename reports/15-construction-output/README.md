@@ -1,7 +1,9 @@
 # 15 — Construction progress vs economic output
 
-**Run**: `python reports/15-construction-output/run.py` · No network · **Last run**: 2026-08-12
-**Source**: `kopdes_province_rat_and_construction.csv` + `kopdes_stats_province.csv`
+**Reproduce**: `KOPDES_RAW=data/snapshots/2026-08-13 python reports/15-construction-output/run.py` ·
+No network · **Last run**: 2026-08-15
+**Source**: `kopdes_province_rat_and_construction.csv` + `kopdes_stats_province.csv`,
+both from the **2026-08-13** snapshot. Hashes in [`_source.json`](_source.json).
 
 C1 of `analytics-plan.md`, deliberately downgraded. n = 38 provinces, no
 confounder control — the plan-review's verdict is explicit: _"a correlation on

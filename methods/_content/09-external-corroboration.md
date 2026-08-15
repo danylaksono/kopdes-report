@@ -20,9 +20,16 @@ Jawabannya: cocok, dan tidak tanggung-tanggung. Pada 9 Agustus, Liputan6 melapor
 | Dilaporkan media (Liputan6) | Rp <span data-fig="press_value_aug09_miliar">179,72</span> miliar |
 | Penarikan kami sendiri      | Rp 179,79 miliar                                                  |
 
-Sumber kedua tidak menyentuh dashboard sama sekali. Pada 8 Juni, kepala badan komunikasi pemerintah menyebut **1.061 koperasi beroperasi** dari daftar sekitar 80.000, atau 1,3%. Ukuran kami dua bulan kemudian: 3,0% desa yang melaporkan transaksi apa pun. Dua pengukuran independen dengan metode berbeda berakhir di angka tunggal yang sama rendah, di dua provinsi yang sama (Jawa Timur dan Jawa Tengah).
+Sumber kedua tidak menyentuh dashboard sama sekali. Pada 8 Juni, kepala badan komunikasi pemerintah menyebut **<span data-fig="operating_coops">1.061</span> koperasi beroperasi**. Satu detail dalam kutipan itu penting dan mudah terlewat: seluruh 1.061 koperasi tersebut berada di dua provinsi saja, 530 di Jawa Timur dan 531 di Jawa Tengah. Jadi angka itu bisa dibaca dua cara, dan kami menyebut keduanya.
 
-Sekitar Rp 2,43 juta per koperasi, kira-kira setara sebulan belanja keluarga, untuk seumur hidup koperasi itu. (Angka total telah naik menjadi Rp 202,6 miliar pada 13 Agustus.)
+| Cara membaca                | Juni (pemerintah)                                          | 13 Agustus (data kami)                                |
+| --------------------------- | ---------------------------------------------------------- | ------------------------------------------------------ |
+| Di Jawa Timur + Jawa Tengah | <span data-fig="operating_coops_jawa2_pct">6,2%</span> koperasi | <span data-fig="jawa2_reporting_pct">7,9%</span> desa   |
+| Nasional                    | <span data-fig="operating_coops_pct">1,3%</span> koperasi   | <span data-fig="villages_reporting_pct">3,3%</span> desa |
+
+Bacaan nasional mengandaikan provinsi lain benar-benar nol pada Juni, sesuai bunyi kutipannya. Bacaan dua provinsi tidak perlu andaian itu. Yang penting, keduanya berakhir di angka satuan persen: dua pengukuran dengan metode yang sama sekali berbeda, hasilnya sama-sama rendah.
+
+Angka total penjualan telah naik menjadi Rp <span data-fig="transaction_value_miliar">202,6</span> miliar pada 13 Agustus, atau sekitar Rp <span data-fig="value_per_coop_juta">2,43</span> juta per koperasi untuk seumur hidupnya.
 
 | Hingga     | Total                                                             | Desa yang melapor |
 | ---------- | ----------------------------------------------------------------- | ----------------- |

@@ -1,8 +1,10 @@
 # 02 — Zero inflation: there is almost no outcome variable
 
-**Run**: `python reports/02-zero-inflation/run.py` · No network, deterministic ·
-**Source**: `data/raw/kopdes_stats_village.csv` (2026-08-05 snapshot, **83,069
-villages after deduplication**) · **Last run**: 2026-08-13 (on 08-13 snapshot)
+**Reproduce**: `KOPDES_RAW=data/snapshots/2026-08-13 python reports/02-zero-inflation/run.py` ·
+No network, deterministic · **Last run**: 2026-08-13
+**Source**: `kopdes_stats_village.csv` from the **2026-08-13** snapshot (**83,069
+villages after deduplication**). Hashes in [`_source.json`](_source.json). Running
+without `KOPDES_RAW` reads the 08-05 export instead and every figure below moves.
 
 > **Corrected 2026-08-09.** The 2026-08-05 export contains **1,555 duplicate
 > `village_id`s**, found when the 2026-08-09 snapshot came back 1,555 rows

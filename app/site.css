@@ -222,6 +222,64 @@ hr {
   margin-top: 0;
 }
 
+/* ---- footnotes ------------------------------------------------------------
+   The tone rules ask for sentences a general reader can finish. A qualifier
+   that is true but technical (which denominator, which date, which of two
+   sources) belongs under the article, not inside the sentence. The marker is
+   a link both ways so a reader never loses their place.
+   -------------------------------------------------------------------------- */
+
+.fn {
+  font-family: var(--sans);
+  font-size: 0.68em;
+  font-weight: 700;
+  line-height: 0;
+  vertical-align: super;
+  margin-left: 1px;
+}
+.fn a {
+  text-decoration: none;
+  color: var(--accent);
+}
+.fn a:hover {
+  text-decoration: underline;
+}
+
+.footnotes {
+  max-width: var(--measure);
+  margin: 3em auto 0;
+  padding-top: 1.2em;
+  border-top: 1px solid var(--line);
+  font-size: 15px;
+  color: var(--muted);
+}
+.footnotes h2 {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 0.8em;
+}
+.footnotes ol {
+  margin: 0;
+  padding-left: 1.4em;
+}
+.footnotes li {
+  margin-bottom: 0.7em;
+  line-height: 1.55;
+}
+.footnotes li:target {
+  background: #faf6f0;
+  box-shadow: 0 0 0 6px #faf6f0;
+  border-radius: 2px;
+}
+.fn-back {
+  text-decoration: none;
+  margin-left: 4px;
+}
+
 .kicker {
   font-size: 12px;
   font-weight: 700;

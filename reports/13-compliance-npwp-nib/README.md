@@ -1,7 +1,9 @@
 # 13 — NPWP/NIB compliance: is the paperwork real, and is anyone operating under it?
 
-**Run**: `python reports/13-compliance-npwp-nib/run.py` · No network · **Last run**: 2026-08-13 (on 08-13 snapshot)
-**Source**: `kopdes_stats_village.csv` (deduplicated) + national summary
+**Reproduce**: `KOPDES_RAW=data/snapshots/2026-08-13 python reports/13-compliance-npwp-nib/run.py` ·
+No network · **Last run**: 2026-08-13
+**Source**: `kopdes_stats_village.csv` (deduplicated) + national summary, both from
+the **2026-08-13** snapshot. Hashes in [`_source.json`](_source.json).
 
 D3 of `analytics-plan.md` — the "zombie" test. NPWP is the tax id, NIB is the
 business identification number; in Indonesia a cooperative without an NIB

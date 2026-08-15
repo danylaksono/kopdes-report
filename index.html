@@ -192,7 +192,7 @@
             <div class="step-inner">
               <p class="step-num">Bab 2 · Kompetisi</p>
               <h2>Berbagi petak sungguhan tidak banyak terjadi, dan tidak selamanya merugikan.</h2>
-              <p>Hanya 6,8% kopdes benar-benar berbagi petak 1 km dengan kopdes
+              <p>Hanya <span data-fig="sharing_1km_cell_pct">6,8%</span> kopdes benar-benar berbagi petak 1 km dengan kopdes
                 lain. Sebagian besar “tumpang tindih” yang tampak pada peta ternyata
                 hanya jejak data: koordinat ganda, bukan bangunan bersebelahan.</p>
               <p>Yang lebih penting, kopdes yang berdekatan melaporkan transaksi
@@ -217,8 +217,9 @@
     <figure class="wrap story-photo reveal">
       <img src="assets/story/kompetisi.jpg" alt="Toko Indomaret di Jombang, Jawa Timur" loading="lazy"
         decoding="async" />
-      <figcaption>Kedekatan dengan minimarket memang ada, tetapi sedang, dan selebihnya
-        hilang pada jarak 2 km. Ritel modern dan koperasi ini ada di
+      <figcaption>Kedekatan dengan minimarket memang ada, tetapi sedang: <span data-fig="minimarket_excess_pp">6,7</span> poin
+        lebih sering dalam 500 m dibanding lokasi acak yang sama ramainya, menyusut
+        jadi <span data-fig="minimarket_excess_1km_pp">3,7</span> poin pada 1 km. Ritel modern dan koperasi ini ada di
         lingkup yang berbeda.
         <span class="photo-credit">Foto: “Indomaret RE Martadinata Jombang”, Indonesiagood, CC BY 4.0.</span>
       </figcaption>
@@ -243,11 +244,13 @@
             <div class="step-inner">
               <p class="step-num">Bab 3 · Anggaran &amp; output</p>
               <h2>Angka nasionalnya: Rp <span data-fig="transaction_value_miliar">202,6</span> miliar.</h2>
-              <p>Program ini mencatat <strong>Rp <span data-fig="transaction_value_miliar">202,6</span> miliar</strong> nilai
-                transaksi per 13 Agustus 2026, naik dari Rp 179,5 miliar pada 5
-                Agustus. Rata-rata, setiap koperasi baru “menghasilkan”
-                sekitar <strong>Rp <span data-fig="value_per_coop_juta">2,43</span> juta seumur hidupnya</strong>, tak lebih dari
-                sebulan belanja dapur.
+              <p>Angka ini bukan uang yang dikeluarkan negara, melainkan
+                <strong>penjualan yang dilaporkan koperasi</strong>: Rp
+                <span data-fig="transaction_value_miliar">202,6</span> miliar per 13 Agustus 2026, naik dari Rp 179,5
+                miliar pada 5 Agustus. Dibagi rata, setiap koperasi
+                “menghasilkan” sekitar <strong>Rp <span data-fig="value_per_coop_juta">2,43</span> juta seumur
+                  hidupnya</strong>, dan rata-rata itu sendiri menyesatkan: 96,7%
+                desa tidak melaporkan apa-apa.
               </p>
               <p>Lihat grafik di samping: sistem mencatat 96% desa punya rekening dan
                 97% punya NPWP, tetapi hanya <span data-fig="villages_reporting_pct">3,3%</span> yang melaporkan transaksi. Mesin
@@ -276,11 +279,11 @@
               <p class="step-num">Bab 3 · Anggaran &amp; output</p>
               <h2>Dan aktivitas yang ada pun menumpuk di segelintir desa.</h2>
               <p>100 desa menyumbang 34,8% dari seluruh nilai transaksi nasional; 1.000
-                desa menyumbang <span data-fig="top1000_value_share_pct">90,6%</span>. Antara 5 dan 9 Agustus nilainya naik di dalam
-                kumpulan desa pelapor yang hampir tidak berubah, tetapi sejak 13
-                Agustus jumlah desa pelapor ikut naik (+209 desa). Pertanyaannya
-                bukan lagi “apakah ada yang melaporkan”, melainkan apakah tunggakan
-                mulai terbayar.</p>
+                desa menyumbang <span data-fig="top1000_value_share_pct">90,6%</span>. Antara 5 dan 9 Agustus angkanya praktis
+                diam: naik <span data-fig="our_growth_aug05_09_pct">0,13%</span>, satu desa baru. Lalu antara 9 dan 13 Agustus
+                melonjak: <span data-fig="new_reporting_aug09_13">209</span> desa pelapor baru dan nilai naik <span data-fig="our_growth_pct">12,7%</span>.
+                Pertanyaannya bukan lagi “apakah ada yang melaporkan”, melainkan
+                apakah tunggakan mulai terbayar.</p>
               <p>Konstruksinya baru seperempat yang selesai. Rapat anggota tahunan
                 (RAT): tercatat untuk 60% koperasi, tetapi hanya 6% di Papua
                 Pegunungan.</p>
@@ -301,7 +304,7 @@
 
     <figure class="wrap story-photo reveal">
       <img src="assets/story/anggaran.jpg" alt="Tumpukan uang rupiah" loading="lazy" decoding="async" />
-      <figcaption>Rp <span data-fig="transaction_value_miliar">202,6</span> miliar terdengar besar, tetapi itu sekitar <strong>Rp <span data-fig="value_per_coop_juta">2,43</span> juta per
+      <figcaption>Rp <span data-fig="transaction_value_miliar">202,6</span> miliar penjualan terdengar besar, tetapi itu sekitar <strong>Rp <span data-fig="value_per_coop_juta">2,43</span> juta per
           koperasi seumur hidupnya</strong>, dan angka itu adalah catatan pemerintah sendiri.
         <span class="photo-credit">Foto: “Rupiah swath”, Jonny-mt, CC BY 3.0.</span>
       </figcaption>
@@ -372,10 +375,11 @@
 
         <article class="verdict-card reveal">
           <span class="verdict-stamp strong">Paling didukung data</span>
-          <h3>“Boros”</h3>
-          <p>Rp <span data-fig="transaction_value_miliar">202,6</span> miliar, tetapi mesin operasi nyaris senyap:
-            hanya <span data-fig="villages_reporting_pct">3,3%</span> desa melaporkan transaksi. Ini catatan resmi di website SIMKOPDES, setelah program berjalan
-            lebih dari satu tahun sejak Instruksi Presiden No. 9 Tahun 2025.</p>
+          <h3>“Tidak ada hasil”</h3>
+          <p>Penjualan yang dilaporkan seluruh program: Rp <span data-fig="transaction_value_miliar">202,6</span> miliar, dan
+            mesin operasinya nyaris senyap. Hanya <span data-fig="villages_reporting_pct">3,3%</span> desa melaporkan transaksi. Ini catatan resmi di website SIMKOPDES, setelah program berjalan
+            lebih dari satu tahun sejak Instruksi Presiden No. 9 Tahun 2025. Sisi
+            biayanya tidak ada dalam data ini, jadi “boros” sendiri tidak bisa kami uji.</p>
           <a class="verdict-link" href="findings/money/">Baca bab Anggaran →</a>
         </article>
       </div>

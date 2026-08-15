@@ -1,0 +1,4 @@
+points,n,median_pop_own_400m_cell,mean_pop_own_400m_cell
+minimarket (tier 1),7617,3786.0,5795.0
+null: road + pop-weighted,7617,2374.0,4353.0
+null: road + pop-matched,7617,3786.0,5698.0

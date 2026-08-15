@@ -1,7 +1,9 @@
 # 16 — RAT compliance: the "zero" was a field misread
 
-**Run**: `python reports/16-rat-compliance/run.py` · No network · **Last run**: 2026-08-13
-**Source**: `kopdes_stats_province.csv` (`rat_count`) + `reports/15-construction-output` for the old claim
+**Reproduce**: `KOPDES_RAW=data/snapshots/2026-08-13 python reports/16-rat-compliance/run.py` ·
+No network · **Last run**: 2026-08-15
+**Source**: `kopdes_stats_province.csv` (`rat_count`) from the **2026-08-13** snapshot,
+plus `reports/15-construction-output` for the old claim. Hashes in [`_source.json`](_source.json).
 
 ## The correction this report exists to make
 
@@ -25,7 +27,7 @@ anyway. This report closes the blocker.
 
 |                           | Cooperatives | RAT conducted | Share     |
 | ------------------------- | ------------ | ------------- | --------- |
-| **National (2026-08-05)** | 83,382       | **50,174**    | **60.2%** |
+| **National (2026-08-13)** | 83,379       | **50,200**    | **60.2%** |
 
 The count is stable and real, not a one-off artefact: 50,174 (08-05 baseline) →
 50,188 (08-09 snapshot) → 50,200 (live 08-13 pull, where the dashboard displays
@@ -38,8 +40,8 @@ melaksanakan". The `rat_count` field is the "telah melaksanakan" number.
 
 ## Finding 2 — the gradient is the familiar Java/east-Indonesia one
 
-Compliance runs 98.9% (DKI Jakarta, Sumatera Barat) down to **6.1% (Papua
-Pegunungan)**, 16.2% (Papua Selatan), 21.3% (Papua Barat Daya). The same
+Compliance runs 99.3% (DKI Jakarta) and 98.9% (Sumatera Barat) down to **6.1% (Papua
+Pegunungan)**, 16.0% (Papua Selatan), 21.3% (Papua Barat Daya). The same
 eastern-Indonesia shortfall that shows up in transactions (14), construction
 (15) and compliance (13) shows up in governance too. And it tracks activity:
 Spearman(rat compliance, transaction value per cooperative) = **0.438** (n = 38) —

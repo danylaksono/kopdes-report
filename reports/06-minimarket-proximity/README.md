@@ -1,9 +1,10 @@
 # 06 — Minimarket proximity: were KDMP built on top of existing retail?
 
-**Run**: `python reports/06-minimarket-proximity/run.py` · No network ·
-**Last run**: 2026-08-13 (on 08-13 coordinates)
+**Reproduce**: `KOPDES_RAW=data/snapshots/2026-08-13 python reports/06-minimarket-proximity/run.py` ·
+No network · **Last run**: 2026-08-15
 **Source**: `data/osm/indonesia_minimarkets.gpkg` (10,580 POIs) + Kontur population + the
-road cell index from [05](../05-road-access/)
+road cell index from [05](../05-road-access/), with KDMP coordinates from the
+**2026-08-13** snapshot. Hashes in [`_source.json`](_source.json).
 
 > **This report is built around two known problems in its own data**: the source
 > is incomplete and urban-biased (§2), and it is not actually a minimarket
@@ -74,10 +75,10 @@ per 100 KDMP in DKI Jakarta, 0.15 in Sulawesi Barat, **0 in Papua Tengah**.
 
 | Within | Cooperatives (≥) | Share (≥) |
 | ------ | ---------------- | --------- |
-| ~500 m | 2,069            | **2.5%**  |
+| ~500 m | 2,068            | **2.5%**  |
 | ~1 km  | 4,150            | 5.0%      |
-| ~2 km  | 7,416            | 8.9%      |
-| ~5 km  | 16,496           | 19.8%     |
+| ~2 km  | 7,425            | 8.9%      |
+| ~5 km  | 16,505           | 19.8%     |
 
 Supermarkets separately
 ([`kdmp_near_supermarket_lower_bounds.csv`](kdmp_near_supermarket_lower_bounds.csv)):
@@ -99,33 +100,65 @@ minimarkets have a KDMP within ~1 km**, 95.7% within ~2 km.
 
 On its own that proves nothing — KDMP are one-per-village and cover 95% of the
 population within ~1.4 km ([03](../03-population-coverage/)), so _any_ populated
-point has one nearby almost by construction. Two controls, each matched to the
+point has one nearby almost by construction. Three controls, each matched to the
 minimarket count ([`null_model_comparison.csv`](null_model_comparison.csv)):
 
 - **Population-weighted random** — a location sampled proportional to Kontur population.
 - **Road-constrained population-weighted random** — a location on a non-track
-  road cell inside a populated area, i.e. a plausible retail site. The stricter
-  control: if minimarkets and KDMP both simply sit on the village road, that
-  alone would manufacture apparent co-location.
+  road cell inside a populated area, i.e. a plausible retail site.
+- **Road-constrained, population-_matched_** — the same road-cell pool, but
+  sampled to reproduce the minimarkets' own population distribution. **This is
+  the primary control.**
 
-| Within | Minimarkets | Pop null | **Road+pop null** | Excess vs pop | **Excess vs road** |
-| ------ | ----------- | -------- | ----------------- | ------------- | ------------------ |
-| ~500 m | 43.8%       | 27.6%    | 34.2%             | +16.2 pts     | **+9.6 pts**       |
-| ~1 km  | 78.3%       | 61.6%    | 71.2%             | +16.7 pts     | **+7.1 pts**       |
-| ~2 km  | 95.7%       | 86.6%    | 92.7%             | +9.1 pts      | +3.0 pts           |
-| ~5 km  | 99.6%       | 98.5%    | 99.5%             | +1.2 pts      | +0.1 pts           |
+### Why the third null exists (corrected 2026-08-15)
 
-**About half the apparent co-location is just "both sit on roads in populated
-places."** The residual is real but modest: a mapped minimarket is ~9.6
-percentage points more likely to have a KDMP within 500 m than an equivalent
-random roadside location in a populated area. The excess **decays with
-distance** (+9.6 → +7.1 → +3.0 → +0.1) — the signature of genuine short-range
-catchment overlap rather than a global artefact.
+The road+pop null was described in this README as answering "if minimarkets and
+KDMP both simply sit on the village road, that alone would manufacture apparent
+co-location." It only half answered it. Measured on the same grid
+([`null_density_match.csv`](null_density_match.csv)):
 
-These figures are essentially unchanged by the §1 re-tiering (previously +9.4 /
-+6.7 / +2.3 / +0.1 on the untiered set), which is a useful robustness result:
-the co-location conclusion does not depend on where the format boundary is
-drawn, even though the forward percentages do.
+| Points                        | Median population in own 400 m cell |
+| ----------------------------- | ----------------------------------- |
+| Minimarket (tier 1)           | 3,786                               |
+| Null: road + pop-**weighted** | **2,374**                           |
+| Null: road + pop-**matched**  | 3,786                               |
+
+Weighting by population is not the same as matching it. The old null stood in
+for the minimarkets in places roughly a third less dense, and since KDMP
+coverage rises with density, that gap was scored as co-location. Matching the
+distribution removes it, and takes the ~500 m excess from **+9.6 to +6.7 pts**.
+
+| Within | Minimarkets | Pop null | Road+pop null | **Road+pop-matched** | **Excess (primary)** |
+| ------ | ----------- | -------- | ------------- | -------------------- | -------------------- |
+| ~500 m | 43.8%       | 27.3%    | 34.7%         | 37.1%                | **+6.7 pts**         |
+| ~1 km  | 78.3%       | 62.2%    | 70.9%         | 74.6%                | **+3.7 pts**         |
+| ~2 km  | 95.7%       | 87.0%    | 92.9%         | 94.2%                | +1.5 pts             |
+| ~5 km  | 99.6%       | 98.2%    | 99.4%         | 99.4%                | +0.2 pts             |
+
+The residual is real but modest, and it **decays with distance**
+(+6.7 → +3.7 → +1.5 → +0.2) — the signature of genuine short-range catchment
+overlap rather than a global artefact.
+
+### The nulls are draws, not constants
+
+Two further corrections from the same pass:
+
+- **The published figure was one sample.** `null_stability.csv` redraws each
+  null 40 times: the ~500 m excess spans **5.7–7.7** for the matched null and
+  **8.2–10.4** for the old road null. Quote the mean and the range, never a
+  single draw to one decimal. The figures the site prints come from
+  [`null_excess_published.csv`](null_excess_published.csv) for exactly this
+  reason; the ~2 km and ~5 km rows there are still single draws, and say so.
+- **The fixed seed never made this reproducible.** The nulls draw integer
+  indices into DuckDB result sets, and DuckDB does not guarantee row order, so
+  re-running with no code change to the null moved the ~500 m road null from
+  34.41% to 33.79%. The candidate queries now carry `order by`, and two
+  consecutive runs are byte-identical.
+
+An earlier robustness note claimed these figures were "essentially unchanged by
+the §1 re-tiering (previously +9.4 / +6.7 / +2.3 / +0.1 on the untiered set)".
+That comparison is withdrawn: the untiered run exists nowhere in the repo, and
+the numbers it quoted are indistinguishable from ordinary redraw noise.
 
 ### What this does and does not establish
 

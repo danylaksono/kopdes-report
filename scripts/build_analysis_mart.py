@@ -85,6 +85,30 @@ ROOT = Path(__file__).resolve().parent.parent
 RAW = Path(os.environ["KOPDES_RAW"]) if os.environ.get("KOPDES_RAW") else ROOT / "data" / "raw"
 REPORTS = ROOT / "reports"
 
+
+def source_snapshot() -> str:
+    """Name the pull this mart was built from, for the manifest.
+
+    This used to be the hardcoded string "data/raw (SIMKOPDES export
+    2026-08-05)". It stopped being true the first time the mart was rebuilt
+    with KOPDES_RAW pointing at a snapshot: the parquet carried the 08-13
+    figures (Rp 202,6 miliar) while the manifest still announced the 08-05
+    export (Rp 179,6 miliar). A caveat that has to be edited by hand to stay
+    true eventually stops being true, so it is derived now.
+    """
+    manifest = RAW / "_manifest.json"
+    if manifest.exists():
+        date_ = json.loads(manifest.read_text(encoding="utf-8")).get(
+            "snapshot_date", RAW.name
+        )
+    else:
+        date_ = "2026-08-05"  # data/raw ships without a manifest
+    try:
+        where = RAW.resolve().relative_to(ROOT).as_posix()
+    except ValueError:
+        where = RAW.as_posix()
+    return f"{where} (SIMKOPDES export {date_})"
+
 # User-contributed coordinate corrections (see import_coordinate_corrections.py).
 # Only `status = applied` rows override the SIMKOPDES point. Committed: it is
 # part of the app's data layer, like the mart itself.
@@ -639,7 +663,7 @@ def main():
         schema[fname] = entry
     manifest = {
         "built": date.today().isoformat(),
-        "source_snapshot": "data/raw (SIMKOPDES export 2026-08-05)",
+        "source_snapshot": source_snapshot(),
         "h3_resolutions": H3_RES,
         "h3_encoding": "UBIGINT; use h3_h3_to_string() for the hex form",
         "levels": ["kopdes_points", "kopdes_kecamatan", "kopdes_kabupaten", "kopdes_provinsi"],

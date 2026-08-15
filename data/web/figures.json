@@ -5,6 +5,12 @@
     "label": "% of villages with an account",
     "page": "findings/money"
   },
+  "any_footprint_pct": {
+    "value": 14.27,
+    "text": "14,3%",
+    "label": "% of villages with any financial footprint",
+    "page": "findings/money"
+  },
   "any_savings_pct": {
     "value": 12.5,
     "text": "12,5%",
@@ -137,17 +143,95 @@
     "label": "Java share of transaction value (%)",
     "page": "findings"
   },
+  "jawa2_coops": {
+    "value": 17018,
+    "text": "17.018",
+    "label": "cooperatives in Jawa Timur + Jawa Tengah",
+    "page": "findings/money · methods/09"
+  },
+  "jawa2_reporting": {
+    "value": 1337,
+    "text": "1.337",
+    "label": "villages reporting in those two provinces",
+    "page": "findings/money · methods/09"
+  },
+  "jawa2_reporting_pct": {
+    "value": 7.9,
+    "text": "7,9%",
+    "label": "% of villages reporting in those two provinces",
+    "page": "findings/money · methods/09"
+  },
+  "jawa2_villages": {
+    "value": 17010,
+    "text": "17.010",
+    "label": "villages in Jawa Timur + Jawa Tengah",
+    "page": "findings/money · methods/09"
+  },
+  "matched_null_500m_pct": {
+    "value": 37.1,
+    "text": "37,1%",
+    "label": "% of matched random points with a KDMP within 500 m",
+    "page": "findings/competition"
+  },
   "max_in_one_cell": {
     "value": 17,
     "text": "17",
     "label": "most KDMP in a single ~1 km cell",
     "page": "findings/competition"
   },
-  "minimarket_excess_pp": {
-    "value": 9.4,
-    "text": "9,4",
-    "label": "minimarket excess within 500 m (pp, road null)",
+  "minimarket_excess_1km_pp": {
+    "value": 3.7,
+    "text": "3,7",
+    "label": "minimarket excess within 1 km (pp, matched null)",
     "page": "findings/competition"
+  },
+  "minimarket_excess_2km_pp": {
+    "value": 1.5,
+    "text": "1,5",
+    "label": "minimarket excess within 2 km (pp, matched null)",
+    "page": "findings/competition"
+  },
+  "minimarket_excess_5km_pp": {
+    "value": 0.2,
+    "text": "0,2",
+    "label": "minimarket excess within 5 km (pp, matched null)",
+    "page": "findings/competition"
+  },
+  "minimarket_excess_hi": {
+    "value": 7.7,
+    "text": "7,7",
+    "label": "minimarket excess within 500 m, high end",
+    "page": "findings/competition"
+  },
+  "minimarket_excess_lo": {
+    "value": 5.7,
+    "text": "5,7",
+    "label": "minimarket excess within 500 m, low end",
+    "page": "findings/competition"
+  },
+  "minimarket_excess_pp": {
+    "value": 6.7,
+    "text": "6,7",
+    "label": "minimarket excess within 500 m (pp, matched null)",
+    "page": "findings/competition"
+  },
+  "minimarket_excess_road_pp": {
+    "value": 9.6,
+    "text": "9,6",
+    "label": "minimarket excess within 500 m (pp, weaker road null)",
+    "page": "methods/06"
+  },
+  "minimarket_with_kdmp_500m_pct": {
+    "value": 43.8,
+    "text": "43,8%",
+    "label": "% of mapped minimarkets with a KDMP within 500 m",
+    "page": "findings/competition"
+  },
+  "mm_median_pop": {
+    "value": 3786.0,
+    "text": "3.786",
+    "label": "median population, minimarket cell",
+    "page": "methods/06"
   },
   "new_reporting_aug09_13": {
     "value": 209,
@@ -166,6 +250,12 @@
     "text": "72,9%",
     "label": "% of cooperatives with NIB",
     "page": "findings/money"
+  },
+  "nib_villages_pct": {
+    "value": 73.11,
+    "text": "73,1%",
+    "label": "% of villages holding an NIB",
+    "page": "findings/money · methods/02"
   },
   "no_building_5km_pct": {
     "value": 1.19,
@@ -197,6 +287,12 @@
     "label": "% of villages with NPWP",
     "page": "findings/money"
   },
+  "npwp_villages_pct": {
+    "value": 97.19,
+    "text": "97,2%",
+    "label": "% of villages holding an NPWP",
+    "page": "findings/money · methods/02"
+  },
   "on_building_cell_pct": {
     "value": 44.36,
     "text": "44,36%",
@@ -208,6 +304,12 @@
     "text": "1.061",
     "label": "government count of operating cooperatives",
     "page": "findings/money"
+  },
+  "operating_coops_jawa2_pct": {
+    "value": 6.2,
+    "text": "6,2%",
+    "label": "1.061 operating as % of those two provinces",
+    "page": "findings/money · methods/09"
   },
   "operating_coops_pct": {
     "value": 1.3,
@@ -251,11 +353,23 @@
     "label": "% with another KDMP within 5 km",
     "page": "/ · findings/competition"
   },
+  "our_growth_aug05_09_pct": {
+    "value": 0.13,
+    "text": "0,13%",
+    "label": "our value growth, 5 Aug to 9 Aug (%)",
+    "page": "findings/money"
+  },
   "our_growth_pct": {
     "value": 12.7,
     "text": "12,7%",
     "label": "our value growth, 9 Aug to 13 Aug (%)",
     "page": "findings/money"
+  },
+  "outlets_complete_jun": {
+    "value": 12232,
+    "text": "12.232",
+    "label": "government count of completed outlets",
+    "page": "findings/money · methods/09"
   },
   "overlap_artefact_pct": {
     "value": 64.0,
@@ -280,6 +394,12 @@
     "text": "0,6%",
     "label": "Papua share of transaction value (%)",
     "page": "/ · findings"
+  },
+  "pokok_villages_pct": {
+    "value": 11.88,
+    "text": "11,9%",
+    "label": "% of villages reporting founding capital",
+    "page": "findings/money · methods/02"
   },
   "pop_within_1_4km_pct": {
     "value": 95.0,
@@ -359,6 +479,12 @@
     "label": "rice share of reported sales value (%)",
     "page": "methods/12"
   },
+  "road_null_median_pop": {
+    "value": 2374.0,
+    "text": "2.374",
+    "label": "median population, road+pop-weighted null cell",
+    "page": "methods/06"
+  },
   "roadless_5_10km": {
     "value": 2467,
     "text": "2.467",
@@ -437,6 +563,12 @@
     "label": "no house 1 km + isolated + roadless",
     "page": "methods/17 · about"
   },
+  "tx_without_savings": {
+    "value": 1471,
+    "text": "1.471",
+    "label": "villages reporting a transaction but no savings",
+    "page": "findings/money"
+  },
   "value_per_coop_juta": {
     "value": 2.43,
     "text": "2,43",
@@ -467,10 +599,22 @@
     "label": "% of villages reporting a transaction",
     "page": "/ · findings/money"
   },
+  "wajib_gt_pokok_pct": {
+    "value": 15.8,
+    "text": "15,8%",
+    "label": "share of those villages where wajib exceeds pokok (%)",
+    "page": "findings/money"
+  },
   "wajib_paying_pct": {
     "value": 9.24,
     "text": "9,2%",
     "label": "% of villages paying monthly dues (wajib)",
+    "page": "findings/money"
+  },
+  "wajib_pokok_both_villages": {
+    "value": 7164.0,
+    "text": "7.164",
+    "label": "villages reporting both pokok and wajib",
     "page": "findings/money"
   },
   "wajib_pokok_ratio": {

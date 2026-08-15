@@ -302,10 +302,88 @@ def _():
     return one(f"select count(*) from {t}")
 
 
-@check("findings/competition", "minimarket excess within 500 m (pp, road null)", 9.4, tol=0.05, key="minimarket_excess_pp", fmt="dec1")
+# The chapter's headline, rewritten 2026-08-15.
+#
+# It used to be `excess_vs_road_null`, the excess over a road+population-
+# weighted null, quoted as 9,4 from a single draw. Two things were wrong with
+# that. The null landed in cells of median 2,374 people against the
+# minimarkets' 3,786, so it was not standing in for them on the dimension that
+# drives the result; matching the distribution takes the excess from ~9,6 to
+# ~6,7. And a single draw is a sample, not an estimate: redrawing the old null
+# 40 times spans 8,2 to 10,4. Both figures now come from
+# `null_excess_published.csv`, which carries the redraw mean and its range.
+PUB = "06-minimarket-proximity", "null_excess_published.csv"
+
+
+@check("findings/competition", "minimarket excess within 500 m (pp, matched null)", 6.7, tol=0.05, key="minimarket_excess_pp", fmt="dec1")
+def _():
+    return round(one(f"select excess_pp from {csv(*PUB)} where within = '~500 m'"), 1)
+
+
+@check("findings/competition", "minimarket excess within 500 m, low end", 5.7, tol=0.05, key="minimarket_excess_lo", fmt="dec1")
+def _():
+    return round(one(f"select lo95 from {csv(*PUB)} where within = '~500 m'"), 1)
+
+
+@check("findings/competition", "minimarket excess within 500 m, high end", 7.7, tol=0.05, key="minimarket_excess_hi", fmt="dec1")
+def _():
+    return round(one(f"select hi95 from {csv(*PUB)} where within = '~500 m'"), 1)
+
+
+@check("findings/competition", "minimarket excess within 1 km (pp, matched null)", 3.7, tol=0.05, key="minimarket_excess_1km_pp", fmt="dec1")
+def _():
+    return round(one(f"select excess_pp from {csv(*PUB)} where within = '~1 km'"), 1)
+
+
+@check("findings/competition", "minimarket excess within 2 km (pp, matched null)", 1.5, tol=0.05, key="minimarket_excess_2km_pp", fmt="dec1")
+def _():
+    return round(one(f"select excess_pp from {csv(*PUB)} where within = '~2 km'"), 1)
+
+
+@check("findings/competition", "minimarket excess within 5 km (pp, matched null)", 0.2, tol=0.05, key="minimarket_excess_5km_pp", fmt="dec1")
+def _():
+    return round(one(f"select excess_pp from {csv(*PUB)} where within = '~5 km'"), 1)
+
+
+@check("methods/06", "minimarket excess within 500 m (pp, weaker road null)", 9.6, tol=0.05, key="minimarket_excess_road_pp", fmt="dec1")
+def _():
+    t = csv("06-minimarket-proximity", "null_stability.csv")
+    return round(
+        one(f"select mean_excess_pp from {t} "
+            "where \"null\" = 'road + pop-weighted' and within = '~500 m'"),
+        1,
+    )
+
+
+@check("methods/06", "median population, minimarket cell", 3_786, key="mm_median_pop", fmt="int")
+def _():
+    t = csv("06-minimarket-proximity", "null_density_match.csv")
+    return one(f"select median_pop_own_400m_cell from {t} where points = 'minimarket (tier 1)'")
+
+
+@check("methods/06", "median population, road+pop-weighted null cell", 2_374, key="road_null_median_pop", fmt="int")
+def _():
+    t = csv("06-minimarket-proximity", "null_density_match.csv")
+    return one(
+        f"select median_pop_own_400m_cell from {t} "
+        "where points = 'null: road + pop-weighted'"
+    )
+
+
+@check("findings/competition", "% of mapped minimarkets with a KDMP within 500 m", 43.8, tol=0.05, key="minimarket_with_kdmp_500m_pct", fmt="pct1")
 def _():
     t = csv("06-minimarket-proximity", "null_model_comparison.csv")
-    return round(one(f"select excess_vs_road_null from {t} where within = '~500 m'"), 1)
+    return one(f"select pct_minimarkets from {t} where within = '~500 m'")
+
+
+@check("findings/competition", "% of matched random points with a KDMP within 500 m", 37.1, tol=0.05, key="matched_null_500m_pct", fmt="pct1")
+def _():
+    # The figure prints minimarkets minus excess, so it has to be the same
+    # arithmetic the page states: 43,8 - 6,7. Reading the single draw's 36,71
+    # here would make the diagram fail to add up.
+    t = csv("06-minimarket-proximity", "null_model_comparison.csv")
+    mm = one(f"select pct_minimarkets from {t} where within = '~500 m'")
+    return round(mm - one(f"select excess_pp from {csv(*PUB)} where within = '~500 m'"), 1)
 
 
 @check("findings/competition", "OSM share of Indomaret outlets (%)", 13.8, tol=0.05, key="osm_share_indomaret_pct", fmt="pct1")
@@ -461,6 +539,31 @@ def _():
     return round(one(f"select pct_nonzero from {t} where field = 'accounts_count'"), 0)
 
 
+# The village-level twins of npwp_pct / nib_pct above. Report 13 counts
+# documents per *cooperative*; report 02 counts villages holding at least one.
+# The funnel table on findings/money is a column of village shares with a header
+# that says so, and it was printing the cooperative figures in two of its six
+# rows, which is also why it disagreed with methods/02 by a tenth of a point.
+# Both pairs stay in the registry: the funnel binds these, the "zombie"
+# paragraph binds the per-cooperative ones, and each says which it means.
+@check("findings/money · methods/02", "% of villages holding an NPWP", 97.2, tol=0.05, key="npwp_villages_pct", fmt="pct1")
+def _():
+    t = csv("02-zero-inflation", "zero_inflation_by_field.csv")
+    return one(f"select pct_nonzero from {t} where field = 'npwp_count'")
+
+
+@check("findings/money · methods/02", "% of villages holding an NIB", 73.1, tol=0.05, key="nib_villages_pct", fmt="pct1")
+def _():
+    t = csv("02-zero-inflation", "zero_inflation_by_field.csv")
+    return one(f"select pct_nonzero from {t} where field = 'nib_count'")
+
+
+@check("findings/money · methods/02", "% of villages reporting founding capital", 11.9, tol=0.05, key="pokok_villages_pct", fmt="pct1")
+def _():
+    t = csv("11-savings-behaviour", "savings_zero_inflation.csv")
+    return one(f"select pct_nonzero from {t} where field = 'simpanan_pokok_amount'")
+
+
 # NOT bound into the prose, deliberately. The source CSV carries 34.85 at two
 # decimals, so the true value is somewhere in 34.845-34.855 and *neither* 34,8%
 # nor 34,9% is justified at one decimal: the page's "34,8%" and a half-up
@@ -494,6 +597,23 @@ def _():
 def _():
     t = csv("11-savings-behaviour", "wajib_pokok_ratio.csv")
     return round(one(f"select value from {t} where stat = 'median wajib/pokok'"), 2)
+
+
+# Both of the figures below are conditioned on a village reporting *both* kinds
+# of savings, which is 8,6% of villages, not all of them. The page said "hanya
+# 15,8% desa", which reads as 15,8% of the country and is off by a factor of
+# eleven. Publishing the base alongside the share is the fix; these two are
+# bound next to each other in the sentence so the base cannot go missing again.
+@check("findings/money", "villages reporting both pokok and wajib", 7_164, key="wajib_pokok_both_villages", fmt="int")
+def _():
+    t = csv("11-savings-behaviour", "wajib_pokok_ratio.csv")
+    return one(f"select value from {t} where stat = 'villages with both pokok and wajib'")
+
+
+@check("findings/money", "share of those villages where wajib exceeds pokok (%)", 15.8, tol=0.05, key="wajib_gt_pokok_pct", fmt="pct1")
+def _():
+    t = csv("11-savings-behaviour", "wajib_pokok_ratio.csv")
+    return one(f"select value from {t} where stat = 'share with wajib > pokok (pct)'")
 
 
 @check("findings/money", "RAT recorded for N cooperatives", 50_200, key="rat_recorded_coops", fmt="int")
@@ -659,6 +779,28 @@ def _():
     return one(f"select pct_nonzero from {t} where field = 'simpanan_wajib_amount'")
 
 
+# The funnel table reads as a ladder, where every rung is a subset of the one
+# above. For the administrative rungs it nearly is: only 23 villages report a
+# transaction without an NIB, 1 without an NPWP. For savings it is not. These
+# two figures are the counter-evidence to our own burden-of-proof argument, so
+# they are published rather than left in the report: a village can report sales
+# while reporting no member capital at all, which means the channels are
+# incomplete one at a time and an empty channel proves less than it looks like.
+@check("findings/money", "villages reporting a transaction but no savings", 1_471, key="tx_without_savings", fmt="int")
+def _():
+    t = csv("11-savings-behaviour", "savings_vs_transactions.csv")
+    return one(
+        f"select villages from {t} "
+        "where has_sav = 'no savings' and has_tx = 'transaction'"
+    )
+
+
+@check("findings/money", "% of villages with any financial footprint", 14.3, tol=0.05, key="any_footprint_pct", fmt="pct1")
+def _():
+    t = csv("11-savings-behaviour", "savings_national.csv")
+    return one(f"select value from {t} where metric = 'pct_any_financial_footprint'")
+
+
 # ---------------------------------------------------------------------------
 # Externally sourced figures  (findings/money, methods/09)
 #
@@ -696,10 +838,62 @@ def _():
     return one(f"select value from {csv(*EXT)} where metric = 'cooperatives_operating'")
 
 
+@check("findings/money · methods/09", "government count of completed outlets", 12_232, key="outlets_complete_jun", fmt="int")
+def _():
+    # Transcribed in June and never used on a page until now. It is the only
+    # outside check we have on the construction channel: the same body that
+    # said 12.232 outlets were finished on 11 June is the source SIMKOPDES's
+    # own 20.221-at-100% on 13 August has to be consistent with.
+    return one(f"select value from {csv(*EXT)} where metric = 'outlets_construction_complete'")
+
+
 @check("findings/money", "operating cooperatives as % of the registry", 1.3, tol=0.05, key="operating_coops_pct", fmt="pct1")
 def _():
     n = one(f"select value from {csv(*EXT)} where metric = 'cooperatives_operating'")
     return round(100 * n / 83_379, 1)
+
+
+# The 1.061 are not spread across the country: CNN quotes Bakom saying all of
+# them sit in Jawa Timur (530) and Jawa Tengah (531). The national rate above is
+# therefore a two-province numerator over a national denominator, which is only
+# defensible because the same quote says no other province had one operating.
+# The page used to pair it with "3,3% in the same two provinces", which is the
+# national reporting rate, not the two-province one. These four figures exist so
+# the comparison can be stated both ways round and neither denominator can drift
+# away from the sentence that uses it.
+JAWA2 = "province in ('JAWA TIMUR', 'JAWA TENGAH')"
+
+
+@check("findings/money · methods/09", "cooperatives in Jawa Timur + Jawa Tengah", 17_018, key="jawa2_coops", fmt="int")
+def _():
+    return one(f"select sum(cooperatives) from {PROV} where {JAWA2}")
+
+
+@check("findings/money · methods/09", "1.061 operating as % of those two provinces", 6.2, tol=0.05, key="operating_coops_jawa2_pct", fmt="pct1")
+def _():
+    n = one(f"select value from {csv(*EXT)} where metric = 'cooperatives_operating'")
+    return round(100 * n / one(f"select sum(cooperatives) from {PROV} where {JAWA2}"), 1)
+
+
+@check("findings/money · methods/09", "villages in Jawa Timur + Jawa Tengah", 17_010, key="jawa2_villages", fmt="int")
+def _():
+    # Villages, not cooperatives: the two differ by 8 here, and the page prints
+    # a numerator and a denominator side by side in one sentence. Mixing the
+    # two units is the same defect as the 1.061 denominator this block fixes.
+    return one(f"select sum(villages) from {PROV} where {JAWA2}")
+
+
+@check("findings/money · methods/09", "villages reporting in those two provinces", 1_337, key="jawa2_reporting", fmt="int")
+def _():
+    return one(f"select sum(villages_reporting) from {PROV} where {JAWA2}")
+
+
+@check("findings/money · methods/09", "% of villages reporting in those two provinces", 7.9, tol=0.05, key="jawa2_reporting_pct", fmt="pct1")
+def _():
+    r = con.execute(
+        f"select sum(villages_reporting), sum(villages) from {PROV} where {JAWA2}"
+    ).fetchone()
+    return round(100 * r[0] / r[1], 1)
 
 
 # ---------------------------------------------------------------------------
@@ -790,6 +984,20 @@ def _():
     a = one(f"select miliar from {t} where as_of = '2026-07-31'")
     b = one(f"select miliar from {t} where as_of = '2026-08-09'")
     return round(100 * (b - a) / a, 1)
+
+
+@check("findings/money", "our value growth, 5 Aug to 9 Aug (%)", 0.13, tol=0.005, key="our_growth_aug05_09_pct", fmt="pct2")
+def _():
+    # The page used to pair the press series' +13,8% (31 Jul to 9 Aug) with our
+    # own village count barely moving (2.516 to 2.517, which is 5 to 9 Aug), and
+    # read the two together as "the value grew inside a fixed set of villages".
+    # They are different windows. Over the window we actually observed, the
+    # value did not grow either: this is that number, and it exists so the
+    # sentence cannot be written the old way again.
+    t = csv(*SNAP)
+    a = one(f"select transaction_value_idr from {t} where as_of = '2026-08-05'")
+    b = one(f"select transaction_value_idr from {t} where as_of = '2026-08-09'")
+    return round(100 * (b - a) / a, 2)
 
 
 @check("findings/money", "our value growth, 9 Aug to 13 Aug (%)", 12.7, tol=0.05, key="our_growth_pct", fmt="pct1")

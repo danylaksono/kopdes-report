@@ -26,7 +26,7 @@ from pathlib import Path
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from _lib.common import RAW, out_dir, write_csv  # noqa: E402
+from _lib.common import IDR_PER_USD, RAW, out_dir, write_csv  # noqa: E402
 
 OUT = out_dir(__file__)
 
@@ -194,8 +194,10 @@ def main():
           .to_string(index=False))
 
     # --- 8. national cross-check of the totals above --------------------------
-    print(f"\nsavings total Rp {total/1e9:.1f} miliar (~USD {total/16000/1e6:.1f}M) vs "
-          f"transactions Rp {tx_total/1e9:.1f} miliar (~USD {tx_total/16000/1e6:.1f}M)")
+    print(f"\nsavings total Rp {total/1e9:.1f} miliar "
+          f"(~USD {total/IDR_PER_USD/1e6:.1f}M) vs "
+          f"transactions Rp {tx_total/1e9:.1f} miliar "
+          f"(~USD {tx_total/IDR_PER_USD/1e6:.1f}M)  [at {IDR_PER_USD:,}/USD]")
 
 
 if __name__ == "__main__":

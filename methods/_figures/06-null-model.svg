@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="720" height="530" viewBox="0 0 720 530" font-family="Inter, system-ui, sans-serif">
-  <text x="20" y="30" font-size="16" font-weight="700" fill="#1a1a1a">Dari mana angka “9,4 poin” itu?</text>
+  <text x="20" y="30" font-size="16" font-weight="700" fill="#1a1a1a">Dari mana angka “6,7 poin” itu?</text>
 
   <!-- ============ Scene 1: real minimarket ============ -->
   <text x="24" y="54" font-size="13" font-weight="700" fill="#1a1a1a">Titik minimarket sungguhan</text>
@@ -30,7 +30,7 @@
 
   <!-- ============ Scene 2: random "comparable" spot ============ -->
   <text x="384" y="54" font-size="13" font-weight="700" fill="#1a1a1a">Titik acak “setara”</text>
-  <text x="384" y="70" font-size="11.5" fill="#6b6b6b">diletakkan acak: di jalan, di daerah berpenduduk</text>
+  <text x="384" y="70" font-size="11.5" fill="#6b6b6b">acak: di jalan, di petak yang sama ramainya</text>
   <rect x="380" y="80" width="320" height="170" rx="6" fill="#faf8f2" stroke="#e2ddcd"/>
   <rect x="396" y="172" width="288" height="13" fill="#e9e4d8"/>
   <line x1="396" y1="178.5" x2="684" y2="178.5" stroke="#cfc9b6" stroke-dasharray="3 3"/>
@@ -53,42 +53,42 @@
   <circle cx="630" cy="215" r="3.5" fill="#1a1a1a"/>
   <circle cx="480" cy="110" r="3.5" fill="#1a1a1a"/>
   <circle cx="650" cy="185" r="3.5" fill="#1a1a1a"/>
-  <text x="540" y="268" text-anchor="middle" font-size="14" font-weight="700" fill="#1a1a1a">34,4% punya koperasi dalam 500 m</text>
+  <text x="540" y="268" text-anchor="middle" font-size="14" font-weight="700" fill="#1a1a1a">37,1% punya koperasi dalam 500 m</text>
 
   <!-- ============ The subtraction ============ -->
   <text x="20" y="296" font-size="12.5" fill="#1a1a1a">Keduanya diukur dengan lingkaran 500 m yang sama. Bagian yang juga terjadi di titik acak hanyalah kebetulan lokasi:</text>
 
   <text x="244" y="331" text-anchor="end" font-size="12.5" fill="#1a1a1a">Minimarket sungguhan</text>
-  <rect x="250" y="316" width="298" height="22" fill="#9a958a"/>
-  <text x="399" y="331" text-anchor="middle" font-size="11" fill="#2f2f2f">34,4% kebetulan</text>
-  <rect x="548" y="316" width="82" height="22" fill="#a00"/>
-  <text x="589" y="331" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">9,4 poin</text>
+  <rect x="250" y="316" width="322" height="22" fill="#9a958a"/>
+  <text x="411" y="331" text-anchor="middle" font-size="11" fill="#2f2f2f">37,1% kebetulan</text>
+  <rect x="572" y="316" width="58" height="22" fill="#a00"/>
+  <text x="601" y="331" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">6,7</text>
   <text x="646" y="331" font-size="12.5" font-weight="700" fill="#1a1a1a">43,8%</text>
 
-  <line x1="548" y1="338" x2="548" y2="352" stroke="#9a958a" stroke-dasharray="3 3"/>
+  <line x1="572" y1="338" x2="572" y2="352" stroke="#9a958a" stroke-dasharray="3 3"/>
 
   <text x="244" y="367" text-anchor="end" font-size="12.5" fill="#1a1a1a">Lokasi acak “setara”</text>
-  <rect x="250" y="352" width="298" height="22" fill="#9a958a"/>
-  <text x="399" y="367" text-anchor="middle" font-size="11" fill="#2f2f2f">34,4%</text>
-  <text x="646" y="367" font-size="12.5" font-weight="700" fill="#1a1a1a">34,4%</text>
+  <rect x="250" y="352" width="322" height="22" fill="#9a958a"/>
+  <text x="411" y="367" text-anchor="middle" font-size="11" fill="#2f2f2f">37,1%</text>
+  <text x="646" y="367" font-size="12.5" font-weight="700" fill="#1a1a1a">37,1%</text>
 
   <rect x="20" y="384" width="14" height="14" fill="#a00"/>
-  <text x="42" y="396" font-size="12.5" font-weight="700" fill="#a00">Kelebihan 9,4 poin = 43,8% - 34,4%: kedekatan di luar kebetulan.</text>
+  <text x="42" y="396" font-size="12.5" font-weight="700" fill="#a00">Kelebihan 6,7 poin = 43,8% - 37,1%: kedekatan di luar kebetulan.</text>
 
   <!-- ============ Decay with distance ============ -->
   <text x="20" y="434" font-size="12.5" font-weight="700" fill="#1a1a1a">Kelebihan mengecil mengikuti jarak</text>
   <line x1="20" y1="474" x2="640" y2="474" stroke="#d8d2c2"/>
   <text x="20" y="452" font-size="11.5" fill="#1a1a1a">500 m</text>
   <rect x="20" y="460" width="110" height="14" fill="#a00"/>
-  <text x="20" y="492" font-size="11.5" font-weight="700" fill="#1a1a1a">9,4</text>
+  <text x="20" y="492" font-size="11.5" font-weight="700" fill="#1a1a1a">6,7</text>
   <text x="180" y="452" font-size="11.5" fill="#1a1a1a">1 km</text>
-  <rect x="180" y="460" width="88" height="14" fill="#a00"/>
-  <text x="180" y="492" font-size="11.5" font-weight="700" fill="#1a1a1a">7,5</text>
+  <rect x="180" y="460" width="61" height="14" fill="#a00"/>
+  <text x="180" y="492" font-size="11.5" font-weight="700" fill="#1a1a1a">3,7</text>
   <text x="340" y="452" font-size="11.5" fill="#1a1a1a">2 km</text>
-  <rect x="340" y="460" width="32" height="14" fill="#a00"/>
-  <text x="340" y="492" font-size="11.5" font-weight="700" fill="#1a1a1a">2,7</text>
+  <rect x="340" y="460" width="25" height="14" fill="#a00"/>
+  <text x="340" y="492" font-size="11.5" font-weight="700" fill="#1a1a1a">1,5</text>
   <text x="500" y="452" font-size="11.5" fill="#1a1a1a">5 km</text>
-  <rect x="500" y="460" width="2" height="14" fill="#a00"/>
+  <rect x="500" y="460" width="3" height="14" fill="#a00"/>
   <text x="500" y="492" font-size="11.5" font-weight="700" fill="#1a1a1a">0,2</text>
   <text x="20" y="516" font-size="11.5" fill="#6b6b6b">Di 5 km kelebihannya nyaris nol. Ini tanda kedekatan yang efeknya lokal (jarak dekat), bukan penumpukan di mana-mana.</text>
 </svg>

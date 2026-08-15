@@ -1,0 +1,20 @@
+{
+  "generated_at": "2026-08-15T04:08:49+00:00",
+  "input": {
+    "snapshot": "2026-08-13",
+    "path": "data/snapshots/2026-08-13",
+    "manifest": "data/snapshots/2026-08-13/_manifest.json",
+    "sha256": {
+      "kopdes_land_assets.csv": "7ccd8c8f80a46094e554760c35dc3f214c29e0b7a159d3e00653ce67677d9b86",
+      "kopdes_locations.csv": "0c0d45732b5f8942e7bb2afa770f20808cffe00d9db92587efd3eaf18f32442c",
+      "kopdes_national_summary.csv": "4b413d6c53807bc54c9475441c118d292afd510b5e1299efe3843e45f04b7ee4",
+      "kopdes_province_rat_and_construction.csv": "4b52e2e7a88bb5d3afb5071d0dc87d752bdebf5db8d0221c15821da4c1fe74e5",
+      "kopdes_province_top_products.csv": "d1583402003666d313cc4a9cb558f100571e735b2f48e9ab5df36cf3e06b9a0e",
+      "kopdes_stats_district.csv": "b1d4d01e3890c4a478a152c9b28434094a7705475e6e91f15745f885db2528b1",
+      "kopdes_stats_province.csv": "734bc5e9b2059fed72897d640fda94f6fd2f013c2d364fcacfd394429dbc3475",
+      "kopdes_stats_subdistrict.csv": "fcb98519f5f17f3dcdc49e43498a2c7e7926132e36129ebc484c266969ae721f",
+      "kopdes_stats_village.csv": "3a906e0f275e6c8707793b0d3eca88398b8c34c31396378e45deb1c93dbd2ffe"
+    }
+  },
+  "note": "Which SIMKOPDES pull produced the CSVs in this directory. Reports default to data/raw (2026-08-05); set KOPDES_RAW to a snapshot directory to reproduce a later vintage. The snapshot CSVs are not committed, so the sha256 hashes above are the provenance record."
+}

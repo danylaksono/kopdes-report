@@ -1,0 +1,5 @@
+null,within,draws,mean_excess_pp,sd,lo95,hi95
+road + pop-matched,~1 km,40,3.66,0.41,2.97,4.47
+road + pop-matched,~500 m,40,6.74,0.51,5.71,7.67
+road + pop-weighted,~1 km,40,7.47,0.62,6.48,8.5
+road + pop-weighted,~500 m,40,9.59,0.55,8.19,10.43

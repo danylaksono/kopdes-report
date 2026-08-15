@@ -24,19 +24,20 @@
 
         <div class="stat-strip">
             <div class="stat">
-                <div class="value"><span data-fig="minimarket_excess_pp">9,4</span><small>pt</small></div>
-                <div class="label">lebih mungkin minimarket punya koperasi dalam 500 m, vs lokasi acak</div>
+                <div class="value"><span data-fig="minimarket_excess_pp">6,7</span><small>pt</small></div>
+                <div class="label">lebih mungkin minimarket punya koperasi dalam 500 m, vs lokasi acak yang
+                    sama ramainya</div>
             </div>
             <div class="stat">
-                <div class="value">2<small>km</small></div>
-                <div class="label">jarak di mana kelebihan itu hilang</div>
+                <div class="value"><span data-fig="minimarket_excess_1km_pp">3,7</span><small>pt</small></div>
+                <div class="label">kelebihan yang sama pada jarak 1 km: menyusut cepat</div>
             </div>
             <div class="stat">
-                <div class="value">22,2<small>%</small></div>
+                <div class="value"><span data-fig="other_within_1km_pct">22,2%</span></div>
                 <div class="label">koperasi punya koperasi lain dalam 1 km</div>
             </div>
             <div class="stat">
-                <div class="value">4,6<small>%</small></div>
+                <div class="value"><span data-fig="other_within_500m_pct">4,6%</span></div>
                 <div class="label">koperasi punya koperasi lain dalam 500 m</div>
             </div>
             <div class="stat">
@@ -54,27 +55,32 @@
             Baik minimarket atau koperasi sama-sama sering berada di jalan utama daerah
             berpenduduk, jadi kedekatan itu bisa jadi adalah kebetulan belaka. Karena itu kami
             membandingkan setiap minimarket dengan <strong>lokasi acak yang setara</strong>:
-            sama-sama di jalan, sama-sama di daerah berpenduduk.</p>
+            sama-sama di jalan, dan <strong>sama ramainya</strong>, yaitu di petak yang
+            jumlah penduduknya sama padatnya dengan petak minimarket
+            itu.<span class="fn"><a href="#fn1" id="fnref1">1</a></span></p>
         <p>Hasilnya: setelah faktor itu diimbangi, sebuah minimarket yang terpetakan
-            <strong>sekitar <span data-fig="minimarket_excess_pp">9,4</span> poin persentase lebih mungkin</strong> memiliki koperasi
-            dalam 500 m dibanding lokasi acak yang sebanding. Kelebihan itu
-            <strong>menghilang pada jarak 2 km</strong>. Angka ini bertahan saat tingkat
-            data ritel diubah-ubah, jadi tidak bergantung pada di mana batas format
-            digambar.
+            <strong>sekitar <span data-fig="minimarket_excess_pp">6,7</span> poin persentase lebih mungkin</strong> memiliki koperasi
+            dalam 500 m dibanding lokasi acak yang sebanding (kisaran
+            <span data-fig="minimarket_excess_lo">5,7</span> sampai <span data-fig="minimarket_excess_hi">7,7</span>).<span class="fn"><a href="#fn2" id="fnref2">2</a></span> Kelebihan itu
+            <strong>menyusut cepat mengikuti jarak</strong> dan praktis habis pada 5 km:
+            <span data-fig="minimarket_excess_1km_pp">3,7</span> poin pada 1 km, <span data-fig="minimarket_excess_2km_pp">1,5</span> poin pada 2 km, <span data-fig="minimarket_excess_5km_pp">0,2</span> poin pada 5 km.
+            Pola menyusut itulah tanda tumpang tindih jarak dekat yang sebenarnya, bukan
+            kedekatan yang berlaku di mana-mana.
         </p>
         <figure class="figure">
             <img src="../../methods/_figures/06-null-model.svg"
-                alt="Diagram cara kerja perbandingan dengan lokasi acak: 43,8% minimarket sungguhan punya koperasi dalam 500 m, 34,4% lokasi acak setara, kelebihan 9,4 poin." />
+                alt="Diagram cara kerja perbandingan dengan lokasi acak: 43,8% minimarket sungguhan punya koperasi dalam 500 m, 37,1% lokasi acak yang sama ramainya, kelebihan 6,7 poin." />
             <figcaption>Titik-titik pada gambar hanya ilustrasi; persentasenya angka
                 sebenarnya. Minimarket sungguhan dan lokasi acak “setara” diukur dengan
-                lingkaran 500 m yang sama. Bagian yang juga terjadi di titik acak
-                (34,4 poin) hanyalah kebetulan lokasi; sisanya, <span data-fig="minimarket_excess_pp">9,4</span> poin, adalah
-                kedekatan di luar kebetulan. Kelebihan itu mengecil mengikuti jarak
-                dan hilang pada 2 km.</figcaption>
+                lingkaran 500 m yang sama. <span data-fig="minimarket_with_kdmp_500m_pct">43,8%</span> minimarket punya koperasi dalam
+                500 m; di lokasi acak yang sama ramainya angkanya <span data-fig="matched_null_500m_pct">37,1%</span>, dan itu
+                hanyalah kebetulan lokasi. Sisanya, <span data-fig="minimarket_excess_pp">6,7</span> poin, adalah kedekatan di
+                luar kebetulan. Kelebihan itu menyusut mengikuti jarak dan praktis
+                habis pada 5 km.</figcaption>
         </figure>
         <p>Perlu dicatat: angka ini adalah <em>batas bawah</em>. Peta yang kami pakai
             hanya memuat sebagian minimarket Indonesia (<span data-fig="osm_share_indomaret_pct">13,8%</span> gerai Indomaret, <span data-fig="osm_share_alfamart_pct">10,9%</span>
-            Alfamart), dan kami bahkan belum memasukkan warung dan toko kelontong
+            Alfamart),<span class="fn"><a href="#fn3" id="fnref3">3</a></span> dan kami bahkan belum memasukkan warung dan toko kelontong
             kecil, justru ritel yang paling dekat dengan desa. Kehadiran adalah bukti;
             ketidakhadiran bukan.</p>
 
@@ -115,8 +121,11 @@
             saudara dalam 5 km. Itu konsekuensi wajar dari program “satu koperasi per
             desa” di Indonesia yang padat, bukan bukti penumpukan. <strong>Kedua</strong>,
             pada ujung yang ketat ada jejak nyata: 1 dari 5 koperasi punya koperasi
-            lain dalam 1 km, dan ada <span data-fig="cells_with_2plus">2.513</span> petak 1 km berisi dua koperasi atau lebih
-            (maksimum 17 dalam satu petak).</p>
+            lain dalam 1 km, dan ada <span data-fig="cells_with_2plus">2.513</span> petak 1 km berisi dua koperasi atau lebih.
+            Petak terpadat berisi <strong>8 koperasi</strong> yang jaraknya benar-benar
+            masuk akal, di Aceh Barat Daya. Kelompok yang lebih besar dari itu semuanya
+            koordinat yang mencurigakan, bukan bangunan yang benar-benar
+            menumpuk.<span class="fn"><a href="#fn4" id="fnref4">4</a></span></p>
 
         <div class="callout"><span class="callout-label">Perlu kehati-hatian</span>
             Sebagian besar “koperasi menumpuk” pada skala halus ternyata <strong>jejak
@@ -128,9 +137,11 @@
 
         <h2>Apakah penumpukan merugikan kinerja? Ternyata tidak terukur</h2>
         <p>Dugaan yang kami uji: koperasi yang berdekatan saling berebut warga, jadi
-            hasil per koperasi lebih rendah. Kenyataannya, koperasi yang berbagi petak
-            melaporkan transaksi sama seringnya dengan yang terpencil (<span data-fig="clustered_reporting_pct">4,5%</span> vs <span data-fig="isolated_reporting_pct">3,7%</span>),
-            dan ukuran kelompok tidak berkorelasi dengan nilai per koperasi (ρ ≈ 0).
+            hasil per koperasi lebih rendah. Kalau dugaan itu benar, koperasi yang
+            berbagi petak seharusnya lebih jarang melaporkan transaksi. Yang terjadi
+            justru sebaliknya, walau tipis: <strong><span data-fig="clustered_reporting_pct">4,5%</span> yang berbagi petak melaporkan
+                transaksi, dibanding <span data-fig="isolated_reporting_pct">3,7%</span> yang terpencil</strong>.<span class="fn"><a href="#fn5" id="fnref5">5</a></span> Ukuran
+            kelompok juga tidak berkorelasi dengan nilai per koperasi (ρ ≈ 0).
             <strong>Dugaan itu tidak didukung.</strong> Ini hasil nol yang jujur:
             mengingat data dagang 97% kosong, “tidak ada penalti” adalah pernyataan
             terkuat yang diizinkan data, bukan ukuran ketiadaan kompetisi.
@@ -146,8 +157,9 @@
 
         <div class="verdict">
             <h3>Vonis bab ini</h3>
-            <p><strong>Kedekatan dengan ritel modern nyata tapi sedang, sekitar <span data-fig="minimarket_excess_pp">9,4</span>
-                    poin dalam 500 m dan hilang pada 2 km, sementara tumpang tindih
+            <p><strong>Kedekatan dengan ritel modern nyata tapi sedang, sekitar <span data-fig="minimarket_excess_pp">6,7</span>
+                    poin dalam 500 m, menyusut menjadi <span data-fig="minimarket_excess_1km_pp">3,7</span> poin pada 1 km dan habis
+                    pada 5 km, sementara tumpang tindih
                     antar-koperasi nyata tapi tanpa penalti kinerja yang terukur.</strong>
                 Yang dibutuhkan tuduhan publik, yaitu bukti koperasi merebut
                 pelanggan minimarket atau program sengaja dibangun di atasnya,
@@ -158,6 +170,57 @@
                 koperasi sebelum program ini.
             </p>
         </div>
+
+        <section class="footnotes">
+            <h2>Catatan</h2>
+            <ol>
+                <li id="fn1">“Sama ramainya” di sini bukan kiasan. Setiap petak 400 m
+                    punya angka jumlah penduduk, dan lokasi acak pembandingnya diambil
+                    supaya sebaran kepadatan penduduknya sama persis dengan sebaran
+                    kepadatan di petak-petak minimarket (median <span data-fig="mm_median_pop">3.786</span> orang di
+                    kedua kelompok). Ini koreksi terhadap versi awal halaman ini, yang
+                    memakai pembanding acak “di jalan dan berpenduduk” tanpa menyamakan
+                    kepadatannya. Pembanding lama itu ternyata jatuh di tempat yang jauh
+                    lebih sepi daripada minimarketnya sendiri (median <span data-fig="road_null_median_pop">2.374</span> orang),
+                    dan karena koperasi memang lebih rapat di tempat ramai, selisih
+                    kepadatan itu ikut terhitung sebagai “kedekatan”. Dengan pembanding
+                    lama angkanya <span data-fig="minimarket_excess_road_pp">9,6</span> poin; setelah kepadatannya disamakan,
+                    <span data-fig="minimarket_excess_pp">6,7</span> poin.
+                    <a class="fn-back" href="#fnref1">↩</a></li>
+                <li id="fn2">Lokasi acak itu diundi, jadi hasilnya sedikit berbeda tiap
+                    kali diundi ulang. Angka yang kami sebut adalah rata-rata dari 40
+                    kali pengundian, dan kisarannya adalah rentang 95% dari pengundian
+                    itu. Versi awal halaman ini menyebut satu angka dari satu kali
+                    undian seolah-olah angka pasti.
+                    <a class="fn-back" href="#fnref2">↩</a></li>
+                <li id="fn3">Pembagi angka ini, yaitu jumlah gerai nasional Indomaret
+                    dan Alfamart, adalah angka perkiraan dari laporan perusahaan yang
+                    kami masukkan sebagai tetapan di dalam skrip, bukan angka yang kami
+                    verifikasi sendiri. Angka itu hanya dipakai untuk menyatakan
+                    seberapa tidak lengkap peta yang kami pakai; tidak ada satu pun
+                    hitungan lain di bab ini yang bergantung padanya.
+                    <a class="fn-back" href="#fnref3">↩</a></li>
+                <li id="fn4">Petak berisi 17 koperasi (Wamena, Papua Pegunungan) yang
+                    disebut versi awal halaman ini bukan penumpukan yang nyata: jarak
+                    antar-anggotanya bermedian 5,4 meter, dan dua kelompok terbesar
+                    berikutnya bermedian 0,24 dan 0,27 meter. Bangunan tidak berdiri
+                    beberapa sentimeter dari satu sama lain, jadi itu koordinat yang
+                    dicatat di titik yang sama, bukan koperasi yang dibangun berimpitan.
+                    Penyaringan 798 koordinat kembar hanya menangkap yang persis sama,
+                    bukan yang berjarak beberapa meter: 97 koperasi masih tercatat dalam
+                    jarak 1 meter dari koperasi lain, 117 dalam 10 meter, dan 79 di
+                    antaranya di Papua.
+                    <a class="fn-back" href="#fnref4">↩</a></li>
+                <li id="fn5">Perbandingan ini hanya bisa dilakukan pada 65.500 koperasi
+                    yang datanya tersambung ke statistik desa, dari 82.581 koperasi di
+                    himpunan bersih. Selisih 4,5% dan 3,7% itu kecil tetapi bukan nol
+                    secara statistik. Arahnya berlawanan dengan tuduhan kanibalisasi,
+                    dan kami tidak membacanya sebagai “berdekatan itu menguntungkan”:
+                    koperasi yang berdekatan cenderung berada di daerah yang lebih ramai,
+                    dan daerah ramai memang lebih rajin melapor.
+                    <a class="fn-back" href="#fnref5">↩</a></li>
+            </ol>
+        </section>
 
         <p><em>Lampiran metode:</em>
             <a href="../../methods/06-minimarket-proximity/">06</a> ·

@@ -37,6 +37,7 @@ import sys
 from pathlib import Path
 
 import duckdb
+import numpy as np
 import pandas as pd
 import pyogrio
 
@@ -138,6 +139,123 @@ def rings_to_nearest(con, src_table, target_table, label):
         if left == 0:
             break
     return con.execute("select id, k from _hits").fetchdf()
+
+
+MATCH_DECILES = 10
+STABILITY_DRAWS = 40
+# The redraw pass only recomputes the two bands the argument rests on. They are
+# cheap: "every cell within k rings of any cooperative" is 4.8M cells at k=4 and
+# 14.7M at k=8, but 371M at k=38, which is why the ~2 km and ~5 km rows stay
+# single-draw. Nothing in the write-up leans on those two rows.
+STABILITY_BANDS = [(4, "~500 m"), (8, "~1 km")]
+
+
+def matched_sample(cand, target_pop, rng):
+    """Draw road cells reproducing `target_pop`'s population distribution.
+
+    Equal counts per decile of the target distribution, so the sample matches
+    it by construction rather than by reweighting and hoping.
+    """
+    cpop = cand.population.to_numpy().astype(float)
+    edges = np.unique(np.quantile(target_pop, np.linspace(0, 1, MATCH_DECILES + 1)))
+    want = np.bincount(np.digitize(target_pop, edges[1:-1], right=True),
+                       minlength=len(edges) - 1)
+    pool_of = np.digitize(cpop, edges[1:-1], right=True)
+    picks = []
+    for b, n in enumerate(want):
+        pool = np.where(pool_of == b)[0]
+        if n and len(pool):
+            picks.append(rng.choice(pool, size=n, replace=True))
+    idx = np.concatenate(picks)
+    return pd.DataFrame({"id": range(len(idx)), "h3": cand.h3.to_numpy()[idx]})
+
+
+def stability(con, cand, mm, mm_pop):
+    """How much does the excess move between random draws of the same null?
+
+    The published excess came from one draw with a fixed seed, and was quoted
+    to a tenth of a point as though it were arithmetic. It is a random
+    variable. This redraws both road nulls and reports the spread, so the
+    write-up can state a range instead of a false precision.
+    """
+    print(f"\n=== null stability: {STABILITY_DRAWS} redraws ===")
+    for k, _ in STABILITY_BANDS:
+        con.execute(
+            f"""create or replace table near{k} as select distinct c.cell as h3
+                from kop, unnest(h3_grid_disk(kop.h3, {k})) as c(cell)"""
+        )
+
+    def rates(table):
+        return {
+            k: con.execute(
+                f"""select 100.0 * count(*) filter (where n.h3 is not null) / count(*)
+                    from {table} t left join near{k} n on n.h3 = t.h3"""
+            ).fetchone()[0]
+            for k, _ in STABILITY_BANDS
+        }
+
+    mm_rates = rates("mm")
+    w = cand.population.to_numpy().astype(float)
+    w = w / w.sum()
+    rows = []
+    for draw in range(STABILITY_DRAWS):
+        rng = np.random.default_rng(1000 + draw)
+        weighted = pd.DataFrame({
+            "id": range(len(mm)),
+            "h3": cand.h3.to_numpy()[rng.choice(len(cand), size=len(mm), replace=True, p=w)],
+        })
+        for name, pts in (("road + pop-weighted", weighted),
+                          ("road + pop-matched", matched_sample(cand, mm_pop, rng))):
+            con.register("_s", pts)
+            con.execute("create or replace table _spts as select id, h3 from _s")
+            r = rates("_spts")
+            con.unregister("_s")
+            for k, lbl in STABILITY_BANDS:
+                rows.append({"null": name, "within": lbl, "draw": draw,
+                             "excess_pp": mm_rates[k] - r[k]})
+
+    d = pd.DataFrame(rows)
+    summary = (
+        d.groupby(["null", "within"])
+        .excess_pp.agg(draws="size", mean_excess_pp="mean", sd="std",
+                       lo95=lambda s: s.quantile(0.025), hi95=lambda s: s.quantile(0.975))
+        .round(2).reset_index()
+    )
+    print()
+    print(summary.to_string(index=False))
+    write_csv(summary, OUT / "null_stability.csv",
+              "excess spread over redraws; the single-draw figure is one sample from this")
+    return summary
+
+
+def publish_table(comp, summary):
+    """The one table the pages quote, so they cannot quote different numbers.
+
+    Two bands have a redraw mean and a 95% range; the other two are a single
+    draw because the redraw pass is only cheap at short range. Saying which is
+    which in the data itself is what stops a page presenting a one-sample
+    figure as if it were the estimate.
+    """
+    matched = (
+        summary[summary["null"] == "road + pop-matched"]
+        .set_index("within")[["mean_excess_pp", "lo95", "hi95"]]
+    )
+    rows = []
+    for _, r in comp.iterrows():
+        band = r["within"]
+        if band in matched.index:
+            m = matched.loc[band]
+            rows.append({"within": band, "excess_pp": m.mean_excess_pp,
+                         "lo95": m.lo95, "hi95": m.hi95,
+                         "basis": f"mean of {STABILITY_DRAWS} draws"})
+        else:
+            rows.append({"within": band, "excess_pp": r["excess_vs_matched_null"],
+                         "lo95": None, "hi95": None, "basis": "single draw"})
+    out = pd.DataFrame(rows)
+    print("\nPublished excess vs the density-matched null:\n")
+    print(out.to_string(index=False))
+    write_csv(out, OUT / "null_excess_published.csv",
+              "the figures the site quotes; bind from here, not from a single draw")
 
 
 def main():
@@ -306,10 +424,15 @@ def main():
     # than a population-weighted random point is.
     if POP_PARQUET.exists():
         print("\n=== null model: population-weighted random points ===")
-        import numpy as np
-
         rng = np.random.default_rng(11)
-        cells = con.execute("select h3, population from pop where population > 0").fetchdf()
+        # `order by` is load-bearing, not tidiness. The nulls draw integer
+        # indices into these result sets, and DuckDB does not guarantee row
+        # order, so the fixed seed alone never made this report reproducible:
+        # re-running it with no change to the null code moved the ~500 m road
+        # null from 34.41% to 33.79%. Sorting pins the sample.
+        cells = con.execute(
+            "select h3, population from pop where population > 0 order by h3"
+        ).fetchdf()
         w = cells.population.to_numpy()
         idx = rng.choice(len(cells), size=len(mm), replace=True, p=w / w.sum())
         # Kontur is r8; drop to a random r10 child so the null points sit on the
@@ -343,7 +466,8 @@ def main():
                 """select r.h3, p.population
                    from road_cells_d r
                    join pop10 p on h3_cell_to_parent(r.h3, 8) = p.h3_8
-                   where p.population > 0"""
+                   where p.population > 0
+                   order by r.h3"""  # see the note on `cells` above
             ).fetchdf()
             w2 = cand.population.to_numpy()
             pick = rng.choice(len(cand), size=len(mm), replace=True, p=w2 / w2.sum())
@@ -354,6 +478,54 @@ def main():
                 columns={"k": "k_to_kdmp"}
             )
             null2_j = null2[["id"]].merge(k_null2, on="id", how="left")
+
+        # Third null: matched on population, not merely weighted by it.
+        #
+        # The road+pop null was meant to answer "do both simply sit on the
+        # village road in a populated place". It only half does. Measured on
+        # the same r8 grid, its points land at a median 2,369 people per cell
+        # against the minimarkets' 3,786: it stands in for the minimarkets in
+        # places materially less dense than the minimarkets themselves. KDMP
+        # coverage rises with density, so that residual gap is counted as
+        # co-location and inflates the excess.
+        #
+        # This null draws from the same road-cell pool but reproduces the
+        # minimarkets' own population distribution, by sampling the same number
+        # of points per decile of that distribution. It is the control the
+        # report always described; the road null was an approximation to it.
+        null3_j = None
+        if ROAD_CELLS.exists():
+            mm_pop = con.execute(
+                """select coalesce(p.population, 0) as pop from mm t
+                   left join pop10 p on h3_cell_to_parent(t.h3, 8) = p.h3_8"""
+            ).fetchdf()["pop"].to_numpy()
+            null3 = matched_sample(cand, mm_pop, np.random.default_rng(11))
+            con.register("null3_raw", null3)
+            con.execute("create or replace table nullpts as select id, h3 from null3_raw")
+            k_null3 = rings_to_nearest(con, "nullpts", "kop", "matched-null->KDMP").rename(
+                columns={"k": "k_to_kdmp"}
+            )
+            null3_j = null3[["id"]].merge(k_null3, on="id", how="left")
+
+            # Publish the density check itself, so the reason this null exists
+            # is visible in the committed data rather than only in prose.
+            dens_rows = []
+            for label, tbl in (("minimarket (tier 1)", "mm"),
+                               ("null: road + pop-weighted", "null2_raw"),
+                               ("null: road + pop-matched", "null3_raw")):
+                q = con.execute(
+                    f"""select median(coalesce(p.population, 0)),
+                               avg(coalesce(p.population, 0))
+                        from {tbl} t left join pop10 p
+                          on h3_cell_to_parent(t.h3, 8) = p.h3_8"""
+                ).fetchone()
+                dens_rows.append({"points": label, "n": len(mm),
+                                  "median_pop_own_400m_cell": round(float(q[0]), 0),
+                                  "mean_pop_own_400m_cell": round(float(q[1]), 0)})
+            nd = pd.DataFrame(dens_rows)
+            print("\nDensity of each null against the minimarkets it stands in for:\n")
+            print(nd.to_string(index=False))
+            write_csv(nd, OUT / "null_density_match.csv")
 
         comp = []
         for k, lbl in BANDS:
@@ -366,6 +538,10 @@ def main():
                 row["pct_random_on_road_pop_weighted"] = round(
                     100 * float((null2_j.k_to_kdmp <= k).mean()), 2
                 )
+            if null3_j is not None:
+                row["pct_random_road_pop_matched"] = round(
+                    100 * float((null3_j.k_to_kdmp <= k).mean()), 2
+                )
             comp.append(row)
         comp = pd.DataFrame(comp)
         comp["excess_vs_pop_null"] = (comp.pct_minimarkets - comp.pct_random_pop_weighted).round(2)
@@ -373,9 +549,16 @@ def main():
             comp["excess_vs_road_null"] = (
                 comp.pct_minimarkets - comp.pct_random_on_road_pop_weighted
             ).round(2)
+        if null3_j is not None:
+            comp["excess_vs_matched_null"] = (
+                comp.pct_minimarkets - comp.pct_random_road_pop_matched
+            ).round(2)
         print()
         print(comp.to_string(index=False))
         write_csv(comp, OUT / "null_model_comparison.csv")
+
+        if null3_j is not None:
+            publish_table(comp, stability(con, cand, mm, mm_pop))
 
     # ---------------- scope-restricted estimate ---------------------------
     # Restrict to provinces whose OSM retail density is at least a quarter of

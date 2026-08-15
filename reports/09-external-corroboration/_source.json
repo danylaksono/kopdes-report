@@ -1,0 +1,10 @@
+{
+  "generated_at": "2026-08-15T04:10:35+00:00",
+  "input": {
+    "snapshot": "2026-08-05",
+    "path": "data/raw",
+    "manifest": null,
+    "sha256": {}
+  },
+  "note": "Which SIMKOPDES pull produced the CSVs in this directory. Reports default to data/raw (2026-08-05); set KOPDES_RAW to a snapshot directory to reproduce a later vintage. The snapshot CSVs are not committed, so the sha256 hashes above are the provenance record."
+}

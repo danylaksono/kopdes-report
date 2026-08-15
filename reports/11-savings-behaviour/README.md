@@ -1,7 +1,9 @@
 # 11 — Savings behaviour: are members actually saving, or are the accounts dormant?
 
-**Run**: `python reports/11-savings-behaviour/run.py` · No network · **Last run**: 2026-08-13 (on 08-13 snapshot)
-**Source**: `kopdes_stats_village.csv` (deduplicated, 83,069 villages)
+**Reproduce**: `KOPDES_RAW=data/snapshots/2026-08-13 python reports/11-savings-behaviour/run.py` ·
+No network · **Last run**: 2026-08-13
+**Source**: `kopdes_stats_village.csv` from the **2026-08-13** snapshot (deduplicated,
+83,069 villages). Hashes in [`_source.json`](_source.json).
 
 F2 of `analytics-plan.md`. Transactions are 97% zero ([02](../02-zero-inflation/)),
 which makes them a poor lens on whether KDMP are alive. Savings are the second

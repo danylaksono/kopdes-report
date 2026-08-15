@@ -1,0 +1,5 @@
+within,excess_pp,lo95,hi95,basis
+~500 m,6.74,5.71,7.67,mean of 40 draws
+~1 km,3.66,2.97,4.47,mean of 40 draws
+~2 km,1.52,,,single draw
+~5 km,0.21,,,single draw

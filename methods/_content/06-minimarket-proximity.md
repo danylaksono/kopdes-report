@@ -10,25 +10,31 @@ Artinya semua angka "seberapa dekat" di sini adalah **batas bawah**: kenyataanny
 
 ## Yang kami temukan
 
-Setidaknya 2,5% koperasi (2.069) berada dalam sekitar 500 m dari minimarket yang terpetakan, dan setidaknya 19,8% dalam 5 km.
+Setidaknya 2,5% koperasi (2.068) berada dalam sekitar 500 m dari minimarket yang terpetakan, dan setidaknya 19,8% dalam 5 km.
 
 | Dalam jarak | Koperasi (minimal) | Bagian (minimal) |
 | ----------- | ------------------ | ---------------- |
-| ±500 m      | 2.069              | 2,5%             |
+| ±500 m      | 2.068              | 2,5%             |
 | ±1 km       | 4.150              | 5,0%             |
-| ±2 km       | 7.416              | 8,9%             |
-| ±5 km       | 16.496             | 19,8%            |
+| ±2 km       | 7.425              | 8,9%             |
+| ±5 km       | 16.505             | 19,8%            |
 
 Arah sebaliknya lebih menarik. 78,3% minimarket yang terpetakan punya koperasi dalam 1 km. Tapi ini saja belum membuktikan apa-apa: koperasi ada satu per desa dan menjangkau 95% penduduk, jadi titik mana pun yang berpenduduk hampir pasti punya koperasi di dekatnya.
 
-Untuk menguji, kami membandingkan dengan lokasi acak yang "masuk akal": di jalan utama di daerah ramai, tempat ritel memang biasa berdiri. Hasilnya: **minimarket sekitar 9,6 poin persentase lebih mungkin punya koperasi dalam 500 m daripada lokasi acak yang sebanding**, dan kelebihannya mengecil mengikuti jarak, hilang pada 2 km. Itulah tanda tumpang-tindih jarak dekat yang nyata tapi sedang.
+Untuk menguji, kami membandingkan dengan lokasi acak yang "masuk akal": di jalan utama di daerah ramai, tempat ritel memang biasa berdiri.
 
-| Dalam  | Minimarket | Lokasi acak (jalan + populasi) | Kelebihan     |
-| ------ | ---------- | ------------------------------ | ------------- |
-| ±500 m | 43,8%      | 34,2%                          | **+9,6 poin** |
-| ±1 km  | 78,3%      | 71,2%                          | +7,1 poin     |
-| ±2 km  | 95,7%      | 92,7%                          | +3,0 poin     |
-| ±5 km  | 99,6%      | 99,5%                          | +0,1 poin     |
+Ada satu jebakan di langkah ini, dan kami terjatuh ke dalamnya pada versi pertama. Menaruh titik acak "di daerah berpenduduk" saja tidak cukup, karena minimarket tidak berdiri di sembarang daerah berpenduduk: mereka berdiri di yang paling ramai. Diukur, petak minimarket berisi median <span data-fig="mm_median_pop">3.786</span> orang, sedangkan titik acak versi pertama hanya <span data-fig="road_null_median_pop">2.374</span> orang. Karena koperasi lebih rapat di tempat yang ramai, selisih kepadatan itu sendiri sudah menghasilkan "kedekatan" yang bukan kedekatan.
+
+Versi sekarang menyamakan kepadatannya: titik acak diambil sehingga sebaran jumlah penduduknya sama persis dengan sebaran di petak minimarket. Hasilnya: **minimarket sekitar <span data-fig="minimarket_excess_pp">6,7</span> poin persentase lebih mungkin punya koperasi dalam 500 m daripada lokasi acak yang sama ramainya**, dan kelebihannya menyusut cepat mengikuti jarak, praktis habis pada 5 km.
+
+| Dalam  | Minimarket | Acak, sama ramai | Kelebihan     | Pembanding lama |
+| ------ | ---------- | ---------------- | ------------- | --------------- |
+| ±500 m | 43,8%      | 37,1%            | **+<span data-fig="minimarket_excess_pp">6,7</span> poin** | +<span data-fig="minimarket_excess_road_pp">9,6</span> poin       |
+| ±1 km  | 78,3%      | 74,6%            | +<span data-fig="minimarket_excess_1km_pp">3,7</span> poin     | +7,5 poin       |
+| ±2 km  | 95,7%      | 94,2%            | +<span data-fig="minimarket_excess_2km_pp">1,5</span> poin     | +2,8 poin       |
+| ±5 km  | 99,6%      | 99,4%            | +<span data-fig="minimarket_excess_5km_pp">0,2</span> poin     | +0,2 poin       |
+
+Titik acak itu diundi, jadi angkanya bergeser sedikit tiap pengundian. Angka ±500 m dan ±1 km di atas adalah rata-rata 40 kali undian; untuk ±500 m rentang 95%-nya <span data-fig="minimarket_excess_lo">5,7</span> sampai <span data-fig="minimarket_excess_hi">7,7</span> poin. Dua baris terbawah berasal dari satu undian saja.
 
 ## Yang tidak dapat kami pastikan
 

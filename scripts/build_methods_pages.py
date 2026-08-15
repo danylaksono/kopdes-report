@@ -114,7 +114,7 @@ ID_LEDE = {
     ),
     "03-population-coverage": (
         "Siapa yang terjangkau program ini? Hasilnya membelah dua: jangkauan "
-        "sangat baik, tetapi ekornya nyata."
+        "sangat baik, tetapi memang ada pencilan yang tercatat."
     ),
     "04-siting-screen": (
         "Koperasi mana yang lingkungannya mustahil? Kami mengurutkan 83 ribu "
@@ -204,9 +204,9 @@ ID_SUMMARY = {
     ),
     "03-population-coverage": (
         "Siapa yang terjangkau koperasi? Hampir semua orang: 95% penduduk tinggal "
-        "dalam 1,4 km dari sebuah koperasi. Tetapi ada ekor yang nyata: 146 koperasi "
-        "tanpa penduduk dalam radius 5 km, dan 21,3% koperasi berada di petak 400 "
-        "meter yang kosong."
+        "dalam 1,4 km dari sebuah koperasi. Tetapi ada kasus terpencil yang nyata: "
+        "146 koperasi tanpa penduduk dalam radius 5 km, dan 21,3% koperasi berada "
+        "di petak populasi 400 meter yang kosong."
     ),
     "04-siting-screen": (
         "Koperasi mana yang berada di lokasi yang mustahil? Dari 2.500 koperasi "
@@ -222,11 +222,12 @@ ID_SUMMARY = {
         "jadi merupakan batas bawah."
     ),
     "06-minimarket-proximity": (
-        "Apakah koperasi dibangun di atas minimarket? Setelah memperhitungkan "
-        "bahwa keduanya sama-sama suka berada di jalan utama daerah ramai, "
-        "minimarket sekitar 9,6 poin lebih mungkin punya koperasi dalam 500 m "
-        "daripada lokasi acak yang sebanding, tetapi kelebihannya hilang pada "
-        "jarak 2 km. Kedekatan ini nyata tapi sedang; bukan bukti persaingan dagang."
+        "Apakah koperasi dibangun di atas minimarket? Setelah diperhitungkan "
+        "bahwa keduanya sama-sama suka berada di jalan utama daerah ramai, dan "
+        "setelah tingkat keramaiannya disamakan, minimarket sekitar 6,7 poin "
+        "lebih mungkin punya koperasi dalam 500 m daripada lokasi acak yang "
+        "sebanding. Kelebihan itu menyusut cepat dan habis pada 5 km. Kedekatan "
+        "ini nyata tapi sedang; bukan bukti persaingan dagang."
     ),
     "07-landuse-polygons": (
         "Di atas sawah atau kuburan? Koperasi \u201ctercatat\u201d di sawah 2,4 kali "
