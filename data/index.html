@@ -37,27 +37,27 @@
                 <tbody>
                     <tr>
                         <td><a href="../data/web/kopdes_points.parquet" download>kopdes_points.parquet</a></td>
-                        <td class="num">7,1 MB</td>
-                        <td>83.379 koperasi, 63+ kolom</td>
+                        <td class="num">9,5 MB</td>
+                        <td><span data-fig="coops_total">83.379</span> koperasi, 81 kolom</td>
                     </tr>
                     <tr>
                         <td><a href="../data/web/kopdes_kecamatan.parquet" download>kopdes_kecamatan.parquet</a></td>
-                        <td class="num">0,39 MB</td>
+                        <td class="num">0,56 MB</td>
                         <td>7.277 kecamatan</td>
                     </tr>
                     <tr>
                         <td><a href="../data/web/kopdes_kabupaten.parquet" download>kopdes_kabupaten.parquet</a></td>
-                        <td class="num">0,05 MB</td>
+                        <td class="num">0,09 MB</td>
                         <td>514 kabupaten/kota</td>
                     </tr>
                     <tr>
                         <td><a href="../data/web/kopdes_provinsi.parquet" download>kopdes_provinsi.parquet</a></td>
-                        <td class="num">0,01 MB</td>
+                        <td class="num">0,02 MB</td>
                         <td>38 provinsi</td>
                     </tr>
                     <tr>
                         <td><a href="../data/web/mart_manifest.json" download>mart_manifest.json</a></td>
-                        <td class="num">0,02 MB</td>
+                        <td class="num">0,03 MB</td>
                         <td>keterangan kolom, arti angka kosong, cakupan</td>
                     </tr>
                 </tbody>
@@ -129,13 +129,87 @@
                 dengan titik awal yang sama. Perlu dicatat, angka yang terbit di situs
                 ini <em>bukan</em> dari cuplikan ini, melainkan dari cuplikan 13
                 Agustus 2026 (lihat tabel di bawah).</li>
-            <li><strong>Data pelengkap</strong>: peta jalan &amp; minimarket dari
-                OpenStreetMap (disusun sukarelawan), peta kepadatan penduduk dari
-                Kontur (berpetak 400 meter). Semuanya bisa diunduh ulang lewat
-                skrip di repositori.</li>
             <li><strong>Batas wilayah</strong>: peta turunan Badan Informasi Geospasial
                 (BIG), disederhanakan untuk kebutuhan situs.</li>
         </ul>
+
+        <h3>Data pembanding: tujuh peta, semuanya terbuka</h3>
+        <p>Data SIMKOPDES hanya memberi tahu di mana koperasi berada dan apa yang
+            dilaporkannya. Untuk menguji tuduhan-tuduhan itu, tiap koordinat perlu
+            dibandingkan dengan keadaan di sekitarnya. Semua peta pembanding di bawah
+            ini terbuka, gratis, dan bisa diunduh ulang lewat skrip di repositori.</p>
+        <figure class="figure">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Peta</th>
+                        <th>Sumber</th>
+                        <th>Dipakai untuk</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Kepadatan penduduk</td>
+                        <td>Kontur, petak 400 m</td>
+                        <td>Ada berapa orang di sekitar koperasi
+                            (<a href="../methods/03-population-coverage/">03</a>)</td>
+                    </tr>
+                    <tr>
+                        <td>Jaringan jalan</td>
+                        <td>OpenStreetMap</td>
+                        <td>Seberapa jauh ke jalan terdekat
+                            (<a href="../methods/05-road-access/">05</a>,
+                            <a href="../methods/08-exact-geometry/">08</a>)</td>
+                    </tr>
+                    <tr>
+                        <td>Sebaran bangunan</td>
+                        <td>VIDA: gabungan Google, Microsoft dan OpenStreetMap,
+                            137 juta bangunan</td>
+                        <td>Ada rumah di sekitarnya atau tidak
+                            (<a href="../methods/17-building-proximity/">17</a>)</td>
+                    </tr>
+                    <tr>
+                        <td>Titik minimarket</td>
+                        <td>OpenStreetMap</td>
+                        <td>Kedekatan dengan ritel modern
+                            (<a href="../methods/06-minimarket-proximity/">06</a>)</td>
+                    </tr>
+                    <tr>
+                        <td>Penutup lahan</td>
+                        <td>ESA WorldCover, citra satelit 10 m</td>
+                        <td>Berdiri di atas apa: sawah, hutan, permukiman
+                            (<a href="../methods/19-land-cover/">19</a>,
+                            <a href="../methods/04-siting-screen/">04</a>)</td>
+                    </tr>
+                    <tr>
+                        <td>Penggunaan lahan (poligon)</td>
+                        <td>OpenStreetMap</td>
+                        <td>Di dalam bidang sawah atau kuburan
+                            (<a href="../methods/07-landuse-polygons/">07</a>)</td>
+                    </tr>
+                    <tr>
+                        <td>Ketinggian tanah</td>
+                        <td>Copernicus GLO-30, resolusi 30 m</td>
+                        <td>Setinggi apa, dan senaik-turun apa tanahnya
+                            (<a href="../methods/20-terrain/">20</a>)</td>
+                    </tr>
+                </tbody>
+            </table>
+            <figcaption>Data bangunan dirilis VIDA dengan lisensi CC-BY-4.0, dengan
+                bagian OpenStreetMap tunduk pada ODbL. Penutup lahan dan ketinggian
+                dibaca langsung dari penyimpanan awan, beberapa piksel per titik, tanpa
+                mengunduh petanya.</figcaption>
+        </figure>
+
+        <div class="callout"><span class="callout-label">Aturan yang berlaku untuk semuanya</span>
+            <strong>Tidak terpetakan bukan berarti tidak ada.</strong> Peta sukarelawan
+            paling lengkap di kota dan paling kosong di desa, justru kebalikan dari
+            tempat koperasi berada. Peta ritel yang kami pakai, misalnya, hanya memuat
+            sekitar <span data-fig="osm_share_indomaret_pct">13,8%</span> gerai Indomaret dan <span data-fig="osm_share_alfamart_pct">10,9%</span> Alfamart, dan di
+            Papua Tengah tidak memuat satu pun. Karena itu tiap jarak yang berasal dari
+            OpenStreetMap adalah <em>batas atas</em>, dan tiap kedekatan adalah
+            <em>batas bawah</em>. Peta penduduk, bangunan, penutup lahan dan ketinggian
+            tidak punya masalah ini: ketiganya menutupi seluruh wilayah.</div>
 
         <h2>Jejak data berkala</h2>
         <p>Data SIMKOPDES berubah dari waktu ke waktu. Kami mengambilnya lebih dari
@@ -195,7 +269,7 @@
             <tbody>
                 <tr>
                     <td><code>km_to_minimarket</code></td>
-                    <td>Tidak ada minimarket dalam 5 km (66.846 koperasi), <strong>bukan</strong> “tidak diketahui”
+                    <td>Tidak ada minimarket dalam 5 km (66.874 koperasi), <strong>bukan</strong> “tidak diketahui”
                     </td>
                 </tr>
                 <tr>
