@@ -368,6 +368,54 @@ def _():
     return one(f"select cooperatives from {t} where step like '%< 2 villages%'")
 
 
+# Terrain, national as of report 20. These were only ever available for 04's
+# 2,500-candidate shortlist before, which is why no table column or map filter
+# could use them and why the only public sentence about terrain was a sub-clause.
+# NOTE ON WORDING: relief_200m_m is the height range within ~200 m, a relief
+# proxy. It is not a slope and carries no gradient. Any prose bound to these
+# keys must say "naik atau turun lebih dari 60 m dalam ~200 m", never "lereng".
+@check("findings/remoteness · methods/20", "cooperatives on >60 m relief", 12_325, key="steep_coops", fmt="int")
+def _():
+    return one(f"select count(*) from {P} where flag_steep")
+
+
+@check("findings/remoteness · methods/20", "% on >60 m relief", 14.8, tol=0.05, key="steep_pct", fmt="pct1")
+def _():
+    return round(100 * one(f"select count(*) from {P} where flag_steep") / 83_379, 1)
+
+
+@check("methods/20", "median elevation (m)", 67, tol=0.5, key="median_elevation_m", fmt="int")
+def _():
+    return round(one(f"select median(elevation_m) from {P}"))
+
+
+@check("methods/20", "cooperatives above 2.000 m", 1_505, key="above_2000m_coops", fmt="int")
+def _():
+    t = csv("20-terrain", "terrain_bands.csv")
+    return one(f"select cooperatives from {t} where band = 'di atas 2.000 m'")
+
+
+# 44.65 exactly: do not round before comparing, or Python's round-half-to-even
+# gives 44.6 while the renderer's round-half-up gives 44.7 and the check fails
+# against its own output. Same trap as nib_no_transaction_pct above.
+@check("findings/remoteness · methods/20", "% of Papua KDMP on >60 m relief", 44.65, tol=0.05, key="papua_steep_pct", fmt="pct1")
+def _():
+    t = csv("20-terrain", "terrain_by_island.csv")
+    return one(f"select pct_steep from {t} where island = 'PAPUA'")
+
+
+@check("findings/remoteness · methods/20", "% of Java KDMP on >60 m relief", 6.1, tol=0.05, key="java_steep_pct", fmt="pct1")
+def _():
+    t = csv("20-terrain", "terrain_by_island.csv")
+    return round(one(f"select pct_steep from {t} where island = 'JAVA'"), 1)
+
+
+@check("methods/04 · methods/20", "most-remote 2.500 on >60 m relief", 1_008, key="shortlist_steep", fmt="int")
+def _():
+    t = csv("04-siting-screen", "flag_summary.csv")
+    return one(f"select cooperatives from {t} where flag = 'flag_steep'")
+
+
 @check("findings/remoteness · methods/04", "most-remote 2.500: land officially verified", 384, key="remote_land_verified", fmt="int")
 def _():
     t = csv("04-siting-screen", "candidates.csv")

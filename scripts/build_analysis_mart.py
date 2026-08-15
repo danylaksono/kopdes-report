@@ -144,6 +144,8 @@ SOURCES = {
                   "cooperative_id", "python reports/17-building-proximity/run.py"),
     "landcover": (REPORTS / "19-land-cover" / "kopdes_landcover.csv",
                    "cooperative_id", "python reports/19-land-cover/run.py"),
+    "terrain": (REPORTS / "20-terrain" / "kopdes_terrain.csv",
+                "cooperative_id", "python reports/20-terrain/run.py"),
 }
 
 
@@ -378,8 +380,15 @@ def build_points(con, missing):
 
             -- 04 siting screen: shortlist only, null elsewhere by design
             (s.cooperative_id is not null)          as in_siting_shortlist,
-            s.elevation_m, s.relief_200m_m, s.landcover as siting_landcover,
-            s.flag_steep, s.flag_implausible_cover, s.n_flags as siting_n_flags,
+            s.landcover as siting_landcover,
+            s.flag_implausible_cover, s.n_flags as siting_n_flags,
+
+            -- 20 terrain: nationwide, from the same Copernicus GLO-30 sampler
+            -- 04 used on its shortlist. These three used to come from 04 and
+            -- were therefore null for 97% of the registry, which is why no
+            -- table column or map filter could use them. `relief_200m_m` is the
+            -- height range within ~200 m, a relief proxy and NOT a slope.
+            t.elevation_m, t.relief_200m_m, t.flag_steep,
 
             -- 05 road access
             rd.km_any_road, rd.km_non_track, rd.road_band, rd.track_only,
@@ -452,6 +461,7 @@ def build_points(con, missing):
         left join src_landuse   lu using (cooperative_id)
         left join src_farmcand  fc using (cooperative_id)
         left join src_landcover lc using (cooperative_id)
+        left join src_terrain    t using (cooperative_id)
         left join src_retail_exact rx using (cooperative_id)
         left join src_road_exact   dx using (cooperative_id)
         left join src_suspect      sc using (cooperative_id)
@@ -512,6 +522,14 @@ AGG_MEASURES = f"""
           / nullif(count(*) filter (where land_status is not null), 0), 2)
                                                             as pct_land_verified,
     count(*) filter (where in_siting_shortlist)             as siting_shortlisted,
+
+    -- 20 terrain, nationwide. `median_relief_200m_m` is the median height range
+    -- within ~200 m of each member: a relief proxy, never a slope.
+    round(median(elevation_m), 0)                           as median_elevation_m,
+    round(median(relief_200m_m), 0)                         as median_relief_200m_m,
+    round(100.0 * count(*) filter (where flag_steep)
+          / nullif(count(*) filter (where relief_200m_m is not null), 0), 2)
+                                                            as pct_steep,
 
     -- 10 self-overlap. Distance to the nearest sibling, exact geodesic; NULL
     -- where the point is one of the 821 excluded coordinate artifacts, and the
@@ -707,8 +725,13 @@ def main():
             "pop_within_1_4km": "no populated Kontur cell within the ring - read as 0.",
             "transaction_value": "the village link failed (21% of cooperatives). "
                                  "Genuinely unknown. 0 means linked and nothing reported.",
-            "elevation_m, relief_200m_m, siting_landcover, flag_*": "not in 04's top-2,500 "
-                                                                   "shortlist; never sampled.",
+            "siting_landcover, flag_implausible_cover, siting_n_flags": "not in 04's "
+                                                                       "top-2,500 shortlist; never sampled.",
+            "elevation_m, relief_200m_m, flag_steep": "the DEM tile did not resolve at "
+                                                      "this coordinate (reports/20). "
+                                                      "relief_200m_m is the height range "
+                                                      "within ~200 m, a relief proxy, "
+                                                      "NOT a slope.",
             "farmland_depth_m": "not inside a farmland polygon.",
             "cemetery_depth_m": "not inside a burial ground.",
             "land_status": "no land-asset record exists for this cooperative.",

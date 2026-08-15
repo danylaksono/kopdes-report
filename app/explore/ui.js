@@ -235,6 +235,15 @@ export function updateBasemaps(root, current) {
 export function renderRail(root, on) {
   root.innerHTML = `
     <header class="rail-head">
+      <!-- The sheet toggle only exists on narrow screens, where the rail
+           becomes a bottom sheet over the map. It is a real button rather than
+           a decorative grab handle: the handle alone looked draggable, was
+           not, and left the map permanently covered. -->
+      <button class="rail-toggle" id="rail-toggle" type="button"
+              aria-expanded="true" aria-controls="rail">
+        <span class="rail-grip" aria-hidden="true"></span>
+        <span class="rail-toggle-label">Sembunyikan kontrol</span>
+      </button>
       <p class="rail-kicker">Peta interaktif</p>
       <p class="rail-count"><b id="rail-n">—</b><span>koperasi<br />sedang dipetakan</span></p>
     </header>
@@ -360,7 +369,29 @@ export function renderRail(root, on) {
     on.filters(readFilters(root));
   });
 
-  return { root, el };
+  // --- the bottom sheet, on narrow screens only ----------------------------
+  // Collapsing is a class on <body> rather than on the rail, because the
+  // basemap switcher and the inspector also have to move: they are positioned
+  // against the sheet's edge, and leaving them where they were would park them
+  // under a sheet that is no longer there.
+  const toggle = el("#rail-toggle");
+  const setCollapsed = (collapsed) => {
+    document.body.classList.toggle("rail-collapsed", collapsed);
+    toggle.setAttribute("aria-expanded", String(!collapsed));
+    el(".rail-toggle-label").textContent = collapsed
+      ? "Tampilkan kontrol"
+      : "Sembunyikan kontrol";
+    // The rail scrolls internally; reopening halfway down is disorienting.
+    if (!collapsed) root.scrollTop = 0;
+  };
+  toggle.addEventListener("click", () =>
+    setCollapsed(!document.body.classList.contains("rail-collapsed")),
+  );
+  // Start collapsed on a phone so the map is visible on arrival. The check
+  // runs once: someone rotating a tablet mid-session should keep their choice.
+  if (window.matchMedia("(max-width: 940px)").matches) setCollapsed(true);
+
+  return { root, el, setRailCollapsed: setCollapsed };
 }
 
 export function readFilters(root) {
@@ -764,11 +795,15 @@ export function renderInspector(
         pop: p.median_pop_within_1_4km,
         road: p.median_km_to_road,
         nn: p.median_m_to_nearest_other,
+        elev: p.median_elevation_m,
+        relief: p.median_relief_200m_m,
       }
     : {
         pop: median(rows, "pop_within_1_4km"),
         road: median(rows, "km_non_track"),
         nn: median(rows, "m_to_nearest_other"),
+        elev: median(rows, "elevation_m"),
+        relief: median(rows, "relief_200m_m"),
       };
 
   const econ = isAdmin
@@ -840,6 +875,9 @@ export function renderInspector(
       <dt>Penduduk dalam 1,4 km</dt><dd>${fmtId(medians.pop)}</dd>
       <dt>Jarak ke jalan</dt><dd>${roadDistance(medians.road)}</dd>
       <dt>Koperasi terdekat</dt><dd>${medians.nn == null ? "—" : `${fmtId(medians.nn)} m`}</dd>
+      <dt>Ketinggian</dt><dd>${medians.elev == null ? "—" : `${fmtId(medians.elev)} m`}</dd>
+      <dt title="Selisih tinggi tertinggi dan terendah dalam radius sekitar 200 m. Bukan kemiringan lereng.">Naik-turun tanah</dt>
+      <dd>${medians.relief == null ? "—" : `${fmtId(medians.relief)} m / 200 m`}</dd>
     </dl>
 
     ${econ}

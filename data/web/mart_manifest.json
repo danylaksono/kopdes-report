@@ -1,5 +1,5 @@
 {
-  "built": "2026-08-14",
+  "built": "2026-08-15",
   "source_snapshot": "data/snapshots/2026-08-13 (SIMKOPDES export 2026-08-13)",
   "h3_resolutions": [
     5,
@@ -38,7 +38,8 @@
     "building_band, km_to_building": "no *mapped* building within ~5 km (ring caps at k=38). NOT unknown, and still a LOWER BOUND: since 2026-08-14 the layer is VIDA's Google+Microsoft+OSM union rather than OSM alone, which narrows the rural undercount but does not close it (reports/17).",
     "pop_within_1_4km": "no populated Kontur cell within the ring - read as 0.",
     "transaction_value": "the village link failed (21% of cooperatives). Genuinely unknown. 0 means linked and nothing reported.",
-    "elevation_m, relief_200m_m, siting_landcover, flag_*": "not in 04's top-2,500 shortlist; never sampled.",
+    "siting_landcover, flag_implausible_cover, siting_n_flags": "not in 04's top-2,500 shortlist; never sampled.",
+    "elevation_m, relief_200m_m, flag_steep": "the DEM tile did not resolve at this coordinate (reports/20). relief_200m_m is the height range within ~200 m, a relief proxy, NOT a slope.",
     "farmland_depth_m": "not inside a farmland polygon.",
     "cemetery_depth_m": "not inside a burial ground.",
     "land_status": "no land-asset record exists for this cooperative.",
@@ -202,20 +203,8 @@
           "type": "BOOLEAN"
         },
         {
-          "name": "elevation_m",
-          "type": "DOUBLE"
-        },
-        {
-          "name": "relief_200m_m",
-          "type": "DOUBLE"
-        },
-        {
           "name": "siting_landcover",
           "type": "VARCHAR"
-        },
-        {
-          "name": "flag_steep",
-          "type": "BOOLEAN"
         },
         {
           "name": "flag_implausible_cover",
@@ -224,6 +213,18 @@
         {
           "name": "siting_n_flags",
           "type": "BIGINT"
+        },
+        {
+          "name": "elevation_m",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "relief_200m_m",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "flag_steep",
+          "type": "BOOLEAN"
         },
         {
           "name": "km_any_road",
@@ -488,6 +489,18 @@
           "type": "BIGINT"
         },
         {
+          "name": "median_elevation_m",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "median_relief_200m_m",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "pct_steep",
+          "type": "DOUBLE"
+        },
+        {
           "name": "median_m_to_nearest_other",
           "type": "DOUBLE"
         },
@@ -743,6 +756,18 @@
           "type": "BIGINT"
         },
         {
+          "name": "median_elevation_m",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "median_relief_200m_m",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "pct_steep",
+          "type": "DOUBLE"
+        },
+        {
           "name": "median_m_to_nearest_other",
           "type": "DOUBLE"
         },
@@ -988,6 +1013,18 @@
         {
           "name": "siting_shortlisted",
           "type": "BIGINT"
+        },
+        {
+          "name": "median_elevation_m",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "median_relief_200m_m",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "pct_steep",
+          "type": "DOUBLE"
         },
         {
           "name": "median_m_to_nearest_other",

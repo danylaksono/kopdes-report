@@ -110,6 +110,34 @@ minimarket count ([`null_model_comparison.csv`](null_model_comparison.csv)):
   sampled to reproduce the minimarkets' own population distribution. **This is
   the primary control.**
 
+### What this design is called
+
+It was built from the problem rather than from a textbook, so the names are
+recorded here for anyone who wants to place it in a literature.
+
+| Component                               | Standard term                                                                     |
+| --------------------------------------- | --------------------------------------------------------------------------------- |
+| The comparison itself                   | **Null model**; formally an _inhomogeneous_ null, not Complete Spatial Randomness |
+| The statistic                           | **Cross-type nearest-neighbour distribution function** `G₁₂(r)`, at four radii    |
+| The question being tested               | **Independence null hypothesis** for a bivariate (two-type) point pattern         |
+| Matching the null's density to the POIs | **Frequency matching** on a confounder, in deciles                                |
+| The 40 redraws and their range          | **Monte Carlo envelope**                                                          |
+
+Read as a whole it is a **case-control point pattern analysis with
+frequency-matched controls**: minimarkets are the cases, the road-cell draws are
+the controls, and population density is the confounder being matched out. The
+closest literature is distance-based localization testing in economic geography,
+where the control set is drawn from **feasible sites** (Duranton & Overman 2005,
+_Testing for Localization Using Micro-Geographic Data_); the road-cell pool is
+that idea. Diggle's _Statistical Analysis of Spatial Point Patterns_ is the
+reference for the bivariate framing, Besag & Diggle (1977) for the Monte Carlo
+test.
+
+**Do not claim more than was run.** This is a simplified version of all of the
+above: four radii rather than a full `G₁₂` curve, no p-value, an envelope from
+40 draws rather than the conventional 999, matching on one covariate, and no
+edge correction. Describe the design, do not name-drop the test.
+
 ### Why the third null exists (corrected 2026-08-15)
 
 The road+pop null was described in this README as answering "if minimarkets and

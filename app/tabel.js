@@ -61,6 +61,8 @@ const COLS = [
   { key: "catchment", label: "Populasi di sekitar", sort: false },
   { key: "maps", label: "Peta", sort: false },
   { key: "land_cover", label: "Penutup Lahan", sort: "text" },
+  { key: "elevation_m", label: "Ketinggian", sort: "number", num: true },
+  { key: "relief_200m_m", label: "Naik-turun", sort: "number", num: true },
   { key: "land", label: "Status Lahan", sort: "number" },
 ];
 const COLS_BY_KEY = Object.fromEntries(COLS.map((c) => [c.key, c]));
@@ -229,6 +231,7 @@ async function loadRows() {
       coordinate_suspect, land_verified, land_status,
       in_cemetery, in_farmland, farmland_depth_m, farmland_polygon_coarse,
       land_cover, land_cover_code,
+      elevation_m, relief_200m_m, flag_steep,
       road_class, nn_class
     FROM read_parquet('${PARQUET}')
     WHERE latitude IS NOT NULL AND longitude IS NOT NULL
@@ -339,6 +342,18 @@ function cell(col, r) {
       return dot("road", r.road_class) + km(r.km_non_track);
     case "km_to_minimarket":
       return km(r.km_to_minimarket);
+    case "elevation_m":
+      return r.elevation_m == null ? "—" : `${Math.round(r.elevation_m).toLocaleString("id-ID")} m`;
+    // Height range within ~200 m, not a slope. The badge marks 04/20's >60 m
+    // threshold; the tooltip says what the number is so nobody reads a gradient.
+    case "relief_200m_m": {
+      if (r.relief_200m_m == null) return "—";
+      const v = `${Math.round(r.relief_200m_m).toLocaleString("id-ID")} m`;
+      const t = "Selisih tinggi tertinggi dan terendah dalam radius sekitar 200 m. Bukan kemiringan lereng.";
+      return r.flag_steep
+        ? `<span class="badge badge-warn" title="${t} Lebih dari 60 m: tanah naik-turun tajam.">${v}</span>`
+        : `<span title="${t}">${v}</span>`;
+    }
     case "m_to_nearest_other":
       return dot("nn", r.nn_class) + mtr(r.m_to_nearest_other);
     case "pop_within_1_4km":

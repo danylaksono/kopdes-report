@@ -79,6 +79,7 @@ SHELL = """<!doctype html>
 ID_TITLE = {
     "01-snapshot-drift": "Angka nol itu nyata, atau hanya belum diisi?",
     "19-land-cover": "Penutup lahan: apa yang ada di bawah setiap koperasi?",
+    "20-terrain": "Medan: setinggi apa, dan senaik-turun apa tanahnya?",
     "02-zero-inflation": "Hampir semua data kinerja adalah nol",
     "03-population-coverage": "Jangkauan penduduk dan keterpencilan",
     "04-siting-screen": "Layar penapisan lokasi: koperasi mana yang lingkungannya mustahil?",
@@ -108,6 +109,11 @@ ID_LEDE = {
         "kelas tutupan lahan. Kini seluruh 83.379 koperasi terklasifikasi, "
         "sehingga tabel bisa menunjukkan penutup lahannya satu per satu."
     ),
+    "20-terrain": (
+        "Tuduhan “di lereng gunung” diukur, bukan dibayangkan: "
+        "ketinggian tanah di bawah seluruh 83.379 koperasi, dan seberapa besar "
+        "tanah itu naik-turun di sekitarnya."
+    ),
     "02-zero-inflation": (
         "Hampir semua data kinerja dalam sistem ini adalah nol. Berapa banyak "
         "yang benar-benar terisi, dan apa artinya untuk angka yang boleh kita kutip."
@@ -118,8 +124,8 @@ ID_LEDE = {
     ),
     "04-siting-screen": (
         "Koperasi mana yang lingkungannya mustahil? Kami mengurutkan 83 ribu "
-        "koperasi dari yang paling sepi, lalu memeriksa ketinggian, kemiringan, "
-        "dan penutup lahannya."
+        "koperasi dari yang paling sepi, lalu memeriksa ketinggian, seberapa "
+        "besar tanahnya naik-turun, dan penutup lahannya."
     ),
     "05-road-access": (
         "Seberapa jauh koperasi dari jalan? Kami mengukur jarak setiap koperasi "
@@ -195,6 +201,14 @@ ID_SUMMARY = {
         "setiap koperasi diklasifikasikan: sekitar 61% pada piksel hutan, "
         "17,5% pada pemukiman, 12,6% pada lahan pertanian. Nilai ini piksel "
         "di titik koordinat, bukan jejak bangunan, dan berasal dari tahun 2021."
+    ),
+    "20-terrain": (
+        "Setinggi apa tanah di bawah koperasi? Sebagian besar datar dan rendah "
+        "(median 67 meter), tetapi 12.325 koperasi (14,8%) berdiri di tanah yang "
+        "naik atau turun lebih dari 60 meter dalam jarak sekitar 200 meter, dan "
+        "1.505 berada di atas 2.000 meter. Di Papua angkanya 44,7%, di Jawa 6,1%. "
+        "Catatan: ini bukan kemiringan lereng, melainkan selisih tinggi di "
+        "sekitar titik."
     ),
     "02-zero-inflation": (
         "Berapa banyak data kinerja yang benar-benar nol? Ternyata hampir semuanya: "
@@ -310,6 +324,7 @@ ID_SUMMARY = {
 ID_QUESTION = {
     "01-snapshot-drift": "Apakah data SIMKOPDES masih diisi? Apakah nol hanya sementara?",
     "19-land-cover": "Apa kelas tutupan lahan di bawah setiap koperasi?",
+    "20-terrain": "Setinggi apa, dan senaik-turun apa, tanah di bawah tiap koperasi?",
     "02-zero-inflation": "Berapa banyak data kinerja yang benar-benar nol?",
     "03-population-coverage": "Siapa yang terjangkau koperasi, dan koperasi mana yang dekat dengan siapa pun?",
     "04-siting-screen": "Koperasi mana yang berada di lokasi yang mustahil?",

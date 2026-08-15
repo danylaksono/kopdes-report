@@ -28,7 +28,7 @@ const CHART = {
     ],
   },
   tail: {
-    title: "Pencilan keterpencilan",
+    title: "Populasi yang tidak dijangkau",
     pct: false,
     caption:
       "Hanya 0,18% koperasi tanpa penduduk dalam 5 km, tetapi itu 146 kasus konkret (laporan 03).",
@@ -76,7 +76,7 @@ const CHART = {
     ],
   },
   funnel: {
-    title: "Grafik: pendaftaran → operasi",
+    title: "Legalitas dan operasional",
     pct: true,
     caption:
       "Mesin pendaftaran bekerja (rekening, NPWP, izin); mesin operasinya senyap (laporan 11, 13).",

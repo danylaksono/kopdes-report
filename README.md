@@ -38,7 +38,7 @@ termasuk ketika tuduhannya tidak terbukti.
 | [2 · Kompetisi & kanibalisasi](findings/competition/) | "Dibangun menimpa minimarket yang sudah ada" | Kedekatannya nyata tapi sedang (6,7 poin); kompetisi dagang tidak terbukti         |
 | [3 · Anggaran & output](findings/money/)              | "Boros, uang keluar tanpa hasil"             | "Tidak ada hasil" terbukti; "boros" tidak bisa diuji, sisi biaya tidak ada di data |
 
-## Buktinya: 19 analisis di `reports/`
+## Buktinya: 20 analisis di `reports/`
 
 Setiap direktori berisi `run.py` (bisa dijalankan ulang), `README.md` (tulisan
 lengkapnya, bahasa Inggris) dan CSV hasilnya yang ikut di-commit, sehingga
@@ -65,6 +65,7 @@ termasuk daftar "apa yang bisa dan tidak bisa kami katakan".
 | [08 exact-geometry](reports/08-exact-geometry/)           | Berapa jauh sebenarnya, dan apakah koordinatnya mungkin?             |
 | [17 building-proximity](reports/17-building-proximity/)   | Seberapa jauh koperasi dari bangunan terdekat?                       |
 | [19 land-cover](reports/19-land-cover/)                   | Tiap koperasi berdiri di atas penutup lahan apa?                     |
+| [20 terrain](reports/20-terrain/)                         | Seberapa tinggi dan seberapa terjal tanah di bawah tiap koperasi?    |
 
 #### Bab 2 · kompetisi dan kanibalisasi
 
@@ -168,7 +169,7 @@ explore/           peta interaktif
 periksa/           pemeriksa satu koordinat
 app/               kerangka bersama (site.css, site.js) + story.js
 app/explore/       modul peta; app/explore.css chrome-nya
-reports/           19 analisis: run.py + README.md + CSV hasilnya
+reports/           20 analisis: run.py + README.md + CSV hasilnya
 data/raw/          kopdes_*.csv, ekspor mentah SIMKOPDES (di-commit)
 data/web/          mart parquet + batas wilayah sederhana + figures.json (di-commit)
 scripts/           ekstraktor, pembangun mart, pembangun batas, pemeriksa angka

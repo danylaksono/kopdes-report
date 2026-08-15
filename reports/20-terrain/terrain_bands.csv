@@ -1,0 +1,12 @@
+measure,band,cooperatives,pct
+elevation,0-50 m (dataran pantai),37447,44.91
+elevation,50-200 m (dataran rendah),19236,23.07
+elevation,200-500 m (perbukitan),11193,13.42
+elevation,500-1.000 m (dataran tinggi),8908,10.68
+elevation,1.000-2.000 m (pegunungan),5090,6.1
+elevation,di atas 2.000 m,1505,1.81
+relief,< 10 m (rata),32145,38.55
+relief,10-30 m (bergelombang),26651,31.96
+relief,30-60 m (berbukit),12258,14.7
+relief,60-150 m (curam),11285,13.53
+relief,> 150 m (sangat curam),1040,1.25

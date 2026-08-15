@@ -3,23 +3,23 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Layar penapisan lokasi: koperasi mana yang lingkungannya mustahil? · Metode</title>
+  <title>Medan: setinggi apa, dan senaik-turun apa tanahnya? · Metode</title>
   <link rel="stylesheet" href="../../app/site.css" />
 </head>
 <body data-root="../../">
   <nav id="site-nav"></nav>
   <main class="wrap">
-    <p class="kicker">Metode · 04-siting-screen</p>
-    <h1>Layar penapisan lokasi: koperasi mana yang lingkungannya mustahil?</h1>
-    <p class="lede">Koperasi mana yang lingkungannya mustahil? Kami mengurutkan 83 ribu koperasi dari yang paling sepi, lalu memeriksa ketinggian, seberapa besar tanahnya naik-turun, dan penutup lahannya.</p>
+    <p class="kicker">Metode · 20-terrain</p>
+    <h1>Medan: setinggi apa, dan senaik-turun apa tanahnya?</h1>
+    <p class="lede">Tuduhan “di lereng gunung” diukur, bukan dibayangkan: ketinggian tanah di bawah seluruh 83.379 koperasi, dan seberapa besar tanah itu naik-turun di sekitarnya.</p>
     <div class="callout"><span class="callout-label">Ringkasan</span>
-      <p>Koperasi mana yang berada di lokasi yang mustahil? Dari 2.500 koperasi paling terpencil, 2.385 berada di hutan tertutup, 1.008 di lereng curam, dan 384 punya sertifikat lahan “Terverifikasi”. Catatan penting: cara ini tidak bisa membedakan koperasi yang benar-benar dibangun di tempat mustahil dari yang koordinatnya salah.</p>
+      <p>Setinggi apa tanah di bawah koperasi? Sebagian besar datar dan rendah (median 67 meter), tetapi 12.325 koperasi (14,8%) berdiri di tanah yang naik atau turun lebih dari 60 meter dalam jarak sekitar 200 meter, dan 1.505 berada di atas 2.000 meter. Di Papua angkanya 44,7%, di Jawa 6,1%. Catatan: ini bukan kemiringan lereng, melainkan selisih tinggi di sekitar titik.</p>
     </div>
     <div id="md"></div>
     <hr />
     <p class="md-note">Laporan teknis lengkap dari analisis ini (bahasa Inggris,
       dengan data mentah dan cara menjalankan ulang) tersedia di
-      <a href="../../reports/04-siting-screen/README.md">reports/04-siting-screen/README.md</a>.
+      <a href="../../reports/20-terrain/README.md">reports/20-terrain/README.md</a>.
       Daftar kandidat yang <strong>belum diverifikasi</strong> (jika ada) hanya
       ada di sana; lihat <a href="../../about/">kebijakan verifikasi &amp;
       koreksi</a>.</p>
@@ -30,7 +30,7 @@
     import { fetchMarkdown, renderMarkdownInto } from "../../app/site.js";
     const md = document.getElementById("md");
     try {
-      const text = await fetchMarkdown("../../methods/_content/04-siting-screen.md");
+      const text = await fetchMarkdown("../../methods/_content/20-terrain.md");
       await renderMarkdownInto(md, text);
     } catch (e) {
       md.innerHTML = `<p style="color:#a00">Gagal memuat metode: ${e.message}</p>`;

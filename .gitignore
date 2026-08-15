@@ -61,6 +61,10 @@ reports/06-minimarket-proximity/kopdes_minimarket_distance.csv
 reports/07-landuse-polygons/kopdes_landuse_context.csv
 reports/08-exact-geometry/exact_minimarket_distance.csv
 reports/10-coop-clustering/nn_distances.csv
+# 20's per-cooperative terrain table. Its band summaries ARE committed; this is
+# the 83k-row source they are computed from, and it costs a raster-sampling run
+# rather than a local rebuild, so keep the summaries even if this is missing.
+reports/20-terrain/kopdes_terrain.csv
 
 # --- cached spatial indexes (rebuilt by the reports that use them) ---
 data/osm/road_cells_h3r10.parquet

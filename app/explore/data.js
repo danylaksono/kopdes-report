@@ -114,6 +114,8 @@ export async function loadPoints() {
       pop_within_1_4km,
       km_non_track,
       m_to_nearest_other,
+      elevation_m,
+      relief_200m_m,
       transaction_value::DOUBLE AS transaction_value,
       imagery_url
     FROM read_parquet('${url("kopdes_points.parquet")}')
@@ -135,9 +137,12 @@ function aggColumns() {
     "median_km_to_road",
     "median_km_to_minimarket",
     "median_m_to_nearest_other",
+    "median_elevation_m",
+    "median_relief_200m_m",
     "pct_zero_population_cell",
     "pct_no_road_within_5km",
     "pct_sibling_within_1km",
+    "pct_steep",
   ])
     wanted.add(c);
   return [...wanted];

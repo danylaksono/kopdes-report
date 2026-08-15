@@ -36,6 +36,15 @@
   min-height: 0;
   display: grid;
   grid-template-columns: var(--rail-w) 1fr;
+  /* The narrow-screen rail is absolutely positioned; without this it resolves
+     against the initial containing block and only lands correctly by accident. */
+  position: relative;
+}
+
+/* The sheet toggle is a narrow-screen control. On the desktop rail there is
+   nothing to collapse, so it is not rendered at all rather than hidden. */
+.rail-toggle {
+  display: none;
 }
 
 .map-wrap {
@@ -995,6 +1004,11 @@
    phone-sized screen still shows enough map to be worth panning. */
 
 @media (max-width: 940px) {
+  /* How much of the sheet stays on screen when collapsed: the grab handle and
+     its label, nothing more. */
+  .explore-body {
+    --rail-peek: 52px;
+  }
   .explore-shell {
     grid-template-columns: 1fr;
   }
@@ -1018,19 +1032,72 @@
     top: 0;
     z-index: 1;
     background: var(--chrome-bg);
-    padding-top: 14px;
-  }
-  .rail-head::before {
-    content: "";
-    display: block;
-    width: 34px;
-    height: 3px;
-    margin: -4px auto 12px;
-    border-radius: 2px;
-    background: #d8d3c7;
+    padding-top: 8px;
   }
   .rail-title {
     display: none;
+  }
+
+  /* ---- the sheet toggle ------------------------------------------------- */
+  .rail-toggle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    width: 100%;
+    padding: 6px 0 10px;
+    margin: 0 0 4px;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    font: inherit;
+    color: var(--muted, #5c5c5c);
+    /* A 44px target: this is the one control a thumb must always find. */
+    min-height: 44px;
+  }
+  .rail-grip {
+    display: block;
+    width: 38px;
+    height: 4px;
+    border-radius: 2px;
+    background: #cfc9bb;
+  }
+  .rail-toggle-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .rail-toggle:focus-visible {
+    outline: 2px solid var(--accent, #a00);
+    outline-offset: -2px;
+    border-radius: 8px;
+  }
+
+  /* ---- collapsed ---------------------------------------------------------
+     Slide the sheet down until only its handle strip is left. `transform`
+     rather than `height` so it animates on the compositor and the rail's own
+     scroll position survives. */
+  .rail {
+    transition: transform 0.22s ease;
+  }
+  .rail-collapsed .rail {
+    transform: translateY(calc(100% - var(--rail-peek)));
+  }
+  .rail-collapsed .rail-head {
+    /* Sticky would keep the header pinned to the sheet's scroll box, which is
+       now off-screen; static lets the handle ride with the transform. */
+    position: static;
+  }
+  /* Everything below the handle is inert while collapsed, so a stray tap
+     cannot change a filter the reader cannot see. */
+  .rail-collapsed .rail > *:not(.rail-head),
+  .rail-collapsed .rail-kicker,
+  .rail-collapsed .rail-count {
+    visibility: hidden;
+  }
+  .rail-collapsed .rail {
+    overflow: hidden;
   }
   /* The search field keeps the full width it can get; the inspector drops
      below it so the two never stack on the same strip. */
@@ -1040,9 +1107,14 @@
     right: 10px;
     width: auto;
   }
+  /* These two sit against the sheet's top edge, so they move with it. */
   .map-control-basemaps {
     left: 10px;
-    bottom: 52vh;
+    bottom: calc(48vh + 10px);
+    transition: bottom 0.22s ease;
+  }
+  .rail-collapsed .map-control-basemaps {
+    bottom: calc(var(--rail-peek) + 10px);
   }
   #inspector {
     top: 62px;
@@ -1050,6 +1122,11 @@
     left: 10px;
     width: auto;
     max-height: 36vh;
+  }
+  /* With the sheet down there is room for a taller inspector, which is the
+     panel a reader actually came to read. */
+  .rail-collapsed #inspector {
+    max-height: calc(100dvh - 62px - var(--rail-peek) - 76px);
   }
 }
 

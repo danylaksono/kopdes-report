@@ -4,19 +4,21 @@ Tuduhan publiknya spesifik: koperasi dibangun di tanah kuburan, di tengah sawah,
 
 ## Caranya
 
-Kami mengurutkan seluruh <span data-fig="coops_total">83.379</span> koperasi dari yang paling "mustahil" lingkungannya. Tahap pertama gratis: skor keterpencilan dari peta populasi. Tahap kedua hanya untuk yang paling terpencil: ketinggian, kemiringan, dan jenis penutup lahan di titik itu, diambil langsung dari citra satelit global (Copernicus dan ESA WorldCover) tanpa mengunduh petanya, cukup membaca beberapa piksel di sekitar titik.
+Kami mengurutkan seluruh <span data-fig="coops_total">83.379</span> koperasi dari yang paling "mustahil" lingkungannya. Tahap pertama gratis: skor keterpencilan dari peta populasi. Tahap kedua hanya untuk yang paling terpencil: ketinggian, seberapa besar tanahnya naik-turun, dan jenis penutup lahan di titik itu, diambil langsung dari citra satelit global (Copernicus dan ESA WorldCover) tanpa mengunduh petanya, cukup membaca beberapa piksel di sekitar titik.
 
 ## Yang kami temukan
 
-Dari 2.500 kandidat paling terpencil: sekitar **2.385 berada di kawasan berhutan**, 1.008 di lereng curam, dan 54 di atas air, mangrove, atau lahan basah. Yang paling sulit dijelaskan: **384 di antaranya membawa status lahan resmi "Terverifikasi"** (tanahnya sudah ditandatangani pihak berwenang), dan 175 berada di lereng curam sekaligus.
+Angka di bawah ini berlaku untuk 2.500 kandidat terpencil itu saja, bukan untuk seluruh program. Ukuran medan versi nasionalnya ada di [lampiran 20](../20-terrain/), dan di sana angkanya jauh lebih rendah: <span data-fig="steep_pct">14,8%</span> secara nasional, dibanding 40% di daftar 2.500 ini.
+
+Dari 2.500 kandidat paling terpencil: sekitar **2.385 berada di kawasan berhutan**, 1.008 di tanah yang naik-turun tajam, dan 54 di atas air, mangrove, atau lahan basah. Yang paling sulit dijelaskan: **384 di antaranya membawa status lahan resmi "Terverifikasi"** (tanahnya sudah ditandatangani pihak berwenang), dan 175 berada di tanah yang naik-turun tajam sekaligus.
 
 | Tanda                        | Kandidat (dari 2.500) |
 | ---------------------------- | --------------------- |
 | Kawasan berhutan             | 2.385                 |
-| Lereng curam                 | 1.008                 |
+| Naik-turun tajam                 | 1.008                 |
 | Air, mangrove, lahan basah   | 54                    |
 | Status lahan “Terverifikasi” | 384                   |
-| … dan juga di lereng curam   | 175                   |
+| … dan juga di tanah yang naik-turun tajam   | 175                   |
 
 Kami menguji keandalan cara ini. Dari 248 kandidat yang diambil acak, tidak satu pun memiliki satu piksel bangunan pun dalam radius 250 meter. Ini bukan koperasi yang berdiri 30 meter dari tepi desa; dalam seperempat kilometer di sekitar semuanya, tidak ada yang terbangun.
 

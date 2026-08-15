@@ -1,4 +1,10 @@
 {
+  "above_2000m_coops": {
+    "value": 1505,
+    "text": "1.505",
+    "label": "cooperatives above 2.000 m",
+    "page": "methods/20"
+  },
   "account_pct": {
     "value": 96.0,
     "text": "96%",
@@ -185,6 +191,12 @@
     "label": "Java median distance to a mapped minimarket (km)",
     "page": "findings/remoteness · methods/14"
   },
+  "java_steep_pct": {
+    "value": 6.1,
+    "text": "6,1%",
+    "label": "% of Java KDMP on >60 m relief",
+    "page": "findings/remoteness · methods/20"
+  },
   "java_value_share_pct": {
     "value": 60.0,
     "text": "60%",
@@ -226,6 +238,12 @@
     "text": "17",
     "label": "most KDMP in a single ~1 km cell",
     "page": "findings/competition"
+  },
+  "median_elevation_m": {
+    "value": 67,
+    "text": "67",
+    "label": "median elevation (m)",
+    "page": "methods/20"
   },
   "minimarket_excess_1km_pp": {
     "value": 3.7,
@@ -473,6 +491,12 @@
     "label": "Papua median distance to a mapped minimarket (km)",
     "page": "findings/remoteness · methods/14"
   },
+  "papua_steep_pct": {
+    "value": 44.65,
+    "text": "44,7%",
+    "label": "% of Papua KDMP on >60 m relief",
+    "page": "findings/remoteness · methods/20"
+  },
   "papua_value_share_pct": {
     "value": 0.6,
     "text": "0,6%",
@@ -659,11 +683,29 @@
     "label": "KDMP sharing a ~350 m cell, artefacts removed",
     "page": "findings/competition"
   },
+  "shortlist_steep": {
+    "value": 1008,
+    "text": "1.008",
+    "label": "most-remote 2.500 on >60 m relief",
+    "page": "methods/04 · methods/20"
+  },
   "started_reporting_4d": {
     "value": 1,
     "text": "1",
     "label": "villages that started reporting in those four days",
     "page": "methods/01"
+  },
+  "steep_coops": {
+    "value": 12325,
+    "text": "12.325",
+    "label": "cooperatives on >60 m relief",
+    "page": "findings/remoteness · methods/20"
+  },
+  "steep_pct": {
+    "value": 14.8,
+    "text": "14,8%",
+    "label": "% on >60 m relief",
+    "page": "findings/remoteness · methods/20"
   },
   "top1000_value_share_pct": {
     "value": 90.61,

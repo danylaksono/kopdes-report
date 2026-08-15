@@ -36,6 +36,8 @@ Karena itu kepadatannya kami samakan: titik acak diambil sehingga sebaran jumlah
 
 Titik acak itu diundi, jadi angkanya bergeser sedikit tiap pengundian. Angka ±500 m dan ±1 km di atas adalah rata-rata 40 kali undian; untuk ±500 m rentang 95%-nya <span data-fig="minimarket_excess_lo">5,7</span> sampai <span data-fig="minimarket_excess_hi">7,7</span> poin. Dua baris terbawah berasal dari satu undian saja.
 
+Cara kerja ini setara dengan uji **kasus-kontrol** yang lazim dipakai di epidemiologi: minimarket berperan sebagai "kasus", titik acak sebagai "kontrol", dan keramaian disamakan lebih dulu supaya tidak ikut terhitung. Nama baku tiap langkahnya, beserta rujukannya, kami catat di laporan teknisnya.
+
 ## Yang tidak dapat kami pastikan
 
 Kedekatan bukan persaingan. Ini membuktikan koperasi dan minimarket sering berdekatan; itu syarat untuk bersaing, bukan bukti persaingan itu sendiri.
