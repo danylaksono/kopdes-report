@@ -26,7 +26,7 @@ Dua sumber independen sepakat: 448 koperasi tercatat di lahan pertanian, jauh da
 
 Tuduhan kuburan tidak bertahan. Hanya 22 koperasi yang jatuh di dalam kuburan terpetakan, laju yang tidak bisa dibedakan dari pusat desa biasa. Sebagian besar adalah efek tepi (kantor kelurahan di sebelah tembok kuburan), dan 16 dari 22 berada di kota besar, tempat kuburan umum memang sebesar blok kota.
 
-## Yang tidak bisa kami katakan
+## Yang tidak dapat kami pastikan
 
 Ini poin yang paling penting. **Titik di sawah belum tentu bangunan di sawah.** Jika koordinat SIMKOPDES sebenarnya titik pusat desa, maka desa yang sebagian besar sawah otomatis menghasilkan titik di tengah sawah, dan itu akan lebih sering "jatuh" di sawah daripada pusat desa biasa, persis seperti yang kami ukur. Uji jalan condong ke arah yang mencemaskan: kandidat ini lebih jarang dekat jalan daripada koperasi sebanding, bukan lebih sering.
 

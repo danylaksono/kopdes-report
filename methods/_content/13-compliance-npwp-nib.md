@@ -24,6 +24,6 @@ Izin paling lengkap di DKI Jakarta (99,6%) dan paling kosong di Papua Pegunungan
 
 Bacaan keseluruhan: lapisan administrasi (rekening 96%, NPWP 97%) dan lapisan izin (NIB 73%) terisi; lapisan operasi (transaksi 3%) tidak. Zombie-nya bukan "surat hilang", melainkan "surat ada, operasi tidak".
 
-## Yang tidak bisa kami katakan
+## Yang tidak dapat kami pastikan
 
 "Memegang NIB" di sini berarti setidaknya satu koperasi di desa itu memegangnya, jadi 69,9% adalah batas bawah dalam hitungan koperasi. Kolom itu menghitung dokumen yang dipegang, bukan dokumen yang masih berlaku. Dan arti nol tetap sama seperti di lampiran 01: belum melaporkan, bukan tidak aktif.

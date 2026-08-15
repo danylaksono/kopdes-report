@@ -8,14 +8,14 @@ Seberapa jauh koperasi dari rumah terdekat? Peta populasi (lampiran 03) mengukur
 
 Artinya jelas dan harus dikatakan terus terang: **tuduhan bahwa koperasi dibangun jauh dari permukiman tidak terbukti secara nasional dalam ukuran ini.** Sebagian besar koperasi berdiri di tengah bangunan.
 
-| Jarak ke bangunan terdekat        | Koperasi | Bagian    |
-| --------------------------------- | -------- | --------- |
-| Di atas petak bangunan (&lt;70 m) | 36.985   | <span data-fig="on_building_cell_pct">44,36%</span>    |
-| &lt; ±260 m                       | 25.699   | 30,82%    |
-| &lt; ±530 m                       | 7.555    | 9,06%     |
-| &lt; ±1 km                        | 5.745    | 6,89%     |
-| &lt; ±2 km                        | 3.587    | 4,30%     |
-| &lt; ±5 km                        | 2.817    | 3,38%     |
+| Jarak ke bangunan terdekat        | Koperasi | Bagian                                                |
+| --------------------------------- | -------- | ----------------------------------------------------- |
+| Di atas petak bangunan (&lt;70 m) | 36.985   | <span data-fig="on_building_cell_pct">44,36%</span>   |
+| &lt; ±260 m                       | 25.699   | 30,82%                                                |
+| &lt; ±530 m                       | 7.555    | 9,06%                                                 |
+| &lt; ±1 km                        | 5.745    | 6,89%                                                 |
+| &lt; ±2 km                        | 3.587    | 4,30%                                                 |
+| &lt; ±5 km                        | 2.817    | 3,38%                                                 |
 | **&gt; ±5 km / tak ditemukan**    | **991**  | **<span data-fig="no_building_5km_pct">1,19%</span>** |
 
 ## Yang tersisa, dan justru lebih kuat
@@ -32,7 +32,7 @@ Karena itu hasilnya berupa rentang, bukan ukuran pasti, dan pitanya sengaja sama
 
 Sumber bangunannya adalah gabungan Google Open Buildings, Microsoft Building Footprints dan OpenStreetMap yang dirilis VIDA: **137,1 juta bangunan di Indonesia**, menjadi 10,48 juta petak. Bangunan hasil pengenalan citra satelit penting di sini karena justru rapat di tempat yang jarang dipetakan sukarelawan, yaitu pedesaan.
 
-## Yang tidak bisa kami katakan
+## Yang tidak dapat kami pastikan
 
 Peta bangunan tetap tidak pernah lengkap, bahkan dengan 137 juta jejak. Bangunan di bawah tajuk pohon dan bangunan kecil non-permanen tetap bisa terlewat. "Tidak ada bangunan dalam X" tetap batas bawah: artinya "tidak ada rumah **terpetakan**", selalu.
 

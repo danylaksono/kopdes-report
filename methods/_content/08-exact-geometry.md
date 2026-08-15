@@ -27,6 +27,6 @@ Pengukuran ini juga mengaudit laporan lama. Jarak jalan pada lampiran 05 akurat 
 | 05, jarak jalan      | 34 m         | 92%                     |
 | 06, jarak minimarket | +169 m       | 41%                     |
 
-## Yang tidak bisa kami katakan
+## Yang tidak dapat kami pastikan
 
 Ketelitian punya batas: geometri jalan di OpenStreetMap akurat sekitar 5–15 m, dan jarak di sini sebaiknya dikutip dalam kelipatan 100 m; desimal meter adalah sandiwara. Jarak juga garis lurus, bukan jarak tempuh: 292 km garis lurus di pedalaman Papua bukan perjalanan yang dilakukan siapa pun.

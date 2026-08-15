@@ -30,7 +30,7 @@ Untuk menguji, kami membandingkan dengan lokasi acak yang "masuk akal": di jalan
 | ±2 km  | 95,7%      | 92,7%                          | +3,0 poin     |
 | ±5 km  | 99,6%      | 99,5%                          | +0,1 poin     |
 
-## Yang tidak bisa kami katakan
+## Yang tidak dapat kami pastikan
 
 Kedekatan bukan persaingan. Ini membuktikan koperasi dan minimarket sering berdekatan; itu syarat untuk bersaing, bukan bukti persaingan itu sendiri.
 

@@ -21,6 +21,6 @@ Sebarannya mengikuti gradien yang sudah dikenal: 98,9% di DKI Jakarta dan Sumate
 | Papua Selatan    | 16,2%            |
 | Papua Pegunungan | **6,1%**         |
 
-## Yang tidak bisa kami katakan
+## Yang tidak dapat kami pastikan
 
 Kolom RAT hanya terisi di tingkat provinsi. Tingkat kabupaten, kecamatan, dan desa semuanya nol, jadi peta RAT per desa tidak mungkin dibuat dari API ini. Sekitar 40% koperasi (~33.200) belum melaksanakan RAT: itu celah yang nyata dan besar, hanya saja bukan nol, dan terkonsentrasi di Indonesia timur. Dan "melaksanakan RAT" di sini adalah laporan ke sistem, bukan rapat yang diaudit.

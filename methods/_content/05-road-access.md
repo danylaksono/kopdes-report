@@ -37,7 +37,7 @@ Geografinya persis seperti yang diduga kritikus: di Papua Selatan 71% koperasi j
 | Jawa Tengah      | 8.524    | 1,0%            |
 | DI Yogyakarta    | 438      | **0,0%**        |
 
-## Yang tidak bisa kami katakan
+## Yang tidak dapat kami pastikan
 
 Peta jalan yang kami pakai (OpenStreetMap) sangat baik di Jawa dan lebih tipis di pedalaman Papua, tepat di tempat temuannya terkonsentrasi. Karena itu klaim yang jujur adalah "tidak ada jalan **yang terpetakan** dalam 5 km", dan setiap angka di sini adalah batas atas keterjangkauan.
 

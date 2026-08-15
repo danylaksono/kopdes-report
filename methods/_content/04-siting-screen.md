@@ -20,7 +20,7 @@ Dari 2.500 kandidat paling terpencil: sekitar **2.385 berada di kawasan berhutan
 
 Kami menguji keandalan cara ini. Dari 248 kandidat yang diambil acak, tidak satu pun memiliki satu piksel bangunan pun dalam radius 250 meter. Ini bukan koperasi yang berdiri 30 meter dari tepi desa; dalam seperempat kilometer di sekitar semuanya, tidak ada yang terbangun.
 
-## Yang tidak bisa kami katakan
+## Yang tidak dapat kami pastikan
 
 Ini kandidat, bukan vonis. Lingkungan yang mustahil punya dua sebab yang tidak bisa dipisahkan cara ini: (a) koperasinya memang dibangun di sana, atau (b) koordinat di SIMKOPDES salah. Keduanya bisa ditulis dan merupakan dua cerita yang berbeda: "mereka membangun di rawa" versus "kementerian tidak tahu di mana koperasinya". Tidak satu pun yang boleh diklaim dari tabel ini saja. Sebelum nama mana pun dipublikasikan, tiap kasus perlu dicek dengan citra satelit dan batas desa.
 

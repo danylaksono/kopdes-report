@@ -344,7 +344,7 @@ INDEX_HEAD = """<!doctype html>
     <p class="lede">Setiap klaim di situs ini bisa ditelusuri ke salah satu
       halaman di bawah. Tiap halaman menjelaskan dalam bahasa sederhana: dari
       mana datanya, bagaimana kami mengolahnya, apa yang kami temukan, dan apa
-      yang tidak bisa kami katakan. Laporan teknis lengkap (bahasa Inggris,
+      Yang tidak dapat kami pastikan. Laporan teknis lengkap (bahasa Inggris,
       dengan data mentah dan cara menjalankan ulang) ditautkan di tiap halaman
       bagi siapa pun yang ingin memeriksa pekerjaan kami.</p>
     <div class="callout"><span class="callout-label">Perhatian</span>

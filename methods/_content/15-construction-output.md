@@ -14,6 +14,6 @@ Apakah konstruksi sejalan dengan hasil? Kami mengingatkan sejak awal bahwa lapor
 
 Korelasi antara konstruksi dan hasil di tingkat provinsi lemah (sekitar 0,19) dan tercampur geografi: Jawa Timur dan Jawa Tengah memuncaki tabel konstruksi **dan** tabel hasil; Papua di dasar keduanya. Penyangkal yang mematahkan bacaan sebab-akibat adalah DKI Jakarta: hanya 2,6% konstruksinya 100% selesai (datanya nyaris tidak tercatat) tetapi hasil per koperasinya tertinggi di negara (Rp 17,5 juta). Data konstruksi yang hilang mengikuti tempat program berhenti mencatat, bukan tempat berhenti membangun.
 
-## Yang tidak bisa kami katakan
+## Yang tidak dapat kami pastikan
 
 Tidak ada klaim di luar deskripsi. Yang dapat didukung: konstruksi dan hasil bergerak bersama lintas provinsi searah "terbangun dan beroperasi sama-sama barang Jawa", dan saluran konstruksi tidak mendukung gambaran program yang terkirim penuh: seperempat selesai, separuh tak terdokumentasi.

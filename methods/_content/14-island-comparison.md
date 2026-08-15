@@ -20,6 +20,6 @@ Di sisi penempatan, setiap "ekor" dalam investigasi ini adalah fenomena Indonesi
 
 Tiga klaim utama investigasi ini mengikuti garis yang sama: keterpencilan yang nyata adalah ekor Indonesia timur; kedekatan ritel (kanibalisasi) adalah fenomena Jawa yang padat kota; dan soal anggaran-versus-hasil: uangnya di Jawa, registri kosongnya di Papua.
 
-## Yang tidak bisa kami katakan
+## Yang tidak dapat kami pastikan
 
 Kelompok pulau disusun dari nama provinsi, dan angka ekonomi berasal dari file desa yang lengkap sementara angka penempatan berasal dari per-koperasi. Keduanya diukur dengan cara berbeda. Jika sebuah angka di sini tidak cocok dengan laporan sumbernya, laporan sumbernya yang benar.

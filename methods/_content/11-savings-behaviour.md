@@ -24,6 +24,6 @@ Uang yang dilaporkan itu nyata: median simpanan pokok per anggota Rp 50.000, iur
 
 Sebaran antardaerah sangat timpang: 31,3% desa di DI Yogyakarta melaporkan simpanan, turun ke 4,9% di Aceh, dan 0,08% di Papua Pegunungan, gradien sekitar 400× yang mengikuti peta ekonomi, bukan keacakan.
 
-## Yang tidak bisa kami katakan
+## Yang tidak dapat kami pastikan
 
 Nol tetap ambigu antara "tidak ada kegiatan" dan "belum dilaporkan". Yang ditambah simpanan adalah struktur: sistem yang mencatat rekening untuk 96% desa hanya mencatat modal pokok untuk 12% dan iuran wajib untuk 9%. Urutan itu adalah bentuk corong aktivitas yang sungguhan: administrasi, lalu modal sekali, lalu operasi berjalan. Itu memperkuat, tapi tidak membuktikan, bacaan "rekening tidur".

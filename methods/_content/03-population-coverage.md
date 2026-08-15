@@ -33,7 +33,7 @@ Tetapi ada ekor yang nyata. **21,3% koperasi (17.774) berada di petak 400 meter 
 | 2.000 – 10.000       | 8.139    | 9,76%  |
 | Lebih dari 10.000    | 71.119   | 85,30% |
 
-## Yang tidak bisa kami katakan
+## Yang tidak dapat kami pastikan
 
 "Petak kosong" adalah hasil pemodelan, bukan kebenaran lapangan. Peta yang kami pakai menyatukan empat sumber, dan semuanya kurang akurat di hutan dan pulau kecil; sebagian dari 21,3% itu bisa jadi permukiman sungguhan yang terlewat oleh model.
 

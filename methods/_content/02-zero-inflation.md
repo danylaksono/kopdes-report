@@ -38,7 +38,7 @@ Dan nilainya sangat terkonsentrasi. **100 desa dari 83.069, atau 0,12%, membawa 
 
 Ini punya arti praktis untuk analisis. Karena 97% datanya nol, kami tidak bisa memakai "nilai transaksi" sebagai ukuran yang berkelanjutan. Yang bisa dipakai adalah ukuran biner (ada atau tidak ada transaksi), atau melihat simpanan, atau hanya membandingkan desa-desa yang memang aktif.
 
-## Yang tidak bisa kami katakan
+## Yang tidak dapat kami pastikan
 
 Pola ini tidak membedakan dua penjelasan: "koperasi memang tidak beroperasi" atau "operasinya terjadi tapi belum dilaporkan". Kolom pendaftaran yang lengkap dan kolom operasional yang kosong konsisten dengan keduanya. Yang bisa memisahkan keduanya adalah uji lain (lihat lampiran 01 dan 09).
 

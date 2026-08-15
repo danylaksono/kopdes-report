@@ -28,6 +28,6 @@ Yang penting: **penumpukan tidak terlihat merugikan.** Koperasi yang berbagi pet
 | Berbagi petak (berkelompok) | 4,50%                |
 | Terpencil                   | 3,72%                |
 
-## Yang tidak bisa kami katakan
+## Yang tidak dapat kami pastikan
 
 "Berbagi petak" berarti tercatat di petak yang sama, bukan dibangun di sana. Dan karena 97% datanya nol, "tidak ada penalti" adalah pernyataan terkuat yang diizinkan data ini, bukan pengukuran ketiadaan persaingan.

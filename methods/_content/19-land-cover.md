@@ -21,7 +21,7 @@ di dalam poligon lahan pertanian.
 Sebagian besar koordinat koperasi, sekitar 61%, berada pada piksel berkelas
 hutan. Sekitar 17,5% pada pemukiman, dan 12,6% pada lahan pertanian.
 
-## Yang tidak bisa kami katakan
+## Yang tidak dapat kami pastikan
 
 Dua hal. Pertama, kelas ini adalah nilai piksel 10 meter di titik koordinat,
 bukan jejak bangunan koperasi. Titik koordinat sebagian besar adalah pusat

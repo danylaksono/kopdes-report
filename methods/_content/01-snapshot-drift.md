@@ -34,7 +34,7 @@ Ada tambahan yang mengubah bacaannya. Potret ketiga (13 Agustus) menunjukkan **2
 | 9 Agustus      | Rp 179,79 miliar         | 2.517                |
 | 13 Agustus     | Rp 202,60 miliar         | 2.726                |
 
-## Yang tidak bisa kami katakan
+## Yang tidak dapat kami pastikan
 
 Empat hari adalah jendela yang pendek. Sistem yang diisi per triwulan, misalnya, tidak akan terlihat bergerak dalam empat hari. Dan secara formal kami tetap tidak bisa membedakan "tidak aktif" dari "belum melaporkan": sebuah koperasi bisa berdagang ramai tanpa melaporkan apa pun, dan tidak ada dalam data ini yang akan menangkapnya.
 
