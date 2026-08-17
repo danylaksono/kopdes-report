@@ -429,7 +429,80 @@ def main():
         label = item.get("label")
         if label:
             national_rows.append({"metric": "readiness_" + label, "value": item.get("value")})
+
+    # I. phase-2 reporting, construction verification, programme overlap.
+    #
+    # Three aggregate endpoints the front-end uses that the earlier sections do
+    # not touch. They are worth a snapshot for two reasons. First, they carry
+    # series that exist nowhere else in this export - outlet active/inactive
+    # counts, membership split by gender, and a month-by-month member growth
+    # curve going back to April 2025. Second, none of them returns a name, an
+    # identity number or a phone number: the per-cooperative profile route does,
+    # which is why this script still does not walk it.
+    phase2 = optional(api, "/statistics/national/phase-2", {})
+    phase2_data = phase2.get("data") or {}
+    for key, value in (phase2_data.get("national_totals") or {}).items():
+        if not isinstance(value, (dict, list)):
+            national_rows.append({"metric": "phase2_" + key, "value": value})
+
+    verification = optional(api, "/statistics/asset-verification-validation", {})
+    for key, value in (verification.get("statistic") or {}).items():
+        if isinstance(value, dict):
+            for sub_key, sub_value in value.items():
+                national_rows.append({"metric": "verify_" + key + "_" + sub_key,
+                                      "value": sub_value})
+        elif not isinstance(value, list):
+            national_rows.append({"metric": "verify_" + key, "value": value})
+
+    thematic = optional(api, "/statistics/thematic/overview", {})
+    for key, value in (thematic.get("stats") or {}).items():
+        national_rows.append({"metric": "thematic_" + key, "value": value})
+
     write_csv("kopdes_national_summary.csv", ["metric", "value"], national_rows)
+
+    # The phase-2 province rows are province x satgas region, not one row per
+    # province: a province served by two regions appears twice, so the file runs
+    # longer than 38 rows and province_id is NOT unique here.
+    write_csv("kopdes_phase2_province.csv",
+              ["province_id", "province_name", "regional_name", "accounts_count",
+               "active_outlets", "inactive_outlets", "cooperatives_with_active_outlets",
+               "partnerships_count", "cooperatives_with_partnerships", "loans_count",
+               "cooperatives_with_loan_applications", "total_members", "total_members_male",
+               "total_members_female", "total_managements", "total_managements_male",
+               "total_managements_female"],
+              phase2_data.get("province_distribution") or [])
+    write_csv("kopdes_member_growth.csv", ["month", "cooperative_members"],
+              phase2_data.get("monthly_member_growth") or [])
+    write_csv("kopdes_outlet_types.csv", ["type", "total"],
+              phase2_data.get("cooperative_outlets") or [])
+    write_csv("kopdes_satgas_regions.csv",
+              ["satgas", "legal_cooperative_count", "microsite_count",
+               "cooperatives_with_partnership", "profile_update"],
+              phase2_data.get("regional_distribution") or [])
+
+    # Construction verification by province. verification_detail is a nested
+    # dict of the three "is it usable" verdicts; flatten it onto the row so the
+    # file stays one province per line.
+    verify_rows = []
+    for row in verification.get("provinces") or []:
+        flat = dict(row)
+        for key, value in (row.get("verification_detail") or {}).items():
+            flat["detail_" + key] = value
+        verify_rows.append(flat)
+    write_csv("kopdes_asset_verification.csv",
+              ["province_id", "province_name", "total_cooperative", "completed_construction",
+               "completed_construction_desa", "completed_construction_kelurahan",
+               "under_construction", "under_verification", "pending_verification", "verified",
+               "detail_layak_digunakan_dan_siap_operasional",
+               "detail_layak_digunakan_dengan_catatan_perbaikan", "detail_belum_layak",
+               "total_institution_team_with_sk"],
+              verify_rows)
+
+    # Which other government programmes a kopdes also sits inside - the largest
+    # by far is Badan Gizi Nasional's free-meals programme.
+    write_csv("kopdes_programme_overlap.csv",
+              ["institution_programme_id", "institution", "programme", "count"],
+              thematic.get("intersectingByProgrammes") or [])
 
     write_manifest(started_at)
     log("done - files are in", OUT_DIR.resolve())
