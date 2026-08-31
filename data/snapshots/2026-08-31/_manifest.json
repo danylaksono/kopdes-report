@@ -1,0 +1,86 @@
+{
+  "snapshot_date": "2026-08-31",
+  "pull_started_at": "2026-08-31T18:34:24+01:00",
+  "pull_finished_at": "2026-08-31T18:39:24+01:00",
+  "period": "2026",
+  "api": "https://api.simkopdes.go.id/api",
+  "skip_villages": false,
+  "endpoints_failed": [],
+  "files": {
+    "kopdes_asset_verification.csv": {
+      "bytes": 2292,
+      "rows": 38,
+      "sha256": "2edc5a089e6390831926da25ac4917ee0c7d692a5f3e2b0e5b9dafacc6a97622"
+    },
+    "kopdes_land_assets.csv": {
+      "bytes": 10123042,
+      "rows": 66206,
+      "sha256": "b19383f2315d424be6261ffa8958d8c459c3264b1d2baf5355de95bc6cc0f324"
+    },
+    "kopdes_locations.csv": {
+      "bytes": 9930723,
+      "rows": 83379,
+      "sha256": "8f8d3c794eb58eb4243e5db25163fac3f3fb9e654cb0fb368175e981b12c13d1"
+    },
+    "kopdes_member_growth.csv": {
+      "bytes": 392,
+      "rows": 18,
+      "sha256": "71d18468aefd2e336a4ad6ad4d97804cd2bcb2357c93a7a6d43fd65aa78992d3"
+    },
+    "kopdes_national_summary.csv": {
+      "bytes": 2483,
+      "rows": 68,
+      "sha256": "01ae3840408cb926f35188b1bdcf30d16a6d094c4440d0ee5b72f73456c8c20e"
+    },
+    "kopdes_outlet_types.csv": {
+      "bytes": 266,
+      "rows": 8,
+      "sha256": "0dd50586a592245a1734643feeb45a5e69e31cfa9bce1aaa654bed7f224fdd77"
+    },
+    "kopdes_phase2_province.csv": {
+      "bytes": 20019,
+      "rows": 314,
+      "sha256": "d406fe4192cb5cec7ce244b7bf9bc4a2644cb9effdc7f03558a33879180103f6"
+    },
+    "kopdes_programme_overlap.csv": {
+      "bytes": 669,
+      "rows": 8,
+      "sha256": "d8613aa723b6b5e4928189ef390999d7d6537e26cb2ff82ba87a1c38d58c8ca9"
+    },
+    "kopdes_province_rat_and_construction.csv": {
+      "bytes": 3713,
+      "rows": 38,
+      "sha256": "8f7d24563be35a41760d566eac22d9566f69c3b1c783151378a1bf77a64a6d3d"
+    },
+    "kopdes_province_top_products.csv": {
+      "bytes": 13675,
+      "rows": 284,
+      "sha256": "303254b66ccd9bbd636705687ce05927087ccbfd74e00f5217e777eaca01cc9e"
+    },
+    "kopdes_satgas_regions.csv": {
+      "bytes": 326,
+      "rows": 5,
+      "sha256": "081c1cd61753664b6a61dc3f87588437a6930c37abf6ad12ff542939ee89200b"
+    },
+    "kopdes_stats_district.csv": {
+      "bytes": 53214,
+      "rows": 514,
+      "sha256": "cf730398661862d8eae9c2c066eb255c2c3e0e2d2aee6ac09e165fb051d58c92"
+    },
+    "kopdes_stats_province.csv": {
+      "bytes": 6308,
+      "rows": 38,
+      "sha256": "b93714247c2f25818f017039b2bf62947049252202c818394613ea2f80b420be"
+    },
+    "kopdes_stats_subdistrict.csv": {
+      "bytes": 686251,
+      "rows": 7277,
+      "sha256": "51b508b93b901260861281afb7f412ab6e59fe229bad867cd255cf9570f30240"
+    },
+    "kopdes_stats_village.csv": {
+      "bytes": 8128187,
+      "rows": 83070,
+      "sha256": "79aabe8cb4afe883e0f8414dd7ad60b710fe8ede78e9243547fd3fae8e8c8e67"
+    }
+  }
+}
